@@ -9,7 +9,7 @@
   <meta name="author" content="Jamie Osborne">
 
   
-  <meta name="description" content="With the toolchain compiled, here&#8217;s the basic steps to compile an example and get the code onto the launchpad. These steps should apply to &hellip;">
+  <meta name="description" content="With the toolchain installed, here&#8217;s the basic steps to compile an example and get the code onto the launchpad. # Add the toolchain to your &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -90,7 +90,7 @@
   </header>
 
 
-<div class="entry-content"><p>With the toolchain <a href="/blog/2012/11/15/compiling-the-stellaris-toolchain/">compiled</a>, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  These steps should apply to Linux, Unix/BSD/Mac OS X.</p>
+<div class="entry-content"><p>With the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> installed, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.</p>
 
 <!-- more -->
 
@@ -111,9 +111,11 @@ $ nano project0.c
 $ make &amp;&amp; lm4flash gcc/project0.bin
 </code></pre>
 
+<p>Note: A mirror for the Stellaris example code and other pieces is available on github.</p>
+
 <h2>debugging</h2>
 
-<p>lm4tools has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
+<p><a href="https://github.com/utzig/lm4toolsn">lm4tools</a> has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
 
 <pre><code># build with debug symbols
 $ make clean &amp;&amp; DEBUG=1 make

@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-11-15T20:57:47+00:00</updated>
+  <updated>2012-11-15T21:14:07+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jmeosbn.github.com/blog/2012/11/15/testing-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:40:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/2012/11/15/testing-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>With the toolchain <a href="http://jmeosbn.github.com/blog/2012/11/15/compiling-the-stellaris-toolchain/">compiled</a>, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  These steps should apply to Linux, Unix/BSD/Mac OS X.</p>
+    <content type="html"><![CDATA[<p>With the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> installed, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.</p>
 
 <!-- more -->
 
@@ -39,9 +39,11 @@ $ nano project0.c
 $ make &amp;&amp; lm4flash gcc/project0.bin
 </code></pre>
 
+<p>Note: A mirror for the Stellaris example code and other pieces is available on github.</p>
+
 <h2>debugging</h2>
 
-<p>lm4tools has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
+<p><a href="https://github.com/utzig/lm4toolsn">lm4tools</a> has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
 
 <pre><code># build with debug symbols
 $ make clean &amp;&amp; DEBUG=1 make
@@ -69,7 +71,7 @@ Continuing.
     <link href="http://jmeosbn.github.com/blog/2012/11/15/compiling-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:02:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/2012/11/15/compiling-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>If you have a MacBook and a Stellaris Launchpad, you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain for it - but I did find a couple of catches.</p>
+    <content type="html"><![CDATA[<p>If you have Mac OS X and a Stellaris Launchpad, you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain for it - the only issues I ran into are listed below.</p>
 
 <h2>toolchain</h2>
 
@@ -89,7 +91,7 @@ Unable to find any ICDI devices
 
 <p>The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/cc49426081">cc49426</a>, which doesn&#8217;t check for the serial number.  To use newer versions of lm4tools, a <a href="http://utzig.net/files/lm4f120_icdi.tgz">kernel extension</a> needs to be installed.</p>
 
-<p>For more info, see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github.</p>
+<p>For more info, see the <a href="https://github.com/utzig/lm4toolsn/issues/8">issue</a> on github.</p>
 ]]></content>
   </entry>
   
