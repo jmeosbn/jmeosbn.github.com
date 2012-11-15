@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-11-15T21:57:40+00:00</updated>
+  <updated>2012-11-15T22:05:44+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -60,7 +60,7 @@ Remote debugging using :7777
 Continuing.
 </code></pre>
 
-<p>Note: As well as quitting lm4flash, I also found <code>detach</code> was needed in gdb (even if it hadn&#8217;t yet been ran) else the board would require a power cycle before flashing was possible again.</p>
+<p>Note: As well as quitting lm4flash, I also found <code>detach</code> was needed in gdb (even if it hadn&#8217;t yet been ran), else the board would require a power cycle before flashing was possible again.</p>
 ]]></content>
   </entry>
   
