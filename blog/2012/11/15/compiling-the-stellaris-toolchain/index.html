@@ -98,7 +98,10 @@
 
 <h2>lm4tools</h2>
 
-<p>The lm4tools binary couldn&#8217;t read the serial number of the device <!-- more --> using my MacBook running OS X 10.8 so the binary wasn&#8217;t flashed.</p>
+<p>The lm4tools binary couldn&#8217;t read the serial number of the device using my MacBook running OS X 10.8 so the binary wasn&#8217;t flashed.</p>
+
+<!-- more -->
+
 
 <pre><code>$ ./lm4flash/lm4flash project0.bin
 Unable to get device serial number: LIBUSB_ERROR_OTHER
@@ -130,7 +133,7 @@ $ make &amp;&amp; lm4flash gcc/project0.bin
 
 <h2>debugging</h2>
 
-<p>lm4tools has a bridge to enable TCP over USB, so code running on the device can be debugged using the gdb binary that was complied with the toolchain above.</p>
+<p>lm4tools has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
 
 <pre><code># build with debug symbols
 $ make clean &amp;&amp; DEBUG=1 make
