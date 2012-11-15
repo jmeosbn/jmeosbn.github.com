@@ -9,7 +9,7 @@
   <meta name="author" content="Jamie Osborne">
 
   
-  <meta name="description" content="Here&#8217;s some basic resources for getting started pushing code to github. &#8220;Code&#8221; doesn&#8217;t just mean computer source code; git is &hellip;">
+  <meta name="description" content="Mostly you can follow the instructions at y3xz, but there were a couple of catches on my MacBook as detailed below. toolchain The makefile failed to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +70,49 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/11/15/setting-up-the-stellaris-toolchain/">Setting Up the Stellaris Toolchain</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-15T20:02:00+00:00" pubdate data-updated="true">Nov 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Mostly you can follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a>, but there were a couple of catches on my MacBook as detailed below.</p>
+
+<h2>toolchain</h2>
+
+<p>The makefile failed to download the source archive from <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/arm-eabi">mentor</a>, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/11/15/setting-up-the-stellaris-toolchain/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/09/29/resources-for-using-git/">Resources for Using Git</a></h1>
     
     
@@ -121,97 +164,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/09/29/Stellaris-Toolchain/">Setting Up the Stellaris Toolchain</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-29T20:35:00+01:00" pubdate data-updated="true">Sep 29<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Mostly you can follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a>, but there were a couple of catches on my MacBook as detailed below.</p>
-
-<h2>toolchain</h2>
-
-<p>The makefile failed to download the source archive from <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/arm-eabi">mentor</a>, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
-
-<h2>lm4tools</h2>
-
-<p>The lm4tools binary couldn&#8217;t read the serial number of the device using my MacBook running OS X 10.8 so the binary wasn&#8217;t flashed.</p>
-
-<figure class='code'><figcaption><span>Serial number error</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>./lm4flash/lm4flash project0.bin
-</span><span class='line'>Unable to get device serial number: LIBUSB_ERROR_OTHER
-</span><span class='line'>Unable to find any ICDI devices
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/cc49426081">cc49426</a>, which doesn&#8217;t check for the serial number.  To use newer versions of lm4tools, a <a href="http://utzig.net/files/lm4f120_icdi.tgz">kernel extension</a> needs to be installed.  For more info, see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github.</p>
-
-<h2>verify toolchain</h2>
-
-<pre><code># Add the toolchain to your path
-$ export PATH=$HOME/arm-cs-tools/bin:$PATH
-
-# Test the compiler
-$ cd ../stellaris/boards/ek-lm4f120xl/project0/
-$ make clean; make
-
-# Flash binary to the board
-$ lm4flash gcc/project0.bin
-
-# Try making a source modification
-$ nano project0.c
-$ make &amp;&amp; lm4flash gcc/project0.bin
-</code></pre>
-
-<h2>debugging</h2>
-
-<pre><code># build with debug symbols
-$ make clean &amp;&amp; DEBUG=1 make
-$ lm4flash gcc/project0.bin
-
-# start tcp/usb bridge in a separate terminal
-$ lmicdi
-
-# start gdb and connect to device
-$ arm-none-eabi-gdb gcc/project0.axf
-Reading symbols from ./gcc/project0.axf...done.
-(gdb) target remote :7777
-Remote debugging using :7777
-0x00000494 in SysCtlDelay ()
-(gdb) c
-Continuing.
-</code></pre>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
     <a href="/blog/archives">Blog Archives</a>
@@ -225,11 +177,11 @@ Continuing.
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/09/29/resources-for-using-git/">Resources for Using Git</a>
+        <a href="/blog/2012/11/15/setting-up-the-stellaris-toolchain/">Setting up the Stellaris toolchain</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/09/29/Stellaris-Toolchain/">Setting up the Stellaris toolchain</a>
+        <a href="/blog/2012/09/29/resources-for-using-git/">Resources for Using Git</a>
       </li>
     
   </ul>
