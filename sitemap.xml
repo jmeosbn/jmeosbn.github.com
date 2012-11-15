@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://jmeosbn.github.com/blog/2012/09/29/git2/</loc>
-        <lastmod>2012-10-05T03:28:48+01:00</lastmod>
+        <loc>http://jmeosbn.github.com/blog/2012/09/29/Stellaris-Toolchain/</loc>
+        <lastmod>2012-11-15T19:50:43+00:00</lastmod>
     </url>
     <url>
         <loc>http://jmeosbn.github.com/blog/2012/09/29/resources-for-using-git/</loc>
@@ -10,10 +10,10 @@
     </url>
     <url>
         <loc>http://jmeosbn.github.com/blog/archives/</loc>
-        <lastmod>2012-10-05T03:28:48+01:00</lastmod>
+        <lastmod>2012-11-15T19:50:43+00:00</lastmod>
     </url>
     <url>
         <loc>http://jmeosbn.github.com/</loc>
-        <lastmod>2012-10-05T03:28:48+01:00</lastmod>
+        <lastmod>2012-11-15T19:50:43+00:00</lastmod>
     </url>
 </urlset>
