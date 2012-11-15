@@ -94,30 +94,29 @@
 
 <h2>toolchain</h2>
 
-<p>The makefile failed to download the source archive from <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/arm-eabi">mentor</a>, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually <!-- more --> into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
+<p>The makefile failed to download the source archive from <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/arm-eabi">mentor</a>, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
 
 <h2>lm4tools</h2>
 
-<p>The lm4tools binary couldn&#8217;t read the serial number of the device using my MacBook running OS X 10.8 so the binary wasn&#8217;t flashed.</p>
+<p>The lm4tools binary couldn&#8217;t read the serial number of the device <!-- more --> using my MacBook running OS X 10.8 so the binary wasn&#8217;t flashed.</p>
 
-<figure class='code'><figcaption><span>Serial number error</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>./lm4flash/lm4flash project0.bin
-</span><span class='line'>Unable to get device serial number: LIBUSB_ERROR_OTHER
-</span><span class='line'>Unable to find any ICDI devices
-</span></code></pre></td></tr></table></div></figure>
-
+<pre><code>$ ./lm4flash/lm4flash project0.bin
+Unable to get device serial number: LIBUSB_ERROR_OTHER
+Unable to find any ICDI devices
+</code></pre>
 
 <p>The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/cc49426081">cc49426</a>, which doesn&#8217;t check for the serial number.  To use newer versions of lm4tools, a <a href="http://utzig.net/files/lm4f120_icdi.tgz">kernel extension</a> needs to be installed.  For more info, see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github.</p>
 
 <h2>verify toolchain</h2>
 
-<pre><code># Add the toolchain to your path
-$ export PATH=$HOME/arm-cs-tools/bin:$PATH
+<p>Add the toolchain to your path</p>
 
-# Test the compiler
-$ cd ../stellaris/boards/ek-lm4f120xl/project0/
+<pre><code>$ export PATH=$HOME/arm-cs-tools/bin:$PATH
+</code></pre>
+
+<p>Test the compiler</p>
+
+<pre><code>$ cd ../stellaris/boards/ek-lm4f120xl/project0/
 $ make clean; make
 
 # Flash binary to the board
