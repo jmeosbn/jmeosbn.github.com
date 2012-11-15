@@ -132,7 +132,7 @@ Remote debugging using :7777
 Continuing.
 </code></pre>
 
-<p>Note: As well as quitting the bridge, I also found the board required a reset (toggle the power selector switch) before flashing was possible again.</p>
+<p>Note: As well as quitting lm4flash, I also found <code>detach</code> was needed in gdb (even if it hadn&#8217;t yet been ran) else the board would require a power cycle before flashing was possible again.</p>
 </div>
 
 
