@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-11-15T21:33:21+00:00</updated>
+  <updated>2012-11-15T21:54:13+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -47,7 +47,7 @@ $ make &amp;&amp; lm4flash gcc/project0.bin
 $ make clean &amp;&amp; DEBUG=1 make
 $ lm4flash gcc/project0.bin
 
-# start tcp/usb bridge in a separate terminal
+# start the tcp/usb bridge (in the background)
 $ lmicdi
 
 # start gdb and connect to device
