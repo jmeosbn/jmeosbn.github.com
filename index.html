@@ -99,46 +99,12 @@
 
 <p>Here&#8217;s the basic steps to compile an example and get the code onto the launchpad.</p>
 
-<pre><code># Add the toolchain to your path
-# Ideally this should go into your bash profile
-$ export PATH=$HOME/arm-cs-tools/bin:$PATH
-
-# Test the compiler
-$ cd ../stellaris/boards/ek-lm4f120xl/project0/
-$ make clean; make
-
-# Flash binary to the board
-$ lm4flash gcc/project0.bin
-
-# Try making a source modification
-$ nano project0.c
-$ make &amp;&amp; lm4flash gcc/project0.bin
-</code></pre>
-
-<h2>debugging</h2>
-
-<p>lm4tools has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
-
-<pre><code># build with debug symbols
-$ make clean &amp;&amp; DEBUG=1 make
-$ lm4flash gcc/project0.bin
-
-# start tcp/usb bridge in a separate terminal
-$ lmicdi
-
-# start gdb and connect to device
-$ arm-none-eabi-gdb gcc/project0.axf
-Reading symbols from ./gcc/project0.axf...done.
-(gdb) target remote :7777
-Remote debugging using :7777
-0x00000494 in SysCtlDelay ()
-(gdb) c
-Continuing.
-</code></pre>
-
-<p>Note: As well as quitting the bridge, I also found the board required a reset (toggle the power selector switch) before flashing was possible again.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/11/15/testing-the-stellaris-toolchain/">Read on &rarr;</a>
+    </footer>
   
 
 
