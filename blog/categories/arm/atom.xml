@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-11-15T20:54:39+00:00</updated>
+  <updated>2012-11-15T20:57:47+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jmeosbn.github.com/blog/2012/11/15/testing-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:40:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/2012/11/15/testing-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>With the toolchain <a href="/blog/2012/11/15/compiling-the-stellaris-toolchain/">compiled</a>, here's the basic steps to compile an example and get the code onto the launchpad.</p>
+    <content type="html"><![CDATA[<p>With the toolchain <a href="/blog/2012/11/15/compiling-the-stellaris-toolchain/">compiled</a>, here's the basic steps to compile an example and get the code onto the launchpad.  These steps should apply to Linux, Unix/BSD/Mac OS X.</p>
 
 <!-- more -->
 
@@ -69,7 +69,7 @@ Continuing.
     <link href="http://jmeosbn.github.com/blog/2012/11/15/compiling-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:02:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/2012/11/15/compiling-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>If you have a MacBook and a Stellaris Launchpad, you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain for it - but there were a couple of catches.</p>
+    <content type="html"><![CDATA[<p>If you have a MacBook and a Stellaris Launchpad, you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain for it - but I did find a couple of catches.</p>
 
 <h2>toolchain</h2>
 
@@ -77,7 +77,7 @@ Continuing.
 
 <h2>lm4tools</h2>
 
-<p>The lm4tools binary couldn't read the serial number of the device using my MacBook running OS X 10.8 so the binary wasn't flashed.</p>
+<p>The lm4tools binary couldn't read the serial number of the device so the binary wasn't flashed.</p>
 
 <!-- more -->
 
