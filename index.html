@@ -9,7 +9,7 @@
   <meta name="author" content="Jamie Osborne">
 
   
-  <meta name="description" content="Mostly you can follow the instructions at y3xz, but there were a couple of catches on my MacBook as detailed below. toolchain The makefile failed to &hellip;">
+  <meta name="description" content="With the toolchain compiled, the next task is to make sure code can be compiled correctly and flashed to the device. verify toolchain Here&#8217;s &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +70,85 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/11/15/testing-the-stellaris-toolchain/">Testing the Stellaris Toolchain</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-15T20:40:00+00:00" pubdate data-updated="true">Nov 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>With the toolchain <a href="/blog/2012/11/15/compiling-the-stellaris-toolchain/">compiled</a>, the next task is to make sure code can be compiled correctly and flashed to the device.</p>
+
+<h2>verify toolchain</h2>
+
+<p>Here&#8217;s the basic steps to compile an example and get the code onto the launchpad.</p>
+
+<pre><code># Add the toolchain to your path
+# Ideally this should go into your bash profile
+$ export PATH=$HOME/arm-cs-tools/bin:$PATH
+
+# Test the compiler
+$ cd ../stellaris/boards/ek-lm4f120xl/project0/
+$ make clean; make
+
+# Flash binary to the board
+$ lm4flash gcc/project0.bin
+
+# Try making a source modification
+$ nano project0.c
+$ make &amp;&amp; lm4flash gcc/project0.bin
+</code></pre>
+
+<h2>debugging</h2>
+
+<p>lm4tools has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
+
+<pre><code># build with debug symbols
+$ make clean &amp;&amp; DEBUG=1 make
+$ lm4flash gcc/project0.bin
+
+# start tcp/usb bridge in a separate terminal
+$ lmicdi
+
+# start gdb and connect to device
+$ arm-none-eabi-gdb gcc/project0.axf
+Reading symbols from ./gcc/project0.axf...done.
+(gdb) target remote :7777
+Remote debugging using :7777
+0x00000494 in SysCtlDelay ()
+(gdb) c
+Continuing.
+</code></pre>
+
+<p>Note: As well as quitting the bridge, I also found the board required a reset (toggle the power selector switch) before flashing was possible again.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/11/15/compiling-the-stellaris-toolchain/">Compiling the Stellaris Toolchain</a></h1>
     
     
@@ -93,7 +172,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Mostly you can follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a>, but there were a couple of catches on my MacBook as detailed below.</p>
+  <div class="entry-content"><p>If you have a MacBook and a Stellaris Launchpad, you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain for it - but there were a couple of catches.</p>
 
 <h2>toolchain</h2>
 
@@ -181,6 +260,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/11/15/testing-the-stellaris-toolchain/">Testing the Stellaris toolchain</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2012/11/15/compiling-the-stellaris-toolchain/">Compiling the Stellaris toolchain</a>
