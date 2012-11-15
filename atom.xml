@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-11-15T21:17:05+00:00</updated>
+  <updated>2012-11-15T21:18:51+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jmeosbn.github.com/blog/2012/11/15/testing-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:40:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/2012/11/15/testing-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>With the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> installed, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.</p>
+    <content type="html"><![CDATA[<p>With the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> installed, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
 <!-- more -->
 
@@ -38,8 +38,6 @@ $ lm4flash gcc/project0.bin
 $ nano project0.c
 $ make &amp;&amp; lm4flash gcc/project0.bin
 </code></pre>
-
-<p>Note: A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
 <h2>debugging</h2>
 
