@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-11-15T20:07:17+00:00</updated>
+  <updated>2012-11-15T20:31:33+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Setting up the Stellaris toolchain]]></title>
-    <link href="http://jmeosbn.github.com/blog/2012/11/15/setting-up-the-stellaris-toolchain/"/>
+    <title type="html"><![CDATA[Compiling the Stellaris toolchain]]></title>
+    <link href="http://jmeosbn.github.com/blog/2012/11/15/compiling-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:02:00+00:00</updated>
-    <id>http://jmeosbn.github.com/blog/2012/11/15/setting-up-the-stellaris-toolchain</id>
+    <id>http://jmeosbn.github.com/blog/2012/11/15/compiling-the-stellaris-toolchain</id>
     <content type="html"><![CDATA[<p>Mostly you can follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a>, but there were a couple of catches on my MacBook as detailed below.</p>
 
 <h2>toolchain</h2>
@@ -33,18 +33,19 @@ Unable to get device serial number: LIBUSB_ERROR_OTHER
 Unable to find any ICDI devices
 </code></pre>
 
-<p>The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/cc49426081">cc49426</a>, which doesn&#8217;t check for the serial number.  To use newer versions of lm4tools, a <a href="http://utzig.net/files/lm4f120_icdi.tgz">kernel extension</a> needs to be installed.  For more info, see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github.</p>
+<p>The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/cc49426081">cc49426</a>, which doesn&#8217;t check for the serial number.  To use newer versions of lm4tools, a <a href="http://utzig.net/files/lm4f120_icdi.tgz">kernel extension</a> needs to be installed.</p>
+
+<p>For more info, see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github.</p>
 
 <h2>verify toolchain</h2>
 
-<p>Add the toolchain to your path</p>
+<p>Here&#8217;s the basic steps to compile an example and get the code onto the launchpad.</p>
 
-<pre><code>$ export PATH=$HOME/arm-cs-tools/bin:$PATH
-</code></pre>
+<pre><code># Add the toolchain to your path
+$ export PATH=$HOME/arm-cs-tools/bin:$PATH
 
-<p>Test the compiler</p>
-
-<pre><code>$ cd ../stellaris/boards/ek-lm4f120xl/project0/
+# Test the compiler
+$ cd ../stellaris/boards/ek-lm4f120xl/project0/
 $ make clean; make
 
 # Flash binary to the board
@@ -56,6 +57,8 @@ $ make &amp;&amp; lm4flash gcc/project0.bin
 </code></pre>
 
 <h2>debugging</h2>
+
+<p>lm4tools has a bridge to enable TCP over USB, so code running on the device can be debugged using the gdb binary that was complied with the toolchain above.</p>
 
 <pre><code># build with debug symbols
 $ make clean &amp;&amp; DEBUG=1 make
@@ -73,6 +76,8 @@ Remote debugging using :7777
 (gdb) c
 Continuing.
 </code></pre>
+
+<p>Note: As well as quitting the bridge, I also found the board required a reset (toggle the power selector switch) before flashing was possible again.</p>
 ]]></content>
   </entry>
   
