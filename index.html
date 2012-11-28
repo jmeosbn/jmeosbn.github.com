@@ -95,12 +95,47 @@
 
   <div class="entry-content"><p>With the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> installed, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
+<pre><code># Add the toolchain to your profile's path
+# Ideally this should go into your bash profile
+$ export PATH=$HOME/arm-cs-tools/bin:$PATH
+
+# Test the compiler
+$ git clone https://github.com/yuvadm/stellaris
+$ cd stellaris/boards/ek-lm4f120xl/project0/
+$ make clean; make
+
+# Flash binary to the board
+$ lm4flash gcc/project0.bin
+
+# Try making a source modification
+$ nano project0.c
+$ make &amp;&amp; lm4flash gcc/project0.bin
+</code></pre>
+
+<h2>debugging</h2>
+
+<p><a href="https://github.com/utzig/lm4toolsn">lm4tools</a> has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
+
+<pre><code># build with debug symbols
+$ make clean &amp;&amp; DEBUG=1 make
+$ lm4flash gcc/project0.bin
+
+# start the tcp/usb bridge (in the background)
+$ lmicdi &amp;
+
+# start gdb and connect to device
+$ arm-none-eabi-gdb gcc/project0.axf
+Reading symbols from ./gcc/project0.axf...done.
+(gdb) target remote :7777
+Remote debugging using :7777
+0x00000494 in SysCtlDelay ()
+(gdb) c
+Continuing.
+</code></pre>
+
+<p>Note: As well as quitting lm4flash, I also found <code>detach</code> was needed in gdb (even if it hadn&#8217;t yet been ran), else the board would require a power cycle before flashing was possible again.</p>
 </div>
   
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/11/15/testing-the-stellaris-toolchain/">Read on &rarr;</a>
-    </footer>
   
 
 
@@ -144,12 +179,16 @@
 
 <p>The <a href="https://github.com/utzig/lm4tools">lm4tools</a> binary couldn&#8217;t read the serial number of the device using my MacBook running OS X 10.8 so the binary wasn&#8217;t flashed.</p>
 
+<pre><code>$ ./lm4flash/lm4flash project0.bin
+Unable to get device serial number: LIBUSB_ERROR_OTHER
+Unable to find any ICDI devices
+</code></pre>
+
+<p>The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/cc49426081">cc49426</a>, which doesn&#8217;t check for the serial number.  To use newer versions of lm4tools, a <a href="http://utzig.net/files/lm4f120_icdi.tgz">kernel extension</a> needs to be installed.</p>
+
+<p>For more info, see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github.</p>
 </div>
   
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/11/15/compiling-the-stellaris-toolchain/">Read on &rarr;</a>
-    </footer>
   
 
 
@@ -198,14 +237,63 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>You then add any new or changed files you want to track, and then commit those changes to the repo.</p>
+
+<figure class='code'><figcaption><span>Add and commit changes </span><a href='http://git-scm.com/docs/git-add'>git-add</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">echo </span>About My-Project &gt; README.md
+</span><span class='line'><span class="nv">$ </span>git add . <span class="c"># add all files recursively</span>
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s1">&#39;First Commit&#39;</span>
+</span><span class='line'><span class="o">[</span>master <span class="o">(</span>root-commit<span class="o">)</span> cdab15f<span class="o">]</span> First Commit
+</span><span class='line'> 1 file changed, 1 insertion<span class="o">(</span>+<span class="o">)</span>
+</span><span class='line'> create mode 100644 README.md
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>View recent commits using <code>git log</code>.</p>
+
+<figure class='code'><figcaption><span>View recent commits </span><a href='http://git-scm.com/docs/git-log'>git-log</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git log
+</span><span class='line'>commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
+</span><span class='line'>Author: Jamie Osborne &lt;jmeosbn@your-email.com&gt;
+</span><span class='line'>Date:   Sat Sep 29 23:30:20 2012 +0100
+</span><span class='line'>
+</span><span class='line'>    First Commit
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Documentation</h2>
+
+<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&#8217;t already include it. They also host a copy of the <a href="http://git-scm.com/docs">documentation</a> and the online <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
+
+<p>If you don&#8217;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&#8217;s minimal explanatory text, but full command examples for most operations, making it a useful resource for commands you use rarely and need to quickly relearn.</p>
+
+<h2>Graphical Interfaces</h2>
+
+<p>While it&#8217;s good to know how to use git from the command line, it&#8217;s worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
+
+<p><a href="http://github.com/">Github</a> offers their own decent <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients that also have the advantage of supporting github&#8217;s niceties for organisations and the &#8220;Clone in Windows/Mac&#8221; button found on each repo on github.</p>
+
+<p><img class="center" src="http://1.2.3.11/bmi/mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" ></p>
+
+<p>They do lack some more advanced features though so I mostly prefer <a href="http://gitx.laullon.com/">GitX</a> on the Mac, although <a href="http://git-scm.com/downloads/guis">plenty more GUIs</a> exist on various platforms.</p>
+
+<p><img class="center" src="http://gitx.laullon.com/commit.png" width="512" title="GitX" ></p>
+
+<h2>Other Info</h2>
+
+<p>Btw, if you just want to share some code snippets somewhere, while maintaining versioning etc., then check out <a href="https://gist.github.com/">gists</a>, a feature of github.</p>
 </div>
   
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/09/29/resources-for-using-git/">Read on &rarr;</a>
-    </footer>
   
 
 
