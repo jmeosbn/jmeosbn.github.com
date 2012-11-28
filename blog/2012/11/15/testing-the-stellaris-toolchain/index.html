@@ -95,12 +95,13 @@
 <!-- more -->
 
 
-<pre><code># Add the toolchain to your path
+<pre><code># Add the toolchain to your profile's path
 # Ideally this should go into your bash profile
 $ export PATH=$HOME/arm-cs-tools/bin:$PATH
 
 # Test the compiler
-$ cd ../stellaris/boards/ek-lm4f120xl/project0/
+$ git clone https://github.com/yuvadm/stellaris
+$ cd stellaris/boards/ek-lm4f120xl/project0/
 $ make clean; make
 
 # Flash binary to the board

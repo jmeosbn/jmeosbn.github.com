@@ -134,15 +134,15 @@
   </header>
 
 
-  <div class="entry-content"><p>If you have Mac OS X and a Stellaris Launchpad, you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain for it - the only issues I ran into are listed below.</p>
+  <div class="entry-content"><p>If you have Mac OS X and a Stellaris Launchpad, you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain for it - the only issues I ran into are listed below.  Additionally, ARM is maintaining a GCC <a href="https://launchpad.net/gcc-arm-embedded/+download">toolchain</a> targeting embedded ARM processors.</p>
 
 <h2>toolchain</h2>
 
-<p>The makefile failed to download the source archive from <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/arm-eabi">mentor</a>, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
+<p>The makefile for the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a> failed to download the source archive from <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/arm-eabi">mentor</a>, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
 
 <h2>lm4tools</h2>
 
-<p>The lm4tools binary couldn&#8217;t read the serial number of the device so the binary wasn&#8217;t flashed.</p>
+<p>The <a href="https://github.com/utzig/lm4tools">lm4tools</a> binary couldn&#8217;t read the serial number of the device using my MacBook running OS X 10.8 so the binary wasn&#8217;t flashed.</p>
 
 </div>
   
