@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Compiling the Stellaris toolchain - git-log(1)</title>
+  <title>Testing the Stellaris toolchain - git-log(1)</title>
   <meta name="author" content="Jamie Osborne">
 
   
-  <meta name="description" content="If you have Mac OS X and a Stellaris Launchpad, you can mostly follow the instructions at y3xz to build your own toolchain for it - the only issues I &hellip;">
+  <meta name="description" content="With the toolchain installed, here&#8217;s the basic steps to compile an example and get the code onto the launchpad. A mirror for the Stellaris &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jmeosbn.github.com/blog/2012/11/15/compiling-the-stellaris-toolchain/">
+  <link rel="canonical" href="http://jmeosbn.github.comstellaris-testing">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -67,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">Compiling the Stellaris Toolchain</h1>
+      <h1 class="entry-title">Testing the Stellaris Toolchain</h1>
     
     
       <p class="meta">
@@ -83,31 +83,54 @@
   
 
 
-<time datetime="2012-11-15T20:02:00+00:00" pubdate data-updated="true">Nov 15<span>th</span>, 2012</time>
+<time datetime="2012-11-15T20:40:00+00:00" pubdate data-updated="true">Nov 15<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>If you have Mac OS X and a Stellaris Launchpad, you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain for it - the only issues I ran into are listed below.  Additionally, ARM is maintaining a GCC <a href="https://launchpad.net/gcc-arm-embedded/+download">toolchain</a> targeting embedded ARM processors.</p>
+<div class="entry-content"><p>With the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> installed, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
-<h2>toolchain</h2>
+<pre><code># Add the toolchain to your profile's path
+# Ideally this should go into your bash profile
+$ export PATH=$HOME/arm-cs-tools/bin:$PATH
 
-<p>The makefile for the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a> failed to download the source archive from <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/arm-eabi">mentor</a>, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
+# Test the compiler
+$ git clone https://github.com/yuvadm/stellaris
+$ cd stellaris/boards/ek-lm4f120xl/project0/
+$ make clean; make
 
-<h2>lm4tools</h2>
+# Flash binary to the board
+$ lm4flash gcc/project0.bin
 
-<p>The <a href="https://github.com/utzig/lm4tools">lm4tools</a> binary couldn&#8217;t read the serial number of the device using my MacBook running OS X 10.8 so the binary wasn&#8217;t flashed.</p>
-
-<pre><code>$ ./lm4flash/lm4flash project0.bin
-Unable to get device serial number: LIBUSB_ERROR_OTHER
-Unable to find any ICDI devices
+# Try making a source modification
+$ nano project0.c
+$ make &amp;&amp; lm4flash gcc/project0.bin
 </code></pre>
 
-<p>The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/cc49426081">cc49426</a>, which doesn&#8217;t check for the serial number.  To use newer versions of lm4tools, a <a href="http://utzig.net/files/lm4f120_icdi.tgz">kernel extension</a> needs to be installed.</p>
+<h2>debugging</h2>
 
-<p>For more info, see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github.</p>
+<p><a href="https://github.com/utzig/lm4toolsn">lm4tools</a> has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
+
+<pre><code># build with debug symbols
+$ make clean &amp;&amp; DEBUG=1 make
+$ lm4flash gcc/project0.bin
+
+# start the tcp/usb bridge (in the background)
+$ lmicdi &amp;
+
+# start gdb and connect to device
+$ arm-none-eabi-gdb gcc/project0.axf
+Reading symbols from ./gcc/project0.axf...done.
+(gdb) target remote :7777
+Remote debugging using :7777
+0x00000494 in SysCtlDelay ()
+(gdb) c
+Continuing.
+</code></pre>
+
+<p>Note: As well as quitting lm4flash, I also found <code>detach</code> was needed in gdb (even if it hadn&#8217;t yet been ran), else the board would require a power cycle before flashing was possible again.</p>
 </div>
 
 
@@ -130,12 +153,12 @@ Unable to find any ICDI devices
   
 
 
-<time datetime="2012-11-15T20:02:00+00:00" pubdate data-updated="true">Nov 15<span>th</span>, 2012</time>
+<time datetime="2012-11-15T20:40:00+00:00" pubdate data-updated="true">Nov 15<span>th</span>, 2012</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/arm/'>arm</a>
+    <a class='category' href='/blog/categories/arm/'>arm</a>, <a class='category' href='/blog/categories/hacking/'>hacking</a>
   
 </span>
 
@@ -144,7 +167,7 @@ Unable to find any ICDI devices
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jmeosbn.github.com/blog/2012/11/15/compiling-the-stellaris-toolchain/" data-via="jmeosbn" data-counturl="http://jmeosbn.github.com/blog/2012/11/15/compiling-the-stellaris-toolchain/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jmeosbn.github.comstellaris-testing" data-via="jmeosbn" data-counturl="http://jmeosbn.github.comstellaris-testing" >Tweet</a>
   
   
   
@@ -153,10 +176,8 @@ Unable to find any ICDI devices
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/09/29/resources-for-using-git/" title="Previous Post: Resources for Using Git">&laquo; Resources for Using Git</a>
+        <a class="basic-alignment left" href="stellaris-toolchain" title="Previous Post: Compiling the Stellaris toolchain">&laquo; Compiling the Stellaris toolchain</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/11/15/testing-the-stellaris-toolchain/" title="Next Post: Testing the Stellaris toolchain">Testing the Stellaris toolchain &raquo;</a>
       
     </p>
   </footer>

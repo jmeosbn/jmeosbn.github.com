@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: hacking | git-log(1)]]></title>
+  <link href="http://jmeosbn.github.com/blog/categories/hacking/atom.xml" rel="self"/>
+  <link href="http://jmeosbn.github.com/"/>
+  <updated>2012-11-28T21:29:38+00:00</updated>
+  <id>http://jmeosbn.github.com/</id>
+  <author>
+    <name><![CDATA[Jamie Osborne]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Testing the Stellaris toolchain]]></title>
+    <link href="http://jmeosbn.github.comstellaris-testing"/>
+    <updated>2012-11-15T20:40:00+00:00</updated>
+    <id>http://jmeosbn.github.com./testing-the-stellaris-toolchain</id>
+    <content type="html"><![CDATA[<p>With the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> installed, here's the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
+
+<pre><code># Add the toolchain to your profile's path
+# Ideally this should go into your bash profile
+$ export PATH=$HOME/arm-cs-tools/bin:$PATH
+
+# Test the compiler
+$ git clone https://github.com/yuvadm/stellaris
+$ cd stellaris/boards/ek-lm4f120xl/project0/
+$ make clean; make
+
+# Flash binary to the board
+$ lm4flash gcc/project0.bin
+
+# Try making a source modification
+$ nano project0.c
+$ make &amp;&amp; lm4flash gcc/project0.bin
+</code></pre>
+
+<h2>debugging</h2>
+
+<p><a href="https://github.com/utzig/lm4toolsn">lm4tools</a> has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
+
+<pre><code># build with debug symbols
+$ make clean &amp;&amp; DEBUG=1 make
+$ lm4flash gcc/project0.bin
+
+# start the tcp/usb bridge (in the background)
+$ lmicdi &amp;
+
+# start gdb and connect to device
+$ arm-none-eabi-gdb gcc/project0.axf
+Reading symbols from ./gcc/project0.axf...done.
+(gdb) target remote :7777
+Remote debugging using :7777
+0x00000494 in SysCtlDelay ()
+(gdb) c
+Continuing.
+</code></pre>
+
+<p>Note: As well as quitting lm4flash, I also found <code>detach</code> was needed in gdb (even if it hadn't yet been ran), else the board would require a power cycle before flashing was possible again.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Compiling the Stellaris toolchain]]></title>
+    <link href="http://jmeosbn.github.comstellaris-toolchain"/>
+    <updated>2012-11-15T20:02:00+00:00</updated>
+    <id>http://jmeosbn.github.com./compiling-the-stellaris-toolchain</id>
+    <content type="html"><![CDATA[<p>If you have Mac OS X and a Stellaris Launchpad, you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain for it - the only issues I ran into are listed below.  Additionally, ARM is maintaining a GCC <a href="https://launchpad.net/gcc-arm-embedded/+download">toolchain</a> targeting embedded ARM processors.</p>
+
+<h2>toolchain</h2>
+
+<p>The makefile for the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a> failed to download the source archive from <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/arm-eabi">mentor</a>, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
+
+<h2>lm4tools</h2>
+
+<p>The <a href="https://github.com/utzig/lm4tools">lm4tools</a> binary couldn't read the serial number of the device using my MacBook running OS X 10.8 so the binary wasn't flashed.</p>
+
+<pre><code>$ ./lm4flash/lm4flash project0.bin
+Unable to get device serial number: LIBUSB_ERROR_OTHER
+Unable to find any ICDI devices
+</code></pre>
+
+<p>The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/cc49426081">cc49426</a>, which doesn't check for the serial number.  To use newer versions of lm4tools, a <a href="http://utzig.net/files/lm4f120_icdi.tgz">kernel extension</a> needs to be installed.</p>
+
+<p>For more info, see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Resources for Using Git]]></title>
+    <link href="http://jmeosbn.github.comgit-resources"/>
+    <updated>2012-09-29T20:35:00+01:00</updated>
+    <id>http://jmeosbn.github.com./resources-for-using-git</id>
+    <content type="html"><![CDATA[<p>Here's some basic resources for getting started pushing code to github.</p>
+
+<p>"Code" doesn't just mean computer source code; git is useful for tracking anything that can be represented as plain text, eg. changes to <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
+
+<p>The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named <code>.git</code>.</p>
+
+<p><code>sh Initialise a new git repo http://git-scm.com/docs/git-init git-init
+$ cd my-project
+$ git init
+Initialized empty Git repository in my-project/.git/
+</code></p>
+
+<p>You then add any new or changed files you want to track, and then commit those changes to the repo.</p>
+
+<p><code>sh Add and commit changes http://git-scm.com/docs/git-add git-add
+$ echo About My-Project &gt; README.md
+$ git add . # add all files recursively
+$ git commit -m 'First Commit'
+[master (root-commit) cdab15f] First Commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+</code></p>
+
+<p>View recent commits using <code>git log</code>.</p>
+
+<p>``` sh View recent commits http://git-scm.com/docs/git-log git-log
+$ git log
+commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
+Author: Jamie Osborne <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x6a;&#x6d;&#x65;&#111;&#115;&#x62;&#x6e;&#x40;&#x79;&#x6f;&#117;&#x72;&#45;&#101;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#x6d;">&#x6a;&#109;&#101;&#111;&#x73;&#x62;&#110;&#64;&#x79;&#111;&#117;&#114;&#45;&#101;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a>
+Date:   Sat Sep 29 23:30:20 2012 +0100</p>
+
+<pre><code>First Commit
+</code></pre>
+
+<p>```</p>
+
+<h2>Documentation</h2>
+
+<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn't already include it. They also host a copy of the <a href="http://git-scm.com/docs">documentation</a> and the online <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
+
+<p>If you don't fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There's minimal explanatory text, but full command examples for most operations, making it a useful resource for commands you use rarely and need to quickly relearn.</p>
+
+<h2>Graphical Interfaces</h2>
+
+<p>While it's good to know how to use git from the command line, it's worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
+
+<p><a href="http://github.com/">Github</a> offers their own decent <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients that also have the advantage of supporting github's niceties for organisations and the "Clone in Windows/Mac" button found on each repo on github.</p>
+
+<p><img class="center" src="http://1.2.3.11/bmi/mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" ></p>
+
+<p>They do lack some more advanced features though so I mostly prefer <a href="http://gitx.laullon.com/">GitX</a> on the Mac, although <a href="http://git-scm.com/downloads/guis">plenty more GUIs</a> exist on various platforms.</p>
+
+<p><img class="center" src="http://gitx.laullon.com/commit.png" width="512" title="GitX" ></p>
+
+<h2>Other Info</h2>
+
+<p>Btw, if you just want to share some code snippets somewhere, while maintaining versioning etc., then check out <a href="https://gist.github.com/">gists</a>, a feature of github.</p>
+]]></content>
+  </entry>
+  
+</feed>

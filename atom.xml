@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-11-28T21:09:51+00:00</updated>
+  <updated>2012-11-28T21:29:38+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Testing the Stellaris toolchain]]></title>
-    <link href="http://jmeosbn.github.com/blog/2012/11/15/testing-the-stellaris-toolchain/"/>
+    <link href="http://jmeosbn.github.comstellaris-testing"/>
     <updated>2012-11-15T20:40:00+00:00</updated>
-    <id>http://jmeosbn.github.com/blog/2012/11/15/testing-the-stellaris-toolchain</id>
+    <id>http://jmeosbn.github.com./testing-the-stellaris-toolchain</id>
     <content type="html"><![CDATA[<p>With the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> installed, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
 <pre><code># Add the toolchain to your profile's path
@@ -64,9 +64,9 @@ Continuing.
   
   <entry>
     <title type="html"><![CDATA[Compiling the Stellaris toolchain]]></title>
-    <link href="http://jmeosbn.github.com/blog/2012/11/15/compiling-the-stellaris-toolchain/"/>
+    <link href="http://jmeosbn.github.comstellaris-toolchain"/>
     <updated>2012-11-15T20:02:00+00:00</updated>
-    <id>http://jmeosbn.github.com/blog/2012/11/15/compiling-the-stellaris-toolchain</id>
+    <id>http://jmeosbn.github.com./compiling-the-stellaris-toolchain</id>
     <content type="html"><![CDATA[<p>If you have Mac OS X and a Stellaris Launchpad, you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain for it - the only issues I ran into are listed below.  Additionally, ARM is maintaining a GCC <a href="https://launchpad.net/gcc-arm-embedded/+download">toolchain</a> targeting embedded ARM processors.</p>
 
 <h2>toolchain</h2>
@@ -90,9 +90,9 @@ Unable to find any ICDI devices
   
   <entry>
     <title type="html"><![CDATA[Resources for Using Git]]></title>
-    <link href="http://jmeosbn.github.com/blog/2012/09/29/resources-for-using-git/"/>
+    <link href="http://jmeosbn.github.comgit-resources"/>
     <updated>2012-09-29T20:35:00+01:00</updated>
-    <id>http://jmeosbn.github.com/blog/2012/09/29/resources-for-using-git</id>
+    <id>http://jmeosbn.github.com./resources-for-using-git</id>
     <content type="html"><![CDATA[<p>Here&#8217;s some basic resources for getting started pushing code to github.</p>
 
 <p>&#8220;Code&#8221; doesn&#8217;t just mean computer source code; git is useful for tracking anything that can be represented as plain text, eg. changes to <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
