@@ -3,7 +3,8 @@ layout: post
 title: "Resources for Using Git"
 date: 2012-09-29 20:35
 comments: true
-categories: git
+categories: [git, hacking]
+permalink: git-resources
 sidebar: false
 ---
 
