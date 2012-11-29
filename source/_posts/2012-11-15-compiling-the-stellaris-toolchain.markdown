@@ -32,9 +32,11 @@ The makefile for the [ARM EABI Toolchain Builder][EABI] failed to download the s
 
 The [lm4tools] binary couldn't read the serial number of the device using my MacBook running OS X 10.8 so the binary wasn't flashed.
 
-	$ ./lm4flash/lm4flash project0.bin
-	Unable to get device serial number: LIBUSB_ERROR_OTHER
-	Unable to find any ICDI devices
+``` sh
+$ ./lm4flash/lm4flash project0.bin
+Unable to get device serial number: LIBUSB_ERROR_OTHER
+Unable to find any ICDI devices
+```
 
 The simplest workaround is to checkout and build commit [cc49426], which doesn't check for the serial number.  To use newer versions of lm4tools, a [kernel extension] needs to be installed.
 
