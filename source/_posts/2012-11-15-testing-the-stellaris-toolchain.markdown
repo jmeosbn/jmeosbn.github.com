@@ -5,7 +5,7 @@ title: "Testing the Stellaris toolchain"
 date: 2012-11-15 20:40
 comments: true
 categories: [arm, hacking]
-permalink: stellaris-testing
+_permalink: stellaris-testing
 sidebar: false
 
 ---
