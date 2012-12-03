@@ -45,7 +45,7 @@ Date:   Sat Sep 29 23:30:20 2012 +0100
 ```
 
 ## Documentation
-    
+
 Git itself can be installed from [git-scm.com](http://git-scm.com/downloads) if your OS doesn't already include it. They also host a copy of the [documentation](http://git-scm.com/docs) and the online [Pro Git book](http://git-scm.com/book) which is a great place to start learning git.  Pro Git is also available as a commercially [printed book](http://www.amazon.com/gp/product/1430218339?ie=UTF8&tag=prgi-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=1430218339) from Apress, and as a free [ePub](https://github.s3.amazonaws.com/media/progit.epub), [mobi](https://github.s3.amazonaws.com/media/pro-git.en.mobi), or [PDF](https://github.s3.amazonaws.com/media/progit.en.pdf) download.
 
 If you don't fancy reading an entire book, then this [Git Tutorial](http://www.vogella.com/articles/Git/article.html) gets straight to the point for those already familiar with the concepts of version control.  There's minimal explanatory text, but full command examples for most operations, making it a useful resource for commands you use rarely and need to quickly relearn.

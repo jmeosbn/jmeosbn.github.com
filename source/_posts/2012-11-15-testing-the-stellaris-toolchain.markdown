@@ -39,23 +39,23 @@ $ make && lm4flash gcc/project0.bin
 [lm4tools] has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.
 
 [lm4tools]: https://github.com/utzig/lm4toolsn
-	
+
 ``` sh
-# build with debug symbols
-$ make clean && DEBUG=1 make
-$ lm4flash gcc/project0.bin
+    # build with debug symbols
+    $ make clean && DEBUG=1 make
+    $ lm4flash gcc/project0.bin
 
-# start the tcp/usb bridge (in the background)
-$ lmicdi &
+    # start the tcp/usb bridge (in the background)
+    $ lmicdi &
 
-# start gdb and connect to device
-$ arm-none-eabi-gdb gcc/project0.axf
-Reading symbols from ./gcc/project0.axf...done.
-(gdb) target remote :7777
-Remote debugging using :7777
-0x00000494 in SysCtlDelay ()
-(gdb) c
-Continuing.
+    # start gdb and connect to device
+    $ arm-none-eabi-gdb gcc/project0.axf
+    Reading symbols from ./gcc/project0.axf...done.
+    (gdb) target remote :7777
+    Remote debugging using :7777
+    0x00000494 in SysCtlDelay ()
+    (gdb) c
+    Continuing.
 ```
-	
+
 Note: As well as quitting lm4flash, I also found ``detach`` was needed in gdb (even if it hadn't yet been ran), else the board would require a power cycle before flashing was possible again.

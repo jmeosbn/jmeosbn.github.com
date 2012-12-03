@@ -12,6 +12,7 @@ sidebar: false
 
 If you have a Stellaris [Launchpad] - and don't want to use the [official] tools - you can mostly follow the instructions at [y3xz] to build your own toolchain on any Unix/Linux based system using the [ARM EABI Toolchain Builder][EABI].  This includes Mac OS X, but I ran into a couple of minor issues as listed below.
 
+[Stellaris]: http://www.ti.com/product/lm4f120h5qr
 [Launchpad]: http://www.ti.com/ww/en/launchpad/stellaris_head.html
 [y3xz]: http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/
 [official]: http://www.ti.com/tool/SW-EK-LM4F120XL
@@ -19,10 +20,13 @@ If you have a Stellaris [Launchpad] - and don't want to use the [official] tools
 
 Note, the Codesourcery Lite [toolchain][mentor] used here does not support the hardware FPU of the ARM [Cortex-M4F], using software floating point code instead.  There is a [hardfloat-toolchain] builder (which I've not used yet), and ARM is maintaining a [GCC toolchain][launchpad.net] targeting embedded ARM processors, which I'll probably try building next.
 
+For more details, T.I. have a selection of [technical documentation][Stellaris] on their site.
+
 
 [Cortex-M4F]: http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4
 [launchpad.net]: https://launchpad.net/gcc-arm-embedded/+download
 [hardfloat-toolchain]: https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain
+
 
 ## toolchain
 
