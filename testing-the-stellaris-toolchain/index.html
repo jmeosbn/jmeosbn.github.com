@@ -9,7 +9,7 @@
   <meta name="author" content="Jamie Osborne">
 
   
-  <meta name="description" content="With the toolchain installed, here&#8217;s the basic steps to compile an example and get the code onto the launchpad. A mirror for the Stellaris &hellip;">
+  <meta name="description" content="Once the toolchain is [installed], here&#8217;s the basic steps to compile an example and get the code onto the launchpad. A mirror for the Stellaris &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -90,7 +90,7 @@
   </header>
 
 
-<div class="entry-content"><p>With the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> installed, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
+<div class="entry-content"><p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is [installed], here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -145,7 +145,7 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># build with debug symbols</span>
-</span><span class='line'><span class="nv">$ </span>make clean <span class="o">&amp;&amp;</span> <span class="nv">DEBUG</span><span class="o">=</span>1 make
+</span><span class='line'><span class="nv">$ </span>make clean <span class="o">&amp;&amp;</span> make <span class="nv">DEBUG</span><span class="o">=</span>1
 </span><span class='line'><span class="nv">$ </span>lm4flash gcc/project0.bin
 </span><span class='line'>
 </span><span class='line'><span class="c"># start the tcp/usb bridge (in the background)</span>
@@ -162,7 +162,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Note: As well as quitting lm4flash, I also found <code>detach</code> was needed in gdb (even if it hadn&#8217;t yet been ran), else the board would require a power cycle before flashing was possible again.</p>
+<p>Note: As well as quitting lmicdi, I also found <code>detach</code> was needed in gdb (even if it hadn&#8217;t yet been ran), else the board would require a power cycle before flashing was possible again.</p>
 </div>
 
 
