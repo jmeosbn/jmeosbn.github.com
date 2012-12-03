@@ -10,10 +10,10 @@ sidebar: false
 
 ---
 
-With the [toolchain] installed, here's the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on [github].
+Once the [toolchain] is [installed], here's the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on [github].
 
 [toolchain]: https://github.com/jsnyder/arm-eabi-toolchain
-[macosx]: /blog/2012/11/15/compiling-the-stellaris-toolchain/
+[installed]: /compiling-the-stellaris-toolchain/
 [github]: https://github.com/yuvadm/stellaris
 
 ``` sh
@@ -42,7 +42,7 @@ $ make && lm4flash gcc/project0.bin
 
 ``` sh
     # build with debug symbols
-    $ make clean && DEBUG=1 make
+    $ make clean && make DEBUG=1
     $ lm4flash gcc/project0.bin
 
     # start the tcp/usb bridge (in the background)
@@ -58,4 +58,4 @@ $ make && lm4flash gcc/project0.bin
     Continuing.
 ```
 
-Note: As well as quitting lm4flash, I also found ``detach`` was needed in gdb (even if it hadn't yet been ran), else the board would require a power cycle before flashing was possible again.
+Note: As well as quitting lmicdi, I also found ``detach`` was needed in gdb (even if it hadn't yet been ran), else the board would require a power cycle before flashing was possible again.
