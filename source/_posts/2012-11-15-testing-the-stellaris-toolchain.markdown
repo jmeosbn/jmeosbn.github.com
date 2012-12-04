@@ -56,6 +56,13 @@ Once the [toolchain] is [installed], here's the basic steps to compile an exampl
 	0x00000494 in SysCtlDelay ()
 	(gdb) c
 	Continuing.
-```
+	^C
+	[Thread <main>] #1 stopped.
+	0x00000662 in SysCtlDelay ()
+	(gdb) detach
+	Ending remote debugging.
+	(gdb) quit
 
-Note: As well as quitting lmicdi, I also found ``detach`` was needed in gdb (even if it hadn't yet been ran), else the board would require a power cycle before flashing was possible again.
+	# quit lmicdi to allow use of lm4flash
+	$ sudo killall lmicdi # or type 'fg' followed by ^C
+```
