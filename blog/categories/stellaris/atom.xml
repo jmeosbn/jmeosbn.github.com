@@ -4,7 +4,7 @@
   <title><![CDATA[Category: stellaris | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/stellaris/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-03T21:14:45+00:00</updated>
+  <updated>2012-12-04T19:26:17+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -22,27 +22,24 @@
 
 <p>``` sh</p>
 
-<h1>Add the toolchain to your profile's path</h1>
+<pre><code># Add the toolchain to your profile's path
+# Ideally this should go into your bash profile
+$ export PATH=$HOME/arm-cs-tools/bin:$PATH
 
-<h1>Ideally this should go into your bash profile</h1>
-
-<p>$ export PATH=$HOME/arm-cs-tools/bin:$PATH</p>
-
-<h1>Test the compiler</h1>
-
-<p>$ git clone https://github.com/yuvadm/stellaris
+# Test the compiler
+$ git clone https://github.com/yuvadm/stellaris
 $ cd stellaris/boards/ek-lm4f120xl/project0/
-$ make clean; make</p>
+$ make clean; make
 
-<h1>Flash binary to the board</h1>
+# Flash binary to the board
+$ lm4flash gcc/project0.bin
 
-<p>$ lm4flash gcc/project0.bin</p>
-
-<h1>Try making a source modification</h1>
-
-<p>$ nano project0.c
+# Try making a source modification
+$ nano project0.c
 $ make &amp;&amp; lm4flash gcc/project0.bin
-```</p>
+</code></pre>
+
+<p>```</p>
 
 <h2>debugging</h2>
 
@@ -65,11 +62,18 @@ Remote debugging using :7777
 0x00000494 in SysCtlDelay ()
 (gdb) c
 Continuing.
+^C
+[Thread &lt;main&gt;] #1 stopped.
+0x00000662 in SysCtlDelay ()
+(gdb) detach
+Ending remote debugging.
+(gdb) quit
+
+# quit lmicdi to allow use of lm4flash
+$ sudo killall lmicdi # or type 'fg' followed by ^C
 </code></pre>
 
 <p>```</p>
-
-<p>Note: As well as quitting lmicdi, I also found <code>detach</code> was needed in gdb (even if it hadn't yet been ran), else the board would require a power cycle before flashing was possible again.</p>
 ]]></content>
   </entry>
   
@@ -92,11 +96,14 @@ Continuing.
 
 <p>The <a href="https://github.com/utzig/lm4tools">lm4tools</a> binary couldn't read the serial number of the device using my MacBook running OS X 10.8, so I couldn't flash the binary.</p>
 
-<p><code>sh
-$ ./lm4flash/lm4flash project0.bin
+<p>``` sh</p>
+
+<pre><code>$ ./lm4flash/lm4flash project0.bin
 Unable to get device serial number: LIBUSB_ERROR_OTHER
 Unable to find any ICDI devices
-</code></p>
+</code></pre>
+
+<p>```</p>
 
 <p>The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/cc49426081">cc49426</a>, which doesn't check for the serial number.  To use newer versions of lm4tools, a kernel extension needs to be installed, see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.</p>
 

@@ -144,6 +144,15 @@
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># build with debug symbols</span>
 </span><span class='line'><span class="nv">$ </span>make clean <span class="o">&amp;&amp;</span> make <span class="nv">DEBUG</span><span class="o">=</span>1
 </span><span class='line'><span class="nv">$ </span>lm4flash gcc/project0.bin
@@ -159,10 +168,17 @@
 </span><span class='line'>0x00000494 in SysCtlDelay <span class="o">()</span>
 </span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> c
 </span><span class='line'>Continuing.
+</span><span class='line'>^C
+</span><span class='line'><span class="o">[</span>Thread &lt;main&gt;<span class="o">]</span> <span class="c">#1 stopped.</span>
+</span><span class='line'>0x00000662 in SysCtlDelay <span class="o">()</span>
+</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> detach
+</span><span class='line'>Ending remote debugging.
+</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> quit
+</span><span class='line'>
+</span><span class='line'><span class="c"># quit lmicdi to allow use of lm4flash</span>
+</span><span class='line'><span class="nv">$ </span>sudo killall lmicdi <span class="c"># or type &#39;fg&#39; followed by ^C</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>Note: As well as quitting lmicdi, I also found <code>detach</code> was needed in gdb (even if it hadn&#8217;t yet been ran), else the board would require a power cycle before flashing was possible again.</p>
 </div>
 
 
