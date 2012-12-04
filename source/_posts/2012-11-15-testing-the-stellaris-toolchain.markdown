@@ -17,21 +17,21 @@ Once the [toolchain] is [installed], here's the basic steps to compile an exampl
 [github]: https://github.com/yuvadm/stellaris
 
 ``` sh
-# Add the toolchain to your profile's path
-# Ideally this should go into your bash profile
-$ export PATH=$HOME/arm-cs-tools/bin:$PATH
+	# Add the toolchain to your profile's path
+	# Ideally this should go into your bash profile
+	$ export PATH=$HOME/arm-cs-tools/bin:$PATH
 
-# Test the compiler
-$ git clone https://github.com/yuvadm/stellaris
-$ cd stellaris/boards/ek-lm4f120xl/project0/
-$ make clean; make
+	# Test the compiler
+	$ git clone https://github.com/yuvadm/stellaris
+	$ cd stellaris/boards/ek-lm4f120xl/project0/
+	$ make clean; make
 
-# Flash binary to the board
-$ lm4flash gcc/project0.bin
+	# Flash binary to the board
+	$ lm4flash gcc/project0.bin
 
-# Try making a source modification
-$ nano project0.c
-$ make && lm4flash gcc/project0.bin
+	# Try making a source modification
+	$ nano project0.c
+	$ make && lm4flash gcc/project0.bin
 ```
 
 ## debugging
@@ -41,21 +41,21 @@ $ make && lm4flash gcc/project0.bin
 [lm4tools]: https://github.com/utzig/lm4toolsn
 
 ``` sh
-    # build with debug symbols
-    $ make clean && make DEBUG=1
-    $ lm4flash gcc/project0.bin
+	# build with debug symbols
+	$ make clean && make DEBUG=1
+	$ lm4flash gcc/project0.bin
 
-    # start the tcp/usb bridge (in the background)
-    $ lmicdi &
+	# start the tcp/usb bridge (in the background)
+	$ lmicdi &
 
-    # start gdb and connect to device
-    $ arm-none-eabi-gdb gcc/project0.axf
-    Reading symbols from ./gcc/project0.axf...done.
-    (gdb) target remote :7777
-    Remote debugging using :7777
-    0x00000494 in SysCtlDelay ()
-    (gdb) c
-    Continuing.
+	# start gdb and connect to device
+	$ arm-none-eabi-gdb gcc/project0.axf
+	Reading symbols from ./gcc/project0.axf...done.
+	(gdb) target remote :7777
+	Remote debugging using :7777
+	0x00000494 in SysCtlDelay ()
+	(gdb) c
+	Continuing.
 ```
 
 Note: As well as quitting lmicdi, I also found ``detach`` was needed in gdb (even if it hadn't yet been ran), else the board would require a power cycle before flashing was possible again.
