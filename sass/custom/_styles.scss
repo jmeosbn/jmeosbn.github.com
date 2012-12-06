@@ -1,2 +1,13 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+
+/*
+	http://melandri.net/2012/02/14/octopress-theme-customization/
+*/
+@font-face {
+  font-family: "League";
+  src: url('/font/LeagueGothic.otf');
+}
+
+a:visited, #content .blog-index article h1 a:hover { color: #1863A1; }
+
