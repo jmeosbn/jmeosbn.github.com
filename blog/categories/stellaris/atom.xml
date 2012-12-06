@@ -4,7 +4,7 @@
   <title><![CDATA[Category: stellaris | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/stellaris/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-06T13:21:54+00:00</updated>
+  <updated>2012-12-06T13:31:47+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -94,9 +94,9 @@ $ sudo killall lmicdi # or type 'fg' followed by ^C
 
 <h2>lm4tools</h2>
 
-<p>The <code>lm4flash</code> tool included in the current version of <a href="https://github.com/utzig/lm4tools">lm4tools</a>, is unable to read the serial number of the device on recent versions of OS X; so I couldn't flash compiled code to the launchpad device.</p>
+<p>The <code>lm4flash</code> tool included in <a href="https://github.com/utzig/lm4tools/commit/cc466b1">recent</a> versions of <a href="https://github.com/utzig/lm4tools">lm4tools</a>, is unable to read the serial number of the device on OS X; so compiled code cannot be flashed to the launchpad device.</p>
 
-<p><strong>Update: The dev has <a href="https://github.com/utzig/lm4tools/commit/99d501b">committed</a> a workaround for OS X, so building from HEAD should work now.</strong>
+<p><strong>Update: The dev has <a href="https://github.com/utzig/lm4tools/commit/99d501b">committed</a> a workaround for OS X, so recent versions of lm4flash should work now.</strong>
 ``` sh</p>
 
 <pre><code>$ ./lm4flash project0.bin
