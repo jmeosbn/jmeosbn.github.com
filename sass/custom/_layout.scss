@@ -1,3 +1,11 @@
+/*
+	change the main layout width so the article content is 640px wide
+	http://melandri.net/2012/02/14/octopress-theme-customization/
+*/
+$max-width: 1037px;
+$sidebar-width-medium: 240px;
+$sidebar-width-wide: 270px;
+
 // Here you can easily change your sites's layout.
 // To give it a try, uncomment some of the lines below, make changes, rebuild your blog, and see how it works.
 
