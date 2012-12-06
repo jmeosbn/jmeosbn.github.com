@@ -4,7 +4,7 @@
   <title><![CDATA[Category: stellaris | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/stellaris/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-06T13:36:20+00:00</updated>
+  <updated>2012-12-06T13:40:33+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -86,7 +86,7 @@ $ sudo killall lmicdi # or type 'fg' followed by ^C
 
 <p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I've not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I'll probably try building next.</p>
 
-<p>For more details, T.I. have a selection of <a href="http://www.ti.com/product/lm4f120h5qr">technical documentation</a> on their site.</p>
+<p>For more details on the launchpad, and the various libraries etc. that it uses, T.I. have a selection of <a href="http://www.ti.com/product/lm4f120h5qr">technical documentation</a> on their site.</p>
 
 <h2>toolchain</h2>
 
