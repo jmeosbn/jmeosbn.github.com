@@ -18,11 +18,13 @@ If you have a Stellaris [Launchpad] - and don't want to use the [official] tools
 [official]: http://www.ti.com/tool/SW-EK-LM4F120XL
 [EABI]: https://github.com/jsnyder/arm-eabi-toolchain
 
-Note, the Codesourcery Lite [toolchain][mentor] used here does not support the hardware FPU of the ARM [Cortex-M4F], using software floating point code instead.  There is a [hardfloat-toolchain] builder (which I've not used yet), and ARM is maintaining a [GCC toolchain][launchpad.net] targeting embedded ARM processors, which I'll probably try building next.
+Note, the libraries included with the Codesourcery Lite [toolchain][mentor] used here [do not support][libraries] the hardware FPU of the ARM [Cortex-M4F], using software floating point code instead.  There is a [hardfloat-toolchain] builder (which I've not used yet), and ARM is maintaining a [GCC toolchain][launchpad.net] targeting embedded ARM processors, which I'll probably try building next.
 
-For more details, T.I. have a selection of [technical documentation][Stellaris] on their site.
+For more details on the launchpad, and the various libraries etc. that it uses, T.I. has a selection of [technical documentation][Stellaris] on their site.
 
+[^softlib]: The compiler supports soft-float, VFP hard-float using the soft-float ABI, and VFP hard-float using the VFP ABI. The included libraries are only compiled with soft floating point support, and are link-compatible with VFP hard-float code only when using the soft-float ABI; linking with code that uses the VFP ABI will fail.
 
+[libraries]: https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet
 [Cortex-M4F]: http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4
 [launchpad.net]: https://launchpad.net/gcc-arm-embedded/+download
 [hardfloat-toolchain]: https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain
@@ -41,20 +43,26 @@ The makefile failed to download the source archive, you can [download] it manual
 
 ## lm4tools
 
-The [lm4tools] binary couldn't read the serial number of the device using my MacBook running OS X 10.8, so I couldn't flash the binary.
+The `lm4flash` tool included in [recent] versions of [lm4tools], is unable to read the serial number of the device on OS X; so compiled code cannot be flashed to the launchpad device.
+
+[recent]: https://github.com/utzig/lm4tools/commit/cc466b1
+
+__Update: The dev has [committed] a workaround that fixes `lm4flash` on OS X.__
+[committed]: https://github.com/utzig/lm4tools/commit/99d501b
 
 ``` sh
-	$ ./lm4flash/lm4flash project0.bin
+	$ ./lm4flash project0.bin
 	Unable to get device serial number: LIBUSB_ERROR_OTHER
 	Unable to find any ICDI devices
 ```
 
-The simplest workaround is to checkout and build commit [cc49426], which doesn't check for the serial number.  To use newer versions of lm4tools, a kernel extension needs to be installed, see the [issue] on github for more info.
+Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the [issue] on github for more info.  The simplest workaround is to checkout and build commit [ea3c905], which doesn't check for the serial number.
 
-Btw, you will get a similar error if your system requires root privileges to access the device directly over usb, try using `sudo` on linux/unix systems if you have issues.
+Btw, you will get a similar error if your system requires root privileges to access the device directly over usb; try using `sudo` on linux/unix systems if you have issues.
 
 [lm4tools]: https://github.com/utzig/lm4tools
 [issue]: https://github.com/utzig/lm4tools/issues/8
+[ea3c905]: https://github.com/utzig/lm4tools/commit/ea3c905
 [cc49426]: https://github.com/utzig/lm4tools/commit/cc49426081
 
 
@@ -62,5 +70,7 @@ Btw, you will get a similar error if your system requires root privileges to acc
 
 [Setting up the GCC ARM Toolchain](http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/) - focuses on using ARM's [GCC toolchain][launchpad.net] on Windows
 
-An older [programming tool](https://github.com/texane/stlink) with some good info in the README ([and another one here](https://github.com/utzig/icdiflasher)).
+[Testing the Stellaris Toolchain](/testing-the-stellaris-toolchain) - my overview for compiling and testing code on the device.
+
+[^stlink]: An older [programming tool](https://github.com/texane/stlink) with some debugging info in the README that applies to lmicdi.
 
