@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-09T22:42:20+00:00</updated>
+  <updated>2012-12-09T22:44:09+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -46,7 +46,7 @@ $ git commit -m 'First Commit'
 <p>``` sh View recent commits http://git-scm.com/docs/git-log git-log
 $ git log
 commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
-Author: Jamie Osborne <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#x6a;&#x6d;&#101;&#x6f;&#x73;&#x62;&#110;&#64;&#x79;&#111;&#117;&#114;&#45;&#101;&#x6d;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#109;">&#x6a;&#x6d;&#x65;&#111;&#115;&#98;&#x6e;&#64;&#x79;&#x6f;&#x75;&#x72;&#45;&#x65;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#x6d;</a>
+Author: Jamie Osborne <a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#x6a;&#x6d;&#x65;&#x6f;&#115;&#98;&#x6e;&#64;&#121;&#111;&#x75;&#x72;&#x2d;&#x65;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#x6a;&#x6d;&#101;&#111;&#x73;&#98;&#110;&#x40;&#x79;&#x6f;&#117;&#114;&#45;&#x65;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;</a>
 Date:   Sat Sep 29 23:30:20 2012 +0100</p>
 
 <pre><code>First Commit
