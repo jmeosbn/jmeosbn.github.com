@@ -114,6 +114,12 @@ aside.sidebar section h1 {
 
 aside.sidebar a { text-decoration: none; }
 
+/* remove bottom border from subitems */
+aside.sidebar li {
+  border-bottom: 0px;
+  @include box-shadow(lighten($sidebar-bg, 5) 0 0px);
+}
+
 .toggle-sidebar { display: none; }
 
 ul#gh_repos > li > a {
