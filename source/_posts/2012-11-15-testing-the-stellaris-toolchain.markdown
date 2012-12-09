@@ -38,7 +38,7 @@ Once the [toolchain] is [installed], here's the basic steps to compile an exampl
 
 [lm4tools] has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.
 
-[lm4tools]: https://github.com/utzig/lm4toolsn
+[lm4tools]: https://github.com/utzig/lm4tools
 
 ``` sh
 	# build with debug symbols
