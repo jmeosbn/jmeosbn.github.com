@@ -68,6 +68,10 @@ body > nav a {
 
 /* ----- Content ----- */
 
+/* Default colour for article text */
+article {
+  color: #555555 !important;
+}
 
 #content .blog-index article h1 {
   font-size: 1.8em;
