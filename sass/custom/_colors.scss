@@ -15,6 +15,10 @@
 //$footer-bg-back: linear-gradient(lighten($footer-bg, 8), $footer-bg, darken($footer-bg, 11));
 
 
+/* Prevent colouring all sidebar links on hover */
+$sidebar-link-color: #555555;
+$sidebar-link-color-hover: #555555;
+
 /* To use the light Solarized highlighting theme uncomment the following line */
 //$solarized: light;
 
