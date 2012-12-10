@@ -4,7 +4,7 @@
   <title><![CDATA[Category: stellaris | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/stellaris/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-10T04:50:21+00:00</updated>
+  <updated>2012-12-10T05:04:42+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -37,19 +37,21 @@ KERNEL=="ttyACM?", OWNER="devuser"
 
 <p>```</p>
 
-<p>The (fairly open) rules shown above gives the user named '<em>devuser</em>' permission to access the launchpad, along with it's (virtual) serial device.  Note: these rules should be more specific if you have similar devices that you don't wish to allow access to inadvertently.</p>
+<p>The (fairly open) rules shown above gives the user named '<em>devuser</em>' permission to access the launchpad's usb interface, along with it's virtual serial device.</p>
+
+<p>Note: these rules should be more specific if you have similar devices that you don't wish to allow access to inadvertently.</p>
 
 <p>``` sh</p>
 
-<pre><code># a better example:
+<pre><code># Exact match for Stellaris LM4F120XL
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="1cbe", ATTRS{idProduct}=="00fd", MODE="0660", OWNER="devuser"
 </code></pre>
 
 <p>```</p>
 
-<p>The device in the rule above is strictly defined, read/write permissions have been explicitly set for it.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
+<p>The device in this rule is strictly defined and read/write permissions have been explicitly set for it.  Also, because the device itself is matched directly (rather than it's individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
-<p>Defining such a rule requires you to use the exact vendor and product id your device reports to the system.  You can check these values using <code>dmesg</code> after connecting your device.</p>
+<p>To define these rules, the exact name, vendor and product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device.</p>
 
 <p>``` sh</p>
 
