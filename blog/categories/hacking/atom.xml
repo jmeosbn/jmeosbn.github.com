@@ -4,7 +4,7 @@
   <title><![CDATA[Category: hacking | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/hacking/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-10T03:55:00+00:00</updated>
+  <updated>2012-12-10T03:55:59+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -12,6 +12,70 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Stellaris Virtual Serial Device]]></title>
+    <link href="http://jmeosbn.github.com/stellaris-virtual-serial-device/"/>
+    <updated>2012-12-10T02:48:00+00:00</updated>
+    <id>http://jmeosbn.github.com/stellaris-virtual-serial-device</id>
+    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, eg. to interact with program execution, or to simply log it's output.</p>
+
+<h2>device permissions</h2>
+
+<p>Root privileges are required to access the device on some Linux and Unix based systems, so remember to use <code>sudo</code> with anything directly accessing the device, such as <code>lm4flash</code> and <code>ttylog</code>.</p>
+
+<p>Alternatively, on Linux you can configure permissions for the device using udev rules:</p>
+
+<p>``` sh</p>
+
+<pre><code>$ sudo nano /etc/udev/rules.d/42-sellaris.rules
+
+# add the following lines:
+ATTRS{product}=="In-Circuit Debug Interface", OWNER="userdev"
+KERNEL=="ttyACM?", OWNER="userdev"
+</code></pre>
+
+<p>```</p>
+
+<p>The (fairly open) rules shown above gives the user named '<em>userdev</em>' permission to access the launchpad, along with it's (virtual) serial device.  Note: these rules should be more specific if you have similar devices that you don't wish to allow access to inadvertently.</p>
+
+<p>``` sh</p>
+
+<pre><code># a better example:
+SUBSYSTEM=="usb", ATTR{idVendor}=="0x1cbe", ATTR{idProduct}=="0x00fd", MODE="0660", GROUP="plugdev"
+</code></pre>
+
+<p>```</p>
+
+<p>The device in the (untested) rule above is strictly defined, and users in the group '<em>plugdev</em>' have been given read/write permissions for it.</p>
+
+<h2>serial device</h2>
+
+<p>If you want to use the serial connection to provide input or commands to the launchpad, you'll need a terminal emulator that can connect to a serial device.</p>
+
+<p>``` sh</p>
+
+<pre><code>$ cd stellaris/boards/ek-lm4f120xl/qs-rgb
+$ make
+$ lm4flash gcc/qs-rgb.bin
+
+# Use of screen on linux
+$ screen /dev/ttyACM? 115200
+
+# Use of screen on mac os x
+$ screen /dev/tty.usbmodem* 115200
+
+# Kill the connection by typing: ^A k
+#  to list other commands, type: ^A ?
+</code></pre>
+
+<p>```</p>
+
+<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, eg. when power cycling or reconnecting - if you have another ttyACM device connected, then you should probably use it's full name.</p>
+
+<p>On OS X the device should be named similar to <code>tty.usbmodem</code>, with the serial number of the device appended.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Testing the Stellaris Toolchain]]></title>
@@ -151,7 +215,7 @@ $ git commit -m 'First Commit'
 <p>``` sh View recent commits http://git-scm.com/docs/git-log git-log
 $ git log
 commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
-Author: Jamie Osborne <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x6a;&#x6d;&#x65;&#111;&#x73;&#98;&#110;&#x40;&#x79;&#111;&#x75;&#x72;&#x2d;&#x65;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#109;">&#106;&#109;&#101;&#111;&#115;&#x62;&#110;&#64;&#x79;&#x6f;&#x75;&#114;&#x2d;&#101;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a>
+Author: Jamie Osborne <a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#58;&#x6a;&#x6d;&#101;&#x6f;&#x73;&#98;&#x6e;&#x40;&#121;&#111;&#117;&#114;&#45;&#101;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#x6a;&#109;&#101;&#x6f;&#115;&#98;&#110;&#x40;&#x79;&#x6f;&#117;&#x72;&#x2d;&#x65;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;</a>
 Date:   Sat Sep 29 23:30:20 2012 +0100</p>
 
 <pre><code>First Commit
