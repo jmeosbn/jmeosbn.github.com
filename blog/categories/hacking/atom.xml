@@ -4,7 +4,7 @@
   <title><![CDATA[Category: hacking | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/hacking/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-10T04:08:40+00:00</updated>
+  <updated>2012-12-10T04:50:21+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -31,23 +31,38 @@
 <pre><code>$ sudo nano /etc/udev/rules.d/42-sellaris.rules
 
 # add the following lines:
-ATTRS{product}=="In-Circuit Debug Interface", OWNER="userdev"
-KERNEL=="ttyACM?", OWNER="userdev"
+ATTRS{product}=="In-Circuit Debug Interface", OWNER="devuser"
+KERNEL=="ttyACM?", OWNER="devuser"
 </code></pre>
 
 <p>```</p>
 
-<p>The (fairly open) rules shown above gives the user named '<em>userdev</em>' permission to access the launchpad, along with it's (virtual) serial device.  Note: these rules should be more specific if you have similar devices that you don't wish to allow access to inadvertently.</p>
+<p>The (fairly open) rules shown above gives the user named '<em>devuser</em>' permission to access the launchpad, along with it's (virtual) serial device.  Note: these rules should be more specific if you have similar devices that you don't wish to allow access to inadvertently.</p>
 
 <p>``` sh</p>
 
 <pre><code># a better example:
-SUBSYSTEM=="usb", ATTR{idVendor}=="0x1cbe", ATTR{idProduct}=="0x00fd", MODE="0660", GROUP="plugdev"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="1cbe", ATTRS{idProduct}=="00fd", MODE="0660", OWNER="devuser"
 </code></pre>
 
 <p>```</p>
 
-<p>The device in the (untested) rule above is strictly defined, and users in the group '<em>plugdev</em>' have been given read/write permissions for it.</p>
+<p>The device in the rule above is strictly defined, read/write permissions have been explicitly set for it.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
+
+<p>Defining such a rule requires you to use the exact vendor and product id your device reports to the system.  You can check these values using <code>dmesg</code> after connecting your device.</p>
+
+<p>``` sh</p>
+
+<pre><code>$ dmesg
+# &lt;snip&gt;
+[39911.201497] usb 1-1.2.3: New USB device found, idVendor=1cbe, idProduct=00fd
+[39911.201537] usb 1-1.2.3: Product: In-Circuit Debug Interface
+[39911.201551] usb 1-1.2.3: Manufacturer: Texas Instruments
+[39911.201564] usb 1-1.2.3: SerialNumber: 0E103077
+[39911.344575] cdc_acm 1-1.2.3:1.0: ttyACM0: USB ACM device
+</code></pre>
+
+<p>```</p>
 
 <h2>serial device</h2>
 
@@ -215,7 +230,7 @@ $ git commit -m 'First Commit'
 <p>``` sh View recent commits http://git-scm.com/docs/git-log git-log
 $ git log
 commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
-Author: Jamie Osborne <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#106;&#x6d;&#x65;&#111;&#115;&#x62;&#110;&#x40;&#121;&#111;&#117;&#114;&#45;&#101;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;">&#106;&#109;&#x65;&#111;&#115;&#x62;&#x6e;&#x40;&#x79;&#x6f;&#117;&#114;&#x2d;&#x65;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#109;</a>
+Author: Jamie Osborne <a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#106;&#109;&#x65;&#x6f;&#115;&#98;&#x6e;&#64;&#x79;&#x6f;&#117;&#x72;&#45;&#x65;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;">&#x6a;&#x6d;&#101;&#111;&#x73;&#98;&#110;&#x40;&#121;&#111;&#x75;&#x72;&#x2d;&#x65;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a>
 Date:   Sat Sep 29 23:30:20 2012 +0100</p>
 
 <pre><code>First Commit

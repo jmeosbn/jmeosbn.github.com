@@ -95,21 +95,40 @@
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo nano /etc/udev/rules.d/42-sellaris.rules
 </span><span class='line'>
 </span><span class='line'><span class="c"># add the following lines:</span>
-</span><span class='line'>ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;userdev&quot;</span>
-</span><span class='line'><span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;userdev&quot;</span>
+</span><span class='line'>ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
+</span><span class='line'><span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The (fairly open) rules shown above gives the user named &#8217;<em>userdev</em>&#8217; permission to access the launchpad, along with it&#8217;s (virtual) serial device.  Note: these rules should be more specific if you have similar devices that you don&#8217;t wish to allow access to inadvertently.</p>
+<p>The (fairly open) rules shown above gives the user named &#8217;<em>devuser</em>&#8217; permission to access the launchpad, along with it&#8217;s (virtual) serial device.  Note: these rules should be more specific if you have similar devices that you don&#8217;t wish to allow access to inadvertently.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># a better example:</span>
-</span><span class='line'><span class="nv">SUBSYSTEM</span><span class="o">==</span><span class="s2">&quot;usb&quot;</span>, ATTR<span class="o">{</span>idVendor<span class="o">}==</span><span class="s2">&quot;0x1cbe&quot;</span>, ATTR<span class="o">{</span>idProduct<span class="o">}==</span><span class="s2">&quot;0x00fd&quot;</span>, <span class="nv">MODE</span><span class="o">=</span><span class="s2">&quot;0660&quot;</span>, <span class="nv">GROUP</span><span class="o">=</span><span class="s2">&quot;plugdev&quot;</span>
+</span><span class='line'><span class="nv">SUBSYSTEMS</span><span class="o">==</span><span class="s2">&quot;usb&quot;</span>, ATTRS<span class="o">{</span>idVendor<span class="o">}==</span><span class="s2">&quot;1cbe&quot;</span>, ATTRS<span class="o">{</span>idProduct<span class="o">}==</span><span class="s2">&quot;00fd&quot;</span>, <span class="nv">MODE</span><span class="o">=</span><span class="s2">&quot;0660&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The device in the (untested) rule above is strictly defined, and users in the group &#8217;<em>plugdev</em>&#8217; have been given read/write permissions for it.</p>
+<p>The device in the rule above is strictly defined, read/write permissions have been explicitly set for it.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
+
+<p>Defining such a rule requires you to use the exact vendor and product id your device reports to the system.  You can check these values using <code>dmesg</code> after connecting your device.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>dmesg
+</span><span class='line'><span class="c"># &lt;snip&gt;</span>
+</span><span class='line'><span class="o">[</span>39911.201497<span class="o">]</span> usb 1-1.2.3: New USB device found, <span class="nv">idVendor</span><span class="o">=</span>1cbe, <span class="nv">idProduct</span><span class="o">=</span>00fd
+</span><span class='line'><span class="o">[</span>39911.201537<span class="o">]</span> usb 1-1.2.3: Product: In-Circuit Debug Interface
+</span><span class='line'><span class="o">[</span>39911.201551<span class="o">]</span> usb 1-1.2.3: Manufacturer: Texas Instruments
+</span><span class='line'><span class="o">[</span>39911.201564<span class="o">]</span> usb 1-1.2.3: SerialNumber: 0E103077
+</span><span class='line'><span class="o">[</span>39911.344575<span class="o">]</span> cdc_acm 1-1.2.3:1.0: ttyACM0: USB ACM device
+</span></code></pre></td></tr></table></div></figure>
+
 
 <h2>serial device</h2>
 
