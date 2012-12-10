@@ -33,3 +33,8 @@ aside.sidebar section h1 {
 /* don't underline titles */
 aside.sidebar a { text-decoration: none; }
 
+/* remove bottom border from subitems */
+aside.sidebar li {
+  border-bottom: 0px;
+  @include box-shadow(lighten($sidebar-bg, 5) 0 0px);
+}
