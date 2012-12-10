@@ -15,6 +15,10 @@
 //$footer-bg-back: linear-gradient(lighten($footer-bg, 8), $footer-bg, darken($footer-bg, 11));
 
 
+/* Set colour of text */
+$text-color: #555555;
+$sidebar-color: $text-color;
+
 /* Set colour of visited links */
 $link-color: lighten(#1863A1, 3);
 $link-color-visited: $link-color;
