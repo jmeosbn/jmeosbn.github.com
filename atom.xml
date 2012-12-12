@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-10T05:04:42+00:00</updated>
+  <updated>2012-12-12T23:00:19+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -52,7 +52,7 @@
 
 <p>The device in this rule is strictly defined and read/write permissions have been explicitly set for it.  Also, because the device itself is matched directly (rather than it&#8217;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
-<p>To define these rules, the exact name, vendor and product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device.</p>
+<p>To define these rules, the exact name, vendor and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -60,13 +60,11 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-<span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>dmesg
 </span><span class='line'><span class="c"># &lt;snip&gt;</span>
 </span><span class='line'><span class="o">[</span>39911.201497<span class="o">]</span> usb 1-1.2.3: New USB device found, <span class="nv">idVendor</span><span class="o">=</span>1cbe, <span class="nv">idProduct</span><span class="o">=</span>00fd
 </span><span class='line'><span class="o">[</span>39911.201537<span class="o">]</span> usb 1-1.2.3: Product: In-Circuit Debug Interface
 </span><span class='line'><span class="o">[</span>39911.201551<span class="o">]</span> usb 1-1.2.3: Manufacturer: Texas Instruments
-</span><span class='line'><span class="o">[</span>39911.201564<span class="o">]</span> usb 1-1.2.3: SerialNumber: 0E103077
 </span><span class='line'><span class="o">[</span>39911.344575<span class="o">]</span> cdc_acm 1-1.2.3:1.0: ttyACM0: USB ACM device
 </span></code></pre></td></tr></table></div></figure>
 
