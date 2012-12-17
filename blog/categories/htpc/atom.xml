@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: htpc | git-log(1)]]></title>
+  <link href="http://jmeosbn.github.com/blog/categories/htpc/atom.xml" rel="self"/>
+  <link href="http://jmeosbn.github.com/"/>
+  <updated>2012-12-17T19:56:47+00:00</updated>
+  <id>http://jmeosbn.github.com/</id>
+  <author>
+    <name><![CDATA[Jamie Osborne]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Home Theatre Pi (HTPi)]]></title>
+    <link href="http://jmeosbn.github.com/baking-the-pi/"/>
+    <updated>2012-12-17T19:13:00+00:00</updated>
+    <id>http://jmeosbn.github.com/baking-the-pi</id>
+    <content type="html"><![CDATA[<p>File /Users/jmeosbn/Documents/Octopress/jmeosbn/source/<em>posts/</em>links/BakingThePi.md could not be found</p>
+]]></content>
+  </entry>
+  
+</feed>

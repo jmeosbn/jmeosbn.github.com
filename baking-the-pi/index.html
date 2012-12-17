@@ -1,0 +1,466 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Home Theatre Pi (HTPi) - git-log(1)</title>
+  <meta name="author" content="Jamie Osborne">
+
+  
+  <meta name="description" content="Just a collection of notes for setting up a clean image on the Raspberry Pi. Notes are current for XBian 1.0 Alpha 3. Basic Pi Tips Guide for &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jmeosbn.github.com/baking-the-pi/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="git-log(1)" type="application/atom+xml">
+  <!--
+	http://aijazansari.com/2012/08/27/how-to-customize-octopress-theme/
+-->
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   class="no-sidebar"  >
+  <header role="banner"><hgroup>
+  <h1><a href="/">git-log(1)</a></h1>
+  
+</hgroup>
+
+</header>
+  
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Home Theatre Pi (HTPi)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-17T19:13:00+00:00" pubdate data-updated="true">Dec 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Just a collection of notes for setting up a clean image on the Raspberry Pi.</p>
+
+<p>Notes are current for <a href="http://www.xbian.org">XBian</a> 1.0 Alpha 3.</p>
+
+<!-- more -->
+
+
+<h2>Basic Pi Tips</h2>
+
+<ul>
+<li>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a></li>
+<li>Login using hostname with zeroconfig: <code>ssh user@host.local</code></li>
+</ul>
+
+
+<hr />
+
+<h2>Pre-setup, on PC, laptop, etc.</h2>
+
+<p>Before setting up the Pi remotely, there are some things to do locally to ease logging in.  This will obviate the need to enter the password, or specify the full host name each time we access the Pi.</p>
+
+<p><strong>Copy public key to Pi</strong></p>
+
+<pre><code># remove any old, conflicting host entries
+ssh-keygen -R xbian.local
+
+# generate key pair if not found
+test -f ~/.ssh/id_rsa.pub || ssh-keygen
+
+# password required until key installed
+ssh-copy-id xbian@xbian.local
+</code></pre>
+
+<p><strong>Transfer any files and log in</strong></p>
+
+<pre><code># use 'put' to upload dot files etc.
+sftp xbian@xbian.local
+
+# log in to pi
+ssh xbian@xbian.local
+</code></pre>
+
+<p><strong>Add an alias to .ssh/config</strong></p>
+
+<p>Define alias <code>xb</code> to be used in place of <code>xbian@xbian.local</code>.</p>
+
+<pre><code>echo '
+Host xb
+  User  xbian
+  Hostname  xbian.local' &gt;&gt; ~/.ssh/config
+</code></pre>
+
+<p>With this alias defined, <code>ssh xb</code> and <code>sftp xb</code> can be used to login.</p>
+
+<hr />
+
+<h2>First login tasks</h2>
+
+<p>Prevent xbian starting a setup script and/or showing a message upon each login. Additionally, remove the requirement for a password when using sudo</p>
+
+<pre><code># Login to the Pi, using the `xb` alias defined above
+ssh xb
+
+# xbian-config may run here, set it up as you like then exit
+
+# Prevent future display of login message
+touch ~/.hushlogin
+
+# Login as root for the remainder of the setup
+sudo -s
+
+# Allow full use of sudo without needing password
+echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
+
+# Prevent autorun of xbian-config.sh,
+# moving it to /usr/bin to be executable
+mv /etc/profile.d/xbian-config.sh /usr/bin
+chmod +x /usr/bin/xbian-config.sh
+</code></pre>
+
+<p>First login with the alias created earlier: <code>ssh xb</code> - xbian-config may run, set it up as you like then exit.</p>
+
+<pre><code>touch ~/.hushlogin
+
+# Login as root
+sudo -s
+
+echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
+mv /etc/profile.d/xbian-config.sh /usr/bin
+chmod +x /usr/bin/xbian-config.sh
+</code></pre>
+
+<h2>Update packages</h2>
+
+<pre><code>apt-get update &amp;&amp; apt-get upgrade
+</code></pre>
+
+<h2>Fake a hw clock based on recent timestamp</h2>
+
+<p>The Pi doesn&#8217;t have any hardware to track time while powered off; using fake-hwclock, the time can be set during startup to the last known date and time.</p>
+
+<pre><code>touch /etc/init.d/hwclock.sh
+/etc/init.d/ntp restart
+apt-get install ntpdate fake-hwclock
+ntpdate-debian
+dpkg-reconfigure tzdata
+sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
+</code></pre>
+
+<h2>Generate new RSA host keys</h2>
+
+<p>These keys confirm the identity of the Pi when logging in remotely, to prevent a malicious host from intercepting the process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.</p>
+
+<pre><code>$ ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+$ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
+</code></pre>
+
+<h2>Install Mono</h2>
+
+<p>Basic mono setup to run and compile command line tools</p>
+
+<pre><code>apt-get install mono-devel mono-gmcs mono-csharp-shell
+</code></pre>
+
+<h2>Installing iPlayer (and 4od, ITV, 5)</h2>
+
+<p>Download the latest versions from the links below, then open the zip files directly from xbmc&#8217;s addons page.</p>
+
+<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br/>
+<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br/>
+<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></p>
+
+<h2>Packages from Raspbian</h2>
+
+<p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
+
+<pre><code>apt-get install psmisc usbutils omxplayer
+</code></pre>
+
+<hr />
+
+<br />
+
+
+<br />
+
+
+<h1>Useful extras, not always used</h1>
+
+<p>Stuff used infrequently, or currently being tested</p>
+
+<br />
+
+
+<hr />
+
+<h2>Useful packages</h2>
+
+<pre><code>apt-get install fs2resize exfat-fuse
+apt-get install clang geany
+apt-get install sysv-rc-conf
+</code></pre>
+
+<h2>Testing PVR</h2>
+
+<pre><code>agi vdr-plugin-dvbsddevice
+</code></pre>
+
+<h2>Setting up webcam</h2>
+
+<p>Use &#8216;motion&#8217; or &#8216;fswebcam&#8217;, motion may need a default cfg copying</p>
+
+<pre><code>apt-get install motion
+nano /etc/default/motion /etc/motion/motion.conf
+</code></pre>
+
+<hr />
+
+<br />
+
+
+<br />
+
+
+<h1>Troubleshooting / backup</h1>
+
+<p>Some useful commands and procedures</p>
+
+<br />
+
+
+<hr />
+
+<h2>Backup XBMC settings</h2>
+
+<ul>
+<li>Settings, addons etc. are in ~/.xbmc</li>
+<li>.xbmc/userdata - preferences etc</li>
+<li>.xbmc/addons - binaries, themes</li>
+<li>.xbmc/addons/packages - original downloads, can use with &#8220;install from zip&#8221;</li>
+</ul>
+
+
+<h2>Clear cached network adapter</h2>
+
+<p>(needed for switching cards between devices)</p>
+
+<pre><code>echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
+</code></pre>
+
+<p>When the file opens, just erase the lines and save it.</p>
+
+<h2>Quick Tips</h2>
+
+<ul>
+<li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
+<li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
+</ul>
+
+
+<hr />
+
+<br />
+
+
+<br />
+
+
+<h1>Not used/needed with recent versions</h1>
+
+<p>Previously useful functionality or workarounds</p>
+
+<br />
+
+
+<hr />
+
+<h2>Fix ssh access using public key</h2>
+
+<pre><code># must be owned by root
+chown root: ~ ~/.ssh
+# no write for others
+chmod a=rx,u+w  ~
+
+# no access for others
+chmod -R go-rwx ~/.ssh
+# public key can be readable
+chmod a+r ~/.ssh/id_rsa.pub
+</code></pre>
+
+<h2>Download OpenSSH sftp server</h2>
+
+<pre><code>apt-get -d install openssh-server
+cp /var/cache/apt/archives/openssh-server_*.deb .
+dpkg-deb -X openssh-server_*.deb sftp
+cp sftp/usr/lib/openssh/sftp-server /usr/lib/
+rm -r sftp openssh-server_*.deb
+</code></pre>
+
+<h2>Change Hostname</h2>
+
+<pre><code>sudo nano /etc/hostname # enter the desired name
+sudo nano /etc/hosts # replace the hostname
+sudo /etc/init.d/hostname.sh start # to enable the changes
+</code></pre>
+
+<h2>Update firmware without kernel</h2>
+
+<pre><code>wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update &amp;&amp; chmod +x /usr/bin/rpi-update
+SKIP_KERNEL=1 rpi-update 128
+</code></pre>
+
+<h2>Install Shairport</h2>
+
+<p>Instructions found <a href="http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi">here</a> (alt site <a href="http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/">here</a>)</p>
+
+<pre><code># do as root
+sudo -s
+apt-get install alsa-utils
+modprobe snd_bcm2835
+# optionally set to headphone output
+# amixer cset numid=3 1
+# optionally restore to hdmi output
+# amixer cset numid=3 2
+apt-get install build-essential libssl-dev libcrypt-openssl-rsa-perl libao-dev libio-socket-inet6-perl libwww-perl avahi-utils pkg-config
+wget https://github.com/albertz/shairport/zipball/master
+unzip master
+cd albertz-shairport-*
+make install
+cp shairport.init.sample /etc/init.d/shairport
+# add to start of shairport: modprobe snd_bcm2835
+nano /etc/init.d/shairport
+# optionally edit name of service (remove port number):
+nano /usr/local/bin/shairport.pl
+insserv shairport
+# manually start [services](http://pi-raspberry.blogspot.co.uk/2012/08/shairport-raspberry-pi.html)
+service avahi-daemon start
+/etc/init.d/shairport start
+# exit root
+exit
+</code></pre>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jamie Osborne</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-17T19:13:00+00:00" pubdate data-updated="true">Dec 17<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/arm/'>arm</a>, <a class='category' href='/blog/categories/htpc/'>htpc</a>, <a class='category' href='/blog/categories/pi/'>pi</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jmeosbn.github.com/baking-the-pi/" data-via="jmeosbn" data-counturl="http://jmeosbn.github.com/baking-the-pi/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/stellaris-virtual-serial-device/" title="Previous Post: Stellaris Virtual Serial Device">&laquo; Stellaris Virtual Serial Device</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Jamie Osborne -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
