@@ -4,7 +4,7 @@ layout: post
 title: "Testing the Stellaris Toolchain"
 date: 2012-11-15 20:40
 comments: true
-categories: [stellaris, arm, hacking]
+categories: [stellaris, arm]
 sidebar: false
 
 ---

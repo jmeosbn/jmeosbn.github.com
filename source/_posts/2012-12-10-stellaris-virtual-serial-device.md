@@ -5,7 +5,7 @@ title: "Stellaris Virtual Serial Device"
 date: 2012-12-10 02:48
 comments: true
 sidebar: false
-categories: [stellaris, arm, hacking]
+categories: [stellaris, arm]
 
 ---
 

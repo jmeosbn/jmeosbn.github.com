@@ -4,7 +4,7 @@ layout: post
 title: "Compiling the Stellaris Toolchain"
 date: 2012-11-15 20:02
 comments: true
-categories: [stellaris, arm, hacking]
+categories: [stellaris, arm]
 sidebar: false
 
 ---
