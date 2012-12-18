@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-17T20:00:11+00:00</updated>
+  <updated>2012-12-18T20:46:52+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -32,8 +32,6 @@
 <li>Login using hostname with zeroconfig: <code>ssh user@host.local</code></li>
 </ul>
 
-
-<hr />
 
 <h2>Pre-setup, on PC, laptop, etc.</h2>
 
@@ -71,8 +69,6 @@ Host xb
 </code></pre>
 
 <p>With this alias defined, <code>ssh xb</code> and <code>sftp xb</code> can be used to login.</p>
-
-<hr />
 
 <h2>First login tasks</h2>
 
@@ -172,8 +168,6 @@ $ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 <br />
 
 
-<hr />
-
 <h2>Useful packages</h2>
 
 <pre><code>apt-get install fs2resize exfat-fuse
@@ -208,8 +202,6 @@ nano /etc/default/motion /etc/motion/motion.conf
 
 <br />
 
-
-<hr />
 
 <h2>Backup XBMC settings</h2>
 
@@ -252,8 +244,6 @@ nano /etc/default/motion /etc/motion/motion.conf
 
 <br />
 
-
-<hr />
 
 <h2>Fix ssh access using public key</h2>
 
