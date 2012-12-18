@@ -100,12 +100,14 @@
 <pre><code># remove any old, conflicting host entries
 ssh-keygen -R xbian.local
 
-# generate key pair if not found
+# generate key pair if none already exists
 test -f ~/.ssh/id_rsa.pub || ssh-keygen
 
 # password required until key installed
 ssh-copy-id xbian@xbian.local
 </code></pre>
+
+<p>The easiest way to append a key to the remote user&#8217;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if you don&#8217;t have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
 <p><strong>Transfer any files and log in</strong></p>
 
@@ -114,11 +116,13 @@ sftp xbian@xbian.local
 
 # log in to pi
 ssh xbian@xbian.local
+
+# type 'exit', or ctlr+d to logout
 </code></pre>
 
 <p><strong>Add an alias to .ssh/config</strong></p>
 
-<p>Define alias <code>xb</code> to be used in place of <code>xbian@xbian.local</code>.</p>
+<p>Locally define the alias <code>xb</code> to be used in place of <code>xbian@xbian.local</code>.</p>
 
 <pre><code>echo '
 Host xb
@@ -148,18 +152,6 @@ echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
 
 # Prevent autorun of xbian-config.sh,
 # moving it to /usr/bin to be executable
-mv /etc/profile.d/xbian-config.sh /usr/bin
-chmod +x /usr/bin/xbian-config.sh
-</code></pre>
-
-<p>First login with the alias created earlier: <code>ssh xb</code> - xbian-config may run, set it up as you like then exit.</p>
-
-<pre><code>touch ~/.hushlogin
-
-# Login as root
-sudo -s
-
-echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
 mv /etc/profile.d/xbian-config.sh /usr/bin
 chmod +x /usr/bin/xbian-config.sh
 </code></pre>
