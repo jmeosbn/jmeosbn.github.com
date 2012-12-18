@@ -109,17 +109,6 @@ ssh-copy-id xbian@xbian.local
 
 <p>The easiest way to append a key to the remote user&#8217;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if you don&#8217;t have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
-<p><strong>Transfer any files and log in</strong></p>
-
-<pre><code># use 'put' to upload dot files etc.
-sftp xbian@xbian.local
-
-# log in to pi
-ssh xbian@xbian.local
-
-# type 'exit', or ctlr+d to logout
-</code></pre>
-
 <p><strong>Add an alias to .ssh/config</strong></p>
 
 <p>Locally define the alias <code>xb</code> to be used in place of <code>xbian@xbian.local</code>.</p>
@@ -134,9 +123,19 @@ Host xb
 
 <h2>First login tasks</h2>
 
-<p>Prevent xbian starting a setup script and/or showing a message upon each login. Additionally, remove the requirement for a password when using sudo</p>
+<p>If you have any files stored locally, you can transfer them using <code>sftp</code>.</p>
 
-<pre><code># Login to the Pi, using the `xb` alias defined above
+<pre><code># connect to the pi, using the `xb` alias defined above
+sftp xb
+sftp&gt; put .profile
+sftp&gt; exit
+
+# you can also use ctlr+d to logout
+</code></pre>
+
+<p>Most of the commands below need root privileges on the Pi, as they configure the system.  For a single command you can prepend <code>sudo</code>, for many commands it&#8217;s easier to run <code>sudo -s</code> to start a new shell using sudo.</p>
+
+<pre><code># Login to the pi, using the `xb` alias
 ssh xb
 
 # xbian-config may run here, set it up as you like then exit
@@ -188,25 +187,12 @@ $ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 <pre><code>apt-get install mono-devel mono-gmcs mono-csharp-shell
 </code></pre>
 
-<h2>Installing iPlayer (and 4od, ITV, 5)</h2>
-
-<p>Download the latest versions from the links below, then open the zip files directly from xbmc&#8217;s addons page.</p>
-
-<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br/>
-<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br/>
-<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></p>
-
 <h2>Packages from Raspbian</h2>
 
 <p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
 
 <pre><code>apt-get install psmisc usbutils omxplayer
 </code></pre>
-
-<hr />
-
-<br />
-
 
 <br />
 
@@ -215,8 +201,13 @@ $ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 
 <p>Stuff used infrequently, or currently being tested</p>
 
-<br />
+<h2>Installing iPlayer (and 4od, ITV, 5)</h2>
 
+<p>Download the latest versions from the links below, then open the zip files directly from xbmc&#8217;s addons page.</p>
+
+<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br/>
+<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br/>
+<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></p>
 
 <h2>Useful packages</h2>
 
@@ -238,20 +229,12 @@ apt-get install sysv-rc-conf
 nano /etc/default/motion /etc/motion/motion.conf
 </code></pre>
 
-<hr />
-
-<br />
-
-
 <br />
 
 
 <h1>Troubleshooting / backup</h1>
 
 <p>Some useful commands and procedures</p>
-
-<br />
-
 
 <h2>Backup XBMC settings</h2>
 
@@ -280,20 +263,12 @@ nano /etc/default/motion /etc/motion/motion.conf
 </ul>
 
 
-<hr />
-
-<br />
-
-
 <br />
 
 
 <h1>Not used/needed with recent versions</h1>
 
 <p>Previously useful functionality or workarounds</p>
-
-<br />
-
 
 <h2>Fix ssh access using public key</h2>
 
