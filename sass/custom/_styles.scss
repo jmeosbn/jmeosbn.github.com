@@ -2,6 +2,14 @@
 // Add styles here to make changes without digging in too much
 
 
+/* set properties for superscript text */
+sup{
+  /* super is the expected setting */
+  vertical-align: middle;
+  /* smaller seems to be the default */
+  font-size: 70%;
+}
+
 /* ----- Content ----- */
 
 /* set all article h1 titles */
