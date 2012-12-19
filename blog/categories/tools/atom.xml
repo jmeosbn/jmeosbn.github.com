@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tools | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/tools/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-19T00:05:18+00:00</updated>
+  <updated>2012-12-19T01:35:34+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -18,9 +18,9 @@
     <link href="http://jmeosbn.github.com/resources-for-using-git/"/>
     <updated>2012-09-29T20:35:00+01:00</updated>
     <id>http://jmeosbn.github.com/resources-for-using-git</id>
-    <content type="html"><![CDATA[<p>Here's some basic resources for getting started pushing code to github.</p>
+    <content type="html"><![CDATA[<p>Here&rsquo;s some basic resources for getting started pushing code to github.</p>
 
-<p>"Code" doesn't just mean computer source code; git is useful for tracking anything that can be represented as plain text, eg. changes to <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
+<p>&ldquo;Code&rdquo; doesn&rsquo;t just mean computer source code; git is useful for tracking anything that can be represented as plain text, eg. changes to <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
 
 <p>The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named <code>.git</code>.</p>
 
@@ -46,25 +46,23 @@ $ git commit -m 'First Commit'
 <p>``` sh View recent commits http://git-scm.com/docs/git-log git-log
 $ git log
 commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
-Author: Jamie Osborne <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x6a;&#x6d;&#101;&#x6f;&#115;&#98;&#x6e;&#64;&#x79;&#x6f;&#117;&#x72;&#x2d;&#101;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;">&#106;&#109;&#101;&#111;&#x73;&#98;&#x6e;&#64;&#121;&#x6f;&#x75;&#114;&#45;&#x65;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#109;</a>
+Author: Jamie Osborne <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#106;&#109;&#101;&#111;&#115;&#098;&#110;&#064;&#121;&#111;&#117;&#114;&#045;&#101;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">&#106;&#109;&#101;&#111;&#115;&#098;&#110;&#064;&#121;&#111;&#117;&#114;&#045;&#101;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;</a>
 Date:   Sat Sep 29 23:30:20 2012 +0100</p>
 
-<pre><code>First Commit
+<pre><code>First Commit ```
 </code></pre>
 
-<p>```</p>
+<h2 id="documentation">documentation</h2>
 
-<h2>documentation</h2>
+<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&rsquo;t already include it. They also host a copy of the <a href="http://git-scm.com/docs">documentation</a> and the online <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
 
-<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn't already include it. They also host a copy of the <a href="http://git-scm.com/docs">documentation</a> and the online <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
+<p>If you don&rsquo;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&rsquo;s minimal explanatory text, but full command examples for most operations, making it a useful resource for commands you use rarely and need to quickly relearn.</p>
 
-<p>If you don't fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There's minimal explanatory text, but full command examples for most operations, making it a useful resource for commands you use rarely and need to quickly relearn.</p>
+<h2 id="graphical-interfaces">graphical interfaces</h2>
 
-<h2>graphical interfaces</h2>
+<p>While it&rsquo;s good to know how to use git from the command line, it&rsquo;s worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
 
-<p>While it's good to know how to use git from the command line, it's worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
-
-<p><a href="http://github.com/">Github</a> offers their own decent <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients that also have the advantage of supporting github's niceties for organisations and the "Clone in Windows/Mac" button found on each repo on github.</p>
+<p><a href="http://github.com/">Github</a> offers their own decent <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients that also have the advantage of supporting github&rsquo;s niceties for organisations and the &ldquo;Clone in Windows/Mac&rdquo; button found on each repo on github.</p>
 
 <p><img class="center" src="http://mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" ></p>
 
@@ -72,7 +70,7 @@ Date:   Sat Sep 29 23:30:20 2012 +0100</p>
 
 <p><img class="center" src="http://gitx.laullon.com/commit.png" width="512" title="GitX" ></p>
 
-<h2>other info</h2>
+<h2 id="other-info">other info</h2>
 
 <p>Btw, if you just want to share some code snippets somewhere, while maintaining versioning etc., then check out <a href="https://gist.github.com/">gists</a>, a feature of github.</p>
 ]]></content>

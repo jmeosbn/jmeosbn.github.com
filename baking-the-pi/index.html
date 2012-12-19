@@ -82,258 +82,345 @@
 
 <!-- more -->
 
-
-<h2>Basic Pi Tips</h2>
+<h2 id="basic-pi-tips">Basic Pi Tips</h2>
 
 <ul>
-<li>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a></li>
-<li>Login using hostname with zeroconfig: <code>ssh user@host.local</code></li>
+  <li>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a></li>
+  <li>Login using hostname with zeroconfig: <code>ssh user@host.local</code></li>
 </ul>
 
-
-<h2>Pre-setup, on PC, laptop, etc.</h2>
+<h2 id="pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</h2>
 
 <p>Before setting up the Pi remotely, there are some things to do locally to ease logging in.  This will obviate the need to enter the password, or specify the full host name each time we access the Pi.</p>
 
-<h3>Copy public key to Pi</h3>
+<h3 id="copy-public-key-to-pi">Copy public key to Pi</h3>
 
-<pre><code># remove any old, conflicting host entries
-ssh-keygen -R xbian.local
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># remove any old, conflicting host entries</span>
+</span><span class="line">ssh-keygen -R xbian.local
+</span><span class="line">
+</span><span class="line"><span class="c"># generate key pair if none already exists</span>
+</span><span class="line"><span class="nb">test</span> -f ~/.ssh/id_rsa.pub <span class="o">||</span> ssh-keygen
+</span><span class="line">
+</span><span class="line"><span class="c"># password required until key installed</span>
+</span><span class="line">ssh-copy-id xbian@xbian.local
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-# generate key pair if none already exists
-test -f ~/.ssh/id_rsa.pub || ssh-keygen
+<p>The easiest way to append a key to the remote user&rsquo;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if you don&rsquo;t have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
-# password required until key installed
-ssh-copy-id xbian@xbian.local
-</code></pre>
-
-<p>The easiest way to append a key to the remote user&#8217;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if you don&#8217;t have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
-
-<h3>Add an alias to .ssh/config</h3>
+<h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
 <p>Locally define the alias <code>xb</code> to be used in place of <code>xbian@xbian.local</code>.</p>
 
-<pre><code>echo '
-Host xb
-  User  xbian
-  Hostname  xbian.local' &gt;&gt; ~/.ssh/config
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nb">echo</span> <span class="s1">&#39;</span>
+</span><span class="line"><span class="s1">Host xb</span>
+</span><span class="line"><span class="s1">  User  xbian</span>
+</span><span class="line"><span class="s1">  Hostname  xbian.local&#39;</span> &gt;&gt; ~/.ssh/config
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>With this alias defined, <code>ssh xb</code> and <code>sftp xb</code> can be used to login.</p>
 
-<h2>First login tasks</h2>
+<h2 id="first-login-tasks">First login tasks</h2>
 
 <p>If you have any files stored locally, you can transfer them using <code>sftp</code>.</p>
 
-<pre><code># connect to the pi, using the `xb` alias defined above
-sftp xb
-sftp&gt; put .profile
-sftp&gt; exit
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># connect to the pi, using the `xb` alias defined above</span>
+</span><span class="line">sftp xb
+</span><span class="line">sftp&gt; put .profile
+</span><span class="line">sftp&gt; <span class="nb">exit</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># you can also use ctlr+d to logout</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-# you can also use ctlr+d to logout
-</code></pre>
+<p>Most of the commands below need root privileges on the Pi, as they configure the system.  For a single command you can prepend <code>sudo</code>, for many commands it&rsquo;s easier to run <code>sudo -s</code> to start a new shell using sudo.</p>
 
-<p>Most of the commands below need root privileges on the Pi, as they configure the system.  For a single command you can prepend <code>sudo</code>, for many commands it&#8217;s easier to run <code>sudo -s</code> to start a new shell using sudo.</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
+</span><span class="line">ssh xb
+</span><span class="line">
+</span><span class="line"><span class="c"># xbian-config may run here, set it up as you like then exit</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Prevent future display of login message</span>
+</span><span class="line">touch ~/.hushlogin
+</span><span class="line">
+</span><span class="line"><span class="c"># Login as root for the remainder of the setup</span>
+</span><span class="line">sudo -s
+</span><span class="line">
+</span><span class="line"><span class="c"># Allow full use of sudo without needing password</span>
+</span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;%sudo  ALL=(ALL) NOPASSWD: ALL&#39;</span> &gt;&gt; /etc/sudoers
+</span><span class="line">
+</span><span class="line"><span class="c"># Prevent autorun of xbian-config.sh,</span>
+</span><span class="line"><span class="c"># moving it to /usr/bin to be executable</span>
+</span><span class="line">mv /etc/profile.d/xbian-config.sh /usr/bin
+</span><span class="line">chmod +x /usr/bin/xbian-config.sh
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<pre><code># Login to the pi, using the `xb` alias
-ssh xb
+<h2 id="update-packages">Update packages</h2>
 
-# xbian-config may run here, set it up as you like then exit
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-# Prevent future display of login message
-touch ~/.hushlogin
+<h2 id="fake-a-hw-clock-based-on-recent-timestamp">Fake a hw clock based on recent timestamp</h2>
 
-# Login as root for the remainder of the setup
-sudo -s
+<p>The Pi doesn&rsquo;t have any hardware to track time while powered off; using fake-hwclock, the time can be set during startup to the last known date and time.</p>
 
-# Allow full use of sudo without needing password
-echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">touch /etc/init.d/hwclock.sh
+</span><span class="line">/etc/init.d/ntp restart
+</span><span class="line">apt-get install ntpdate fake-hwclock
+</span><span class="line">ntpdate-debian
+</span><span class="line">dpkg-reconfigure tzdata
+</span><span class="line">sed -i <span class="s1">&#39;s/^exit 0/ntpdate-debian\nexit 0/g&#39;</span> /etc/rc.local
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-# Prevent autorun of xbian-config.sh,
-# moving it to /usr/bin to be executable
-mv /etc/profile.d/xbian-config.sh /usr/bin
-chmod +x /usr/bin/xbian-config.sh
-</code></pre>
-
-<h2>Update packages</h2>
-
-<pre><code>apt-get update &amp;&amp; apt-get upgrade
-</code></pre>
-
-<h2>Fake a hw clock based on recent timestamp</h2>
-
-<p>The Pi doesn&#8217;t have any hardware to track time while powered off; using fake-hwclock, the time can be set during startup to the last known date and time.</p>
-
-<pre><code>touch /etc/init.d/hwclock.sh
-/etc/init.d/ntp restart
-apt-get install ntpdate fake-hwclock
-ntpdate-debian
-dpkg-reconfigure tzdata
-sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
-</code></pre>
-
-<h2>Generate new RSA host keys</h2>
+<h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
 <p>These keys confirm the identity of the Pi when logging in remotely, to prevent a malicious host from intercepting the process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.</p>
 
-<pre><code>$ ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
-$ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+</span><span class="line">ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2>Install Mono</h2>
+<h2 id="install-mono">Install Mono</h2>
 
 <p>Basic mono setup to run and compile command line tools</p>
 
-<pre><code>apt-get install mono-devel mono-gmcs mono-csharp-shell
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-gmcs mono-csharp-shell
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2>Packages from Raspbian</h2>
+<h2 id="packages-from-raspbian">Packages from Raspbian</h2>
 
 <p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
 
-<pre><code>apt-get install psmisc usbutils omxplayer
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install psmisc usbutils omxplayer
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<br />
-
-
-<h1>Useful extras, not always used</h1>
+<p><br />
+# Useful extras, not always used</p>
 
 <p>Stuff used infrequently, or currently being tested</p>
 
-<h2>Installing iPlayer (and 4od, ITV, 5)</h2>
+<h2 id="installing-iplayer-and-4od-itv-5">Installing iPlayer (and 4od, ITV, 5)</h2>
 
-<p>Download the latest versions from the links below, then open the zip files directly from xbmc&#8217;s addons page.</p>
+<p>Download the latest versions from the links below, then open the zip files directly from xbmc&rsquo;s addons page.</p>
 
-<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br/>
-<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br/>
-<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></p>
+<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br />
+<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br />
+<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a>  </p>
 
-<h2>Useful packages</h2>
+<h2 id="useful-packages">Useful packages</h2>
 
-<pre><code>apt-get install fs2resize exfat-fuse
-apt-get install clang geany
-apt-get install sysv-rc-conf
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fs2resize exfat-fuse
+</span><span class="line">apt-get install clang geany
+</span><span class="line">apt-get install sysv-rc-conf
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2>Testing PVR</h2>
+<h2 id="testing-pvr">Testing PVR</h2>
 
-<pre><code>apt-get install vdr-plugin-dvbsddevice
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install vdr-plugin-dvbsddevice
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2>Setting up webcam</h2>
+<h2 id="setting-up-webcam">Setting up webcam</h2>
 
-<p>Use &#8216;motion&#8217; or &#8216;fswebcam&#8217;, motion may need a default cfg copying</p>
+<p>Use &lsquo;motion&rsquo; or &lsquo;fswebcam&rsquo;, motion may need a default cfg copying</p>
 
-<pre><code>apt-get install motion
-nano /etc/default/motion /etc/motion/motion.conf
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install motion
+</span><span class="line">nano /etc/default/motion /etc/motion/motion.conf
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<br />
-
-
-<h1>Troubleshooting / backup</h1>
+<p><br />
+# Troubleshooting / backup</p>
 
 <p>Some useful commands and procedures</p>
 
-<h2>Backup XBMC settings</h2>
+<h2 id="backup-xbmc-settings">Backup XBMC settings</h2>
 
 <ul>
-<li>Settings, addons etc. are in ~/.xbmc</li>
-<li>.xbmc/userdata - preferences etc</li>
-<li>.xbmc/addons - binaries, themes</li>
-<li>.xbmc/addons/packages - original downloads, can use with &#8220;install from zip&#8221;</li>
+  <li>Settings, addons etc. are in ~/.xbmc</li>
+  <li>.xbmc/userdata - preferences etc</li>
+  <li>.xbmc/addons - binaries, themes</li>
+  <li>.xbmc/addons/packages - original downloads, can use with &ldquo;install from zip&rdquo;</li>
 </ul>
 
-
-<h2>Clear cached network adapter</h2>
+<h2 id="clear-cached-network-adapter">Clear cached network adapter</h2>
 
 <p>(needed for switching cards between devices)</p>
 
-<pre><code>echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nb">echo</span> | sudo tee /etc/udev/rules.d/70-persistent-net.rules
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>When the file opens, just erase the lines and save it.</p>
 
-<h2>Quick Tips</h2>
+<h2 id="quick-tips">Quick Tips</h2>
 
 <ul>
-<li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
-<li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
+  <li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
+  <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
 </ul>
 
-
-<br />
-
-
-<h1>Not used/needed with recent versions</h1>
+<p><br />
+# Not used/needed with recent versions</p>
 
 <p>Previously useful functionality or workarounds</p>
 
-<h2>Fix ssh access using public key</h2>
+<h2 id="fix-ssh-access-using-public-key">Fix ssh access using public key</h2>
 
-<pre><code># must be owned by root
-chown root: ~ ~/.ssh
-# no write for others
-chmod a=rx,u+w  ~
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># must be owned by root</span>
+</span><span class="line">chown root: ~ ~/.ssh
+</span><span class="line"><span class="c"># no write for others</span>
+</span><span class="line">chmod <span class="nv">a</span><span class="o">=</span>rx,u+w  ~
+</span><span class="line">
+</span><span class="line"><span class="c"># no access for others</span>
+</span><span class="line">chmod -R go-rwx ~/.ssh
+</span><span class="line"><span class="c"># public key can be readable</span>
+</span><span class="line">chmod a+r ~/.ssh/id_rsa.pub
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-# no access for others
-chmod -R go-rwx ~/.ssh
-# public key can be readable
-chmod a+r ~/.ssh/id_rsa.pub
-</code></pre>
+<h2 id="download-openssh-sftp-server">Download OpenSSH sftp server</h2>
 
-<h2>Download OpenSSH sftp server</h2>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get -d install openssh-server
+</span><span class="line">cp /var/cache/apt/archives/openssh-server_*.deb .
+</span><span class="line">dpkg-deb -X openssh-server_*.deb sftp
+</span><span class="line">cp sftp/usr/lib/openssh/sftp-server /usr/lib/
+</span><span class="line">rm -r sftp openssh-server_*.deb
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<pre><code>apt-get -d install openssh-server
-cp /var/cache/apt/archives/openssh-server_*.deb .
-dpkg-deb -X openssh-server_*.deb sftp
-cp sftp/usr/lib/openssh/sftp-server /usr/lib/
-rm -r sftp openssh-server_*.deb
-</code></pre>
+<h2 id="change-hostname">Change Hostname</h2>
 
-<h2>Change Hostname</h2>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/hostname <span class="c"># enter the desired name</span>
+</span><span class="line">sudo nano /etc/hosts <span class="c"># replace the hostname</span>
+</span><span class="line">sudo /etc/init.d/hostname.sh start <span class="c"># to enable the changes</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<pre><code>sudo nano /etc/hostname # enter the desired name
-sudo nano /etc/hosts # replace the hostname
-sudo /etc/init.d/hostname.sh start # to enable the changes
-</code></pre>
+<h2 id="update-firmware-without-kernel">Update firmware without kernel</h2>
 
-<h2>Update firmware without kernel</h2>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update <span class="o">&amp;&amp;</span> chmod +x /usr/bin/rpi-update
+</span><span class="line"><span class="nv">SKIP_KERNEL</span><span class="o">=</span>1 rpi-update 128
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<pre><code>wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update &amp;&amp; chmod +x /usr/bin/rpi-update
-SKIP_KERNEL=1 rpi-update 128
-</code></pre>
-
-<h2>Install Shairport</h2>
+<h2 id="install-shairport">Install Shairport</h2>
 
 <p>Instructions found <a href="http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi">here</a> (alt site <a href="http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/">here</a>)</p>
 
-<pre><code># do as root
-sudo -s
-apt-get install alsa-utils
-modprobe snd_bcm2835
-# optionally set to headphone output
-# amixer cset numid=3 1
-# optionally restore to hdmi output
-# amixer cset numid=3 2
-apt-get install build-essential libssl-dev libcrypt-openssl-rsa-perl libao-dev libio-socket-inet6-perl libwww-perl avahi-utils pkg-config
-wget https://github.com/albertz/shairport/zipball/master
-unzip master
-cd albertz-shairport-*
-make install
-cp shairport.init.sample /etc/init.d/shairport
-# add to start of shairport: modprobe snd_bcm2835
-nano /etc/init.d/shairport
-# optionally edit name of service (remove port number):
-nano /usr/local/bin/shairport.pl
-insserv shairport
-# manually start [services](http://pi-raspberry.blogspot.co.uk/2012/08/shairport-raspberry-pi.html)
-service avahi-daemon start
-/etc/init.d/shairport start
-# exit root
-exit
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># do as root</span>
+</span><span class="line">sudo -s
+</span><span class="line">apt-get install alsa-utils
+</span><span class="line">modprobe snd_bcm2835
+</span><span class="line"><span class="c"># optionally set to headphone output</span>
+</span><span class="line"><span class="c"># amixer cset numid=3 1</span>
+</span><span class="line"><span class="c"># optionally restore to hdmi output</span>
+</span><span class="line"><span class="c"># amixer cset numid=3 2</span>
+</span><span class="line">apt-get install build-essential libssl-dev libcrypt-openssl-rsa-perl libao-dev libio-socket-inet6-perl libwww-perl avahi-utils pkg-config
+</span><span class="line">wget https://github.com/albertz/shairport/zipball/master
+</span><span class="line">unzip master
+</span><span class="line"><span class="nb">cd </span>albertz-shairport-*
+</span><span class="line">make install
+</span><span class="line">cp shairport.init.sample /etc/init.d/shairport
+</span><span class="line"><span class="c"># add to start of shairport: modprobe snd_bcm2835</span>
+</span><span class="line">nano /etc/init.d/shairport
+</span><span class="line"><span class="c"># optionally edit name of service (remove port number):</span>
+</span><span class="line">nano /usr/local/bin/shairport.pl
+</span><span class="line">insserv shairport
+</span><span class="line"><span class="c"># manually start [services](http://pi-raspberry.blogspot.co.uk/2012/08/shairport-raspberry-pi.html)</span>
+</span><span class="line">service avahi-daemon start
+</span><span class="line">/etc/init.d/shairport start
+</span><span class="line"><span class="c"># exit root</span>
+</span><span class="line"><span class="nb">exit</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 </div>
 
 
@@ -381,6 +468,8 @@ exit
       
         <a class="basic-alignment left" href="/stellaris-virtual-serial-device/" title="Previous Post: Stellaris Virtual Serial Device">&laquo; Stellaris Virtual Serial Device</a>
       
+      
+        <a class="basic-alignment right" href="/pi-box/" title="Next Post: Dropbox on Pi">Dropbox on Pi &raquo;</a>
       
     </p>
   </footer>

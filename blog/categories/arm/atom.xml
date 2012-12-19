@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-19T00:05:18+00:00</updated>
+  <updated>2012-12-19T01:35:34+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -24,63 +24,65 @@
 
 <!-- more -->
 
-
-<h2>Basic Pi Tips</h2>
+<h2 id="basic-pi-tips">Basic Pi Tips</h2>
 
 <ul>
-<li>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a></li>
-<li>Login using hostname with zeroconfig: <code>ssh user@host.local</code></li>
+  <li>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a></li>
+  <li>Login using hostname with zeroconfig: <code>ssh user@host.local</code></li>
 </ul>
 
-
-<h2>Pre-setup, on PC, laptop, etc.</h2>
+<h2 id="pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</h2>
 
 <p>Before setting up the Pi remotely, there are some things to do locally to ease logging in.  This will obviate the need to enter the password, or specify the full host name each time we access the Pi.</p>
 
-<h3>Copy public key to Pi</h3>
+<h3 id="copy-public-key-to-pi">Copy public key to Pi</h3>
 
-<pre><code># remove any old, conflicting host entries
-ssh-keygen -R xbian.local
+<p>```sh
+	# remove any old, conflicting host entries
+	ssh-keygen -R xbian.local</p>
 
-# generate key pair if none already exists
+<pre><code># generate key pair if none already exists
 test -f ~/.ssh/id_rsa.pub || ssh-keygen
 
 # password required until key installed
-ssh-copy-id xbian@xbian.local
+ssh-copy-id xbian@xbian.local ```
 </code></pre>
 
-<p>The easiest way to append a key to the remote user's <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if you don't have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
+<p>The easiest way to append a key to the remote user&rsquo;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if you don&rsquo;t have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
-<h3>Add an alias to .ssh/config</h3>
+<h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
 <p>Locally define the alias <code>xb</code> to be used in place of <code>xbian@xbian.local</code>.</p>
 
-<pre><code>echo '
-Host xb
-  User  xbian
-  Hostname  xbian.local' &gt;&gt; ~/.ssh/config
-</code></pre>
+<p><code>sh
+	echo '
+	Host xb
+	  User  xbian
+	  Hostname  xbian.local' &gt;&gt; ~/.ssh/config
+</code></p>
 
 <p>With this alias defined, <code>ssh xb</code> and <code>sftp xb</code> can be used to login.</p>
 
-<h2>First login tasks</h2>
+<h2 id="first-login-tasks">First login tasks</h2>
 
 <p>If you have any files stored locally, you can transfer them using <code>sftp</code>.</p>
 
-<pre><code># connect to the pi, using the `xb` alias defined above
-sftp xb
-sftp&gt; put .profile
-sftp&gt; exit
+<p>```sh
+	# connect to the pi, using the <code>xb</code> alias defined above
+	sftp xb
+	sftp&gt; put .profile
+	sftp&gt; exit</p>
 
-# you can also use ctlr+d to logout
+<pre><code># you can also use ctlr+d to logout ```
 </code></pre>
 
-<p>Most of the commands below need root privileges on the Pi, as they configure the system.  For a single command you can prepend <code>sudo</code>, for many commands it's easier to run <code>sudo -s</code> to start a new shell using sudo.</p>
+<p>Most of the commands below need root privileges on the Pi, as they configure the system.  For a single command you can prepend <code>sudo</code>, for many commands it&rsquo;s easier to run <code>sudo -s</code> to start a new shell using sudo.</p>
 
-<pre><code># Login to the pi, using the `xb` alias
-ssh xb
+<p>```sh
+	# Login to the pi, using the <code>xb</code> alias
+	ssh xb</p>
 
-# xbian-config may run here, set it up as you like then exit
+<pre><code># xbian-config may run here, set it up as you like then exit
 
 # Prevent future display of login message
 touch ~/.hushlogin
@@ -94,188 +96,194 @@ echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
 # Prevent autorun of xbian-config.sh,
 # moving it to /usr/bin to be executable
 mv /etc/profile.d/xbian-config.sh /usr/bin
-chmod +x /usr/bin/xbian-config.sh
+chmod +x /usr/bin/xbian-config.sh ```
 </code></pre>
 
-<h2>Update packages</h2>
+<h2 id="update-packages">Update packages</h2>
 
-<pre><code>apt-get update &amp;&amp; apt-get upgrade
-</code></pre>
+<p><code>sh
+	apt-get update &amp;&amp; apt-get upgrade
+</code>	</p>
 
-<h2>Fake a hw clock based on recent timestamp</h2>
+<h2 id="fake-a-hw-clock-based-on-recent-timestamp">Fake a hw clock based on recent timestamp</h2>
 
-<p>The Pi doesn't have any hardware to track time while powered off; using fake-hwclock, the time can be set during startup to the last known date and time.</p>
+<p>The Pi doesn&rsquo;t have any hardware to track time while powered off; using fake-hwclock, the time can be set during startup to the last known date and time.</p>
 
-<pre><code>touch /etc/init.d/hwclock.sh
-/etc/init.d/ntp restart
-apt-get install ntpdate fake-hwclock
-ntpdate-debian
-dpkg-reconfigure tzdata
-sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
-</code></pre>
+<p><code>sh
+	touch /etc/init.d/hwclock.sh
+	/etc/init.d/ntp restart
+	apt-get install ntpdate fake-hwclock
+	ntpdate-debian
+	dpkg-reconfigure tzdata
+	sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
+</code></p>
 
-<h2>Generate new RSA host keys</h2>
+<h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
 <p>These keys confirm the identity of the Pi when logging in remotely, to prevent a malicious host from intercepting the process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.</p>
 
-<pre><code>$ ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
-$ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
-</code></pre>
+<p><code>sh
+	ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
+</code></p>
 
-<h2>Install Mono</h2>
+<h2 id="install-mono">Install Mono</h2>
 
 <p>Basic mono setup to run and compile command line tools</p>
 
-<pre><code>apt-get install mono-devel mono-gmcs mono-csharp-shell
-</code></pre>
+<p><code>sh
+	apt-get install mono-devel mono-gmcs mono-csharp-shell
+</code></p>
 
-<h2>Packages from Raspbian</h2>
+<h2 id="packages-from-raspbian">Packages from Raspbian</h2>
 
 <p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
 
-<pre><code>apt-get install psmisc usbutils omxplayer
-</code></pre>
+<p><code>sh
+	apt-get install psmisc usbutils omxplayer
+</code></p>
 
-<br />
-
-
-<h1>Useful extras, not always used</h1>
+<p><br />
+# Useful extras, not always used</p>
 
 <p>Stuff used infrequently, or currently being tested</p>
 
-<h2>Installing iPlayer (and 4od, ITV, 5)</h2>
+<h2 id="installing-iplayer-and-4od-itv-5">Installing iPlayer (and 4od, ITV, 5)</h2>
 
-<p>Download the latest versions from the links below, then open the zip files directly from xbmc's addons page.</p>
+<p>Download the latest versions from the links below, then open the zip files directly from xbmc&rsquo;s addons page.</p>
 
-<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br/>
-<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br/>
-<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></p>
+<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br />
+<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br />
+<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a>  </p>
 
-<h2>Useful packages</h2>
+<h2 id="useful-packages">Useful packages</h2>
 
-<pre><code>apt-get install fs2resize exfat-fuse
-apt-get install clang geany
-apt-get install sysv-rc-conf
-</code></pre>
+<p><code>sh
+	apt-get install fs2resize exfat-fuse
+	apt-get install clang geany
+	apt-get install sysv-rc-conf
+</code></p>
 
-<h2>Testing PVR</h2>
+<h2 id="testing-pvr">Testing PVR</h2>
 
-<pre><code>apt-get install vdr-plugin-dvbsddevice
-</code></pre>
+<p><code>sh
+	apt-get install vdr-plugin-dvbsddevice
+</code></p>
 
-<h2>Setting up webcam</h2>
+<h2 id="setting-up-webcam">Setting up webcam</h2>
 
-<p>Use 'motion' or 'fswebcam', motion may need a default cfg copying</p>
+<p>Use &lsquo;motion&rsquo; or &lsquo;fswebcam&rsquo;, motion may need a default cfg copying</p>
 
-<pre><code>apt-get install motion
-nano /etc/default/motion /etc/motion/motion.conf
-</code></pre>
+<p><code>sh
+	apt-get install motion
+	nano /etc/default/motion /etc/motion/motion.conf
+</code></p>
 
-<br />
-
-
-<h1>Troubleshooting / backup</h1>
+<p><br />
+# Troubleshooting / backup</p>
 
 <p>Some useful commands and procedures</p>
 
-<h2>Backup XBMC settings</h2>
+<h2 id="backup-xbmc-settings">Backup XBMC settings</h2>
 
 <ul>
-<li>Settings, addons etc. are in ~/.xbmc</li>
-<li>.xbmc/userdata - preferences etc</li>
-<li>.xbmc/addons - binaries, themes</li>
-<li>.xbmc/addons/packages - original downloads, can use with "install from zip"</li>
+  <li>Settings, addons etc. are in ~/.xbmc</li>
+  <li>.xbmc/userdata - preferences etc</li>
+  <li>.xbmc/addons - binaries, themes</li>
+  <li>.xbmc/addons/packages - original downloads, can use with &ldquo;install from zip&rdquo;</li>
 </ul>
 
-
-<h2>Clear cached network adapter</h2>
+<h2 id="clear-cached-network-adapter">Clear cached network adapter</h2>
 
 <p>(needed for switching cards between devices)</p>
 
-<pre><code>echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
-</code></pre>
+<p><code>sh
+    echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
+</code></p>
 
 <p>When the file opens, just erase the lines and save it.</p>
 
-<h2>Quick Tips</h2>
+<h2 id="quick-tips">Quick Tips</h2>
 
 <ul>
-<li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
-<li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
+  <li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
+  <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
 </ul>
 
-
-<br />
-
-
-<h1>Not used/needed with recent versions</h1>
+<p><br />
+# Not used/needed with recent versions</p>
 
 <p>Previously useful functionality or workarounds</p>
 
-<h2>Fix ssh access using public key</h2>
+<h2 id="fix-ssh-access-using-public-key">Fix ssh access using public key</h2>
 
-<pre><code># must be owned by root
-chown root: ~ ~/.ssh
-# no write for others
-chmod a=rx,u+w  ~
+<p>```sh
+	# must be owned by root
+	chown root: ~ ~/.ssh
+	# no write for others
+	chmod a=rx,u+w  ~</p>
 
-# no access for others
+<pre><code># no access for others
 chmod -R go-rwx ~/.ssh
 # public key can be readable
-chmod a+r ~/.ssh/id_rsa.pub
+chmod a+r ~/.ssh/id_rsa.pub ``` 
 </code></pre>
 
-<h2>Download OpenSSH sftp server</h2>
+<h2 id="download-openssh-sftp-server">Download OpenSSH sftp server</h2>
 
-<pre><code>apt-get -d install openssh-server
-cp /var/cache/apt/archives/openssh-server_*.deb .
-dpkg-deb -X openssh-server_*.deb sftp
-cp sftp/usr/lib/openssh/sftp-server /usr/lib/
-rm -r sftp openssh-server_*.deb
-</code></pre>
+<p><code>sh
+	apt-get -d install openssh-server
+	cp /var/cache/apt/archives/openssh-server_*.deb .
+	dpkg-deb -X openssh-server_*.deb sftp
+	cp sftp/usr/lib/openssh/sftp-server /usr/lib/
+	rm -r sftp openssh-server_*.deb
+</code></p>
 
-<h2>Change Hostname</h2>
+<h2 id="change-hostname">Change Hostname</h2>
 
-<pre><code>sudo nano /etc/hostname # enter the desired name
-sudo nano /etc/hosts # replace the hostname
-sudo /etc/init.d/hostname.sh start # to enable the changes
-</code></pre>
+<p><code>sh
+    sudo nano /etc/hostname # enter the desired name
+    sudo nano /etc/hosts # replace the hostname
+    sudo /etc/init.d/hostname.sh start # to enable the changes
+</code></p>
 
-<h2>Update firmware without kernel</h2>
+<h2 id="update-firmware-without-kernel">Update firmware without kernel</h2>
 
-<pre><code>wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update &amp;&amp; chmod +x /usr/bin/rpi-update
-SKIP_KERNEL=1 rpi-update 128
-</code></pre>
+<p><code>sh
+    wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update &amp;&amp; chmod +x /usr/bin/rpi-update
+    SKIP_KERNEL=1 rpi-update 128
+</code></p>
 
-<h2>Install Shairport</h2>
+<h2 id="install-shairport">Install Shairport</h2>
 
 <p>Instructions found <a href="http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi">here</a> (alt site <a href="http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/">here</a>)</p>
 
-<pre><code># do as root
-sudo -s
-apt-get install alsa-utils
-modprobe snd_bcm2835
-# optionally set to headphone output
-# amixer cset numid=3 1
-# optionally restore to hdmi output
-# amixer cset numid=3 2
-apt-get install build-essential libssl-dev libcrypt-openssl-rsa-perl libao-dev libio-socket-inet6-perl libwww-perl avahi-utils pkg-config
-wget https://github.com/albertz/shairport/zipball/master
-unzip master
-cd albertz-shairport-*
-make install
-cp shairport.init.sample /etc/init.d/shairport
-# add to start of shairport: modprobe snd_bcm2835
-nano /etc/init.d/shairport
-# optionally edit name of service (remove port number):
-nano /usr/local/bin/shairport.pl
-insserv shairport
-# manually start [services](http://pi-raspberry.blogspot.co.uk/2012/08/shairport-raspberry-pi.html)
-service avahi-daemon start
-/etc/init.d/shairport start
-# exit root
-exit
-</code></pre>
+<p><code>sh
+	# do as root
+	sudo -s
+	apt-get install alsa-utils
+	modprobe snd_bcm2835
+	# optionally set to headphone output
+	# amixer cset numid=3 1
+	# optionally restore to hdmi output
+	# amixer cset numid=3 2
+	apt-get install build-essential libssl-dev libcrypt-openssl-rsa-perl libao-dev libio-socket-inet6-perl libwww-perl avahi-utils pkg-config
+	wget https://github.com/albertz/shairport/zipball/master
+	unzip master
+	cd albertz-shairport-*
+	make install
+	cp shairport.init.sample /etc/init.d/shairport
+	# add to start of shairport: modprobe snd_bcm2835
+	nano /etc/init.d/shairport
+	# optionally edit name of service (remove port number):
+	nano /usr/local/bin/shairport.pl
+	insserv shairport
+	# manually start [services](http://pi-raspberry.blogspot.co.uk/2012/08/shairport-raspberry-pi.html)
+	service avahi-daemon start
+	/etc/init.d/shairport start
+	# exit root
+	exit
+</code></p>
 ]]></content>
   </entry>
   
@@ -284,76 +292,64 @@ exit
     <link href="http://jmeosbn.github.com/stellaris-virtual-serial-device/"/>
     <updated>2012-12-10T02:48:00+00:00</updated>
     <id>http://jmeosbn.github.com/stellaris-virtual-serial-device</id>
-    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, eg. to interact with program execution, or to simply log it's output.</p>
+    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, eg. to interact with program execution, or to simply log it&rsquo;s output.</p>
 
-<h2>device permissions</h2>
+<h2 id="device-permissions">device permissions</h2>
 
 <p>Root privileges are required to access the device on some Linux and Unix based systems, so remember to use <code>sudo</code> with anything directly accessing the device, such as <code>lm4flash</code> and <code>ttylog</code>.</p>
 
 <p>Alternatively, on Linux you can configure permissions for the device using udev rules:</p>
 
-<p>``` sh</p>
+<p>``` sh
+	$ sudo nano /etc/udev/rules.d/42-sellaris.rules</p>
 
-<pre><code>$ sudo nano /etc/udev/rules.d/42-sellaris.rules
-
-# add the following lines:
+<pre><code># add the following lines:
 ATTRS{product}=="In-Circuit Debug Interface", OWNER="devuser"
-KERNEL=="ttyACM?", OWNER="devuser"
+KERNEL=="ttyACM?", OWNER="devuser" ```
 </code></pre>
 
-<p>```</p>
+<p>The (fairly open) rules shown above gives the user named &lsquo;<em>devuser</em>&rsquo; permission to access the launchpad&rsquo;s usb interface, along with it&rsquo;s virtual serial device.</p>
 
-<p>The (fairly open) rules shown above gives the user named '<em>devuser</em>' permission to access the launchpad's usb interface, along with it's virtual serial device.</p>
+<p>Note: these rules should be more specific if you have similar devices that you don&rsquo;t wish to allow access to inadvertently.</p>
 
-<p>Note: these rules should be more specific if you have similar devices that you don't wish to allow access to inadvertently.</p>
+<p><code>sh
+	# Exact match for Stellaris LM4F120XL
+	SUBSYSTEMS=="usb", ATTRS{idVendor}=="1cbe", ATTRS{idProduct}=="00fd", MODE="0660", OWNER="devuser"
+</code></p>
 
-<p>``` sh</p>
-
-<pre><code># Exact match for Stellaris LM4F120XL
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="1cbe", ATTRS{idProduct}=="00fd", MODE="0660", OWNER="devuser"
-</code></pre>
-
-<p>```</p>
-
-<p>The device in this rule is strictly defined and read/write permissions have been explicitly set for it.  Also, because the device itself is matched directly (rather than it's individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
+<p>The device in this rule is strictly defined and read/write permissions have been explicitly set for it.  Also, because the device itself is matched directly (rather than it&rsquo;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
 <p>To define these rules, the exact name, vendor and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
 
-<p>``` sh</p>
+<p><code>sh
+	$ dmesg
+	# &lt;snip&gt;
+	[39911.201497] usb 1-1.2.3: New USB device found, idVendor=1cbe, idProduct=00fd
+	[39911.201537] usb 1-1.2.3: Product: In-Circuit Debug Interface
+	[39911.201551] usb 1-1.2.3: Manufacturer: Texas Instruments
+	[39911.344575] cdc_acm 1-1.2.3:1.0: ttyACM0: USB ACM device
+</code></p>
 
-<pre><code>$ dmesg
-# &lt;snip&gt;
-[39911.201497] usb 1-1.2.3: New USB device found, idVendor=1cbe, idProduct=00fd
-[39911.201537] usb 1-1.2.3: Product: In-Circuit Debug Interface
-[39911.201551] usb 1-1.2.3: Manufacturer: Texas Instruments
-[39911.344575] cdc_acm 1-1.2.3:1.0: ttyACM0: USB ACM device
-</code></pre>
+<h2 id="serial-device">serial device</h2>
 
-<p>```</p>
+<p>If you want to use the serial connection to provide input or commands to the launchpad, you&rsquo;ll need a terminal emulator that can connect to a serial device.</p>
 
-<h2>serial device</h2>
+<p>``` sh
+	$ cd stellaris/boards/ek-lm4f120xl/qs-rgb
+	$ make
+	$ lm4flash gcc/qs-rgb.bin</p>
 
-<p>If you want to use the serial connection to provide input or commands to the launchpad, you'll need a terminal emulator that can connect to a serial device.</p>
-
-<p>``` sh</p>
-
-<pre><code>$ cd stellaris/boards/ek-lm4f120xl/qs-rgb
-$ make
-$ lm4flash gcc/qs-rgb.bin
-
-# Use of screen on linux
+<pre><code># Use of screen on linux
 $ screen /dev/ttyACM? 115200
 
 # Use of screen on mac os x
 $ screen /dev/tty.usbmodem* 115200
 
 # Kill the connection by typing: ^A k
-#  to list other commands, type: ^A ?
+#  to list other commands, type: ^A ? ```
 </code></pre>
 
-<p>```</p>
-
-<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, eg. when power cycling or reconnecting - if you have another ttyACM device connected, then you should probably use it's full name.</p>
+<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, eg. when power cycling or reconnecting - if you have another ttyACM device connected, then you should probably use it&rsquo;s full name.</p>
 
 <p>On OS X the device should be named similar to <code>tty.usbmodem</code>, with the serial number of the device appended.</p>
 ]]></content>
@@ -364,15 +360,14 @@ $ screen /dev/tty.usbmodem* 115200
     <link href="http://jmeosbn.github.com/testing-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:40:00+00:00</updated>
     <id>http://jmeosbn.github.com/testing-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="/compiling-the-stellaris-toolchain/">installed</a>, here's the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
+    <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="/compiling-the-stellaris-toolchain/">installed</a>, here&rsquo;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
-<p>``` sh</p>
+<p>``` sh
+	# Add the toolchain to your profile&rsquo;s path
+	# Ideally this should go into your bash profile
+	$ export PATH=$HOME/arm-cs-tools/bin:$PATH</p>
 
-<pre><code># Add the toolchain to your profile's path
-# Ideally this should go into your bash profile
-$ export PATH=$HOME/arm-cs-tools/bin:$PATH
-
-# Test the compiler
+<pre><code># Test the compiler
 $ git clone https://github.com/yuvadm/stellaris
 $ cd stellaris/boards/ek-lm4f120xl/project0/
 $ make clean; make
@@ -382,22 +377,19 @@ $ lm4flash gcc/project0.bin
 
 # Try making a source modification
 $ nano project0.c
-$ make &amp;&amp; lm4flash gcc/project0.bin
+$ make &amp;&amp; lm4flash gcc/project0.bin ```
 </code></pre>
 
-<p>```</p>
-
-<h2>debugging</h2>
+<h2 id="debugging">debugging</h2>
 
 <p><a href="https://github.com/utzig/lm4tools">lm4tools</a> has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
 
-<p>``` sh</p>
+<p>``` sh
+	# build with debug symbols
+	$ make clean &amp;&amp; make DEBUG=1
+	$ lm4flash gcc/project0.bin</p>
 
-<pre><code># build with debug symbols
-$ make clean &amp;&amp; make DEBUG=1
-$ lm4flash gcc/project0.bin
-
-# start the tcp/usb bridge (in the background)
+<pre><code># start the tcp/usb bridge (in the background)
 $ lmicdi &amp;
 
 # start gdb and connect to device
@@ -416,10 +408,8 @@ Ending remote debugging.
 (gdb) quit
 
 # quit lmicdi to allow use of lm4flash
-$ sudo killall lmicdi # or type 'fg' followed by ^C
+$ sudo killall lmicdi # or type 'fg' followed by ^C ```
 </code></pre>
-
-<p>```</p>
 ]]></content>
   </entry>
   
@@ -428,39 +418,39 @@ $ sudo killall lmicdi # or type 'fg' followed by ^C
     <link href="http://jmeosbn.github.com/compiling-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:02:00+00:00</updated>
     <id>http://jmeosbn.github.com/compiling-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don't want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
+    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
 
-<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I've not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I'll probably try building next.</p>
+<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&rsquo;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&rsquo;ll probably try building next.</p>
 
 <p>For more details on the launchpad, and the various libraries etc. that it uses, T.I. has a selection of <a href="http://www.ti.com/product/lm4f120h5qr">technical documentation</a> on their site.</p>
 
-<h2>toolchain</h2>
+<h2 id="toolchain">toolchain</h2>
 
 <p>The makefile failed to download the source archive, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
 
-<h2>lm4tools</h2>
+<h2 id="lm4tools">lm4tools</h2>
 
 <p>The <code>lm4flash</code> tool included in <a href="https://github.com/utzig/lm4tools/commit/cc466b1">recent</a> versions of <a href="https://github.com/utzig/lm4tools">lm4tools</a>, is unable to read the serial number of the device on OS X; so compiled code cannot be flashed to the launchpad device.</p>
 
-<p><strong>Update: The dev has <a href="https://github.com/utzig/lm4tools/commit/99d501b">committed</a> a workaround that fixes <code>lm4flash</code> on OS X.</strong>
-``` sh</p>
+<p><strong>Update: The dev has [committed] a workaround that fixes <code>lm4flash</code> on OS X.</strong>
+[committed]: https://github.com/utzig/lm4tools/commit/99d501b</p>
 
-<pre><code>$ ./lm4flash project0.bin
-Unable to get device serial number: LIBUSB_ERROR_OTHER
-Unable to find any ICDI devices
-</code></pre>
+<p><code>sh
+	$ ./lm4flash project0.bin
+	Unable to get device serial number: LIBUSB_ERROR_OTHER
+	Unable to find any ICDI devices
+</code></p>
 
-<p>```</p>
-
-<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn't check for the serial number.</p>
+<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn&rsquo;t check for the serial number.</p>
 
 <p>Btw, you will get a similar error if your system requires root privileges to access the device directly over usb; try using <code>sudo</code> on linux/unix systems if you have issues.</p>
 
-<h2>more links</h2>
+<h2 id="more-links">more links</h2>
 
-<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM's <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
+<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM&rsquo;s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
 
 <p><a href="/testing-the-stellaris-toolchain">Testing the Stellaris Toolchain</a> - my overview for compiling and testing code on the device.</p>
+
 ]]></content>
   </entry>
   

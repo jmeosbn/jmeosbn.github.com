@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Dropbox on Pi - git-log(1)</title>
+  <meta name="author" content="Jamie Osborne">
+
+  
+  <meta name="description" content="There&rsquo;s currently no build of the Dropbox sync client for ARM devices; while there is source available, it&rsquo;s not suitable for automatic, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jmeosbn.github.com/pi-box/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="git-log(1)" type="application/atom+xml">
+  <!--
+	http://aijazansari.com/2012/08/27/how-to-customize-octopress-theme/
+-->
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   class="no-sidebar"  >
+  <header role="banner"><hgroup>
+  <h1><a href="/">git-log(1)</a></h1>
+  
+</hgroup>
+
+</header>
+  
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Dropbox on Pi</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-19T00:54:00+00:00" pubdate data-updated="true">Dec 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>There&rsquo;s currently no build of the Dropbox sync client for ARM devices; while there is source available, it&rsquo;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
+
+<p>Dropbox does make various SDKs available though, which enables a ruby or python script to be used instead of the official client.</p>
+
+<h1 id="a-ready-made-solution">a ready made solution..</h1>
+
+<p><a href="https://github.com/kenpratt/dbox">dbox</a> is a great ruby client for Dropbox that can locally create, clone, push, pull, sync, and move, a Dropbox folder hierarchy.  It can be used as an API directly from another ruby script, or with the included command line tool.</p>
+
+<blockquote>
+  <p><a href="https://github.com/kenpratt/dbox">dbox</a><br />
+Dropbox integration made easy. This robust client gives you control over what, where, and when you sync with Dropbox.</p>
+</blockquote>
+
+<p>Before installing dbox, make sure you have any needed packages.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo apt-get install ruby ruby-dev libsqlite3-dev
+</span><span class="line"><span class="nv">$ </span>sudo gem install dbox
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page to configure your keys, and clone your Dropbox folder.</p>
+
+<p>To run dbox periodically, download<sup id="fnref:dl"><a href="#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a>, make it executable, then replace the example keys and path settings with your own.</p>
+
+<!--	$ cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb -->
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>wget https://raw.github.com/kenpratt/dbox/master/sample_polling_script.rb
+</span><span class="line"><span class="nv">$ </span>mv ./sample_polling_script.rb dboxsync.rb
+</span><span class="line"><span class="nv">$ </span>chmod +x dboxsync.rb
+</span><span class="line"><span class="nv">$ </span>nano dboxsync.rb
+</span><span class="line"><span class="nv">$ </span>./dboxsync.rb
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running; change the script so <code>LOGFILE = STDOUT</code> if you want to see some basic info while testing.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
+
+<p>To have the script run on startup, add the following entry to <code>/etc/rc.local</code>.  </p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo nano /etc/rc.local
+</span><span class="line">
+</span><span class="line"><span class="c"># add the following</span>
+</span><span class="line"><span class="k">if</span> ! pgrep -f dboxsync; <span class="k">then</span>
+</span><span class="line"><span class="k">  </span>sudo -u xbian /home/xbian/dboxsync.rb &amp;
+</span><span class="line"><span class="k">fi</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>There&rsquo;s more proper ways of doing this, but this seemed the simplest.</p>
+
+<h2 id="todo">todo</h2>
+
+<ul>
+  <li>increase polling delay, but add detection of local changes to initiate push/pull</li>
+</ul>
+
+<h2 id="notes">notes</h2>
+
+<p>While cron or similar could be used to run dbox periodically, each separate invocation of dbox from the command line incurs a startup delay of a few seconds, during which time the Pi&rsquo;s CPU is maxed out loading ruby and the code needed to run dbox.  This isn&rsquo;t ideal and would likely cause issues if the Pi is used as a media player.</p>
+
+<p>The sample_polling_script accesses dbox directly though it&rsquo;s ruby API, and doesn&rsquo;t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
+
+<h1 id="alternatives">alternatives</h1>
+
+<p>Here&rsquo;s some more options I considered, in order of decreasing usefulness.</p>
+
+<h2 id="one-way-sync">one way sync</h2>
+
+<p>Create a simple ruby script to sync files one way - <em>from Dropbox</em> - using the Dropbox SDK.  It&rsquo;s also possible to sync both ways in ruby, but <a href="https://github.com/kenpratt/dbox">dbox</a> has already done a great job implementing that.</p>
+
+<p>Ruby SDK <a href="https://www.dropbox.com/developers/start/setup#ruby">Tutorial</a>, <a href="https://www.dropbox.com/static/developers/dropbox-ruby-sdk-1.5.1-docs/index.html">Documentation</a>.</p>
+
+<p>eg. See the <a href="https://www.dropbox.com/static/developers/dropbox-ruby-sdk-1.5.1-docs/DropboxClient.html#method-i-delta">delta method</a> to keep local files in sync without writing too much code.</p>
+
+<p>There&rsquo;s also the cli_example.rb script included in the SDK, which provides a simple shell interface similar to FTP but does not have any syncing logic included.</p>
+
+<h2 id="linux-daemon">linux daemon</h2>
+
+<p>Dropbox does have a download for a daemon, but it&rsquo;s x86/_64 only, see the <a href="https://www.dropbox.com/install?os=lnx">Linux Download</a> page for more info.</p>
+
+<blockquote>
+  <p>The Dropbox daemon works fine on all 32-bit and 64-bit Linux servers. To install, run the following command in your Linux terminal.</p>
+</blockquote>
+
+<h2 id="build-from-source">build from source</h2>
+
+<p>The Dropbox source appears to be just a plugin for the nautilus file browser (and doesn&rsquo;t include the above daemon?).  This is only useful when using the desktop.</p>
+
+<p>Download <a href="https://www.dropbox.com/download?dl=packages/nautilus-dropbox-1.4.0.tar.bz2">source archive</a> and build as usual, more details are <a href="https://www.dropbox.com/help/247">here</a>.</p>
+
+<h2 id="use-something-else">use something else</h2>
+
+<p>I also use github, sftp, scp, and rsync for file transfer, version history and keeping various things in sync; there are many ways to achieve automatic folder syncing.  However, Dropbox fulfills a role that can&rsquo;t easily be duplicated if you use many Dropbox enabled mobile apps, and do not wish the Pi to rely upon a second computer to sync through.</p>
+<div class="footnotes">
+  <ol>
+    <li id="fn:dl">
+      <p>the script is also included in the installed gem:  <code>cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb</code><a href="#fnref:dl" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:mem">
+      <p>memory usage starts at ~8MB after startup, and evens out to ~12MB after many polling loops; polling takes a second or two, during which CPU usage is around 5%, peaking at ~12%.  Contrast with the CLI version which uses a similar amount of memory, but takes several seconds to complete each sync, and includes the overhead of almost total CPU usage for half that time.<a href="#fnref:mem" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jamie Osborne</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-19T00:54:00+00:00" pubdate data-updated="true">Dec 19<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jmeosbn.github.com/pi-box/" data-via="jmeosbn" data-counturl="http://jmeosbn.github.com/pi-box/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/baking-the-pi/" title="Previous Post: Home Theatre Pi (HTPi)">&laquo; Home Theatre Pi (HTPi)</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Jamie Osborne -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

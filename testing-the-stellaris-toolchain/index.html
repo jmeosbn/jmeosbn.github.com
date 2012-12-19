@@ -9,7 +9,7 @@
   <meta name="author" content="Jamie Osborne">
 
   
-  <meta name="description" content="Once the toolchain is installed, here&#8217;s the basic steps to compile an example and get the code onto the launchpad. A mirror for the Stellaris &hellip;">
+  <meta name="description" content="Once the toolchain is installed, here&rsquo;s the basic steps to compile an example and get the code onto the launchpad. A mirror for the Stellaris &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,95 +76,93 @@
   </header>
 
 
-<div class="entry-content"><p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="/compiling-the-stellaris-toolchain/">installed</a>, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
+<div class="entry-content"><p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="/compiling-the-stellaris-toolchain/">installed</a>, here&rsquo;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># Add the toolchain to your profile&#39;s path</span>
-</span><span class='line'><span class="c"># Ideally this should go into your bash profile</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$HOME</span>/arm-cs-tools/bin:<span class="nv">$PATH</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># Test the compiler</span>
-</span><span class='line'><span class="nv">$ </span>git clone https://github.com/yuvadm/stellaris
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/project0/
-</span><span class='line'><span class="nv">$ </span>make clean; make
-</span><span class='line'>
-</span><span class='line'><span class="c"># Flash binary to the board</span>
-</span><span class='line'><span class="nv">$ </span>lm4flash gcc/project0.bin
-</span><span class='line'>
-</span><span class='line'><span class="c"># Try making a source modification</span>
-</span><span class='line'><span class="nv">$ </span>nano project0.c
-</span><span class='line'><span class="nv">$ </span>make <span class="o">&amp;&amp;</span> lm4flash gcc/project0.bin
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Add the toolchain to your profile&#39;s path</span>
+</span><span class="line"><span class="c"># Ideally this should go into your bash profile</span>
+</span><span class="line"><span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$HOME</span>/arm-cs-tools/bin:<span class="nv">$PATH</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Test the compiler</span>
+</span><span class="line"><span class="nv">$ </span>git clone https://github.com/yuvadm/stellaris
+</span><span class="line"><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/project0/
+</span><span class="line"><span class="nv">$ </span>make clean; make
+</span><span class="line">
+</span><span class="line"><span class="c"># Flash binary to the board</span>
+</span><span class="line"><span class="nv">$ </span>lm4flash gcc/project0.bin
+</span><span class="line">
+</span><span class="line"><span class="c"># Try making a source modification</span>
+</span><span class="line"><span class="nv">$ </span>nano project0.c
+</span><span class="line"><span class="nv">$ </span>make <span class="o">&amp;&amp;</span> lm4flash gcc/project0.bin
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<h2>debugging</h2>
+<h2 id="debugging">debugging</h2>
 
 <p><a href="https://github.com/utzig/lm4tools">lm4tools</a> has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># build with debug symbols</span>
-</span><span class='line'><span class="nv">$ </span>make clean <span class="o">&amp;&amp;</span> make <span class="nv">DEBUG</span><span class="o">=</span>1
-</span><span class='line'><span class="nv">$ </span>lm4flash gcc/project0.bin
-</span><span class='line'>
-</span><span class='line'><span class="c"># start the tcp/usb bridge (in the background)</span>
-</span><span class='line'><span class="nv">$ </span>lmicdi &amp;
-</span><span class='line'>
-</span><span class='line'><span class="c"># start gdb and connect to device</span>
-</span><span class='line'><span class="nv">$ </span>arm-none-eabi-gdb gcc/project0.axf
-</span><span class='line'>Reading symbols from ./gcc/project0.axf...done.
-</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> target remote :7777
-</span><span class='line'>Remote debugging using :7777
-</span><span class='line'>0x00000494 in SysCtlDelay <span class="o">()</span>
-</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> c
-</span><span class='line'>Continuing.
-</span><span class='line'>^C
-</span><span class='line'><span class="o">[</span>Thread &lt;main&gt;<span class="o">]</span> <span class="c">#1 stopped.</span>
-</span><span class='line'>0x00000662 in SysCtlDelay <span class="o">()</span>
-</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> detach
-</span><span class='line'>Ending remote debugging.
-</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> quit
-</span><span class='line'>
-</span><span class='line'><span class="c"># quit lmicdi to allow use of lm4flash</span>
-</span><span class='line'><span class="nv">$ </span>sudo killall lmicdi <span class="c"># or type &#39;fg&#39; followed by ^C</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># build with debug symbols</span>
+</span><span class="line"><span class="nv">$ </span>make clean <span class="o">&amp;&amp;</span> make <span class="nv">DEBUG</span><span class="o">=</span>1
+</span><span class="line"><span class="nv">$ </span>lm4flash gcc/project0.bin
+</span><span class="line">
+</span><span class="line"><span class="c"># start the tcp/usb bridge (in the background)</span>
+</span><span class="line"><span class="nv">$ </span>lmicdi &amp;
+</span><span class="line">
+</span><span class="line"><span class="c"># start gdb and connect to device</span>
+</span><span class="line"><span class="nv">$ </span>arm-none-eabi-gdb gcc/project0.axf
+</span><span class="line">Reading symbols from ./gcc/project0.axf...done.
+</span><span class="line"><span class="o">(</span>gdb<span class="o">)</span> target remote :7777
+</span><span class="line">Remote debugging using :7777
+</span><span class="line">0x00000494 in SysCtlDelay <span class="o">()</span>
+</span><span class="line"><span class="o">(</span>gdb<span class="o">)</span> c
+</span><span class="line">Continuing.
+</span><span class="line">^C
+</span><span class="line"><span class="o">[</span>Thread &lt;main&gt;<span class="o">]</span> <span class="c">#1 stopped.</span>
+</span><span class="line">0x00000662 in SysCtlDelay <span class="o">()</span>
+</span><span class="line"><span class="o">(</span>gdb<span class="o">)</span> detach
+</span><span class="line">Ending remote debugging.
+</span><span class="line"><span class="o">(</span>gdb<span class="o">)</span> quit
+</span><span class="line">
+</span><span class="line"><span class="c"># quit lmicdi to allow use of lm4flash</span>
+</span><span class="line"><span class="nv">$ </span>sudo killall lmicdi <span class="c"># or type &#39;fg&#39; followed by ^C</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 </div>
 
 

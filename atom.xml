@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-19T00:05:18+00:00</updated>
+  <updated>2012-12-19T01:35:34+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -12,6 +12,126 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Dropbox on Pi]]></title>
+    <link href="http://jmeosbn.github.com/pi-box/"/>
+    <updated>2012-12-19T00:54:00+00:00</updated>
+    <id>http://jmeosbn.github.com/pi-box</id>
+    <content type="html"><![CDATA[<p>There&rsquo;s currently no build of the Dropbox sync client for ARM devices; while there is source available, it&rsquo;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
+
+<p>Dropbox does make various SDKs available though, which enables a ruby or python script to be used instead of the official client.</p>
+
+<h1 id="a-ready-made-solution">a ready made solution..</h1>
+
+<p><a href="https://github.com/kenpratt/dbox">dbox</a> is a great ruby client for Dropbox that can locally create, clone, push, pull, sync, and move, a Dropbox folder hierarchy.  It can be used as an API directly from another ruby script, or with the included command line tool.</p>
+
+<blockquote>
+  <p><a href="https://github.com/kenpratt/dbox">dbox</a><br />
+Dropbox integration made easy. This robust client gives you control over what, where, and when you sync with Dropbox.</p>
+</blockquote>
+
+<p>Before installing dbox, make sure you have any needed packages.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo apt-get install ruby ruby-dev libsqlite3-dev
+</span><span class="line"><span class="nv">$ </span>sudo gem install dbox
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page to configure your keys, and clone your Dropbox folder.</p>
+
+<p>To run dbox periodically, download<sup id="fnref:dl"><a href="#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a>, make it executable, then replace the example keys and path settings with your own.</p>
+
+<!--	$ cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb -->
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>wget https://raw.github.com/kenpratt/dbox/master/sample_polling_script.rb
+</span><span class="line"><span class="nv">$ </span>mv ./sample_polling_script.rb dboxsync.rb
+</span><span class="line"><span class="nv">$ </span>chmod +x dboxsync.rb
+</span><span class="line"><span class="nv">$ </span>nano dboxsync.rb
+</span><span class="line"><span class="nv">$ </span>./dboxsync.rb
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running; change the script so <code>LOGFILE = STDOUT</code> if you want to see some basic info while testing.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
+
+<p>To have the script run on startup, add the following entry to <code>/etc/rc.local</code>.  </p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo nano /etc/rc.local
+</span><span class="line">
+</span><span class="line"><span class="c"># add the following</span>
+</span><span class="line"><span class="k">if</span> ! pgrep -f dboxsync; <span class="k">then</span>
+</span><span class="line"><span class="k">  </span>sudo -u xbian /home/xbian/dboxsync.rb &amp;
+</span><span class="line"><span class="k">fi</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>There&rsquo;s more proper ways of doing this, but this seemed the simplest.</p>
+
+<h2 id="todo">todo</h2>
+
+<ul>
+  <li>increase polling delay, but add detection of local changes to initiate push/pull</li>
+</ul>
+
+<h2 id="notes">notes</h2>
+
+<p>While cron or similar could be used to run dbox periodically, each separate invocation of dbox from the command line incurs a startup delay of a few seconds, during which time the Pi&rsquo;s CPU is maxed out loading ruby and the code needed to run dbox.  This isn&rsquo;t ideal and would likely cause issues if the Pi is used as a media player.</p>
+
+<p>The sample_polling_script accesses dbox directly though it&rsquo;s ruby API, and doesn&rsquo;t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
+
+<h1 id="alternatives">alternatives</h1>
+
+<p>Here&rsquo;s some more options I considered, in order of decreasing usefulness.</p>
+
+<h2 id="one-way-sync">one way sync</h2>
+
+<p>Create a simple ruby script to sync files one way - <em>from Dropbox</em> - using the Dropbox SDK.  It&rsquo;s also possible to sync both ways in ruby, but <a href="https://github.com/kenpratt/dbox">dbox</a> has already done a great job implementing that.</p>
+
+<p>Ruby SDK <a href="https://www.dropbox.com/developers/start/setup#ruby">Tutorial</a>, <a href="https://www.dropbox.com/static/developers/dropbox-ruby-sdk-1.5.1-docs/index.html">Documentation</a>.</p>
+
+<p>eg. See the <a href="https://www.dropbox.com/static/developers/dropbox-ruby-sdk-1.5.1-docs/DropboxClient.html#method-i-delta">delta method</a> to keep local files in sync without writing too much code.</p>
+
+<p>There&rsquo;s also the cli_example.rb script included in the SDK, which provides a simple shell interface similar to FTP but does not have any syncing logic included.</p>
+
+<h2 id="linux-daemon">linux daemon</h2>
+
+<p>Dropbox does have a download for a daemon, but it&rsquo;s x86/_64 only, see the <a href="https://www.dropbox.com/install?os=lnx">Linux Download</a> page for more info.</p>
+
+<blockquote>
+  <p>The Dropbox daemon works fine on all 32-bit and 64-bit Linux servers. To install, run the following command in your Linux terminal.</p>
+</blockquote>
+
+<h2 id="build-from-source">build from source</h2>
+
+<p>The Dropbox source appears to be just a plugin for the nautilus file browser (and doesn&rsquo;t include the above daemon?).  This is only useful when using the desktop.</p>
+
+<p>Download <a href="https://www.dropbox.com/download?dl=packages/nautilus-dropbox-1.4.0.tar.bz2">source archive</a> and build as usual, more details are <a href="https://www.dropbox.com/help/247">here</a>.</p>
+
+<h2 id="use-something-else">use something else</h2>
+
+<p>I also use github, sftp, scp, and rsync for file transfer, version history and keeping various things in sync; there are many ways to achieve automatic folder syncing.  However, Dropbox fulfills a role that can&rsquo;t easily be duplicated if you use many Dropbox enabled mobile apps, and do not wish the Pi to rely upon a second computer to sync through.</p>
+<div class="footnotes">
+  <ol>
+    <li id="fn:dl">
+      <p>the script is also included in the installed gem:  <code>cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb</code><a href="#fnref:dl" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:mem">
+      <p>memory usage starts at ~8MB after startup, and evens out to ~12MB after many polling loops; polling takes a second or two, during which CPU usage is around 5%, peaking at ~12%.  Contrast with the CLI version which uses a similar amount of memory, but takes several seconds to complete each sync, and includes the overhead of almost total CPU usage for half that time.<a href="#fnref:mem" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Home Theatre Pi (HTPi)]]></title>
@@ -24,258 +144,345 @@
 
 <!-- more -->
 
-
-<h2>Basic Pi Tips</h2>
+<h2 id="basic-pi-tips">Basic Pi Tips</h2>
 
 <ul>
-<li>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a></li>
-<li>Login using hostname with zeroconfig: <code>ssh user@host.local</code></li>
+  <li>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a></li>
+  <li>Login using hostname with zeroconfig: <code>ssh user@host.local</code></li>
 </ul>
 
-
-<h2>Pre-setup, on PC, laptop, etc.</h2>
+<h2 id="pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</h2>
 
 <p>Before setting up the Pi remotely, there are some things to do locally to ease logging in.  This will obviate the need to enter the password, or specify the full host name each time we access the Pi.</p>
 
-<h3>Copy public key to Pi</h3>
+<h3 id="copy-public-key-to-pi">Copy public key to Pi</h3>
 
-<pre><code># remove any old, conflicting host entries
-ssh-keygen -R xbian.local
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># remove any old, conflicting host entries</span>
+</span><span class="line">ssh-keygen -R xbian.local
+</span><span class="line">
+</span><span class="line"><span class="c"># generate key pair if none already exists</span>
+</span><span class="line"><span class="nb">test</span> -f ~/.ssh/id_rsa.pub <span class="o">||</span> ssh-keygen
+</span><span class="line">
+</span><span class="line"><span class="c"># password required until key installed</span>
+</span><span class="line">ssh-copy-id xbian@xbian.local
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-# generate key pair if none already exists
-test -f ~/.ssh/id_rsa.pub || ssh-keygen
+<p>The easiest way to append a key to the remote user&rsquo;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if you don&rsquo;t have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
-# password required until key installed
-ssh-copy-id xbian@xbian.local
-</code></pre>
-
-<p>The easiest way to append a key to the remote user&#8217;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if you don&#8217;t have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
-
-<h3>Add an alias to .ssh/config</h3>
+<h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
 <p>Locally define the alias <code>xb</code> to be used in place of <code>xbian@xbian.local</code>.</p>
 
-<pre><code>echo '
-Host xb
-  User  xbian
-  Hostname  xbian.local' &gt;&gt; ~/.ssh/config
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nb">echo</span> <span class="s1">&#39;</span>
+</span><span class="line"><span class="s1">Host xb</span>
+</span><span class="line"><span class="s1">  User  xbian</span>
+</span><span class="line"><span class="s1">  Hostname  xbian.local&#39;</span> &gt;&gt; ~/.ssh/config
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>With this alias defined, <code>ssh xb</code> and <code>sftp xb</code> can be used to login.</p>
 
-<h2>First login tasks</h2>
+<h2 id="first-login-tasks">First login tasks</h2>
 
 <p>If you have any files stored locally, you can transfer them using <code>sftp</code>.</p>
 
-<pre><code># connect to the pi, using the `xb` alias defined above
-sftp xb
-sftp&gt; put .profile
-sftp&gt; exit
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># connect to the pi, using the `xb` alias defined above</span>
+</span><span class="line">sftp xb
+</span><span class="line">sftp&gt; put .profile
+</span><span class="line">sftp&gt; <span class="nb">exit</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># you can also use ctlr+d to logout</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-# you can also use ctlr+d to logout
-</code></pre>
+<p>Most of the commands below need root privileges on the Pi, as they configure the system.  For a single command you can prepend <code>sudo</code>, for many commands it&rsquo;s easier to run <code>sudo -s</code> to start a new shell using sudo.</p>
 
-<p>Most of the commands below need root privileges on the Pi, as they configure the system.  For a single command you can prepend <code>sudo</code>, for many commands it&#8217;s easier to run <code>sudo -s</code> to start a new shell using sudo.</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
+</span><span class="line">ssh xb
+</span><span class="line">
+</span><span class="line"><span class="c"># xbian-config may run here, set it up as you like then exit</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Prevent future display of login message</span>
+</span><span class="line">touch ~/.hushlogin
+</span><span class="line">
+</span><span class="line"><span class="c"># Login as root for the remainder of the setup</span>
+</span><span class="line">sudo -s
+</span><span class="line">
+</span><span class="line"><span class="c"># Allow full use of sudo without needing password</span>
+</span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;%sudo  ALL=(ALL) NOPASSWD: ALL&#39;</span> &gt;&gt; /etc/sudoers
+</span><span class="line">
+</span><span class="line"><span class="c"># Prevent autorun of xbian-config.sh,</span>
+</span><span class="line"><span class="c"># moving it to /usr/bin to be executable</span>
+</span><span class="line">mv /etc/profile.d/xbian-config.sh /usr/bin
+</span><span class="line">chmod +x /usr/bin/xbian-config.sh
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<pre><code># Login to the pi, using the `xb` alias
-ssh xb
+<h2 id="update-packages">Update packages</h2>
 
-# xbian-config may run here, set it up as you like then exit
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-# Prevent future display of login message
-touch ~/.hushlogin
+<h2 id="fake-a-hw-clock-based-on-recent-timestamp">Fake a hw clock based on recent timestamp</h2>
 
-# Login as root for the remainder of the setup
-sudo -s
+<p>The Pi doesn&rsquo;t have any hardware to track time while powered off; using fake-hwclock, the time can be set during startup to the last known date and time.</p>
 
-# Allow full use of sudo without needing password
-echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">touch /etc/init.d/hwclock.sh
+</span><span class="line">/etc/init.d/ntp restart
+</span><span class="line">apt-get install ntpdate fake-hwclock
+</span><span class="line">ntpdate-debian
+</span><span class="line">dpkg-reconfigure tzdata
+</span><span class="line">sed -i <span class="s1">&#39;s/^exit 0/ntpdate-debian\nexit 0/g&#39;</span> /etc/rc.local
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-# Prevent autorun of xbian-config.sh,
-# moving it to /usr/bin to be executable
-mv /etc/profile.d/xbian-config.sh /usr/bin
-chmod +x /usr/bin/xbian-config.sh
-</code></pre>
-
-<h2>Update packages</h2>
-
-<pre><code>apt-get update &amp;&amp; apt-get upgrade
-</code></pre>
-
-<h2>Fake a hw clock based on recent timestamp</h2>
-
-<p>The Pi doesn&#8217;t have any hardware to track time while powered off; using fake-hwclock, the time can be set during startup to the last known date and time.</p>
-
-<pre><code>touch /etc/init.d/hwclock.sh
-/etc/init.d/ntp restart
-apt-get install ntpdate fake-hwclock
-ntpdate-debian
-dpkg-reconfigure tzdata
-sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
-</code></pre>
-
-<h2>Generate new RSA host keys</h2>
+<h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
 <p>These keys confirm the identity of the Pi when logging in remotely, to prevent a malicious host from intercepting the process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.</p>
 
-<pre><code>$ ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
-$ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+</span><span class="line">ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2>Install Mono</h2>
+<h2 id="install-mono">Install Mono</h2>
 
 <p>Basic mono setup to run and compile command line tools</p>
 
-<pre><code>apt-get install mono-devel mono-gmcs mono-csharp-shell
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-gmcs mono-csharp-shell
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2>Packages from Raspbian</h2>
+<h2 id="packages-from-raspbian">Packages from Raspbian</h2>
 
 <p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
 
-<pre><code>apt-get install psmisc usbutils omxplayer
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install psmisc usbutils omxplayer
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<br />
-
-
-<h1>Useful extras, not always used</h1>
+<p><br />
+# Useful extras, not always used</p>
 
 <p>Stuff used infrequently, or currently being tested</p>
 
-<h2>Installing iPlayer (and 4od, ITV, 5)</h2>
+<h2 id="installing-iplayer-and-4od-itv-5">Installing iPlayer (and 4od, ITV, 5)</h2>
 
-<p>Download the latest versions from the links below, then open the zip files directly from xbmc&#8217;s addons page.</p>
+<p>Download the latest versions from the links below, then open the zip files directly from xbmc&rsquo;s addons page.</p>
 
-<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br/>
-<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br/>
-<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></p>
+<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br />
+<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br />
+<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a>  </p>
 
-<h2>Useful packages</h2>
+<h2 id="useful-packages">Useful packages</h2>
 
-<pre><code>apt-get install fs2resize exfat-fuse
-apt-get install clang geany
-apt-get install sysv-rc-conf
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fs2resize exfat-fuse
+</span><span class="line">apt-get install clang geany
+</span><span class="line">apt-get install sysv-rc-conf
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2>Testing PVR</h2>
+<h2 id="testing-pvr">Testing PVR</h2>
 
-<pre><code>apt-get install vdr-plugin-dvbsddevice
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install vdr-plugin-dvbsddevice
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2>Setting up webcam</h2>
+<h2 id="setting-up-webcam">Setting up webcam</h2>
 
-<p>Use &#8216;motion&#8217; or &#8216;fswebcam&#8217;, motion may need a default cfg copying</p>
+<p>Use &lsquo;motion&rsquo; or &lsquo;fswebcam&rsquo;, motion may need a default cfg copying</p>
 
-<pre><code>apt-get install motion
-nano /etc/default/motion /etc/motion/motion.conf
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install motion
+</span><span class="line">nano /etc/default/motion /etc/motion/motion.conf
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<br />
-
-
-<h1>Troubleshooting / backup</h1>
+<p><br />
+# Troubleshooting / backup</p>
 
 <p>Some useful commands and procedures</p>
 
-<h2>Backup XBMC settings</h2>
+<h2 id="backup-xbmc-settings">Backup XBMC settings</h2>
 
 <ul>
-<li>Settings, addons etc. are in ~/.xbmc</li>
-<li>.xbmc/userdata - preferences etc</li>
-<li>.xbmc/addons - binaries, themes</li>
-<li>.xbmc/addons/packages - original downloads, can use with &#8220;install from zip&#8221;</li>
+  <li>Settings, addons etc. are in ~/.xbmc</li>
+  <li>.xbmc/userdata - preferences etc</li>
+  <li>.xbmc/addons - binaries, themes</li>
+  <li>.xbmc/addons/packages - original downloads, can use with &ldquo;install from zip&rdquo;</li>
 </ul>
 
-
-<h2>Clear cached network adapter</h2>
+<h2 id="clear-cached-network-adapter">Clear cached network adapter</h2>
 
 <p>(needed for switching cards between devices)</p>
 
-<pre><code>echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nb">echo</span> | sudo tee /etc/udev/rules.d/70-persistent-net.rules
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>When the file opens, just erase the lines and save it.</p>
 
-<h2>Quick Tips</h2>
+<h2 id="quick-tips">Quick Tips</h2>
 
 <ul>
-<li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
-<li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
+  <li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
+  <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
 </ul>
 
-
-<br />
-
-
-<h1>Not used/needed with recent versions</h1>
+<p><br />
+# Not used/needed with recent versions</p>
 
 <p>Previously useful functionality or workarounds</p>
 
-<h2>Fix ssh access using public key</h2>
+<h2 id="fix-ssh-access-using-public-key">Fix ssh access using public key</h2>
 
-<pre><code># must be owned by root
-chown root: ~ ~/.ssh
-# no write for others
-chmod a=rx,u+w  ~
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># must be owned by root</span>
+</span><span class="line">chown root: ~ ~/.ssh
+</span><span class="line"><span class="c"># no write for others</span>
+</span><span class="line">chmod <span class="nv">a</span><span class="o">=</span>rx,u+w  ~
+</span><span class="line">
+</span><span class="line"><span class="c"># no access for others</span>
+</span><span class="line">chmod -R go-rwx ~/.ssh
+</span><span class="line"><span class="c"># public key can be readable</span>
+</span><span class="line">chmod a+r ~/.ssh/id_rsa.pub
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-# no access for others
-chmod -R go-rwx ~/.ssh
-# public key can be readable
-chmod a+r ~/.ssh/id_rsa.pub
-</code></pre>
+<h2 id="download-openssh-sftp-server">Download OpenSSH sftp server</h2>
 
-<h2>Download OpenSSH sftp server</h2>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get -d install openssh-server
+</span><span class="line">cp /var/cache/apt/archives/openssh-server_*.deb .
+</span><span class="line">dpkg-deb -X openssh-server_*.deb sftp
+</span><span class="line">cp sftp/usr/lib/openssh/sftp-server /usr/lib/
+</span><span class="line">rm -r sftp openssh-server_*.deb
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<pre><code>apt-get -d install openssh-server
-cp /var/cache/apt/archives/openssh-server_*.deb .
-dpkg-deb -X openssh-server_*.deb sftp
-cp sftp/usr/lib/openssh/sftp-server /usr/lib/
-rm -r sftp openssh-server_*.deb
-</code></pre>
+<h2 id="change-hostname">Change Hostname</h2>
 
-<h2>Change Hostname</h2>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/hostname <span class="c"># enter the desired name</span>
+</span><span class="line">sudo nano /etc/hosts <span class="c"># replace the hostname</span>
+</span><span class="line">sudo /etc/init.d/hostname.sh start <span class="c"># to enable the changes</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<pre><code>sudo nano /etc/hostname # enter the desired name
-sudo nano /etc/hosts # replace the hostname
-sudo /etc/init.d/hostname.sh start # to enable the changes
-</code></pre>
+<h2 id="update-firmware-without-kernel">Update firmware without kernel</h2>
 
-<h2>Update firmware without kernel</h2>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update <span class="o">&amp;&amp;</span> chmod +x /usr/bin/rpi-update
+</span><span class="line"><span class="nv">SKIP_KERNEL</span><span class="o">=</span>1 rpi-update 128
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<pre><code>wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update &amp;&amp; chmod +x /usr/bin/rpi-update
-SKIP_KERNEL=1 rpi-update 128
-</code></pre>
-
-<h2>Install Shairport</h2>
+<h2 id="install-shairport">Install Shairport</h2>
 
 <p>Instructions found <a href="http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi">here</a> (alt site <a href="http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/">here</a>)</p>
 
-<pre><code># do as root
-sudo -s
-apt-get install alsa-utils
-modprobe snd_bcm2835
-# optionally set to headphone output
-# amixer cset numid=3 1
-# optionally restore to hdmi output
-# amixer cset numid=3 2
-apt-get install build-essential libssl-dev libcrypt-openssl-rsa-perl libao-dev libio-socket-inet6-perl libwww-perl avahi-utils pkg-config
-wget https://github.com/albertz/shairport/zipball/master
-unzip master
-cd albertz-shairport-*
-make install
-cp shairport.init.sample /etc/init.d/shairport
-# add to start of shairport: modprobe snd_bcm2835
-nano /etc/init.d/shairport
-# optionally edit name of service (remove port number):
-nano /usr/local/bin/shairport.pl
-insserv shairport
-# manually start [services](http://pi-raspberry.blogspot.co.uk/2012/08/shairport-raspberry-pi.html)
-service avahi-daemon start
-/etc/init.d/shairport start
-# exit root
-exit
-</code></pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># do as root</span>
+</span><span class="line">sudo -s
+</span><span class="line">apt-get install alsa-utils
+</span><span class="line">modprobe snd_bcm2835
+</span><span class="line"><span class="c"># optionally set to headphone output</span>
+</span><span class="line"><span class="c"># amixer cset numid=3 1</span>
+</span><span class="line"><span class="c"># optionally restore to hdmi output</span>
+</span><span class="line"><span class="c"># amixer cset numid=3 2</span>
+</span><span class="line">apt-get install build-essential libssl-dev libcrypt-openssl-rsa-perl libao-dev libio-socket-inet6-perl libwww-perl avahi-utils pkg-config
+</span><span class="line">wget https://github.com/albertz/shairport/zipball/master
+</span><span class="line">unzip master
+</span><span class="line"><span class="nb">cd </span>albertz-shairport-*
+</span><span class="line">make install
+</span><span class="line">cp shairport.init.sample /etc/init.d/shairport
+</span><span class="line"><span class="c"># add to start of shairport: modprobe snd_bcm2835</span>
+</span><span class="line">nano /etc/init.d/shairport
+</span><span class="line"><span class="c"># optionally edit name of service (remove port number):</span>
+</span><span class="line">nano /usr/local/bin/shairport.pl
+</span><span class="line">insserv shairport
+</span><span class="line"><span class="c"># manually start [services](http://pi-raspberry.blogspot.co.uk/2012/08/shairport-raspberry-pi.html)</span>
+</span><span class="line">service avahi-daemon start
+</span><span class="line">/etc/init.d/shairport start
+</span><span class="line"><span class="c"># exit root</span>
+</span><span class="line"><span class="nb">exit</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 ]]></content>
   </entry>
   
@@ -284,89 +491,85 @@ exit
     <link href="http://jmeosbn.github.com/stellaris-virtual-serial-device/"/>
     <updated>2012-12-10T02:48:00+00:00</updated>
     <id>http://jmeosbn.github.com/stellaris-virtual-serial-device</id>
-    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, eg. to interact with program execution, or to simply log it&#8217;s output.</p>
+    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, eg. to interact with program execution, or to simply log it&rsquo;s output.</p>
 
-<h2>device permissions</h2>
+<h2 id="device-permissions">device permissions</h2>
 
 <p>Root privileges are required to access the device on some Linux and Unix based systems, so remember to use <code>sudo</code> with anything directly accessing the device, such as <code>lm4flash</code> and <code>ttylog</code>.</p>
 
 <p>Alternatively, on Linux you can configure permissions for the device using udev rules:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo nano /etc/udev/rules.d/42-sellaris.rules
-</span><span class='line'>
-</span><span class='line'><span class="c"># add the following lines:</span>
-</span><span class='line'>ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
-</span><span class='line'><span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo nano /etc/udev/rules.d/42-sellaris.rules
+</span><span class="line">
+</span><span class="line"><span class="c"># add the following lines:</span>
+</span><span class="line">ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
+</span><span class="line"><span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<p>The (fairly open) rules shown above gives the user named &lsquo;<em>devuser</em>&rsquo; permission to access the launchpad&rsquo;s usb interface, along with it&rsquo;s virtual serial device.</p>
 
-<p>The (fairly open) rules shown above gives the user named &#8217;<em>devuser</em>&#8217; permission to access the launchpad&#8217;s usb interface, along with it&#8217;s virtual serial device.</p>
+<p>Note: these rules should be more specific if you have similar devices that you don&rsquo;t wish to allow access to inadvertently.</p>
 
-<p>Note: these rules should be more specific if you have similar devices that you don&#8217;t wish to allow access to inadvertently.</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Exact match for Stellaris LM4F120XL</span>
+</span><span class="line"><span class="nv">SUBSYSTEMS</span><span class="o">==</span><span class="s2">&quot;usb&quot;</span>, ATTRS<span class="o">{</span>idVendor<span class="o">}==</span><span class="s2">&quot;1cbe&quot;</span>, ATTRS<span class="o">{</span>idProduct<span class="o">}==</span><span class="s2">&quot;00fd&quot;</span>, <span class="nv">MODE</span><span class="o">=</span><span class="s2">&quot;0660&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># Exact match for Stellaris LM4F120XL</span>
-</span><span class='line'><span class="nv">SUBSYSTEMS</span><span class="o">==</span><span class="s2">&quot;usb&quot;</span>, ATTRS<span class="o">{</span>idVendor<span class="o">}==</span><span class="s2">&quot;1cbe&quot;</span>, ATTRS<span class="o">{</span>idProduct<span class="o">}==</span><span class="s2">&quot;00fd&quot;</span>, <span class="nv">MODE</span><span class="o">=</span><span class="s2">&quot;0660&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The device in this rule is strictly defined and read/write permissions have been explicitly set for it.  Also, because the device itself is matched directly (rather than it&#8217;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
+<p>The device in this rule is strictly defined and read/write permissions have been explicitly set for it.  Also, because the device itself is matched directly (rather than it&rsquo;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
 <p>To define these rules, the exact name, vendor and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>dmesg
-</span><span class='line'><span class="c"># &lt;snip&gt;</span>
-</span><span class='line'><span class="o">[</span>39911.201497<span class="o">]</span> usb 1-1.2.3: New USB device found, <span class="nv">idVendor</span><span class="o">=</span>1cbe, <span class="nv">idProduct</span><span class="o">=</span>00fd
-</span><span class='line'><span class="o">[</span>39911.201537<span class="o">]</span> usb 1-1.2.3: Product: In-Circuit Debug Interface
-</span><span class='line'><span class="o">[</span>39911.201551<span class="o">]</span> usb 1-1.2.3: Manufacturer: Texas Instruments
-</span><span class='line'><span class="o">[</span>39911.344575<span class="o">]</span> cdc_acm 1-1.2.3:1.0: ttyACM0: USB ACM device
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>dmesg
+</span><span class="line"><span class="c"># &lt;snip&gt;</span>
+</span><span class="line"><span class="o">[</span>39911.201497<span class="o">]</span> usb 1-1.2.3: New USB device found, <span class="nv">idVendor</span><span class="o">=</span>1cbe, <span class="nv">idProduct</span><span class="o">=</span>00fd
+</span><span class="line"><span class="o">[</span>39911.201537<span class="o">]</span> usb 1-1.2.3: Product: In-Circuit Debug Interface
+</span><span class="line"><span class="o">[</span>39911.201551<span class="o">]</span> usb 1-1.2.3: Manufacturer: Texas Instruments
+</span><span class="line"><span class="o">[</span>39911.344575<span class="o">]</span> cdc_acm 1-1.2.3:1.0: ttyACM0: USB ACM device
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<h2 id="serial-device">serial device</h2>
 
-<h2>serial device</h2>
+<p>If you want to use the serial connection to provide input or commands to the launchpad, you&rsquo;ll need a terminal emulator that can connect to a serial device.</p>
 
-<p>If you want to use the serial connection to provide input or commands to the launchpad, you&#8217;ll need a terminal emulator that can connect to a serial device.</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/qs-rgb
+</span><span class="line"><span class="nv">$ </span>make
+</span><span class="line"><span class="nv">$ </span>lm4flash gcc/qs-rgb.bin
+</span><span class="line">
+</span><span class="line"><span class="c"># Use of screen on linux</span>
+</span><span class="line"><span class="nv">$ </span>screen /dev/ttyACM? 115200
+</span><span class="line">
+</span><span class="line"><span class="c"># Use of screen on mac os x</span>
+</span><span class="line"><span class="nv">$ </span>screen /dev/tty.usbmodem* 115200
+</span><span class="line">
+</span><span class="line"><span class="c"># Kill the connection by typing: ^A k</span>
+</span><span class="line"><span class="c">#  to list other commands, type: ^A ?</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/qs-rgb
-</span><span class='line'><span class="nv">$ </span>make
-</span><span class='line'><span class="nv">$ </span>lm4flash gcc/qs-rgb.bin
-</span><span class='line'>
-</span><span class='line'><span class="c"># Use of screen on linux</span>
-</span><span class='line'><span class="nv">$ </span>screen /dev/ttyACM? 115200
-</span><span class='line'>
-</span><span class='line'><span class="c"># Use of screen on mac os x</span>
-</span><span class='line'><span class="nv">$ </span>screen /dev/tty.usbmodem* 115200
-</span><span class='line'>
-</span><span class='line'><span class="c"># Kill the connection by typing: ^A k</span>
-</span><span class='line'><span class="c">#  to list other commands, type: ^A ?</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, eg. when power cycling or reconnecting - if you have another ttyACM device connected, then you should probably use it&#8217;s full name.</p>
+<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, eg. when power cycling or reconnecting - if you have another ttyACM device connected, then you should probably use it&rsquo;s full name.</p>
 
 <p>On OS X the device should be named similar to <code>tty.usbmodem</code>, with the serial number of the device appended.</p>
 ]]></content>
@@ -377,95 +580,93 @@ exit
     <link href="http://jmeosbn.github.com/testing-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:40:00+00:00</updated>
     <id>http://jmeosbn.github.com/testing-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="http://jmeosbn.github.com/compiling-the-stellaris-toolchain/">installed</a>, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
+    <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="http://jmeosbn.github.com/compiling-the-stellaris-toolchain/">installed</a>, here&rsquo;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># Add the toolchain to your profile&#39;s path</span>
-</span><span class='line'><span class="c"># Ideally this should go into your bash profile</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$HOME</span>/arm-cs-tools/bin:<span class="nv">$PATH</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># Test the compiler</span>
-</span><span class='line'><span class="nv">$ </span>git clone https://github.com/yuvadm/stellaris
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/project0/
-</span><span class='line'><span class="nv">$ </span>make clean; make
-</span><span class='line'>
-</span><span class='line'><span class="c"># Flash binary to the board</span>
-</span><span class='line'><span class="nv">$ </span>lm4flash gcc/project0.bin
-</span><span class='line'>
-</span><span class='line'><span class="c"># Try making a source modification</span>
-</span><span class='line'><span class="nv">$ </span>nano project0.c
-</span><span class='line'><span class="nv">$ </span>make <span class="o">&amp;&amp;</span> lm4flash gcc/project0.bin
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Add the toolchain to your profile&#39;s path</span>
+</span><span class="line"><span class="c"># Ideally this should go into your bash profile</span>
+</span><span class="line"><span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$HOME</span>/arm-cs-tools/bin:<span class="nv">$PATH</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Test the compiler</span>
+</span><span class="line"><span class="nv">$ </span>git clone https://github.com/yuvadm/stellaris
+</span><span class="line"><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/project0/
+</span><span class="line"><span class="nv">$ </span>make clean; make
+</span><span class="line">
+</span><span class="line"><span class="c"># Flash binary to the board</span>
+</span><span class="line"><span class="nv">$ </span>lm4flash gcc/project0.bin
+</span><span class="line">
+</span><span class="line"><span class="c"># Try making a source modification</span>
+</span><span class="line"><span class="nv">$ </span>nano project0.c
+</span><span class="line"><span class="nv">$ </span>make <span class="o">&amp;&amp;</span> lm4flash gcc/project0.bin
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<h2>debugging</h2>
+<h2 id="debugging">debugging</h2>
 
 <p><a href="https://github.com/utzig/lm4tools">lm4tools</a> has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># build with debug symbols</span>
-</span><span class='line'><span class="nv">$ </span>make clean <span class="o">&amp;&amp;</span> make <span class="nv">DEBUG</span><span class="o">=</span>1
-</span><span class='line'><span class="nv">$ </span>lm4flash gcc/project0.bin
-</span><span class='line'>
-</span><span class='line'><span class="c"># start the tcp/usb bridge (in the background)</span>
-</span><span class='line'><span class="nv">$ </span>lmicdi &amp;
-</span><span class='line'>
-</span><span class='line'><span class="c"># start gdb and connect to device</span>
-</span><span class='line'><span class="nv">$ </span>arm-none-eabi-gdb gcc/project0.axf
-</span><span class='line'>Reading symbols from ./gcc/project0.axf...done.
-</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> target remote :7777
-</span><span class='line'>Remote debugging using :7777
-</span><span class='line'>0x00000494 in SysCtlDelay <span class="o">()</span>
-</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> c
-</span><span class='line'>Continuing.
-</span><span class='line'>^C
-</span><span class='line'><span class="o">[</span>Thread &lt;main&gt;<span class="o">]</span> <span class="c">#1 stopped.</span>
-</span><span class='line'>0x00000662 in SysCtlDelay <span class="o">()</span>
-</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> detach
-</span><span class='line'>Ending remote debugging.
-</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> quit
-</span><span class='line'>
-</span><span class='line'><span class="c"># quit lmicdi to allow use of lm4flash</span>
-</span><span class='line'><span class="nv">$ </span>sudo killall lmicdi <span class="c"># or type &#39;fg&#39; followed by ^C</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># build with debug symbols</span>
+</span><span class="line"><span class="nv">$ </span>make clean <span class="o">&amp;&amp;</span> make <span class="nv">DEBUG</span><span class="o">=</span>1
+</span><span class="line"><span class="nv">$ </span>lm4flash gcc/project0.bin
+</span><span class="line">
+</span><span class="line"><span class="c"># start the tcp/usb bridge (in the background)</span>
+</span><span class="line"><span class="nv">$ </span>lmicdi &amp;
+</span><span class="line">
+</span><span class="line"><span class="c"># start gdb and connect to device</span>
+</span><span class="line"><span class="nv">$ </span>arm-none-eabi-gdb gcc/project0.axf
+</span><span class="line">Reading symbols from ./gcc/project0.axf...done.
+</span><span class="line"><span class="o">(</span>gdb<span class="o">)</span> target remote :7777
+</span><span class="line">Remote debugging using :7777
+</span><span class="line">0x00000494 in SysCtlDelay <span class="o">()</span>
+</span><span class="line"><span class="o">(</span>gdb<span class="o">)</span> c
+</span><span class="line">Continuing.
+</span><span class="line">^C
+</span><span class="line"><span class="o">[</span>Thread &lt;main&gt;<span class="o">]</span> <span class="c">#1 stopped.</span>
+</span><span class="line">0x00000662 in SysCtlDelay <span class="o">()</span>
+</span><span class="line"><span class="o">(</span>gdb<span class="o">)</span> detach
+</span><span class="line">Ending remote debugging.
+</span><span class="line"><span class="o">(</span>gdb<span class="o">)</span> quit
+</span><span class="line">
+</span><span class="line"><span class="c"># quit lmicdi to allow use of lm4flash</span>
+</span><span class="line"><span class="nv">$ </span>sudo killall lmicdi <span class="c"># or type &#39;fg&#39; followed by ^C</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 ]]></content>
   </entry>
   
@@ -474,40 +675,41 @@ exit
     <link href="http://jmeosbn.github.com/compiling-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:02:00+00:00</updated>
     <id>http://jmeosbn.github.com/compiling-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&#8217;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
+    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
 
-<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&#8217;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&#8217;ll probably try building next.</p>
+<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&rsquo;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&rsquo;ll probably try building next.</p>
 
 <p>For more details on the launchpad, and the various libraries etc. that it uses, T.I. has a selection of <a href="http://www.ti.com/product/lm4f120h5qr">technical documentation</a> on their site.</p>
 
-<h2>toolchain</h2>
+<h2 id="toolchain">toolchain</h2>
 
 <p>The makefile failed to download the source archive, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
 
-<h2>lm4tools</h2>
+<h2 id="lm4tools">lm4tools</h2>
 
 <p>The <code>lm4flash</code> tool included in <a href="https://github.com/utzig/lm4tools/commit/cc466b1">recent</a> versions of <a href="https://github.com/utzig/lm4tools">lm4tools</a>, is unable to read the serial number of the device on OS X; so compiled code cannot be flashed to the launchpad device.</p>
 
-<p><strong>Update: The dev has <a href="https://github.com/utzig/lm4tools/commit/99d501b">committed</a> a workaround that fixes <code>lm4flash</code> on OS X.</strong></p>
+<p><strong>Update: The dev has [committed] a workaround that fixes <code>lm4flash</code> on OS X.</strong>
+[committed]: https://github.com/utzig/lm4tools/commit/99d501b</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>./lm4flash project0.bin
-</span><span class='line'>Unable to get device serial number: LIBUSB_ERROR_OTHER
-</span><span class='line'>Unable to find any ICDI devices
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>./lm4flash project0.bin
+</span><span class="line">Unable to get device serial number: LIBUSB_ERROR_OTHER
+</span><span class="line">Unable to find any ICDI devices
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn&#8217;t check for the serial number.</p>
+<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn&rsquo;t check for the serial number.</p>
 
 <p>Btw, you will get a similar error if your system requires root privileges to access the device directly over usb; try using <code>sudo</code> on linux/unix systems if you have issues.</p>
 
-<h2>more links</h2>
+<h2 id="more-links">more links</h2>
 
-<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM&#8217;s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
+<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM&rsquo;s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
 
 <p><a href="http://jmeosbn.github.com/testing-the-stellaris-toolchain">Testing the Stellaris Toolchain</a> - my overview for compiling and testing code on the device.</p>
+
 ]]></content>
   </entry>
   
@@ -516,74 +718,71 @@ exit
     <link href="http://jmeosbn.github.com/resources-for-using-git/"/>
     <updated>2012-09-29T20:35:00+01:00</updated>
     <id>http://jmeosbn.github.com/resources-for-using-git</id>
-    <content type="html"><![CDATA[<p>Here&#8217;s some basic resources for getting started pushing code to github.</p>
+    <content type="html"><![CDATA[<p>Here&rsquo;s some basic resources for getting started pushing code to github.</p>
 
-<p>&#8220;Code&#8221; doesn&#8217;t just mean computer source code; git is useful for tracking anything that can be represented as plain text, eg. changes to <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
+<p>&ldquo;Code&rdquo; doesn&rsquo;t just mean computer source code; git is useful for tracking anything that can be represented as plain text, eg. changes to <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
 
 <p>The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named <code>.git</code>.</p>
 
-<figure class='code'><figcaption><span>Initialise a new git repo </span><a href='http://git-scm.com/docs/git-init'>git-init</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>my-project
-</span><span class='line'><span class="nv">$ </span>git init
-</span><span class='line'>Initialized empty Git repository in my-project/.git/
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Initialise a new git repo </span><a href="http://git-scm.com/docs/git-init">git-init</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>my-project
+</span><span class="line"><span class="nv">$ </span>git init
+</span><span class="line">Initialized empty Git repository in my-project/.git/
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>You then add any new or changed files you want to track, and then commit those changes to the repo.</p>
 
-<figure class='code'><figcaption><span>Add and commit changes </span><a href='http://git-scm.com/docs/git-add'>git-add</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">echo </span>About My-Project &gt; README.md
-</span><span class='line'><span class="nv">$ </span>git add . <span class="c"># add all files recursively</span>
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s1">&#39;First Commit&#39;</span>
-</span><span class='line'><span class="o">[</span>master <span class="o">(</span>root-commit<span class="o">)</span> cdab15f<span class="o">]</span> First Commit
-</span><span class='line'> 1 file changed, 1 insertion<span class="o">(</span>+<span class="o">)</span>
-</span><span class='line'> create mode 100644 README.md
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Add and commit changes </span><a href="http://git-scm.com/docs/git-add">git-add</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">echo </span>About My-Project &gt; README.md
+</span><span class="line"><span class="nv">$ </span>git add . <span class="c"># add all files recursively</span>
+</span><span class="line"><span class="nv">$ </span>git commit -m <span class="s1">&#39;First Commit&#39;</span>
+</span><span class="line"><span class="o">[</span>master <span class="o">(</span>root-commit<span class="o">)</span> cdab15f<span class="o">]</span> First Commit
+</span><span class="line"> 1 file changed, 1 insertion<span class="o">(</span>+<span class="o">)</span>
+</span><span class="line"> create mode 100644 README.md
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>View recent commits using <code>git log</code>.</p>
 
-<figure class='code'><figcaption><span>View recent commits </span><a href='http://git-scm.com/docs/git-log'>git-log</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git log
-</span><span class='line'>commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
-</span><span class='line'>Author: Jamie Osborne &lt;jmeosbn@your-email.com&gt;
-</span><span class='line'>Date:   Sat Sep 29 23:30:20 2012 +0100
-</span><span class='line'>
-</span><span class='line'>    First Commit
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>View recent commits </span><a href="http://git-scm.com/docs/git-log">git-log</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>git log
+</span><span class="line">commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
+</span><span class="line">Author: Jamie Osborne &lt;jmeosbn@your-email.com&gt;
+</span><span class="line">Date:   Sat Sep 29 23:30:20 2012 +0100
+</span><span class="line">
+</span><span class="line">    First Commit
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<h2 id="documentation">documentation</h2>
 
-<h2>documentation</h2>
+<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&rsquo;t already include it. They also host a copy of the <a href="http://git-scm.com/docs">documentation</a> and the online <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
 
-<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&#8217;t already include it. They also host a copy of the <a href="http://git-scm.com/docs">documentation</a> and the online <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
+<p>If you don&rsquo;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&rsquo;s minimal explanatory text, but full command examples for most operations, making it a useful resource for commands you use rarely and need to quickly relearn.</p>
 
-<p>If you don&#8217;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&#8217;s minimal explanatory text, but full command examples for most operations, making it a useful resource for commands you use rarely and need to quickly relearn.</p>
+<h2 id="graphical-interfaces">graphical interfaces</h2>
 
-<h2>graphical interfaces</h2>
+<p>While it&rsquo;s good to know how to use git from the command line, it&rsquo;s worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
 
-<p>While it&#8217;s good to know how to use git from the command line, it&#8217;s worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
+<p><a href="http://github.com/">Github</a> offers their own decent <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients that also have the advantage of supporting github&rsquo;s niceties for organisations and the &ldquo;Clone in Windows/Mac&rdquo; button found on each repo on github.</p>
 
-<p><a href="http://github.com/">Github</a> offers their own decent <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients that also have the advantage of supporting github&#8217;s niceties for organisations and the &#8220;Clone in Windows/Mac&#8221; button found on each repo on github.</p>
-
-<p><img class="center" src="http://mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" ></p>
+<p><img class="center" src="http://mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" /></p>
 
 <p>They do lack some more advanced features though so I mostly prefer <a href="http://gitx.laullon.com/">GitX</a> on the Mac, although <a href="http://git-scm.com/downloads/guis">plenty more GUIs</a> exist on various platforms.</p>
 
-<p><img class="center" src="http://gitx.laullon.com/commit.png" width="512" title="GitX" ></p>
+<p><img class="center" src="http://gitx.laullon.com/commit.png" width="512" title="GitX" /></p>
 
-<h2>other info</h2>
+<h2 id="other-info">other info</h2>
 
 <p>Btw, if you just want to share some code snippets somewhere, while maintaining versioning etc., then check out <a href="https://gist.github.com/">gists</a>, a feature of github.</p>
 ]]></content>

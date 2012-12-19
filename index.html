@@ -9,7 +9,7 @@
   <meta name="author" content="Jamie Osborne">
 
   
-  <meta name="description" content="Just a collection of notes for setting up a clean image on the Raspberry Pi. Notes are current for XBian 1.0 Alpha 3. ">
+  <meta name="description" content="There&rsquo;s currently no build of the Dropbox sync client for ARM devices; while there is source available, it&rsquo;s not suitable for automatic, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -50,6 +50,153 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/pi-box/">Dropbox on Pi</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-19T00:54:00+00:00" pubdate data-updated="true">Dec 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There&rsquo;s currently no build of the Dropbox sync client for ARM devices; while there is source available, it&rsquo;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
+
+<p>Dropbox does make various SDKs available though, which enables a ruby or python script to be used instead of the official client.</p>
+
+<h1 id="a-ready-made-solution">a ready made solution..</h1>
+
+<p><a href="https://github.com/kenpratt/dbox">dbox</a> is a great ruby client for Dropbox that can locally create, clone, push, pull, sync, and move, a Dropbox folder hierarchy.  It can be used as an API directly from another ruby script, or with the included command line tool.</p>
+
+<blockquote>
+  <p><a href="https://github.com/kenpratt/dbox">dbox</a><br />
+Dropbox integration made easy. This robust client gives you control over what, where, and when you sync with Dropbox.</p>
+</blockquote>
+
+<p>Before installing dbox, make sure you have any needed packages.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo apt-get install ruby ruby-dev libsqlite3-dev
+</span><span class="line"><span class="nv">$ </span>sudo gem install dbox
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page to configure your keys, and clone your Dropbox folder.</p>
+
+<p>To run dbox periodically, download<sup id="fnref:dl"><a href="#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a>, make it executable, then replace the example keys and path settings with your own.</p>
+
+<!--	$ cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb -->
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>wget https://raw.github.com/kenpratt/dbox/master/sample_polling_script.rb
+</span><span class="line"><span class="nv">$ </span>mv ./sample_polling_script.rb dboxsync.rb
+</span><span class="line"><span class="nv">$ </span>chmod +x dboxsync.rb
+</span><span class="line"><span class="nv">$ </span>nano dboxsync.rb
+</span><span class="line"><span class="nv">$ </span>./dboxsync.rb
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running; change the script so <code>LOGFILE = STDOUT</code> if you want to see some basic info while testing.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
+
+<p>To have the script run on startup, add the following entry to <code>/etc/rc.local</code>.  </p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo nano /etc/rc.local
+</span><span class="line">
+</span><span class="line"><span class="c"># add the following</span>
+</span><span class="line"><span class="k">if</span> ! pgrep -f dboxsync; <span class="k">then</span>
+</span><span class="line"><span class="k">  </span>sudo -u xbian /home/xbian/dboxsync.rb &amp;
+</span><span class="line"><span class="k">fi</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>There&rsquo;s more proper ways of doing this, but this seemed the simplest.</p>
+
+<h2 id="todo">todo</h2>
+
+<ul>
+  <li>increase polling delay, but add detection of local changes to initiate push/pull</li>
+</ul>
+
+<h2 id="notes">notes</h2>
+
+<p>While cron or similar could be used to run dbox periodically, each separate invocation of dbox from the command line incurs a startup delay of a few seconds, during which time the Pi&rsquo;s CPU is maxed out loading ruby and the code needed to run dbox.  This isn&rsquo;t ideal and would likely cause issues if the Pi is used as a media player.</p>
+
+<p>The sample_polling_script accesses dbox directly though it&rsquo;s ruby API, and doesn&rsquo;t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
+
+<h1 id="alternatives">alternatives</h1>
+
+<p>Here&rsquo;s some more options I considered, in order of decreasing usefulness.</p>
+
+<h2 id="one-way-sync">one way sync</h2>
+
+<p>Create a simple ruby script to sync files one way - <em>from Dropbox</em> - using the Dropbox SDK.  It&rsquo;s also possible to sync both ways in ruby, but <a href="https://github.com/kenpratt/dbox">dbox</a> has already done a great job implementing that.</p>
+
+<p>Ruby SDK <a href="https://www.dropbox.com/developers/start/setup#ruby">Tutorial</a>, <a href="https://www.dropbox.com/static/developers/dropbox-ruby-sdk-1.5.1-docs/index.html">Documentation</a>.</p>
+
+<p>eg. See the <a href="https://www.dropbox.com/static/developers/dropbox-ruby-sdk-1.5.1-docs/DropboxClient.html#method-i-delta">delta method</a> to keep local files in sync without writing too much code.</p>
+
+<p>There&rsquo;s also the cli_example.rb script included in the SDK, which provides a simple shell interface similar to FTP but does not have any syncing logic included.</p>
+
+<h2 id="linux-daemon">linux daemon</h2>
+
+<p>Dropbox does have a download for a daemon, but it&rsquo;s x86/_64 only, see the <a href="https://www.dropbox.com/install?os=lnx">Linux Download</a> page for more info.</p>
+
+<blockquote>
+  <p>The Dropbox daemon works fine on all 32-bit and 64-bit Linux servers. To install, run the following command in your Linux terminal.</p>
+</blockquote>
+
+<h2 id="build-from-source">build from source</h2>
+
+<p>The Dropbox source appears to be just a plugin for the nautilus file browser (and doesn&rsquo;t include the above daemon?).  This is only useful when using the desktop.</p>
+
+<p>Download <a href="https://www.dropbox.com/download?dl=packages/nautilus-dropbox-1.4.0.tar.bz2">source archive</a> and build as usual, more details are <a href="https://www.dropbox.com/help/247">here</a>.</p>
+
+<h2 id="use-something-else">use something else</h2>
+
+<p>I also use github, sftp, scp, and rsync for file transfer, version history and keeping various things in sync; there are many ways to achieve automatic folder syncing.  However, Dropbox fulfills a role that can&rsquo;t easily be duplicated if you use many Dropbox enabled mobile apps, and do not wish the Pi to rely upon a second computer to sync through.</p>
+<div class="footnotes">
+  <ol>
+    <li id="fn:dl">
+      <p>the script is also included in the installed gem:  <code>cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb</code><a href="#fnref:dl" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:mem">
+      <p>memory usage starts at ~8MB after startup, and evens out to ~12MB after many polling loops; polling takes a second or two, during which CPU usage is around 5%, peaking at ~12%.  Contrast with the CLI version which uses a similar amount of memory, but takes several seconds to complete each sync, and includes the overhead of almost total CPU usage for half that time.<a href="#fnref:mem" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -122,89 +269,85 @@
   </header>
 
 
-  <div class="entry-content"><p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, eg. to interact with program execution, or to simply log it&#8217;s output.</p>
+  <div class="entry-content"><p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, eg. to interact with program execution, or to simply log it&rsquo;s output.</p>
 
-<h2>device permissions</h2>
+<h2 id="device-permissions">device permissions</h2>
 
 <p>Root privileges are required to access the device on some Linux and Unix based systems, so remember to use <code>sudo</code> with anything directly accessing the device, such as <code>lm4flash</code> and <code>ttylog</code>.</p>
 
 <p>Alternatively, on Linux you can configure permissions for the device using udev rules:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo nano /etc/udev/rules.d/42-sellaris.rules
-</span><span class='line'>
-</span><span class='line'><span class="c"># add the following lines:</span>
-</span><span class='line'>ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
-</span><span class='line'><span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo nano /etc/udev/rules.d/42-sellaris.rules
+</span><span class="line">
+</span><span class="line"><span class="c"># add the following lines:</span>
+</span><span class="line">ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
+</span><span class="line"><span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<p>The (fairly open) rules shown above gives the user named &lsquo;<em>devuser</em>&rsquo; permission to access the launchpad&rsquo;s usb interface, along with it&rsquo;s virtual serial device.</p>
 
-<p>The (fairly open) rules shown above gives the user named &#8217;<em>devuser</em>&#8217; permission to access the launchpad&#8217;s usb interface, along with it&#8217;s virtual serial device.</p>
+<p>Note: these rules should be more specific if you have similar devices that you don&rsquo;t wish to allow access to inadvertently.</p>
 
-<p>Note: these rules should be more specific if you have similar devices that you don&#8217;t wish to allow access to inadvertently.</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Exact match for Stellaris LM4F120XL</span>
+</span><span class="line"><span class="nv">SUBSYSTEMS</span><span class="o">==</span><span class="s2">&quot;usb&quot;</span>, ATTRS<span class="o">{</span>idVendor<span class="o">}==</span><span class="s2">&quot;1cbe&quot;</span>, ATTRS<span class="o">{</span>idProduct<span class="o">}==</span><span class="s2">&quot;00fd&quot;</span>, <span class="nv">MODE</span><span class="o">=</span><span class="s2">&quot;0660&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># Exact match for Stellaris LM4F120XL</span>
-</span><span class='line'><span class="nv">SUBSYSTEMS</span><span class="o">==</span><span class="s2">&quot;usb&quot;</span>, ATTRS<span class="o">{</span>idVendor<span class="o">}==</span><span class="s2">&quot;1cbe&quot;</span>, ATTRS<span class="o">{</span>idProduct<span class="o">}==</span><span class="s2">&quot;00fd&quot;</span>, <span class="nv">MODE</span><span class="o">=</span><span class="s2">&quot;0660&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The device in this rule is strictly defined and read/write permissions have been explicitly set for it.  Also, because the device itself is matched directly (rather than it&#8217;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
+<p>The device in this rule is strictly defined and read/write permissions have been explicitly set for it.  Also, because the device itself is matched directly (rather than it&rsquo;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
 <p>To define these rules, the exact name, vendor and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>dmesg
-</span><span class='line'><span class="c"># &lt;snip&gt;</span>
-</span><span class='line'><span class="o">[</span>39911.201497<span class="o">]</span> usb 1-1.2.3: New USB device found, <span class="nv">idVendor</span><span class="o">=</span>1cbe, <span class="nv">idProduct</span><span class="o">=</span>00fd
-</span><span class='line'><span class="o">[</span>39911.201537<span class="o">]</span> usb 1-1.2.3: Product: In-Circuit Debug Interface
-</span><span class='line'><span class="o">[</span>39911.201551<span class="o">]</span> usb 1-1.2.3: Manufacturer: Texas Instruments
-</span><span class='line'><span class="o">[</span>39911.344575<span class="o">]</span> cdc_acm 1-1.2.3:1.0: ttyACM0: USB ACM device
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>dmesg
+</span><span class="line"><span class="c"># &lt;snip&gt;</span>
+</span><span class="line"><span class="o">[</span>39911.201497<span class="o">]</span> usb 1-1.2.3: New USB device found, <span class="nv">idVendor</span><span class="o">=</span>1cbe, <span class="nv">idProduct</span><span class="o">=</span>00fd
+</span><span class="line"><span class="o">[</span>39911.201537<span class="o">]</span> usb 1-1.2.3: Product: In-Circuit Debug Interface
+</span><span class="line"><span class="o">[</span>39911.201551<span class="o">]</span> usb 1-1.2.3: Manufacturer: Texas Instruments
+</span><span class="line"><span class="o">[</span>39911.344575<span class="o">]</span> cdc_acm 1-1.2.3:1.0: ttyACM0: USB ACM device
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<h2 id="serial-device">serial device</h2>
 
-<h2>serial device</h2>
+<p>If you want to use the serial connection to provide input or commands to the launchpad, you&rsquo;ll need a terminal emulator that can connect to a serial device.</p>
 
-<p>If you want to use the serial connection to provide input or commands to the launchpad, you&#8217;ll need a terminal emulator that can connect to a serial device.</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/qs-rgb
+</span><span class="line"><span class="nv">$ </span>make
+</span><span class="line"><span class="nv">$ </span>lm4flash gcc/qs-rgb.bin
+</span><span class="line">
+</span><span class="line"><span class="c"># Use of screen on linux</span>
+</span><span class="line"><span class="nv">$ </span>screen /dev/ttyACM? 115200
+</span><span class="line">
+</span><span class="line"><span class="c"># Use of screen on mac os x</span>
+</span><span class="line"><span class="nv">$ </span>screen /dev/tty.usbmodem* 115200
+</span><span class="line">
+</span><span class="line"><span class="c"># Kill the connection by typing: ^A k</span>
+</span><span class="line"><span class="c">#  to list other commands, type: ^A ?</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/qs-rgb
-</span><span class='line'><span class="nv">$ </span>make
-</span><span class='line'><span class="nv">$ </span>lm4flash gcc/qs-rgb.bin
-</span><span class='line'>
-</span><span class='line'><span class="c"># Use of screen on linux</span>
-</span><span class='line'><span class="nv">$ </span>screen /dev/ttyACM? 115200
-</span><span class='line'>
-</span><span class='line'><span class="c"># Use of screen on mac os x</span>
-</span><span class='line'><span class="nv">$ </span>screen /dev/tty.usbmodem* 115200
-</span><span class='line'>
-</span><span class='line'><span class="c"># Kill the connection by typing: ^A k</span>
-</span><span class='line'><span class="c">#  to list other commands, type: ^A ?</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, eg. when power cycling or reconnecting - if you have another ttyACM device connected, then you should probably use it&#8217;s full name.</p>
+<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, eg. when power cycling or reconnecting - if you have another ttyACM device connected, then you should probably use it&rsquo;s full name.</p>
 
 <p>On OS X the device should be named similar to <code>tty.usbmodem</code>, with the serial number of the device appended.</p>
 </div>
@@ -242,95 +385,93 @@
   </header>
 
 
-  <div class="entry-content"><p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="/compiling-the-stellaris-toolchain/">installed</a>, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
+  <div class="entry-content"><p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="/compiling-the-stellaris-toolchain/">installed</a>, here&rsquo;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># Add the toolchain to your profile&#39;s path</span>
-</span><span class='line'><span class="c"># Ideally this should go into your bash profile</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$HOME</span>/arm-cs-tools/bin:<span class="nv">$PATH</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># Test the compiler</span>
-</span><span class='line'><span class="nv">$ </span>git clone https://github.com/yuvadm/stellaris
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/project0/
-</span><span class='line'><span class="nv">$ </span>make clean; make
-</span><span class='line'>
-</span><span class='line'><span class="c"># Flash binary to the board</span>
-</span><span class='line'><span class="nv">$ </span>lm4flash gcc/project0.bin
-</span><span class='line'>
-</span><span class='line'><span class="c"># Try making a source modification</span>
-</span><span class='line'><span class="nv">$ </span>nano project0.c
-</span><span class='line'><span class="nv">$ </span>make <span class="o">&amp;&amp;</span> lm4flash gcc/project0.bin
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Add the toolchain to your profile&#39;s path</span>
+</span><span class="line"><span class="c"># Ideally this should go into your bash profile</span>
+</span><span class="line"><span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$HOME</span>/arm-cs-tools/bin:<span class="nv">$PATH</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Test the compiler</span>
+</span><span class="line"><span class="nv">$ </span>git clone https://github.com/yuvadm/stellaris
+</span><span class="line"><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/project0/
+</span><span class="line"><span class="nv">$ </span>make clean; make
+</span><span class="line">
+</span><span class="line"><span class="c"># Flash binary to the board</span>
+</span><span class="line"><span class="nv">$ </span>lm4flash gcc/project0.bin
+</span><span class="line">
+</span><span class="line"><span class="c"># Try making a source modification</span>
+</span><span class="line"><span class="nv">$ </span>nano project0.c
+</span><span class="line"><span class="nv">$ </span>make <span class="o">&amp;&amp;</span> lm4flash gcc/project0.bin
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<h2>debugging</h2>
+<h2 id="debugging">debugging</h2>
 
 <p><a href="https://github.com/utzig/lm4tools">lm4tools</a> has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># build with debug symbols</span>
-</span><span class='line'><span class="nv">$ </span>make clean <span class="o">&amp;&amp;</span> make <span class="nv">DEBUG</span><span class="o">=</span>1
-</span><span class='line'><span class="nv">$ </span>lm4flash gcc/project0.bin
-</span><span class='line'>
-</span><span class='line'><span class="c"># start the tcp/usb bridge (in the background)</span>
-</span><span class='line'><span class="nv">$ </span>lmicdi &amp;
-</span><span class='line'>
-</span><span class='line'><span class="c"># start gdb and connect to device</span>
-</span><span class='line'><span class="nv">$ </span>arm-none-eabi-gdb gcc/project0.axf
-</span><span class='line'>Reading symbols from ./gcc/project0.axf...done.
-</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> target remote :7777
-</span><span class='line'>Remote debugging using :7777
-</span><span class='line'>0x00000494 in SysCtlDelay <span class="o">()</span>
-</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> c
-</span><span class='line'>Continuing.
-</span><span class='line'>^C
-</span><span class='line'><span class="o">[</span>Thread &lt;main&gt;<span class="o">]</span> <span class="c">#1 stopped.</span>
-</span><span class='line'>0x00000662 in SysCtlDelay <span class="o">()</span>
-</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> detach
-</span><span class='line'>Ending remote debugging.
-</span><span class='line'><span class="o">(</span>gdb<span class="o">)</span> quit
-</span><span class='line'>
-</span><span class='line'><span class="c"># quit lmicdi to allow use of lm4flash</span>
-</span><span class='line'><span class="nv">$ </span>sudo killall lmicdi <span class="c"># or type &#39;fg&#39; followed by ^C</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># build with debug symbols</span>
+</span><span class="line"><span class="nv">$ </span>make clean <span class="o">&amp;&amp;</span> make <span class="nv">DEBUG</span><span class="o">=</span>1
+</span><span class="line"><span class="nv">$ </span>lm4flash gcc/project0.bin
+</span><span class="line">
+</span><span class="line"><span class="c"># start the tcp/usb bridge (in the background)</span>
+</span><span class="line"><span class="nv">$ </span>lmicdi &amp;
+</span><span class="line">
+</span><span class="line"><span class="c"># start gdb and connect to device</span>
+</span><span class="line"><span class="nv">$ </span>arm-none-eabi-gdb gcc/project0.axf
+</span><span class="line">Reading symbols from ./gcc/project0.axf...done.
+</span><span class="line"><span class="o">(</span>gdb<span class="o">)</span> target remote :7777
+</span><span class="line">Remote debugging using :7777
+</span><span class="line">0x00000494 in SysCtlDelay <span class="o">()</span>
+</span><span class="line"><span class="o">(</span>gdb<span class="o">)</span> c
+</span><span class="line">Continuing.
+</span><span class="line">^C
+</span><span class="line"><span class="o">[</span>Thread &lt;main&gt;<span class="o">]</span> <span class="c">#1 stopped.</span>
+</span><span class="line">0x00000662 in SysCtlDelay <span class="o">()</span>
+</span><span class="line"><span class="o">(</span>gdb<span class="o">)</span> detach
+</span><span class="line">Ending remote debugging.
+</span><span class="line"><span class="o">(</span>gdb<span class="o">)</span> quit
+</span><span class="line">
+</span><span class="line"><span class="c"># quit lmicdi to allow use of lm4flash</span>
+</span><span class="line"><span class="nv">$ </span>sudo killall lmicdi <span class="c"># or type &#39;fg&#39; followed by ^C</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 </div>
   
   
@@ -366,40 +507,41 @@
   </header>
 
 
-  <div class="entry-content"><p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&#8217;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
+  <div class="entry-content"><p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
 
-<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&#8217;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&#8217;ll probably try building next.</p>
+<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&rsquo;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&rsquo;ll probably try building next.</p>
 
 <p>For more details on the launchpad, and the various libraries etc. that it uses, T.I. has a selection of <a href="http://www.ti.com/product/lm4f120h5qr">technical documentation</a> on their site.</p>
 
-<h2>toolchain</h2>
+<h2 id="toolchain">toolchain</h2>
 
 <p>The makefile failed to download the source archive, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
 
-<h2>lm4tools</h2>
+<h2 id="lm4tools">lm4tools</h2>
 
 <p>The <code>lm4flash</code> tool included in <a href="https://github.com/utzig/lm4tools/commit/cc466b1">recent</a> versions of <a href="https://github.com/utzig/lm4tools">lm4tools</a>, is unable to read the serial number of the device on OS X; so compiled code cannot be flashed to the launchpad device.</p>
 
-<p><strong>Update: The dev has <a href="https://github.com/utzig/lm4tools/commit/99d501b">committed</a> a workaround that fixes <code>lm4flash</code> on OS X.</strong></p>
+<p><strong>Update: The dev has [committed] a workaround that fixes <code>lm4flash</code> on OS X.</strong>
+[committed]: https://github.com/utzig/lm4tools/commit/99d501b</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>./lm4flash project0.bin
-</span><span class='line'>Unable to get device serial number: LIBUSB_ERROR_OTHER
-</span><span class='line'>Unable to find any ICDI devices
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>./lm4flash project0.bin
+</span><span class="line">Unable to get device serial number: LIBUSB_ERROR_OTHER
+</span><span class="line">Unable to find any ICDI devices
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn&#8217;t check for the serial number.</p>
+<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn&rsquo;t check for the serial number.</p>
 
 <p>Btw, you will get a similar error if your system requires root privileges to access the device directly over usb; try using <code>sudo</code> on linux/unix systems if you have issues.</p>
 
-<h2>more links</h2>
+<h2 id="more-links">more links</h2>
 
-<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM&#8217;s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
+<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM&rsquo;s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
 
 <p><a href="/testing-the-stellaris-toolchain">Testing the Stellaris Toolchain</a> - my overview for compiling and testing code on the device.</p>
+
 </div>
   
   
@@ -435,74 +577,71 @@
   </header>
 
 
-  <div class="entry-content"><p>Here&#8217;s some basic resources for getting started pushing code to github.</p>
+  <div class="entry-content"><p>Here&rsquo;s some basic resources for getting started pushing code to github.</p>
 
-<p>&#8220;Code&#8221; doesn&#8217;t just mean computer source code; git is useful for tracking anything that can be represented as plain text, eg. changes to <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
+<p>&ldquo;Code&rdquo; doesn&rsquo;t just mean computer source code; git is useful for tracking anything that can be represented as plain text, eg. changes to <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
 
 <p>The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named <code>.git</code>.</p>
 
-<figure class='code'><figcaption><span>Initialise a new git repo </span><a href='http://git-scm.com/docs/git-init'>git-init</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>my-project
-</span><span class='line'><span class="nv">$ </span>git init
-</span><span class='line'>Initialized empty Git repository in my-project/.git/
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Initialise a new git repo </span><a href="http://git-scm.com/docs/git-init">git-init</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>my-project
+</span><span class="line"><span class="nv">$ </span>git init
+</span><span class="line">Initialized empty Git repository in my-project/.git/
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>You then add any new or changed files you want to track, and then commit those changes to the repo.</p>
 
-<figure class='code'><figcaption><span>Add and commit changes </span><a href='http://git-scm.com/docs/git-add'>git-add</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">echo </span>About My-Project &gt; README.md
-</span><span class='line'><span class="nv">$ </span>git add . <span class="c"># add all files recursively</span>
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s1">&#39;First Commit&#39;</span>
-</span><span class='line'><span class="o">[</span>master <span class="o">(</span>root-commit<span class="o">)</span> cdab15f<span class="o">]</span> First Commit
-</span><span class='line'> 1 file changed, 1 insertion<span class="o">(</span>+<span class="o">)</span>
-</span><span class='line'> create mode 100644 README.md
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Add and commit changes </span><a href="http://git-scm.com/docs/git-add">git-add</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">echo </span>About My-Project &gt; README.md
+</span><span class="line"><span class="nv">$ </span>git add . <span class="c"># add all files recursively</span>
+</span><span class="line"><span class="nv">$ </span>git commit -m <span class="s1">&#39;First Commit&#39;</span>
+</span><span class="line"><span class="o">[</span>master <span class="o">(</span>root-commit<span class="o">)</span> cdab15f<span class="o">]</span> First Commit
+</span><span class="line"> 1 file changed, 1 insertion<span class="o">(</span>+<span class="o">)</span>
+</span><span class="line"> create mode 100644 README.md
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>View recent commits using <code>git log</code>.</p>
 
-<figure class='code'><figcaption><span>View recent commits </span><a href='http://git-scm.com/docs/git-log'>git-log</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git log
-</span><span class='line'>commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
-</span><span class='line'>Author: Jamie Osborne &lt;jmeosbn@your-email.com&gt;
-</span><span class='line'>Date:   Sat Sep 29 23:30:20 2012 +0100
-</span><span class='line'>
-</span><span class='line'>    First Commit
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>View recent commits </span><a href="http://git-scm.com/docs/git-log">git-log</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>git log
+</span><span class="line">commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
+</span><span class="line">Author: Jamie Osborne &lt;jmeosbn@your-email.com&gt;
+</span><span class="line">Date:   Sat Sep 29 23:30:20 2012 +0100
+</span><span class="line">
+</span><span class="line">    First Commit
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<h2 id="documentation">documentation</h2>
 
-<h2>documentation</h2>
+<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&rsquo;t already include it. They also host a copy of the <a href="http://git-scm.com/docs">documentation</a> and the online <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
 
-<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&#8217;t already include it. They also host a copy of the <a href="http://git-scm.com/docs">documentation</a> and the online <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
+<p>If you don&rsquo;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&rsquo;s minimal explanatory text, but full command examples for most operations, making it a useful resource for commands you use rarely and need to quickly relearn.</p>
 
-<p>If you don&#8217;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&#8217;s minimal explanatory text, but full command examples for most operations, making it a useful resource for commands you use rarely and need to quickly relearn.</p>
+<h2 id="graphical-interfaces">graphical interfaces</h2>
 
-<h2>graphical interfaces</h2>
+<p>While it&rsquo;s good to know how to use git from the command line, it&rsquo;s worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
 
-<p>While it&#8217;s good to know how to use git from the command line, it&#8217;s worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
+<p><a href="http://github.com/">Github</a> offers their own decent <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients that also have the advantage of supporting github&rsquo;s niceties for organisations and the &ldquo;Clone in Windows/Mac&rdquo; button found on each repo on github.</p>
 
-<p><a href="http://github.com/">Github</a> offers their own decent <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients that also have the advantage of supporting github&#8217;s niceties for organisations and the &#8220;Clone in Windows/Mac&#8221; button found on each repo on github.</p>
-
-<p><img class="center" src="http://mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" ></p>
+<p><img class="center" src="http://mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" /></p>
 
 <p>They do lack some more advanced features though so I mostly prefer <a href="http://gitx.laullon.com/">GitX</a> on the Mac, although <a href="http://git-scm.com/downloads/guis">plenty more GUIs</a> exist on various platforms.</p>
 
-<p><img class="center" src="http://gitx.laullon.com/commit.png" width="512" title="GitX" ></p>
+<p><img class="center" src="http://gitx.laullon.com/commit.png" width="512" title="GitX" /></p>
 
-<h2>other info</h2>
+<h2 id="other-info">other info</h2>
 
 <p>Btw, if you just want to share some code snippets somewhere, while maintaining versioning etc., then check out <a href="https://gist.github.com/">gists</a>, a feature of github.</p>
 </div>
@@ -528,6 +667,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/pi-box/">Dropbox on Pi</a>
+      </li>
     
       <li class="post">
         <a href="/baking-the-pi/">Home Theatre Pi (HTPi)</a>
