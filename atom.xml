@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-19T01:35:34+00:00</updated>
+  <updated>2012-12-19T01:36:28+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -88,6 +88,8 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <p>While cron or similar could be used to run dbox periodically, each separate invocation of dbox from the command line incurs a startup delay of a few seconds, during which time the Pi&rsquo;s CPU is maxed out loading ruby and the code needed to run dbox.  This isn&rsquo;t ideal and would likely cause issues if the Pi is used as a media player.</p>
 
 <p>The sample_polling_script accesses dbox directly though it&rsquo;s ruby API, and doesn&rsquo;t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
+
+<!-- more -->
 
 <h1 id="alternatives">alternatives</h1>
 
