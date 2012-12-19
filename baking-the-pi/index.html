@@ -95,7 +95,7 @@
 
 <p>Before setting up the Pi remotely, there are some things to do locally to ease logging in.  This will obviate the need to enter the password, or specify the full host name each time we access the Pi.</p>
 
-<p><strong>Copy public key to Pi</strong></p>
+<h3>Copy public key to Pi</h3>
 
 <pre><code># remove any old, conflicting host entries
 ssh-keygen -R xbian.local
@@ -109,7 +109,7 @@ ssh-copy-id xbian@xbian.local
 
 <p>The easiest way to append a key to the remote user&#8217;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if you don&#8217;t have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
-<p><strong>Add an alias to .ssh/config</strong></p>
+<h3>Add an alias to .ssh/config</h3>
 
 <p>Locally define the alias <code>xb</code> to be used in place of <code>xbian@xbian.local</code>.</p>
 
