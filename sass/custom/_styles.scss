@@ -10,6 +10,14 @@ sup{
   font-size: 70%;
 }
 
+/* style for footnotes */
+.footnotes {
+  border-top: 1px solid darken($sidebar-border, 4);
+  margin-top: 45px;
+  padding-top: 15px;
+  font-size: smaller;
+}
+
 /* ----- Content ----- */
 
 /* set all article h1 titles */
