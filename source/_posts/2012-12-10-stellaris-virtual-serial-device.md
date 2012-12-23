@@ -9,14 +9,14 @@ categories: [stellaris, arm]
 
 ---
 
-The Stellaris [Launchpad] is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, eg. to interact with program execution, or to simply log it's output.
+The Stellaris [Launchpad] is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, e.g. to interact with program execution or log it's output.
 
 [Launchpad]: http://www.ti.com/ww/en/launchpad/stellaris_head.html
 
 
 ## device permissions
 
-Root privileges are required to access the device on some Linux and Unix based systems, so remember to use `sudo` with anything directly accessing the device, such as `lm4flash` and `ttylog`.
+Root privileges are required to access the device on some Linux and Unix based systems, so remember to use `sudo` with commands such as `lm4flash` and `ttylog` which directly access the device.
 
 Alternatively, on Linux you can configure permissions for the device using udev rules:
 
@@ -28,7 +28,7 @@ Alternatively, on Linux you can configure permissions for the device using udev 
 	KERNEL=="ttyACM?", OWNER="devuser"
 ```
 		
-The (fairly open) rules shown above gives the user named '*devuser*' permission to access the launchpad's usb interface, along with it's virtual serial device.
+The (fairly open) rules shown above, give the user named '*devuser*' permission to access the launchpad's usb interface, along with it's virtual serial device.
 
 Note: these rules should be more specific if you have similar devices that you don't wish to allow access to inadvertently.
 
@@ -37,9 +37,9 @@ Note: these rules should be more specific if you have similar devices that you d
 	SUBSYSTEMS=="usb", ATTRS{idVendor}=="1cbe", ATTRS{idProduct}=="00fd", MODE="0660", OWNER="devuser"
 ```
 
-The device in this rule is strictly defined and read/write permissions have been explicitly set for it.  Also, because the device itself is matched directly (rather than it's individual interfaces), only one rule is required.  You could also try assigning the device to a group, using `GROUP="devgroup"`.
+The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it's individual interfaces), only one rule is required.  You could also try assigning the device to a group, using `GROUP="devgroup"`.
 
-To define these rules, the exact name, vendor and/or product id needs to be known.  You can check these values using `dmesg` after connecting your device; the lines of interest are shown below.
+To define these rules, the exact name, vendor, and/or product id needs to be known.  You can check these values using `dmesg` after connecting your device; the lines of interest are shown below.
 
 ``` sh
 	$ dmesg
@@ -69,6 +69,6 @@ If you want to use the serial connection to provide input or commands to the lau
 	#  to list other commands, type: ^A ?
 ```
 
-Use of the wildcard in `ttyACM?` allows for the times the device may get assigned a different number, eg. when power cycling or reconnecting - if you have another ttyACM device connected, then you should probably use it's full name.
+Use of the wildcard in `ttyACM?` allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it's full name.
 
 On OS X the device should be named similar to `tty.usbmodem`, with the serial number of the device appended.

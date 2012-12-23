@@ -11,11 +11,15 @@ sidebar: false
 
 If you have a Stellaris [Launchpad] - and don't want to use the [official] tools - you can mostly follow the instructions at [y3xz] to build your own toolchain on any Unix/Linux based system using the [ARM EABI Toolchain Builder][EABI].  This includes Mac OS X, but I ran into a couple of minor issues as listed below.
 
+*(If you don't fancy building the toolchain, [yagarto] offers recent binaries for Windows and Mac OS X that target ARM devices.)*
+
 [Stellaris]: http://www.ti.com/product/lm4f120h5qr
 [Launchpad]: http://www.ti.com/ww/en/launchpad/stellaris_head.html
 [y3xz]: http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/
 [official]: http://www.ti.com/tool/SW-EK-LM4F120XL
 [EABI]: https://github.com/jsnyder/arm-eabi-toolchain
+[outdated]: https://github.com/unhandledexception/armx/wiki
+[yagarto]: http://www.yagarto.de/
 
 Note, the libraries included with the Codesourcery Lite [toolchain][mentor] used here [do not support][libraries] the hardware FPU of the ARM [Cortex-M4F], using software floating point code instead.  There is a [hardfloat-toolchain] builder (which I've not used yet), and ARM is maintaining a [GCC toolchain][launchpad.net] targeting embedded ARM processors, which I'll probably try building next.
 
@@ -31,7 +35,7 @@ For more details on the launchpad, and the various libraries etc. that it uses, 
 
 ## toolchain
 
-The makefile failed to download the source archive, you can [download] it manually into the root of the toolchain repo and make will continue so long as the checksum matches.
+The makefile failed to download the source archive, so [download] it manually into the root of the toolchain repo.  Make will continue so long as the filename and checksum matches.
 
 [mentor]: http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition
 
@@ -42,7 +46,7 @@ The makefile failed to download the source archive, you can [download] it manual
 
 ## lm4tools
 
-The `lm4flash` tool included in [recent] versions of [lm4tools], is unable to read the serial number of the device on OS X; so compiled code cannot be flashed to the launchpad device.
+The `lm4flash` tool included in [recent] versions of [lm4tools] is unable to read the serial number of the device on OS X, so compiled code cannot be flashed to the launchpad device.
 
 [recent]: https://github.com/utzig/lm4tools/commit/cc466b1
 

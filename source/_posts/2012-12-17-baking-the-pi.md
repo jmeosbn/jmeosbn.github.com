@@ -79,7 +79,7 @@ If you have any files stored locally, you can transfer them using `sftp`.
 	# you can also use ctlr+d to logout
 ```
 
-Most of the commands below need root privileges on the Pi, as they configure the system.  For a single command you can prepend `sudo`, for many commands it's easier to run `sudo -s` to start a new shell using sudo.
+Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the `sudo` command to it.  To run many commands this way without typing `sudo` each time, first start a root shell with `sudo -s`; *remember to logout with 'exit' or ctrl+d when finished*.
 
 ```sh
 	# Login to the pi, using the `xb` alias
@@ -90,7 +90,7 @@ Most of the commands below need root privileges on the Pi, as they configure the
 	# Prevent future display of login message
 	touch ~/.hushlogin
 
-	# Login as root for the remainder of the setup
+	# Use a root shell for the following commands
 	sudo -s
 
 	# Allow full use of sudo without needing password
@@ -110,7 +110,7 @@ Most of the commands below need root privileges on the Pi, as they configure the
 
 ## Fake a hw clock based on recent timestamp
 
-The Pi doesn't have any hardware to track time while powered off; using fake-hwclock, the time can be set during startup to the last known date and time.
+The Pi doesn't have any hardware to track time while powered off, so it uses Internet time servers to set its clock during startup. If the Pi is likely to be without Internet access, you can use fake-hwclock to set the clock to the last known date and time.
 
 ```sh
 	touch /etc/init.d/hwclock.sh
@@ -123,7 +123,7 @@ The Pi doesn't have any hardware to track time while powered off; using fake-hwc
 
 ## Generate new RSA host keys
 
-These keys confirm the identity of the Pi when logging in remotely, to prevent a malicious host from intercepting the process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.
+These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.
 
 ```sh
 	ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
@@ -132,7 +132,7 @@ These keys confirm the identity of the Pi when logging in remotely, to prevent a
 
 ## Install Mono
 
-Basic mono setup to run and compile command line tools
+Basic mono setup to run and compile command line tools.
 
 ```sh
 	apt-get install mono-devel mono-gmcs mono-csharp-shell
@@ -186,7 +186,7 @@ Use 'motion' or 'fswebcam', motion may need a default cfg copying
 
 ```sh
 	apt-get install motion
-	nano /etc/default/motion /etc/motion/motion.conf
+	cp /etc/default/motion /etc/motion/motion.conf
 ```
 
 
@@ -212,8 +212,6 @@ Some useful commands and procedures
 ```sh
     echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
 ```
-
-When the file opens, just erase the lines and save it.
 
 
 ## Quick Tips
