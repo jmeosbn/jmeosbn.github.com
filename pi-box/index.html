@@ -85,9 +85,13 @@
 <p><a href="https://github.com/kenpratt/dbox">dbox</a> is a great ruby client for Dropbox that can locally create, clone, push, pull, sync, and move, a Dropbox folder hierarchy.  It can be used as an API directly from another ruby script, or with the included command line tool.</p>
 
 <blockquote>
-  <p><a href="https://github.com/kenpratt/dbox">dbox</a>
+  <p><a href="https://github.com/kenpratt/dbox">dbox</a><br />
 Dropbox integration made easy. This robust client gives you control over what, where, and when you sync with Dropbox.</p>
 </blockquote>
+
+<p>dbox syncs one file at a time, so it won&rsquo;t be as quick as the official client when syncing large amounts of files.  For most uses this will only be an issue when initially cloning a large folder.</p>
+
+<h2 id="installation">installation</h2>
 
 <p>Before installing dbox, make sure you have any needed packages.</p>
 
@@ -129,7 +133,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">
 </span><span class="line"><span class="c"># add the following</span>
 </span><span class="line"><span class="k">if</span> ! pgrep -f dboxsync; <span class="k">then</span>
-</span><span class="line"><span class="k">  </span>sudo -u xbian /home/xbian/dboxsync.rb &amp;
+</span><span class="line"><span class="k">  </span>sudo -u xbian nice -n 10 /home/xbian/dboxsync.rb &amp;
 </span><span class="line"><span class="k">fi</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 

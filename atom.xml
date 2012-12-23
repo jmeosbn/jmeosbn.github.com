@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-21T04:05:46+00:00</updated>
+  <updated>2012-12-23T20:41:28+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -27,9 +27,13 @@
 <p><a href="https://github.com/kenpratt/dbox">dbox</a> is a great ruby client for Dropbox that can locally create, clone, push, pull, sync, and move, a Dropbox folder hierarchy.  It can be used as an API directly from another ruby script, or with the included command line tool.</p>
 
 <blockquote>
-  <p><a href="https://github.com/kenpratt/dbox">dbox</a>
+  <p><a href="https://github.com/kenpratt/dbox">dbox</a><br />
 Dropbox integration made easy. This robust client gives you control over what, where, and when you sync with Dropbox.</p>
 </blockquote>
+
+<p>dbox syncs one file at a time, so it won&rsquo;t be as quick as the official client when syncing large amounts of files.  For most uses this will only be an issue when initially cloning a large folder.</p>
+
+<h2 id="installation">installation</h2>
 
 <p>Before installing dbox, make sure you have any needed packages.</p>
 
@@ -71,7 +75,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">
 </span><span class="line"><span class="c"># add the following</span>
 </span><span class="line"><span class="k">if</span> ! pgrep -f dboxsync; <span class="k">then</span>
-</span><span class="line"><span class="k">  </span>sudo -u xbian /home/xbian/dboxsync.rb &amp;
+</span><span class="line"><span class="k">  </span>sudo -u xbian nice -n 10 /home/xbian/dboxsync.rb &amp;
 </span><span class="line"><span class="k">fi</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
@@ -678,6 +682,8 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <updated>2012-11-15T20:02:00+00:00</updated>
     <id>http://jmeosbn.github.com/compiling-the-stellaris-toolchain</id>
     <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
+
+<p><em>(If you don&rsquo;t fancy building the toolchain, <a href="http://www.yagarto.de/">yagarto</a> offers recent binaries for Windows and Mac OS X that target ARM devices.)</em></p>
 
 <p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&rsquo;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&rsquo;ll probably try building next.</p>
 
