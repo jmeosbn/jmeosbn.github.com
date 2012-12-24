@@ -4,7 +4,7 @@
   <title><![CDATA[Category: stellaris | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/stellaris/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-23T20:41:28+00:00</updated>
+  <updated>2012-12-24T16:40:30+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -18,11 +18,11 @@
     <link href="http://jmeosbn.github.com/stellaris-virtual-serial-device/"/>
     <updated>2012-12-10T02:48:00+00:00</updated>
     <id>http://jmeosbn.github.com/stellaris-virtual-serial-device</id>
-    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, eg. to interact with program execution, or to simply log it&rsquo;s output.</p>
+    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, e.g. to interact with program execution or log it&rsquo;s output.</p>
 
 <h2 id="device-permissions">device permissions</h2>
 
-<p>Root privileges are required to access the device on some Linux and Unix based systems, so remember to use <code>sudo</code> with anything directly accessing the device, such as <code>lm4flash</code> and <code>ttylog</code>.</p>
+<p>Root privileges are required to access the device on some Linux and Unix based systems, so remember to use <code>sudo</code> with commands such as <code>lm4flash</code> and <code>ttylog</code> which directly access the device.</p>
 
 <p>Alternatively, on Linux you can configure permissions for the device using udev rules:</p>
 
@@ -34,7 +34,7 @@ ATTRS{product}=="In-Circuit Debug Interface", OWNER="devuser"
 KERNEL=="ttyACM?", OWNER="devuser" ```
 </code></pre>
 
-<p>The (fairly open) rules shown above gives the user named &lsquo;<em>devuser</em>&rsquo; permission to access the launchpad&rsquo;s usb interface, along with it&rsquo;s virtual serial device.</p>
+<p>The (fairly open) rules shown above, give the user named &lsquo;<em>devuser</em>&rsquo; permission to access the launchpad&rsquo;s usb interface, along with it&rsquo;s virtual serial device.</p>
 
 <p>Note: these rules should be more specific if you have similar devices that you don&rsquo;t wish to allow access to inadvertently.</p>
 
@@ -43,9 +43,9 @@ KERNEL=="ttyACM?", OWNER="devuser" ```
 	SUBSYSTEMS=="usb", ATTRS{idVendor}=="1cbe", ATTRS{idProduct}=="00fd", MODE="0660", OWNER="devuser"
 </code></p>
 
-<p>The device in this rule is strictly defined and read/write permissions have been explicitly set for it.  Also, because the device itself is matched directly (rather than it&rsquo;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
+<p>The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it&rsquo;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
-<p>To define these rules, the exact name, vendor and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
+<p>To define these rules, the exact name, vendor, and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
 
 <p><code>sh
 	$ dmesg
@@ -75,7 +75,7 @@ $ screen /dev/tty.usbmodem* 115200
 #  to list other commands, type: ^A ? ```
 </code></pre>
 
-<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, eg. when power cycling or reconnecting - if you have another ttyACM device connected, then you should probably use it&rsquo;s full name.</p>
+<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it&rsquo;s full name.</p>
 
 <p>On OS X the device should be named similar to <code>tty.usbmodem</code>, with the serial number of the device appended.</p>
 ]]></content>
@@ -154,11 +154,11 @@ $ sudo killall lmicdi # or type 'fg' followed by ^C ```
 
 <h2 id="toolchain">toolchain</h2>
 
-<p>The makefile failed to download the source archive, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
+<p>The makefile failed to download the source archive, so <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo.  Make will continue so long as the filename and checksum matches.</p>
 
 <h2 id="lm4tools">lm4tools</h2>
 
-<p>The <code>lm4flash</code> tool included in <a href="https://github.com/utzig/lm4tools/commit/cc466b1">recent</a> versions of <a href="https://github.com/utzig/lm4tools">lm4tools</a>, is unable to read the serial number of the device on OS X; so compiled code cannot be flashed to the launchpad device.</p>
+<p>The <code>lm4flash</code> tool included in <a href="https://github.com/utzig/lm4tools/commit/cc466b1">recent</a> versions of <a href="https://github.com/utzig/lm4tools">lm4tools</a> is unable to read the serial number of the device on OS X, so compiled code cannot be flashed to the launchpad device.</p>
 
 <p><strong>Update: The dev has [committed] a workaround that fixes <code>lm4flash</code> on OS X.</strong>
 [committed]: https://github.com/utzig/lm4tools/commit/99d501b</p>

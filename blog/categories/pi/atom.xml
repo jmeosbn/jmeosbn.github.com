@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-23T20:41:28+00:00</updated>
+  <updated>2012-12-24T16:40:30+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -42,9 +42,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
 	sudo gem install dbox
 </code></p>
 
-<p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page to configure your keys, and clone your Dropbox folder.</p>
+<p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page, to configure your keys and clone your Dropbox folder.</p>
 
-<p>To run dbox periodically, download<sup id="fnref:dl"><a href="#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a>, make it executable, then replace the example keys and path settings with your own.</p>
+<p>To run dbox periodically, download<sup id="fnref:dl"><a href="#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a> and make it executable, then replace the example keys and path settings with your own.</p>
 
 <!--	cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb -->
 
@@ -56,7 +56,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 	./dboxsync.rb
 </code></p>
 
-<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running; change the script so <code>LOGFILE = STDOUT</code> if you want to see some basic info while testing.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
+<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running.  If you want to see some basic info while testing, change the script so <code>LOGFILE = STDOUT</code>.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
 
 <p>To have the script run on startup, add the following entry to <code>/etc/rc.local</code>.</p>
 
@@ -111,7 +111,7 @@ fi ```
 
 <p>The Dropbox source appears to be just a plugin for the nautilus file browser (and doesn&rsquo;t include the above daemon?).  This is only useful when using the desktop.</p>
 
-<p>Download <a href="https://www.dropbox.com/download?dl=packages/nautilus-dropbox-1.4.0.tar.bz2">source archive</a> and build as usual, more details are <a href="https://www.dropbox.com/help/247">here</a>.</p>
+<p>Download the <a href="https://www.dropbox.com/download?dl=packages/nautilus-dropbox-1.4.0.tar.bz2">source archive</a> and build as usual.  More details can be found in <a href="https://www.dropbox.com/help/247">this help topic</a>.</p>
 
 <h2 id="use-something-else">use something else</h2>
 
@@ -192,7 +192,7 @@ ssh-copy-id xbian@xbian.local ```
 <pre><code># you can also use ctlr+d to logout ```
 </code></pre>
 
-<p>Most of the commands below need root privileges on the Pi, as they configure the system.  For a single command you can prepend <code>sudo</code>, for many commands it&rsquo;s easier to run <code>sudo -s</code> to start a new shell using sudo.</p>
+<p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with &lsquo;exit&rsquo; or ctrl+d when finished</em>.</p>
 
 <p>```sh
 	# Login to the pi, using the <code>xb</code> alias
@@ -203,7 +203,7 @@ ssh-copy-id xbian@xbian.local ```
 # Prevent future display of login message
 touch ~/.hushlogin
 
-# Login as root for the remainder of the setup
+# Use a root shell for the following commands
 sudo -s
 
 # Allow full use of sudo without needing password
@@ -223,7 +223,7 @@ chmod +x /usr/bin/xbian-config.sh ```
 
 <h2 id="fake-a-hw-clock-based-on-recent-timestamp">Fake a hw clock based on recent timestamp</h2>
 
-<p>The Pi doesn&rsquo;t have any hardware to track time while powered off; using fake-hwclock, the time can be set during startup to the last known date and time.</p>
+<p>The Pi doesn&rsquo;t have any hardware to track time while powered off, so it uses Internet time servers to set its clock during startup. If the Pi is likely to be without Internet access, you can use fake-hwclock to set the clock to the last known date and time.</p>
 
 <p><code>sh
 	touch /etc/init.d/hwclock.sh
@@ -236,7 +236,7 @@ chmod +x /usr/bin/xbian-config.sh ```
 
 <h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
-<p>These keys confirm the identity of the Pi when logging in remotely, to prevent a malicious host from intercepting the process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.</p>
+<p>These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.</p>
 
 <p><code>sh
 	ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
@@ -245,7 +245,7 @@ chmod +x /usr/bin/xbian-config.sh ```
 
 <h2 id="install-mono">Install Mono</h2>
 
-<p>Basic mono setup to run and compile command line tools</p>
+<p>Basic mono setup to run and compile command line tools.</p>
 
 <p><code>sh
 	apt-get install mono-devel mono-gmcs mono-csharp-shell
@@ -292,7 +292,7 @@ chmod +x /usr/bin/xbian-config.sh ```
 
 <p><code>sh
 	apt-get install motion
-	nano /etc/default/motion /etc/motion/motion.conf
+	cp /etc/default/motion /etc/motion/motion.conf
 </code></p>
 
 <p><br />
@@ -316,8 +316,6 @@ chmod +x /usr/bin/xbian-config.sh ```
 <p><code>sh
     echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
 </code></p>
-
-<p>When the file opens, just erase the lines and save it.</p>
 
 <h2 id="quick-tips">Quick Tips</h2>
 

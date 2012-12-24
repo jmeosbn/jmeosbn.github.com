@@ -104,9 +104,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">sudo gem install dbox
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page to configure your keys, and clone your Dropbox folder.</p>
+<p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page, to configure your keys and clone your Dropbox folder.</p>
 
-<p>To run dbox periodically, download<sup id="fnref:dl"><a href="#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a>, make it executable, then replace the example keys and path settings with your own.</p>
+<p>To run dbox periodically, download<sup id="fnref:dl"><a href="#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a> and make it executable, then replace the example keys and path settings with your own.</p>
 
 <!--	cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb -->
 
@@ -122,7 +122,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">./dboxsync.rb
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running; change the script so <code>LOGFILE = STDOUT</code> if you want to see some basic info while testing.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
+<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running.  If you want to see some basic info while testing, change the script so <code>LOGFILE = STDOUT</code>.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
 
 <p>To have the script run on startup, add the following entry to <code>/etc/rc.local</code>.</p>
 
@@ -236,11 +236,11 @@ Dropbox integration made easy. This robust client gives you control over what, w
   </header>
 
 
-  <div class="entry-content"><p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, eg. to interact with program execution, or to simply log it&rsquo;s output.</p>
+  <div class="entry-content"><p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, e.g. to interact with program execution or log it&rsquo;s output.</p>
 
 <h2 id="device-permissions">device permissions</h2>
 
-<p>Root privileges are required to access the device on some Linux and Unix based systems, so remember to use <code>sudo</code> with anything directly accessing the device, such as <code>lm4flash</code> and <code>ttylog</code>.</p>
+<p>Root privileges are required to access the device on some Linux and Unix based systems, so remember to use <code>sudo</code> with commands such as <code>lm4flash</code> and <code>ttylog</code> which directly access the device.</p>
 
 <p>Alternatively, on Linux you can configure permissions for the device using udev rules:</p>
 
@@ -256,7 +256,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>The (fairly open) rules shown above gives the user named &lsquo;<em>devuser</em>&rsquo; permission to access the launchpad&rsquo;s usb interface, along with it&rsquo;s virtual serial device.</p>
+<p>The (fairly open) rules shown above, give the user named &lsquo;<em>devuser</em>&rsquo; permission to access the launchpad&rsquo;s usb interface, along with it&rsquo;s virtual serial device.</p>
 
 <p>Note: these rules should be more specific if you have similar devices that you don&rsquo;t wish to allow access to inadvertently.</p>
 
@@ -266,9 +266,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="nv">SUBSYSTEMS</span><span class="o">==</span><span class="s2">&quot;usb&quot;</span>, ATTRS<span class="o">{</span>idVendor<span class="o">}==</span><span class="s2">&quot;1cbe&quot;</span>, ATTRS<span class="o">{</span>idProduct<span class="o">}==</span><span class="s2">&quot;00fd&quot;</span>, <span class="nv">MODE</span><span class="o">=</span><span class="s2">&quot;0660&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>The device in this rule is strictly defined and read/write permissions have been explicitly set for it.  Also, because the device itself is matched directly (rather than it&rsquo;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
+<p>The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it&rsquo;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
-<p>To define these rules, the exact name, vendor and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
+<p>To define these rules, the exact name, vendor, and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -314,7 +314,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="c">#  to list other commands, type: ^A ?</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, eg. when power cycling or reconnecting - if you have another ttyACM device connected, then you should probably use it&rsquo;s full name.</p>
+<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it&rsquo;s full name.</p>
 
 <p>On OS X the device should be named similar to <code>tty.usbmodem</code>, with the serial number of the device appended.</p>
 </div>
@@ -484,11 +484,11 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="toolchain">toolchain</h2>
 
-<p>The makefile failed to download the source archive, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
+<p>The makefile failed to download the source archive, so <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo.  Make will continue so long as the filename and checksum matches.</p>
 
 <h2 id="lm4tools">lm4tools</h2>
 
-<p>The <code>lm4flash</code> tool included in <a href="https://github.com/utzig/lm4tools/commit/cc466b1">recent</a> versions of <a href="https://github.com/utzig/lm4tools">lm4tools</a>, is unable to read the serial number of the device on OS X; so compiled code cannot be flashed to the launchpad device.</p>
+<p>The <code>lm4flash</code> tool included in <a href="https://github.com/utzig/lm4tools/commit/cc466b1">recent</a> versions of <a href="https://github.com/utzig/lm4tools">lm4tools</a> is unable to read the serial number of the device on OS X, so compiled code cannot be flashed to the launchpad device.</p>
 
 <p><strong>Update: The dev has [committed] a workaround that fixes <code>lm4flash</code> on OS X.</strong>
 [committed]: https://github.com/utzig/lm4tools/commit/99d501b</p>
@@ -548,7 +548,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
   <div class="entry-content"><p>Here&rsquo;s some basic resources for getting started pushing code to github.</p>
 
-<p>&ldquo;Code&rdquo; doesn&rsquo;t just mean computer source code; git is useful for tracking anything that can be represented as plain text, eg. changes to <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
+<p>&ldquo;Code&rdquo; doesn&rsquo;t just mean computer source code; git is useful for tracking anything that can be represented as plain text, e.g. changes to <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
 
 <p>The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named <code>.git</code>.</p>
 
@@ -560,7 +560,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">Initialized empty Git repository in my-project/.git/
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>You then add any new or changed files you want to track, and then commit those changes to the repo.</p>
+<p>Add any new or changed files you want to track, then commit those changes to the repo.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Add and commit changes </span><a href="http://git-scm.com/docs/git-add">git-add</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -594,25 +594,25 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="documentation">documentation</h2>
 
-<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&rsquo;t already include it. They also host a copy of the <a href="http://git-scm.com/docs">documentation</a> and the online <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
+<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&rsquo;t already include it. The same site also hosts a copy of the <a href="http://git-scm.com/docs">documentation</a>, as well as the <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
 
-<p>If you don&rsquo;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&rsquo;s minimal explanatory text, but full command examples for most operations, making it a useful resource for commands you use rarely and need to quickly relearn.</p>
+<p>If you don&rsquo;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&rsquo;s minimal explanatory text, but full command examples for most operations; making it a useful resource for commands you use rarely and need to quickly relearn.</p>
 
 <h2 id="graphical-interfaces">graphical interfaces</h2>
 
 <p>While it&rsquo;s good to know how to use git from the command line, it&rsquo;s worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
 
-<p><a href="http://github.com/">Github</a> offers their own decent <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients that also have the advantage of supporting github&rsquo;s niceties for organisations and the &ldquo;Clone in Windows/Mac&rdquo; button found on each repo on github.</p>
+<p><a href="http://github.com/">Github</a> offers their own <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients, which have the advantage of closer integration with some of github&rsquo;s features, such as organisations and the &ldquo;Clone in Windows/Mac&rdquo; button found on each repo on github.</p>
 
 <p><img class="center" src="http://mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" /></p>
 
-<p>They do lack some more advanced features though so I mostly prefer <a href="http://gitx.laullon.com/">GitX</a> on the Mac, although <a href="http://git-scm.com/downloads/guis">plenty more GUIs</a> exist on various platforms.</p>
+<p>They do lack some more advanced features though so I mostly prefer <a href="http://gitx.laullon.com/">GitX</a> on the Mac, though <a href="http://git-scm.com/downloads/guis">plenty more GUIs</a> exist on various platforms.</p>
 
 <p><img class="center" src="http://gitx.laullon.com/commit.png" width="512" title="GitX" /></p>
 
 <h2 id="other-info">other info</h2>
 
-<p>Btw, if you just want to share some code snippets somewhere, while maintaining versioning etc., then check out <a href="https://gist.github.com/">gists</a>, a feature of github.</p>
+<p>Btw, if you just want to share some code snippets somewhere while maintaining versioning etc., then check out <a href="https://gist.github.com/">gists</a>, a feature of github.</p>
 </div>
   
   

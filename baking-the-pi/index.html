@@ -149,7 +149,7 @@
 </span><span class="line"><span class="c"># you can also use ctlr+d to logout</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Most of the commands below need root privileges on the Pi, as they configure the system.  For a single command you can prepend <code>sudo</code>, for many commands it&rsquo;s easier to run <code>sudo -s</code> to start a new shell using sudo.</p>
+<p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with &lsquo;exit&rsquo; or ctrl+d when finished</em>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -177,7 +177,7 @@
 </span><span class="line"><span class="c"># Prevent future display of login message</span>
 </span><span class="line">touch ~/.hushlogin
 </span><span class="line">
-</span><span class="line"><span class="c"># Login as root for the remainder of the setup</span>
+</span><span class="line"><span class="c"># Use a root shell for the following commands</span>
 </span><span class="line">sudo -s
 </span><span class="line">
 </span><span class="line"><span class="c"># Allow full use of sudo without needing password</span>
@@ -197,7 +197,7 @@
 
 <h2 id="fake-a-hw-clock-based-on-recent-timestamp">Fake a hw clock based on recent timestamp</h2>
 
-<p>The Pi doesn&rsquo;t have any hardware to track time while powered off; using fake-hwclock, the time can be set during startup to the last known date and time.</p>
+<p>The Pi doesn&rsquo;t have any hardware to track time while powered off, so it uses Internet time servers to set its clock during startup. If the Pi is likely to be without Internet access, you can use fake-hwclock to set the clock to the last known date and time.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -215,7 +215,7 @@
 
 <h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
-<p>These keys confirm the identity of the Pi when logging in remotely, to prevent a malicious host from intercepting the process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.</p>
+<p>These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -225,7 +225,7 @@
 
 <h2 id="install-mono">Install Mono</h2>
 
-<p>Basic mono setup to run and compile command line tools</p>
+<p>Basic mono setup to run and compile command line tools.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-gmcs mono-csharp-shell
@@ -275,7 +275,7 @@
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install motion
-</span><span class="line">nano /etc/default/motion /etc/motion/motion.conf
+</span><span class="line">cp /etc/default/motion /etc/motion/motion.conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><br />
@@ -299,8 +299,6 @@
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nb">echo</span> | sudo tee /etc/udev/rules.d/70-persistent-net.rules
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>When the file opens, just erase the lines and save it.</p>
 
 <h2 id="quick-tips">Quick Tips</h2>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tools | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/tools/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2012-12-23T20:41:28+00:00</updated>
+  <updated>2012-12-24T16:40:30+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -42,9 +42,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
 	sudo gem install dbox
 </code></p>
 
-<p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page to configure your keys, and clone your Dropbox folder.</p>
+<p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page, to configure your keys and clone your Dropbox folder.</p>
 
-<p>To run dbox periodically, download<sup id="fnref:dl"><a href="#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a>, make it executable, then replace the example keys and path settings with your own.</p>
+<p>To run dbox periodically, download<sup id="fnref:dl"><a href="#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a> and make it executable, then replace the example keys and path settings with your own.</p>
 
 <!--	cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb -->
 
@@ -56,7 +56,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 	./dboxsync.rb
 </code></p>
 
-<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running; change the script so <code>LOGFILE = STDOUT</code> if you want to see some basic info while testing.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
+<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running.  If you want to see some basic info while testing, change the script so <code>LOGFILE = STDOUT</code>.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
 
 <p>To have the script run on startup, add the following entry to <code>/etc/rc.local</code>.</p>
 
@@ -111,7 +111,7 @@ fi ```
 
 <p>The Dropbox source appears to be just a plugin for the nautilus file browser (and doesn&rsquo;t include the above daemon?).  This is only useful when using the desktop.</p>
 
-<p>Download <a href="https://www.dropbox.com/download?dl=packages/nautilus-dropbox-1.4.0.tar.bz2">source archive</a> and build as usual, more details are <a href="https://www.dropbox.com/help/247">here</a>.</p>
+<p>Download the <a href="https://www.dropbox.com/download?dl=packages/nautilus-dropbox-1.4.0.tar.bz2">source archive</a> and build as usual.  More details can be found in <a href="https://www.dropbox.com/help/247">this help topic</a>.</p>
 
 <h2 id="use-something-else">use something else</h2>
 
@@ -136,7 +136,7 @@ fi ```
     <id>http://jmeosbn.github.com/resources-for-using-git</id>
     <content type="html"><![CDATA[<p>Here&rsquo;s some basic resources for getting started pushing code to github.</p>
 
-<p>&ldquo;Code&rdquo; doesn&rsquo;t just mean computer source code; git is useful for tracking anything that can be represented as plain text, eg. changes to <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
+<p>&ldquo;Code&rdquo; doesn&rsquo;t just mean computer source code; git is useful for tracking anything that can be represented as plain text, e.g. changes to <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
 
 <p>The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named <code>.git</code>.</p>
 
@@ -146,7 +146,7 @@ $ git init
 Initialized empty Git repository in my-project/.git/
 </code></p>
 
-<p>You then add any new or changed files you want to track, and then commit those changes to the repo.</p>
+<p>Add any new or changed files you want to track, then commit those changes to the repo.</p>
 
 <p><code>sh Add and commit changes http://git-scm.com/docs/git-add git-add
 $ echo About My-Project &gt; README.md
@@ -170,25 +170,25 @@ Date:   Sat Sep 29 23:30:20 2012 +0100</p>
 
 <h2 id="documentation">documentation</h2>
 
-<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&rsquo;t already include it. They also host a copy of the <a href="http://git-scm.com/docs">documentation</a> and the online <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
+<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&rsquo;t already include it. The same site also hosts a copy of the <a href="http://git-scm.com/docs">documentation</a>, as well as the <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
 
-<p>If you don&rsquo;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&rsquo;s minimal explanatory text, but full command examples for most operations, making it a useful resource for commands you use rarely and need to quickly relearn.</p>
+<p>If you don&rsquo;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&rsquo;s minimal explanatory text, but full command examples for most operations; making it a useful resource for commands you use rarely and need to quickly relearn.</p>
 
 <h2 id="graphical-interfaces">graphical interfaces</h2>
 
 <p>While it&rsquo;s good to know how to use git from the command line, it&rsquo;s worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
 
-<p><a href="http://github.com/">Github</a> offers their own decent <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients that also have the advantage of supporting github&rsquo;s niceties for organisations and the &ldquo;Clone in Windows/Mac&rdquo; button found on each repo on github.</p>
+<p><a href="http://github.com/">Github</a> offers their own <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients, which have the advantage of closer integration with some of github&rsquo;s features, such as organisations and the &ldquo;Clone in Windows/Mac&rdquo; button found on each repo on github.</p>
 
 <p><img class="center" src="http://mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" ></p>
 
-<p>They do lack some more advanced features though so I mostly prefer <a href="http://gitx.laullon.com/">GitX</a> on the Mac, although <a href="http://git-scm.com/downloads/guis">plenty more GUIs</a> exist on various platforms.</p>
+<p>They do lack some more advanced features though so I mostly prefer <a href="http://gitx.laullon.com/">GitX</a> on the Mac, though <a href="http://git-scm.com/downloads/guis">plenty more GUIs</a> exist on various platforms.</p>
 
 <p><img class="center" src="http://gitx.laullon.com/commit.png" width="512" title="GitX" ></p>
 
 <h2 id="other-info">other info</h2>
 
-<p>Btw, if you just want to share some code snippets somewhere, while maintaining versioning etc., then check out <a href="https://gist.github.com/">gists</a>, a feature of github.</p>
+<p>Btw, if you just want to share some code snippets somewhere while maintaining versioning etc., then check out <a href="https://gist.github.com/">gists</a>, a feature of github.</p>
 ]]></content>
   </entry>
   

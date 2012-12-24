@@ -86,11 +86,11 @@
 
 <h2 id="toolchain">toolchain</h2>
 
-<p>The makefile failed to download the source archive, you can <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo and make will continue so long as the checksum matches.</p>
+<p>The makefile failed to download the source archive, so <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo.  Make will continue so long as the filename and checksum matches.</p>
 
 <h2 id="lm4tools">lm4tools</h2>
 
-<p>The <code>lm4flash</code> tool included in <a href="https://github.com/utzig/lm4tools/commit/cc466b1">recent</a> versions of <a href="https://github.com/utzig/lm4tools">lm4tools</a>, is unable to read the serial number of the device on OS X; so compiled code cannot be flashed to the launchpad device.</p>
+<p>The <code>lm4flash</code> tool included in <a href="https://github.com/utzig/lm4tools/commit/cc466b1">recent</a> versions of <a href="https://github.com/utzig/lm4tools">lm4tools</a> is unable to read the serial number of the device on OS X, so compiled code cannot be flashed to the launchpad device.</p>
 
 <p><strong>Update: The dev has [committed] a workaround that fixes <code>lm4flash</code> on OS X.</strong>
 [committed]: https://github.com/utzig/lm4tools/commit/99d501b</p>

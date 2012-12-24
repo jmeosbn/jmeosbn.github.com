@@ -101,9 +101,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">sudo gem install dbox
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page to configure your keys, and clone your Dropbox folder.</p>
+<p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page, to configure your keys and clone your Dropbox folder.</p>
 
-<p>To run dbox periodically, download<sup id="fnref:dl"><a href="#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a>, make it executable, then replace the example keys and path settings with your own.</p>
+<p>To run dbox periodically, download<sup id="fnref:dl"><a href="#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a> and make it executable, then replace the example keys and path settings with your own.</p>
 
 <!--	cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb -->
 
@@ -119,7 +119,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">./dboxsync.rb
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running; change the script so <code>LOGFILE = STDOUT</code> if you want to see some basic info while testing.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
+<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running.  If you want to see some basic info while testing, change the script so <code>LOGFILE = STDOUT</code>.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
 
 <p>To have the script run on startup, add the following entry to <code>/etc/rc.local</code>.</p>
 
@@ -179,7 +179,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>The Dropbox source appears to be just a plugin for the nautilus file browser (and doesn&rsquo;t include the above daemon?).  This is only useful when using the desktop.</p>
 
-<p>Download <a href="https://www.dropbox.com/download?dl=packages/nautilus-dropbox-1.4.0.tar.bz2">source archive</a> and build as usual, more details are <a href="https://www.dropbox.com/help/247">here</a>.</p>
+<p>Download the <a href="https://www.dropbox.com/download?dl=packages/nautilus-dropbox-1.4.0.tar.bz2">source archive</a> and build as usual.  More details can be found in <a href="https://www.dropbox.com/help/247">this help topic</a>.</p>
 
 <h2 id="use-something-else">use something else</h2>
 
