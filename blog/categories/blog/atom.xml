@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: blog | git-log(1)]]></title>
+  <link href="http://jmeosbn.github.com/blog/categories/blog/atom.xml" rel="self"/>
+  <link href="http://jmeosbn.github.com/"/>
+  <updated>2013-01-05T12:17:09+00:00</updated>
+  <id>http://jmeosbn.github.com/</id>
+  <author>
+    <name><![CDATA[Jamie Osborne]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Todo]]></title>
+    <link href="http://jmeosbn.github.com/Todo/"/>
+    <updated>2020-01-01T00:00:00+00:00</updated>
+    <id>http://jmeosbn.github.com/Todo</id>
+    <content type="html"><![CDATA[<p>Minimal style from http://gist.io/</p>
+
+<p>Font colour
+ #666666 / #444444</p>
+
+<p>Font colours - black pixel
+#333333 main
+ #787878 sub</p>
+
+<pre><code>&lt;div class="bogus-wrapper"&gt;
+&lt;notextile&gt;
+&lt;figure class="code"&gt;
+&lt;div class="highlight"&gt;
+&lt;table&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="gutter"&gt;
+&lt;pre class="line-numbers"&gt;
+</code></pre>
+
+<p>http://blog.dlecan.com/octopress-continous-integration/</p>
+
+<p>Make octopress pages for cydia apps</p>
+
+<p>http://jigsaw.w3.org/css-validator/validator?uri=http%3A%2F%2Fjmeosbn.github.com%2F&amp;profile=css3&amp;usermedium=all&amp;warning=1&amp;vextwarning=&amp;lang=en</p>
+
+<h1 id="general">general</h1>
+
+<p>git-log - Show commit logs</p>
+
+<p>git-blog(1) - Show a git user&rsquo;s log</p>
+
+<p>Add link to hackspace github etc?</p>
+
+<p>Weird h1 link highlight issues</p>
+
+<h1 id="on-mobile">on mobile</h1>
+
+<p>add basic navigation to header (or link to jump to sidebar at end of page)</p>
+
+<p>Force sidebar on for mobile</p>
+
+]]></content>
+  </entry>
+  
+</feed>

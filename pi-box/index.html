@@ -139,6 +139,8 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>There&rsquo;s more proper ways of doing this, but this seemed the simplest.</p>
 
+<!-- more -->
+
 <h2 id="todo">todo</h2>
 
 <ul>
@@ -150,8 +152,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <p>While cron or similar could be used to run dbox periodically, each separate invocation of dbox from the command line incurs a startup delay of a few seconds, during which time the Pi&rsquo;s CPU is maxed out loading ruby and the code needed to run dbox.  This isn&rsquo;t ideal and would likely cause issues if the Pi is used as a media player.</p>
 
 <p>The sample_polling_script accesses dbox directly though it&rsquo;s ruby API, and doesn&rsquo;t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
-
-<!-- more -->
 
 <h1 id="alternatives">alternatives</h1>
 
@@ -252,7 +252,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - Jamie Osborne -
+  Copyright &copy; 2013 - Jamie Osborne -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
