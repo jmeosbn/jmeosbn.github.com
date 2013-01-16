@@ -51,6 +51,7 @@ The `lm4flash` tool included in [recent] versions of [lm4tools] is unable to rea
 [recent]: https://github.com/utzig/lm4tools/commit/cc466b1
 
 __Update: The dev has [committed] a workaround that fixes `lm4flash` on OS X.__
+
 [committed]: https://github.com/utzig/lm4tools/commit/99d501b
 
 ``` sh

@@ -146,15 +146,12 @@ Some standard packages that are usually excluded from the xbian distro, as they 
 	apt-get install psmisc usbutils omxplayer
 ```
 
-[^omx]: see <http://omxplayer.sconde.net/> for recent builds
-
-
 
 <br />
+
 # Useful extras, not always used
 
 Stuff used infrequently, or currently being tested
-
 
 
 ## Installing iPlayer (and 4od, ITV, 5)
@@ -191,10 +188,10 @@ Use 'motion' or 'fswebcam', motion may need a default cfg copying
 
 
 <br />
+
 # Troubleshooting / backup
 
 Some useful commands and procedures
-
 
 
 ## Backup XBMC settings
@@ -220,14 +217,13 @@ Some useful commands and procedures
 * Setup CEC remote over hdmi from console: `cec-config`
 
 
-
 <br />
+
 # Not used/needed with recent versions
 
 [^Reaper]: http://f.cl.ly/items/0S1S1Y0B3Q241Z2F0z1j/Untitled.png
 
 Previously useful functionality or workarounds
-
 
 
 ## Fix ssh access using public key
