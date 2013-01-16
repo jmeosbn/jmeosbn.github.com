@@ -225,6 +225,68 @@
 </span><span class="line">ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<h2 id="enable-wifi-adapter">Enable WiFi adapter</h2>
+
+<p>XBian includes WiFi configuration as part of xbian-config.sh, these instructions are for a manual setup.</p>
+
+<p><em>From the instructions <a href="http://www.savagehomeautomation.com/raspi-airlink101">posted here</a></em></p>
+
+<p>Use <code>lsusb</code> to check that the adapter is recognised, and <code>lsmod</code> to check the kernel module (e.g. <code>8192cu</code>) is loaded.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/network/interfaces
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Make sure the following lines exist, adding them as needed:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">auto wlan0
+</span><span class="line">allow-hotplug wlan0
+</span><span class="line">iface wlan0 inet manual
+</span><span class="line">wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Add your network details using the following template:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">network</span><span class="o">={</span>
+</span><span class="line"><span class="nv">ssid</span><span class="o">=</span><span class="s2">&quot;YOUR-NETWORK-SSID&quot;</span>
+</span><span class="line"><span class="nv">proto</span><span class="o">=</span>WPA2
+</span><span class="line"><span class="nv">key_mgmt</span><span class="o">=</span>WPA-PSK
+</span><span class="line"><span class="nv">pairwise</span><span class="o">=</span>CCMP TKIP
+</span><span class="line"><span class="nv">group</span><span class="o">=</span>CCMP TKIP
+</span><span class="line"><span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;YOUR-WLAN-PASSWORD&quot;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Reinitialise the adapter, and check it&rsquo;s connected.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo ifdown wlan0
+</span><span class="line">sudo ifup wlan0
+</span><span class="line"><span class="c"># you may get some errors here, even when successful</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Use <code>iwconfig</code> to view wifi adapter info and <code>ifconfig</code> for general network info.</p>
+
 <h2 id="install-mono">Install Mono</h2>
 
 <p>Basic mono setup to run and compile command line tools.</p>
@@ -280,8 +342,9 @@
 </span><span class="line">cp /etc/default/motion /etc/motion/motion.conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><br />
-# Troubleshooting / backup</p>
+<p><br /></p>
+
+<h1 id="troubleshooting--backup">Troubleshooting / backup</h1>
 
 <p>Some useful commands and procedures</p>
 
@@ -309,8 +372,9 @@
   <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
 </ul>
 
-<p><br />
-# Not used/needed with recent versions</p>
+<p><br /></p>
+
+<h1 id="not-usedneeded-with-recent-versions">Not used/needed with recent versions</h1>
 
 <p>Previously useful functionality or workarounds</p>
 
@@ -371,6 +435,24 @@
 <h2 id="install-shairport">Install Shairport</h2>
 
 <p>Instructions found <a href="http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi">here</a> (alt site <a href="http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/">here</a>)</p>
+
+<p>A change in IOS 6 <a href="http://jordanburgess.com/post/38986434391/raspberry-pi-airplay">requires Perl Net-SDP</a> module to installed.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">git clone https://github.com/njh/perl-net-sdp.git perl-net-sdp
+</span><span class="line"><span class="nb">cd </span>perl-net-sdp
+</span><span class="line">perl Build.PL
+</span><span class="line">sudo ./Build
+</span><span class="line">sudo ./Build <span class="nb">test</span>
+</span><span class="line">sudo ./Build install
+</span><span class="line"><span class="nb">cd</span> ..
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>

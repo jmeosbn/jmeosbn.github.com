@@ -4,7 +4,7 @@
   <title><![CDATA[Category: htpc | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/htpc/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-08T19:36:47+00:00</updated>
+  <updated>2013-01-16T23:48:52+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -127,6 +127,56 @@ chmod +x /usr/bin/xbian-config.sh ```
 	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 </code></p>
 
+<h2 id="enable-wifi-adapter">Enable WiFi adapter</h2>
+
+<p>XBian includes WiFi configuration as part of xbian-config.sh, these instructions are for a manual setup.</p>
+
+<p><em>From the instructions <a href="http://www.savagehomeautomation.com/raspi-airlink101">posted here</a></em></p>
+
+<p>Use <code>lsusb</code> to check that the adapter is recognised, and <code>lsmod</code> to check the kernel module (e.g. <code>8192cu</code>) is loaded.</p>
+
+<p><code>sh
+	sudo nano /etc/network/interfaces
+</code></p>
+
+<p>Make sure the following lines exist, adding them as needed:</p>
+
+<p><code>
+    auto wlan0
+    allow-hotplug wlan0
+    iface wlan0 inet manual
+    wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+</code></p>
+
+<p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
+
+<p><code>sh
+	sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+</code></p>
+
+<p>Add your network details using the following template:</p>
+
+<p><code>
+    network={
+    ssid="YOUR-NETWORK-SSID"
+    proto=WPA2
+    key_mgmt=WPA-PSK
+    pairwise=CCMP TKIP
+    group=CCMP TKIP
+    psk="YOUR-WLAN-PASSWORD"
+    }
+</code></p>
+
+<p>Reinitialise the adapter, and check it&rsquo;s connected.</p>
+
+<p><code>sh
+	sudo ifdown wlan0
+	sudo ifup wlan0
+	# you may get some errors here, even when successful
+</code></p>
+
+<p>Use <code>iwconfig</code> to view wifi adapter info and <code>ifconfig</code> for general network info.</p>
+
 <h2 id="install-mono">Install Mono</h2>
 
 <p>Basic mono setup to run and compile command line tools.</p>
@@ -179,8 +229,9 @@ chmod +x /usr/bin/xbian-config.sh ```
 	cp /etc/default/motion /etc/motion/motion.conf
 </code></p>
 
-<p><br />
-# Troubleshooting / backup</p>
+<p><br /></p>
+
+<h1 id="troubleshooting--backup">Troubleshooting / backup</h1>
 
 <p>Some useful commands and procedures</p>
 
@@ -208,8 +259,9 @@ chmod +x /usr/bin/xbian-config.sh ```
   <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
 </ul>
 
-<p><br />
-# Not used/needed with recent versions</p>
+<p><br /></p>
+
+<h1 id="not-usedneeded-with-recent-versions">Not used/needed with recent versions</h1>
 
 <p>Previously useful functionality or workarounds</p>
 
@@ -255,6 +307,18 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 <h2 id="install-shairport">Install Shairport</h2>
 
 <p>Instructions found <a href="http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi">here</a> (alt site <a href="http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/">here</a>)</p>
+
+<p>A change in IOS 6 <a href="http://jordanburgess.com/post/38986434391/raspberry-pi-airplay">requires Perl Net-SDP</a> module to installed.</p>
+
+<p><code>sh
+	git clone https://github.com/njh/perl-net-sdp.git perl-net-sdp
+	cd perl-net-sdp
+	perl Build.PL
+	sudo ./Build
+	sudo ./Build test
+	sudo ./Build install
+	cd ..
+</code></p>
 
 <p><code>sh
 	# do as root
