@@ -10,14 +10,13 @@ categories: [arm, pi, htpc]
 ---
 
 
-Just a collection of notes for setting up a clean image on the Raspberry Pi.
-
-
-Notes are current for [XBian](http://www.xbian.org) 1.0 Alpha 3.
-
-[^Todo]: Install fsck.ntfs (used to fix unclean unmount)
+A collection of notes for setting up a clean image of [XBian](http://www.xbian.org) (1.0 Alpha 4) on the Raspberry Pi.
 
 <!-- more -->
+
+Jump to ["First login tasks"](#first-login-tasks) if you already have a terminal session on the Pi.
+
+[^Todo]: Install fsck.ntfs (used to fix unclean unmount)
 
 ## Basic Pi Tips
 
@@ -29,7 +28,7 @@ Notes are current for [XBian](http://www.xbian.org) 1.0 Alpha 3.
 
 ## Pre-setup, on PC, laptop, etc.
 
-Before setting up the Pi remotely, there are some things to do locally to ease logging in.  This will obviate the need to enter the password, or specify the full host name each time we access the Pi.
+Before setting up the Pi remotely, there are some things to do locally to ease logging in when using SSH.  This will obviate the need to enter the password, or specify the full host name each time we access the Pi.
 
 
 ### Copy public key to Pi
@@ -66,9 +65,9 @@ Locally define the alias `xb` to be used in place of `xbian@xbian.local`.
 With this alias defined, `ssh xb` and `sftp xb` can be used to login.
 
 
-## First login tasks
+## Transfer files
 
-If you have any files stored locally, you can transfer them using `sftp`.
+If you have any files stored locally, you can transfer them using `sftp`, `scp`, etc.
 
 ```sh
 	# connect to the pi, using the `xb` alias defined above
@@ -79,6 +78,8 @@ If you have any files stored locally, you can transfer them using `sftp`.
 	# you can also use ctlr+d to logout
 ```
 
+## First login tasks
+
 Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the `sudo` command to it.  To run many commands this way without typing `sudo` each time, first start a root shell with `sudo -s`; *remember to logout with 'exit' or ctrl+d when finished*.
 
 ```sh
@@ -87,7 +88,7 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 	
 	# xbian-config may run here, set it up as you like then exit
 
-	# Prevent future display of login message
+	# Prevent display of the login message
 	touch ~/.hushlogin
 
 	# Use a root shell for the following commands
@@ -146,20 +147,20 @@ Some standard packages that are usually excluded from the xbian distro, as they 
 ```
 
 
+## Installing iPlayer (and 4od, ITV, 5)
+
+Use `wget` to download the latest versions from the links below, then open the zip files directly from xbmc's addons page.
+
+<http://code.google.com/p/xbmc-iplayerv2/downloads/list>  
+<http://code.google.com/p/mossy-xbmc-repo/downloads/list>  
+<http://code.google.com/p/xbmc-itv-player/downloads/list>  
+
+
 <br />
 
 # Useful extras, not always used
 
 Stuff used infrequently, or currently being tested
-
-
-## Installing iPlayer (and 4od, ITV, 5)
-
-Download the latest versions from the links below, then open the zip files directly from xbmc's addons page.
-
-<http://code.google.com/p/xbmc-iplayerv2/downloads/list>  
-<http://code.google.com/p/mossy-xbmc-repo/downloads/list>  
-<http://code.google.com/p/xbmc-itv-player/downloads/list>  
 
 
 ## Useful packages
