@@ -226,6 +226,57 @@ Some useful commands and procedures
 Previously useful functionality or workarounds
 
 
+## Enable WiFi adapter
+
+XBian includes WiFi configuration as part of xbian-config.sh, these instructions are for a manual setup.
+
+*From the instructions [posted here](http://www.savagehomeautomation.com/raspi-airlink101)*
+
+Use ``lsusb`` to check that the adapter is recognised, and ``lsmod`` to check the kernel module (e.g. ``8192cu``) is loaded.
+
+```sh
+	sudo nano /etc/network/interfaces
+```
+
+Make sure the following lines exist, adding them as needed:
+
+```
+    auto wlan0
+    allow-hotplug wlan0
+    iface wlan0 inet manual
+    wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+```
+
+You may have the line ``wireless-power off`` in this file, which relates to power ***management*** only.  I commented it out as it resulted in errors logged during ``ifup`` and power management remained off without it.
+
+```sh
+	sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+```
+
+Add your network details using the following template:
+
+```
+    network={
+    ssid="YOUR-NETWORK-SSID"
+    proto=WPA2
+    key_mgmt=WPA-PSK
+    pairwise=CCMP TKIP
+    group=CCMP TKIP
+    psk="YOUR-WLAN-PASSWORD"
+    }
+```
+
+Reinitialise the adapter, and check it's connected.
+
+```sh
+	sudo ifdown wlan0
+	sudo ifup wlan0
+	# you may get some errors here, even when successful
+```
+
+Use ``iwconfig`` to view wifi adapter info and ``ifconfig`` for general network info.
+
+
 ## Fix ssh access using public key
  
 ```sh
@@ -269,6 +320,18 @@ Previously useful functionality or workarounds
 ## Install Shairport
 
 Instructions found [here](http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi) (alt site [here](http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/))
+
+A change in IOS 6 [requires Perl Net-SDP](http://jordanburgess.com/post/38986434391/raspberry-pi-airplay) module to installed.
+
+```sh
+	git clone https://github.com/njh/perl-net-sdp.git perl-net-sdp
+	cd perl-net-sdp
+	perl Build.PL
+	sudo ./Build
+	sudo ./Build test
+	sudo ./Build install
+	cd ..
+```
 
 ```sh
 	# do as root
