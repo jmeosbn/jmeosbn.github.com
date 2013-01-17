@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-17T21:51:21+00:00</updated>
+  <updated>2013-01-17T22:00:21+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -258,19 +258,19 @@ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key --&gt;
 	apt-get install psmisc usbutils omxplayer
 </code></p>
 
+<h2 id="installing-iplayer-and-4od-itv-5">Installing iPlayer (and 4od, ITV, 5)</h2>
+
+<p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc&rsquo;s addons page.</p>
+
+<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br />
+<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br />
+<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a>  </p>
+
 <p><br /></p>
 
 <h1 id="useful-extras-not-always-used">Useful extras, not always used</h1>
 
 <p>Stuff used infrequently, or currently being tested</p>
-
-<h2 id="installing-iplayer-and-4od-itv-5">Installing iPlayer (and 4od, ITV, 5)</h2>
-
-<p>Download the latest versions from the links below, then open the zip files directly from xbmc&rsquo;s addons page.</p>
-
-<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br />
-<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br />
-<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a>  </p>
 
 <h2 id="useful-packages">Useful packages</h2>
 
