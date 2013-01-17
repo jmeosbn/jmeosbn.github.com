@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-16T23:48:52+00:00</updated>
+  <updated>2013-01-17T00:00:58+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -309,8 +309,14 @@ chmod +x /usr/bin/xbian-config.sh ```
 	apt-get install psmisc usbutils omxplayer
 </code></p>
 
-<p><br />
-# Useful extras, not always used</p>
+<p><code>sh
+	apt-get install motion
+	cp /etc/default/motion /etc/motion/motion.conf
+</code></p>
+
+<p><br /></p>
+
+<h1 id="useful-extras-not-always-used">Useful extras, not always used</h1>
 
 <p>Stuff used infrequently, or currently being tested</p>
 
