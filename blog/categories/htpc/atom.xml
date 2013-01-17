@@ -4,7 +4,7 @@
   <title><![CDATA[Category: htpc | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/htpc/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-17T20:43:31+00:00</updated>
+  <updated>2013-01-17T21:12:23+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -18,11 +18,11 @@
     <link href="http://jmeosbn.github.com/blog/baking-the-pi/"/>
     <updated>2012-12-17T19:13:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/baking-the-pi</id>
-    <content type="html"><![CDATA[<p>Just a collection of notes for setting up a clean image on the Raspberry Pi.</p>
-
-<p>Notes are current for <a href="http://www.xbian.org">XBian</a> 1.0 Alpha 3.</p>
+    <content type="html"><![CDATA[<p>A collection of notes for setting up a clean image of <a href="http://www.xbian.org">XBian</a> (1.0 Alpha 4) on the Raspberry Pi.</p>
 
 <!-- more -->
+
+<p>Jump to <a href="#first-login-tasks">&ldquo;First login tasks&rdquo;</a> if you already have a terminal session on the Pi.</p>
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
 
@@ -33,7 +33,7 @@
 
 <h2 id="pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</h2>
 
-<p>Before setting up the Pi remotely, there are some things to do locally to ease logging in.  This will obviate the need to enter the password, or specify the full host name each time we access the Pi.</p>
+<p>Before setting up the Pi remotely, there are some things to do locally to ease logging in when using SSH.  This will obviate the need to enter the password, or specify the full host name each time we access the Pi.</p>
 
 <h3 id="copy-public-key-to-pi">Copy public key to Pi</h3>
 
@@ -84,7 +84,7 @@ ssh-copy-id xbian@xbian.local ```
 
 <pre><code># xbian-config may run here, set it up as you like then exit
 
-# Prevent future display of login message
+# Prevent display of the login message
 touch ~/.hushlogin
 
 # Use a root shell for the following commands
@@ -104,13 +104,11 @@ apt-get update &amp;&amp; apt-get upgrade ```
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
 
-<p>The Pi doesn&rsquo;t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.</p>
+<p>The Pi doesn&rsquo;t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
 
 <p><code>sh
 	apt-get install fake-hwclock
 </code></p>
-
-<p><em>note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.</em></p>
 
 <h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
