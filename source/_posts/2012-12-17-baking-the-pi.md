@@ -100,25 +100,17 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 	# moving it to /usr/bin to be executable
 	mv /etc/profile.d/xbian-config.sh /usr/bin
 	chmod +x /usr/bin/xbian-config.sh
-```
-	
-## Update packages
 
-```sh
+	# Update packages
 	apt-get update && apt-get upgrade
 ```	
 
-## Fake a hw clock based on recent timestamp
+## Fake a hardware clock
 
-The Pi doesn't have any hardware to track time while powered off, so it uses Internet time servers to set its clock during startup. If the Pi is likely to be without Internet access, you can use fake-hwclock to set the clock to the last known date and time.
+The Pi doesn't have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  *(note: previous distros required the [unabridged instructions](#fake-a-hardware-clock-unabridged).)*
 
 ```sh
-	touch /etc/init.d/hwclock.sh
-	/etc/init.d/ntp restart
-	apt-get install ntpdate fake-hwclock
-	ntpdate-debian
-	dpkg-reconfigure tzdata
-	sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
+	apt-get install fake-hwclock
 ```
 
 ## Generate new RSA host keys
@@ -358,4 +350,18 @@ A change in IOS 6 [requires Perl Net-SDP](http://jordanburgess.com/post/38986434
 	/etc/init.d/shairport start
 	# exit root
 	exit
+```
+
+
+## Fake a hardware clock (unabridged)
+
+More complicated instructions, as used on previous versions of XBian.
+
+```sh
+	touch /etc/init.d/hwclock.sh
+	/etc/init.d/ntp restart
+	apt-get install ntpdate fake-hwclock
+	ntpdate-debian
+	dpkg-reconfigure tzdata
+	sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
 ```
