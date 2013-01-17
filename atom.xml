@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-17T21:12:23+00:00</updated>
+  <updated>2013-01-17T21:41:37+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -277,9 +277,19 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
-</span><span class="line">ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">rm /etc/ssh/ssh_host_*
+</span><span class="line">/usr/sbin/dpkg-reconfigure openssh-server
+</span><span class="line">
+</span><span class="line"><span class="c"># remove old host key from clients using:</span>
+</span><span class="line"><span class="c"># ssh-keygen -R xbian.local</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+<!--
+	ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
+-->
 
 <h2 id="install-mono">Install Mono</h2>
 

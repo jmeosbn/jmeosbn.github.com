@@ -4,7 +4,7 @@
   <title><![CDATA[Category: htpc | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/htpc/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-17T21:12:23+00:00</updated>
+  <updated>2013-01-17T21:41:37+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -114,10 +114,15 @@ apt-get update &amp;&amp; apt-get upgrade ```
 
 <p>These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.</p>
 
-<p><code>sh
-	ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
-	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
-</code></p>
+<p>```sh
+	rm /etc/ssh/ssh_host_*
+	/usr/sbin/dpkg-reconfigure openssh-server</p>
+
+<pre><code># remove old host key from clients using:
+# ssh-keygen -R xbian.local ``` &lt;!--
+ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key --&gt;
+</code></pre>
 
 <h2 id="install-mono">Install Mono</h2>
 
