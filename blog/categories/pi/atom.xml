@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-17T00:08:12+00:00</updated>
+  <updated>2013-01-17T20:43:31+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -212,27 +212,21 @@ echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
 # Prevent autorun of xbian-config.sh,
 # moving it to /usr/bin to be executable
 mv /etc/profile.d/xbian-config.sh /usr/bin
-chmod +x /usr/bin/xbian-config.sh ```
+chmod +x /usr/bin/xbian-config.sh
+
+# Update packages
+apt-get update &amp;&amp; apt-get upgrade ```	
 </code></pre>
 
-<h2 id="update-packages">Update packages</h2>
+<h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
+
+<p>The Pi doesn&rsquo;t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.</p>
 
 <p><code>sh
-	apt-get update &amp;&amp; apt-get upgrade
-</code>	</p>
-
-<h2 id="fake-a-hw-clock-based-on-recent-timestamp">Fake a hw clock based on recent timestamp</h2>
-
-<p>The Pi doesn&rsquo;t have any hardware to track time while powered off, so it uses Internet time servers to set its clock during startup. If the Pi is likely to be without Internet access, you can use fake-hwclock to set the clock to the last known date and time.</p>
-
-<p><code>sh
-	touch /etc/init.d/hwclock.sh
-	/etc/init.d/ntp restart
-	apt-get install ntpdate fake-hwclock
-	ntpdate-debian
-	dpkg-reconfigure tzdata
-	sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
+	apt-get install fake-hwclock
 </code></p>
+
+<p><em>note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.</em></p>
 
 <h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
@@ -462,6 +456,19 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 	/etc/init.d/shairport start
 	# exit root
 	exit
+</code></p>
+
+<h2 id="fake-a-hardware-clock-unabridged">Fake a hardware clock (unabridged)</h2>
+
+<p>More complicated instructions, as used on previous versions of XBian.</p>
+
+<p><code>sh
+	touch /etc/init.d/hwclock.sh
+	/etc/init.d/ntp restart
+	apt-get install ntpdate fake-hwclock
+	ntpdate-debian
+	dpkg-reconfigure tzdata
+	sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
 </code></p>
 ]]></content>
   </entry>

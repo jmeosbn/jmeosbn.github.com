@@ -171,6 +171,9 @@
 <span class="line-number">16</span>
 <span class="line-number">17</span>
 <span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
 </span><span class="line">ssh xb
 </span><span class="line">
@@ -189,31 +192,20 @@
 </span><span class="line"><span class="c"># moving it to /usr/bin to be executable</span>
 </span><span class="line">mv /etc/profile.d/xbian-config.sh /usr/bin
 </span><span class="line">chmod +x /usr/bin/xbian-config.sh
+</span><span class="line">
+</span><span class="line"><span class="c"># Update packages</span>
+</span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="update-packages">Update packages</h2>
+<h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
+
+<p>The Pi doesn&rsquo;t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fake-hwclock
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="fake-a-hw-clock-based-on-recent-timestamp">Fake a hw clock based on recent timestamp</h2>
-
-<p>The Pi doesn&rsquo;t have any hardware to track time while powered off, so it uses Internet time servers to set its clock during startup. If the Pi is likely to be without Internet access, you can use fake-hwclock to set the clock to the last known date and time.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">touch /etc/init.d/hwclock.sh
-</span><span class="line">/etc/init.d/ntp restart
-</span><span class="line">apt-get install ntpdate fake-hwclock
-</span><span class="line">ntpdate-debian
-</span><span class="line">dpkg-reconfigure tzdata
-</span><span class="line">sed -i <span class="s1">&#39;s/^exit 0/ntpdate-debian\nexit 0/g&#39;</span> /etc/rc.local
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><em>note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.</em></p>
 
 <h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
@@ -503,6 +495,24 @@
 </span><span class="line">/etc/init.d/shairport start
 </span><span class="line"><span class="c"># exit root</span>
 </span><span class="line"><span class="nb">exit</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="fake-a-hardware-clock-unabridged">Fake a hardware clock (unabridged)</h2>
+
+<p>More complicated instructions, as used on previous versions of XBian.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">touch /etc/init.d/hwclock.sh
+</span><span class="line">/etc/init.d/ntp restart
+</span><span class="line">apt-get install ntpdate fake-hwclock
+</span><span class="line">ntpdate-debian
+</span><span class="line">dpkg-reconfigure tzdata
+</span><span class="line">sed -i <span class="s1">&#39;s/^exit 0/ntpdate-debian\nexit 0/g&#39;</span> /etc/rc.local
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 </div>
 
