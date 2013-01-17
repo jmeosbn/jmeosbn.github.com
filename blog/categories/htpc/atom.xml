@@ -4,7 +4,7 @@
   <title><![CDATA[Category: htpc | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/htpc/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-17T21:41:37+00:00</updated>
+  <updated>2013-01-17T21:51:21+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -63,9 +63,9 @@ ssh-copy-id xbian@xbian.local ```
 
 <p>With this alias defined, <code>ssh xb</code> and <code>sftp xb</code> can be used to login.</p>
 
-<h2 id="first-login-tasks">First login tasks</h2>
+<h2 id="transfer-files">Transfer files</h2>
 
-<p>If you have any files stored locally, you can transfer them using <code>sftp</code>.</p>
+<p>If you have any files stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.</p>
 
 <p>```sh
 	# connect to the pi, using the <code>xb</code> alias defined above
@@ -75,6 +75,8 @@ ssh-copy-id xbian@xbian.local ```
 
 <pre><code># you can also use ctlr+d to logout ```
 </code></pre>
+
+<h2 id="first-login-tasks">First login tasks</h2>
 
 <p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with &lsquo;exit&rsquo; or ctrl+d when finished</em>.</p>
 
