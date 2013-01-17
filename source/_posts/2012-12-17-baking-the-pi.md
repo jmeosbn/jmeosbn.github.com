@@ -118,9 +118,16 @@ The Pi doesn't have a real time clock, so it usually defaults to some point in t
 These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.
 
 ```sh
+	rm /etc/ssh/ssh_host_*
+	/usr/sbin/dpkg-reconfigure openssh-server
+
+	# remove old host key from clients using:
+	# ssh-keygen -R xbian.local
+```
+<!--
 	ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
-```
+-->
 
 ## Install Mono
 
