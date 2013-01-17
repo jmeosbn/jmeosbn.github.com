@@ -12,7 +12,7 @@ sidebar: false
 Once the [toolchain] is [installed], here's the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on [github].
 
 [toolchain]: https://github.com/jsnyder/arm-eabi-toolchain
-[installed]: /compiling-the-stellaris-toolchain/
+[installed]: /blog/compiling-the-stellaris-toolchain
 [github]: https://github.com/yuvadm/stellaris
 
 ``` sh
