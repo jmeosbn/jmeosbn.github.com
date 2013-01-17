@@ -1,27 +1,27 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://jmeosbn.github.com/resources-for-using-git/</loc>
+        <loc>http://jmeosbn.github.com/blog/resources-for-using-git/</loc>
         <lastmod>2012-12-24T15:55:45+00:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/compiling-the-stellaris-toolchain/</loc>
+        <loc>http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain/</loc>
         <lastmod>2013-01-11T21:50:41+00:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/testing-the-stellaris-toolchain/</loc>
+        <loc>http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain/</loc>
         <lastmod>2012-12-17T19:15:30+00:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/stellaris-virtual-serial-device/</loc>
+        <loc>http://jmeosbn.github.com/blog/stellaris-virtual-serial-device/</loc>
         <lastmod>2012-12-24T15:35:07+00:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/baking-the-pi/</loc>
+        <loc>http://jmeosbn.github.com/blog/baking-the-pi/</loc>
         <lastmod>2013-01-17T00:05:10+00:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/pi-box/</loc>
+        <loc>http://jmeosbn.github.com/blog/pi-box/</loc>
         <lastmod>2013-01-02T21:08:01+00:00</lastmod>
     </url>
     <url>
