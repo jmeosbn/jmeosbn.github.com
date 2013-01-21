@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-21T20:04:27+00:00</updated>
+  <updated>2013-01-21T20:08:35+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -207,7 +207,6 @@ touch ~/.hushlogin
 
 # Use a root shell for the following commands
 sudo -s
-touch ~/.hushlogin
 
 # Allow full use of sudo without needing password
 echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
@@ -231,7 +230,7 @@ apt-get update &amp;&amp; apt-get upgrade ```
 
 <h2 id="link-profile-settings">Link profile settings</h2>
 
-<p>Occasionally you&rsquo;ll want to use a root shell and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
+<p>Occasionally you&rsquo;ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
 
 <p>```sh
 	# change to the home folder you want to link from

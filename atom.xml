@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-21T20:04:27+00:00</updated>
+  <updated>2013-01-21T20:08:35+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -242,7 +242,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <span class="line-number">19</span>
 <span class="line-number">20</span>
 <span class="line-number">21</span>
-<span class="line-number">22</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
 </span><span class="line">ssh xb
 </span><span class="line">
@@ -253,7 +252,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">
 </span><span class="line"><span class="c"># Use a root shell for the following commands</span>
 </span><span class="line">sudo -s
-</span><span class="line">touch ~/.hushlogin
 </span><span class="line">
 </span><span class="line"><span class="c"># Allow full use of sudo without needing password</span>
 </span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;%sudo  ALL=(ALL) NOPASSWD: ALL&#39;</span> &gt;&gt; /etc/sudoers
@@ -277,7 +275,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="link-profile-settings">Link profile settings</h2>
 
-<p>Occasionally you&rsquo;ll want to use a root shell and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
+<p>Occasionally you&rsquo;ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
