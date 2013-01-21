@@ -9,9 +9,9 @@ sidebar: false
 
 ---
 
-Here's some basic resources for getting started pushing code to github.
+Here's some basic resources to get started pushing code to github.
 
-"Code" doesn't just mean computer source code; git is useful for tracking anything that can be represented as plain text, e.g. changes to [German Law](http://www.wired.com/wiredenterprise/2012/08/bundestag/).
+"Code" doesn't just mean computer source code; git is useful for tracking changes to anything that can be represented as plain text, e.g. [German Law](http://www.wired.com/wiredenterprise/2012/08/bundestag/).
 
 The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named ```.git```.
 

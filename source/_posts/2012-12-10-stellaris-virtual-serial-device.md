@@ -9,7 +9,7 @@ categories: [stellaris, arm]
 
 ---
 
-The Stellaris [Launchpad] is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, e.g. to interact with program execution or log it's output.
+The Stellaris [Launchpad] is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it's output.
 
 [Launchpad]: http://www.ti.com/ww/en/launchpad/stellaris_head.html
 
