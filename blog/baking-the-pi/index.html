@@ -207,28 +207,6 @@
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fake-hwclock
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="link-profile-settings">Link profile settings</h2>
-
-<p>Occasionally you&rsquo;ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># change to the home folder you want to link from</span>
-</span><span class="line"><span class="nb">cd</span> ~xbian
-</span><span class="line">
-</span><span class="line"><span class="c"># define a list of dot files to link</span>
-</span><span class="line"><span class="nv">dotfiles</span><span class="o">=</span><span class="s2">&quot;.profile .bashrc .bash_aliases .bash_logout .nanorc .toprc&quot;</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># link each existing file into the root user&#39;s home folder</span>
-</span><span class="line"><span class="k">for </span>i in <span class="nv">$dotfiles</span>; <span class="k">do</span> <span class="o">[</span> -f <span class="nv">$i</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> sudo ln -sfv ~+/<span class="nv">$i</span> ~root/; <span class="k">done</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
 <h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
 <p>These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.</p>
