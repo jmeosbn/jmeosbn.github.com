@@ -4,7 +4,7 @@
   <title><![CDATA[Category: stellaris | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/stellaris/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-21T02:34:36+00:00</updated>
+  <updated>2013-01-21T02:44:30+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jmeosbn.github.com/blog/stellaris-virtual-serial-device/"/>
     <updated>2012-12-10T02:48:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/stellaris-virtual-serial-device</id>
-    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  With this serial connection, data can be sent in either direction, to interact with program execution or log it&rsquo;s output.</p>
+    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it&rsquo;s output.</p>
 
 <h2 id="device-permissions">device permissions</h2>
 
