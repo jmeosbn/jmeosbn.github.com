@@ -27,6 +27,21 @@ $base3: #ffffff;                  // background - white
 $base2: lighten($base3, 2);       // border
 */
 
+/* code blocks theme */
+$solarized: dark;
+
+/* solarized dark */
+$base03:  darken(#003366, 4);     // background - dark blue
+$base02: lighten($base03, 2);     // border / gist footer
+$base01: lighten(#586e75, 20);    // comments
+$base1:  lighten(#93a1a1, 20);    // text
+
+/* solarized light
+$base3: #ffffff;                  // background - white
+//$base3: #f8f8ff;                // background - blueish white
+$base2: lighten($base3, 2);       // border
+*/
+
 /* image used for background */
 $noise-bg: top left !default;
 /* $noise-bg: image-url('noise.png') top left !default; */
