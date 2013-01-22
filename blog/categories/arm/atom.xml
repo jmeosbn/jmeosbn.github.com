@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-22T22:13:26+00:00</updated>
+  <updated>2013-01-22T23:26:35+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -138,7 +138,7 @@ fi ```
 
 <!-- more -->
 
-<p>Jump to <a href="#first-login-tasks">&ldquo;First login tasks&rdquo;</a> if you already have a terminal session on the Pi.</p>
+<p>Jump to <a href="#first-login-tasks">First login tasks</a> if you already have a terminal session on the Pi.</p>
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
 
