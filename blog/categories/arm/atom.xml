@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-22T01:50:56+00:00</updated>
+  <updated>2013-01-22T02:04:06+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -228,7 +228,7 @@ apt-get update &amp;&amp; apt-get upgrade ```
 	apt-get install fake-hwclock
 </code></p>
 
-<h2 id="link-profile-settings">Link profile settings</h2>
+<h2 id="link-profile-settings-to-root-user">Link profile settings to root user</h2>
 
 <p>Occasionally you&rsquo;ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
 
