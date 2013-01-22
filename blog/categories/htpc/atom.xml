@@ -4,7 +4,7 @@
   <title><![CDATA[Category: htpc | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/htpc/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-22T02:05:38+00:00</updated>
+  <updated>2013-01-22T02:48:59+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jmeosbn.github.com/blog/baking-the-pi/"/>
     <updated>2012-12-17T19:13:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/baking-the-pi</id>
-    <content type="html"><![CDATA[<p>A collection of notes for setting up a clean image of <a href="http://www.xbian.org">XBian</a> (1.0 Alpha 4) on the Raspberry Pi.</p>
+    <content type="html"><![CDATA[<p>A collection of notes for <strong>setting up</strong> a <em>clean image</em> of <a href="http://www.xbian.org">XBian</a> (1.0 Alpha 4) on the <strong><em>Raspberry Pi</em></strong>.</p>
 
 <!-- more -->
 
