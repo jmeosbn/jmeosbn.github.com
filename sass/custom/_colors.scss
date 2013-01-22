@@ -2,23 +2,30 @@
 // To give it a try, uncomment some of the lines below rebuild your blog, and see how it works.
 // If you need a handy color picker try http://hslpicker.com
 
-$page-bg: #555555;
-$header-bg: black;
+/* main background colours */
+$header-bg:     black;
+$sidebar-bg:  #f2f2f2;
+$page-bg:     #555555;
+$main-bg:     #f8f8f8;
 
-//$subtitle-color: lighten($header-bg, 58);
-//$nav-bg: desaturate(lighten(#8fc17a, 18), 5);
+/* header title colours */
+$title-color: #f2f2f2;
+$subtitle-color: #aaa;
 
-//$nav-color: darken($nav-bg, 38);
-//$nav-bg-front: image-url('noise.png');
-//$nav-bg-back: linear-gradient(lighten($nav-bg, 8), $nav-bg, darken($nav-bg, 11));
+/* code blocks theme */
+$solarized: dark;
 
-//$sidebar-bg: desaturate(#eceff5, 8);
-//$footer-bg: #ccc !default;
+/* solarized dark */
+$base03:  darken(#003366, 4);     // background - dark blue
+$base02: lighten($base03, 2);     // border / gist footer
+$base01: lighten(#586e75, 20);    // comments
+$base1:  lighten(#93a1a1, 20);    // text
 
-//$footer-bg-front: image-url('noise.png');
-//$footer-bg-back: linear-gradient(lighten($footer-bg, 8), $footer-bg, darken($footer-bg, 11));
-//$footer-link-color: darken($footer-bg, 38);
-
+/* solarized light
+$base3: #ffffff;                  // background - white
+//$base3: #f8f8ff;                // background - blueish white
+$base2: lighten($base3, 2);       // border
+*/
 
 /* image used for background */
 $noise-bg: top left !default;
@@ -37,6 +44,23 @@ $link-color-visited: $link-color;
 $sidebar-link-color: #555555;
 /*$sidebar-link-color-hover: #555555;*/
 
+
+/*
+   Custom Examples
+*/
+//$subtitle-color: lighten($header-bg, 58);
+//$nav-bg: desaturate(lighten(#8fc17a, 18), 5);
+
+//$nav-color: darken($nav-bg, 38);
+//$nav-bg-front: image-url('noise.png');
+//$nav-bg-back: linear-gradient(lighten($nav-bg, 8), $nav-bg, darken($nav-bg, 11));
+
+//$sidebar-bg: desaturate(#eceff5, 8);
+//$footer-bg: #ccc !default;
+
+//$footer-bg-front: image-url('noise.png');
+//$footer-bg-back: linear-gradient(lighten($footer-bg, 8), $footer-bg, darken($footer-bg, 11));
+//$footer-link-color: darken($footer-bg, 38);
 
 /* To use the light Solarized highlighting theme uncomment the following line */
 //$solarized: light;
