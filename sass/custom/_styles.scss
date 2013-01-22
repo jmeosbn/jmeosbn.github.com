@@ -30,7 +30,16 @@ div.data > .highlight { width: 100%; }
 .gist-meta { padding-bottom: .3em !important; }
 div.data > .highlight { margin-bottom: 1px; }
 
+
 /* ----- Content ----- */
+
+/* Increase size of body text */
+body {
+  font-size: 1.3em !important;
+}
+
+/* Increase size of code text */
+.mono { font-size: 0.85em !important; }
 
 /* set all article h1 titles */
 article h1 {
