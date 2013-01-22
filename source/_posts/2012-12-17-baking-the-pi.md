@@ -114,6 +114,22 @@ The Pi doesn't have a real time clock, so it usually defaults to some point in t
 	apt-get install fake-hwclock
 ```
 
+## Link settings to root profile
+
+Occasionally you'll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.
+
+```sh
+	# change to the home folder you want to link from
+	cd ~xbian
+
+	# define a list of dot files to link
+	dotfiles=".profile .bashrc .bash_aliases .bash_logout .nanorc .toprc"
+
+	# link each existing file into the root user's home folder
+	for i in $dotfiles; do [ -f $i ] && sudo ln -sfv ~+/$i ~root/; done
+```
+
+
 ## Generate new RSA host keys
 
 These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.
