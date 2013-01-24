@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-22T23:31:17+00:00</updated>
+  <updated>2013-01-24T02:41:47+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[To Blog]]></title>
+    <link href="http://jmeosbn.github.com/blog/to-blog/"/>
+    <updated>2020-01-01T00:00:00+00:00</updated>
+    <id>http://jmeosbn.github.com/blog/to-blog</id>
+    <content type="html"><![CDATA[<p>Gist of script for stellaris examples</p>
+
+<p>Make octopress pages for cydia apps</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Dropbox on Pi]]></title>
@@ -159,9 +170,11 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</h2>
 
-<p>Before setting up the Pi remotely, there are some things to do locally to ease logging in when using SSH.  This will obviate the need to enter the password, or specify the full host name each time we access the Pi.</p>
+<p>Before setting up the Pi remotely, there are some things to do locally to ease logging in when using SSH.  This will obviate the need to enter a password, or specify the full host name each time we access the Pi.</p>
 
 <h3 id="copy-public-key-to-pi">Copy public key to Pi</h3>
+
+<p>If generating a new key pair, accept the default key location as suggested by <code>ssh-keygen</code> below.  While a passphrase is optional, anyone can use a copy of the unencrypted private key to authenticate with your identity.  Many operating systems are preconfigured to use <code>ssh-agent</code> or a similar utility, to avoid having to enter a passphrase multiple times (if at all).</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -171,17 +184,17 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <span class="line-number">6</span>
 <span class="line-number">7</span>
 <span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># remove any old, conflicting host entries</span>
-</span><span class="line">ssh-keygen -R xbian.local
-</span><span class="line">
-</span><span class="line"><span class="c"># generate key pair if none already exists</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># generate a key pair if none already exists</span>
 </span><span class="line"><span class="nb">test</span> -f ~/.ssh/id_rsa.pub <span class="o">||</span> ssh-keygen
 </span><span class="line">
-</span><span class="line"><span class="c"># password required until key installed</span>
+</span><span class="line"><span class="c"># remove any old, conflicting host entries</span>
+</span><span class="line">ssh-keygen -R xbian.local
+</span><span class="line">
+</span><span class="line"><span class="c"># password is required until the key is installed</span>
 </span><span class="line">ssh-copy-id xbian@xbian.local
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>The easiest way to append a key to the remote user&rsquo;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if you don&rsquo;t have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
+<p>The easiest way to append a key to the remote user&rsquo;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn&rsquo;t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
 <h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
