@@ -14,7 +14,7 @@ A collection of notes for setting up a clean image of [XBian](http://www.xbian.o
 
 <!-- more -->
 
-Jump to ["First login tasks"](#first-login-tasks) if you already have a terminal session on the Pi.
+Jump to [First login tasks](#first-login-tasks) if you already have a terminal session on the Pi.
 
 [^Todo]: Install fsck.ntfs (used to fix unclean unmount)
 
@@ -28,23 +28,25 @@ Jump to ["First login tasks"](#first-login-tasks) if you already have a terminal
 
 ## Pre-setup, on PC, laptop, etc.
 
-Before setting up the Pi remotely, there are some things to do locally to ease logging in when using SSH.  This will obviate the need to enter the password, or specify the full host name each time we access the Pi.
-
+Before setting up the Pi remotely, there are some things to do locally to ease logging in when using SSH.  This will obviate the need to enter a password, or specify the full host name each time we access the Pi.
 
 ### Copy public key to Pi
 
+If generating a new key pair, accept the default key location as suggested by ``ssh-keygen`` below.  While a passphrase is optional, anyone can use a copy of the unencrypted private key to authenticate with your identity.  Many operating systems are preconfigured to use ``ssh-agent`` or a similar utility, to avoid having to enter a passphrase multiple times (if at all).
+
+
 ```sh
+	# generate a key pair if none already exists
+	test -f ~/.ssh/id_rsa.pub || ssh-keygen
+
 	# remove any old, conflicting host entries
 	ssh-keygen -R xbian.local
 	
-	# generate key pair if none already exists
-	test -f ~/.ssh/id_rsa.pub || ssh-keygen
-
-	# password required until key installed
+	# password is required until the key is installed
 	ssh-copy-id xbian@xbian.local
 ```
 
-The easiest way to append a key to the remote user's `~/.ssh/authorized_keys` file is to use `ssh-copy-id` as shown above.  Download [ssh-copy-id] from source if you don't have it ([installation instructions]), this [alternative method] should also work in most situations.
+The easiest way to append a key to the remote user's `~/.ssh/authorized_keys` file is to use `ssh-copy-id` as shown above.  Download [ssh-copy-id] from source if your system doesn't already have it ([installation instructions]), this [alternative method] should also work in most situations.
 
 [ssh-copy-id]: http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id
 [installation instructions]: http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-
@@ -53,7 +55,7 @@ The easiest way to append a key to the remote user's `~/.ssh/authorized_keys` fi
 	
 ### Add an alias to .ssh/config
 
-Locally define the alias `xb` to be used in place of `xbian@xbian.local`.
+Locally define the alias `xb`, to be used in place of `xbian@xbian.local` with commands such as `ssh xb` and `sftp xb`.  Enter the text below as a single command, or manually paste the quoted text into ``~/.ssh/config`` using ``nano`` or similar.
 
 ```sh
 	echo '
@@ -62,12 +64,10 @@ Locally define the alias `xb` to be used in place of `xbian@xbian.local`.
 	  Hostname  xbian.local' >> ~/.ssh/config
 ```
 
-With this alias defined, `ssh xb` and `sftp xb` can be used to login.
-
 
 ## Transfer files
 
-If you have any files stored locally, you can transfer them using `sftp`, `scp`, etc.
+If you have previous files from your Pi stored locally, you can transfer them using `sftp`, `scp`, etc.  For easily transferring arbitrary files , a GUI sftp client is recommended.
 
 ```sh
 	# connect to the pi, using the `xb` alias defined above
