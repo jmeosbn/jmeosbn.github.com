@@ -119,7 +119,7 @@
 
 <h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
-<p>Locally define the alias <code>xb</code> to be used in place of <code>xbian@xbian.local</code>.</p>
+<p>Locally define the alias <code>xb</code>, to be used in place of <code>xbian@xbian.local</code> with commands such as <code>ssh xb</code> and <code>sftp xb</code>.  Enter the text below as a single command, or manually paste the quoted text into <code>~/.ssh/config</code> using <code>nano</code> or similar.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -130,8 +130,6 @@
 </span><span class="line"><span class="s1">  User  xbian</span>
 </span><span class="line"><span class="s1">  Hostname  xbian.local&#39;</span> &gt;&gt; ~/.ssh/config
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>With this alias defined, <code>ssh xb</code> and <code>sftp xb</code> can be used to login.</p>
 
 <h2 id="transfer-files">Transfer files</h2>
 

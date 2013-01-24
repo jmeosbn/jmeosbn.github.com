@@ -4,7 +4,7 @@
   <title><![CDATA[Category: htpc | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/htpc/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-24T02:43:47+00:00</updated>
+  <updated>2013-01-24T03:06:49+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -54,7 +54,7 @@ ssh-copy-id xbian@xbian.local ```
 
 <h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
-<p>Locally define the alias <code>xb</code> to be used in place of <code>xbian@xbian.local</code>.</p>
+<p>Locally define the alias <code>xb</code>, to be used in place of <code>xbian@xbian.local</code> with commands such as <code>ssh xb</code> and <code>sftp xb</code>.  Enter the text below as a single command, or manually paste the quoted text into <code>~/.ssh/config</code> using <code>nano</code> or similar.</p>
 
 <p><code>sh
 	echo '
@@ -62,8 +62,6 @@ ssh-copy-id xbian@xbian.local ```
 	  User  xbian
 	  Hostname  xbian.local' &gt;&gt; ~/.ssh/config
 </code></p>
-
-<p>With this alias defined, <code>ssh xb</code> and <code>sftp xb</code> can be used to login.</p>
 
 <h2 id="transfer-files">Transfer files</h2>
 
