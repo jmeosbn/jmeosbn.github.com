@@ -174,6 +174,9 @@
 <span class="line-number">19</span>
 <span class="line-number">20</span>
 <span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
 </span><span class="line">ssh xb
 </span><span class="line">
@@ -193,6 +196,9 @@
 </span><span class="line">mv /etc/profile.d/xbian-config.sh /usr/bin
 </span><span class="line">chmod +x /usr/bin/xbian-config.sh
 </span><span class="line">
+</span><span class="line"><span class="c"># Note: No longer works for xbian &gt;= 1.0b4:</span>
+</span><span class="line"><span class="c"># 		To use menu, run &#39;sudo xbian-config&#39;</span>
+</span><span class="line">
 </span><span class="line"><span class="c"># Update packages</span>
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
 </span></code></pre></td></tr></table></div></figure></notextile></div>
@@ -204,6 +210,10 @@
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fake-hwclock
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="configure-wifi-adapter">Configure WiFi adapter</h2>
+
+<p>XBian includes simple menu driven WiFi configuration as part of xbian-config.  See the <a href="#manually-configure-wifi-adapter">manual instructions</a> for connecting to multiple networks.</p>
 
 <h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
 
@@ -339,11 +349,9 @@
 
 <p>Previously useful functionality or workarounds</p>
 
-<h2 id="enable-wifi-adapter">Enable WiFi adapter</h2>
+<h2 id="manually-configure-wifi-adapter">Manually configure WiFi adapter</h2>
 
-<p>XBian includes WiFi configuration as part of xbian-config.sh, these instructions are for a manual setup.</p>
-
-<p><em>From the instructions <a href="http://www.savagehomeautomation.com/raspi-airlink101">posted here</a></em></p>
+<p><a href="http://www.savagehomeautomation.com/raspi-airlink101">Instructions adapted from here</a>.</p>
 
 <p>Use <code>lsusb</code> to check that the adapter is recognised, and <code>lsmod</code> to check the kernel module (e.g. <code>8192cu</code>) is loaded.</p>
 
@@ -356,14 +364,12 @@
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">auto wlan0
-</span><span class="line">allow-hotplug wlan0
+</pre></td><td class="code"><pre><code class="sh"><span class="line">allow-hotplug wlan0
 </span><span class="line">iface wlan0 inet manual
 </span><span class="line">wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
+<p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I&rsquo;ve commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
@@ -400,6 +406,24 @@
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>Use <code>iwconfig</code> to view wifi adapter info and <code>ifconfig</code> for general network info.</p>
+
+<h2 id="fake-a-hardware-clock-unabridged">Fake a hardware clock (unabridged)</h2>
+
+<p>More complicated instructions, as used on previous versions of XBian.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">touch /etc/init.d/hwclock.sh
+</span><span class="line">/etc/init.d/ntp restart
+</span><span class="line">apt-get install ntpdate fake-hwclock
+</span><span class="line">ntpdate-debian
+</span><span class="line">dpkg-reconfigure tzdata
+</span><span class="line">sed -i <span class="s1">&#39;s/^exit 0/ntpdate-debian\nexit 0/g&#39;</span> /etc/rc.local
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="fix-ssh-access-using-public-key">Fix ssh access using public key</h2>
 
@@ -527,23 +551,6 @@
 </span><span class="line"><span class="nb">exit</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="fake-a-hardware-clock-unabridged">Fake a hardware clock (unabridged)</h2>
-
-<p>More complicated instructions, as used on previous versions of XBian.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">touch /etc/init.d/hwclock.sh
-</span><span class="line">/etc/init.d/ntp restart
-</span><span class="line">apt-get install ntpdate fake-hwclock
-</span><span class="line">ntpdate-debian
-</span><span class="line">dpkg-reconfigure tzdata
-</span><span class="line">sed -i <span class="s1">&#39;s/^exit 0/ntpdate-debian\nexit 0/g&#39;</span> /etc/rc.local
-</span></code></pre></td></tr></table></div></figure></notextile></div>
 </div>
 
 
