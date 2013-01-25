@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-25T02:04:24+00:00</updated>
+  <updated>2013-01-25T02:12:37+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -241,10 +241,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <span class="line-number">18</span>
 <span class="line-number">19</span>
 <span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
 </span><span class="line">ssh xb
 </span><span class="line">
@@ -259,13 +255,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="c"># Allow full use of sudo without needing password</span>
 </span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;%sudo  ALL=(ALL) NOPASSWD: ALL&#39;</span> &gt;&gt; /etc/sudoers
 </span><span class="line">
-</span><span class="line"><span class="c"># Prevent autorun of xbian-config.sh,</span>
-</span><span class="line"><span class="c"># moving it to /usr/bin to be executable</span>
-</span><span class="line">mv /etc/profile.d/xbian-config.sh /usr/bin
-</span><span class="line">chmod +x /usr/bin/xbian-config.sh
-</span><span class="line">
-</span><span class="line"><span class="c"># Note: No longer works for xbian &gt;= 1.0b4:</span>
-</span><span class="line"><span class="c"># 		To use menu, run &#39;sudo xbian-config&#39;</span>
+</span><span class="line"><span class="c"># Prevent autorun of configuration menu,</span>
+</span><span class="line"><span class="c"># use &#39;sudo xbian-config&#39; as required</span>
+</span><span class="line">rm /etc/profile.d/xbian-config.sh
 </span><span class="line">
 </span><span class="line"><span class="c"># Update packages</span>
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
