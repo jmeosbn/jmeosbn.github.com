@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tools | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/tools/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-25T19:08:47+00:00</updated>
+  <updated>2013-01-25T19:10:14+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -136,6 +136,8 @@ fi ```
     <id>http://jmeosbn.github.com/blog/resources-for-using-git</id>
     <content type="html"><![CDATA[<p>Here&rsquo;s some basic resources for getting started pushing code to github.</p>
 
+<!-- more -->
+
 <p>&ldquo;Code&rdquo; doesn&rsquo;t just mean computer source code; git is useful for tracking changes to anything that can be represented as plain text, e.g. <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
 
 <p>The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named <code>.git</code>.</p>
@@ -145,8 +147,6 @@ $ cd my-project
 $ git init
 Initialized empty Git repository in my-project/.git/
 </code></p>
-
-<!-- more -->
 
 <p>Add any new or changed files you want to track, then commit those changes to the repo.</p>
 
