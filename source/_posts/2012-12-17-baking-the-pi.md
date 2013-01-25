@@ -14,7 +14,7 @@ A collection of notes for setting up a clean image of [XBian](http://www.xbian.o
 
 <!-- more -->
 
-Jump to [First login tasks](#first-login-tasks) if you already have a terminal session on the Pi.
+Jump to [first login tasks](#first-login-tasks) if you have already set up terminal access to the Pi.
 
 [^Todo]: Install fsck.ntfs (used to fix unclean unmount)
 
@@ -41,7 +41,7 @@ If generating a new key pair, accept the default key location as suggested by ``
 
 	# remove any old, conflicting host entries
 	ssh-keygen -R xbian.local
-	
+
 	# password is required until the key is installed
 	ssh-copy-id xbian@xbian.local
 ```
@@ -51,8 +51,8 @@ The easiest way to append a key to the remote user's `~/.ssh/authorized_keys` fi
 [ssh-copy-id]: http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id
 [installation instructions]: http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-
 [alternative method]: http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id
-	
-	
+
+
 ### Add an alias to .ssh/config
 
 Locally define the alias `xb`, to be used in place of `xbian@xbian.local` with commands such as `ssh xb` and `sftp xb`.  Enter the text below as a single command, or manually paste the quoted text into ``~/.ssh/config`` using ``nano`` or similar.
@@ -67,14 +67,14 @@ Locally define the alias `xb`, to be used in place of `xbian@xbian.local` with c
 
 ## Transfer files
 
-If you have previous files from your Pi stored locally, you can transfer them using `sftp`, `scp`, etc.  For easily transferring arbitrary files , a GUI sftp client is recommended.
+If you have previous files from your Pi stored locally, you can transfer them using `sftp`, `scp`, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.
 
 ```sh
 	# connect to the pi, using the `xb` alias defined above
 	sftp xb
-	sftp> put .profile
+	sftp> put .bash_aliases
 	sftp> exit
-	
+
 	# you can also use ctlr+d to logout
 ```
 
@@ -85,16 +85,17 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 ```sh
 	# Login to the pi, using the `xb` alias
 	ssh xb
-	
+
 	# xbian-config may run here, set it up as you like then exit
 
-	# Prevent display of the login message
+	# Disable the login message
 	touch ~/.hushlogin
 
 	# Use a root shell for the following commands
 	sudo -s
 
 	# Allow full use of sudo without needing password
+	# note: XBian 1.0b4 made this much less essential
 	echo '%sudo  ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 	
 	# Prevent autorun of configuration menu,
@@ -103,7 +104,10 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 
 	# Update packages
 	apt-get update && apt-get upgrade
-```	
+
+	# Install some utilities
+	apt-get install p7zip zip
+```
 
 ## Fake a hardware clock
 
@@ -157,22 +161,13 @@ Basic mono setup to run and compile command line tools.
 	apt-get install mono-devel mono-gmcs mono-csharp-shell
 ```
 
-## Packages from Raspbian
-
-Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.
-
-```sh
-	apt-get install psmisc usbutils omxplayer
-```
-
-
 ## Installing iPlayer (and 4od, ITV, 5)
 
 Use `wget` to download the latest versions from the links below, then open the zip files directly from xbmc's addons page.
 
-<http://code.google.com/p/xbmc-iplayerv2/downloads/list>  
-<http://code.google.com/p/mossy-xbmc-repo/downloads/list>  
-<http://code.google.com/p/xbmc-itv-player/downloads/list>  
+<http://code.google.com/p/xbmc-iplayerv2/downloads/list>
+<http://code.google.com/p/mossy-xbmc-repo/downloads/list>
+<http://code.google.com/p/xbmc-itv-player/downloads/list>
 
 
 <br />
@@ -182,7 +177,18 @@ Use `wget` to download the latest versions from the links below, then open the z
 Stuff used infrequently, or currently being tested
 
 
-## Useful packages
+## Packages from Raspbian
+
+Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.
+
+```sh
+	apt-get install omxplayer
+
+	# included on xbian >= 1.0b
+	apt-get install psmisc usbutils
+```
+
+## Other useful packages
 
 ```sh
 	apt-get install fs2resize exfat-fuse
@@ -255,7 +261,7 @@ Use ``lsusb`` to check that the adapter is recognised, and ``lsmod`` to check th
 	sudo nano /etc/network/interfaces
 ```
 
-Make sure the following lines exist, adding them as needed:
+Make sure the following lines exist in the interfaces file, adding them as needed:
 
 ```
     allow-hotplug wlan0
@@ -269,16 +275,16 @@ You may have the line ``wireless-power off`` in this file, which relates to powe
 	sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
-Add your network details using the following template:
+Add your network details to wpa_supplicant.conf, using the following template:
 
 ```
     network={
-    ssid="YOUR-NETWORK-SSID"
-    proto=WPA2
-    key_mgmt=WPA-PSK
-    pairwise=CCMP TKIP
-    group=CCMP TKIP
-    psk="YOUR-WLAN-PASSWORD"
+      ssid="YOUR-NETWORK-SSID"
+      proto=WPA2
+      key_mgmt=WPA-PSK
+      pairwise=CCMP TKIP
+      group=CCMP TKIP
+      psk="YOUR-WLAN-PASSWORD"
     }
 ```
 
@@ -306,18 +312,18 @@ More complicated instructions, as used on previous versions of XBian.
 ```
 
 ## Fix ssh access using public key
- 
+
 ```sh
 	# must be owned by root
 	chown root: ~ ~/.ssh
 	# no write for others
 	chmod a=rx,u+w  ~
-	
+
 	# no access for others
 	chmod -R go-rwx ~/.ssh
 	# public key can be readable
 	chmod a+r ~/.ssh/id_rsa.pub
-``` 
+```
 
 ## Download OpenSSH sftp server
 
