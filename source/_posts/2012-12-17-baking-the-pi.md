@@ -97,10 +97,9 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 	# Allow full use of sudo without needing password
 	echo '%sudo  ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 	
-	# Prevent autorun of xbian-config.sh,
-	# moving it to /usr/bin to be executable
-	mv /etc/profile.d/xbian-config.sh /usr/bin
-	chmod +x /usr/bin/xbian-config.sh
+	# Prevent autorun of configuration menu,
+	# use 'sudo xbian-config' as required
+	rm /etc/profile.d/xbian-config.sh
 
 	# Update packages
 	apt-get update && apt-get upgrade
