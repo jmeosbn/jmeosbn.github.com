@@ -114,6 +114,10 @@ The Pi doesn't have a real time clock, so it usually defaults to some point in t
 	apt-get install fake-hwclock
 ```
 
+## Configure WiFi adapter
+
+XBian includes simple menu driven WiFi configuration as part of xbian-config.  See the [manual instructions](#manually-configure-wifi-adapter) for connecting to multiple networks.
+
 ## Link settings to root profile
 
 Occasionally you'll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.
@@ -242,11 +246,9 @@ Some useful commands and procedures
 Previously useful functionality or workarounds
 
 
-## Enable WiFi adapter
+## Manually configure WiFi adapter
 
-XBian includes WiFi configuration as part of xbian-config.sh, these instructions are for a manual setup.
-
-*From the instructions [posted here](http://www.savagehomeautomation.com/raspi-airlink101)*
+[Instructions adapted from here](http://www.savagehomeautomation.com/raspi-airlink101).
 
 Use ``lsusb`` to check that the adapter is recognised, and ``lsmod`` to check the kernel module (e.g. ``8192cu``) is loaded.
 
@@ -257,13 +259,12 @@ Use ``lsusb`` to check that the adapter is recognised, and ``lsmod`` to check th
 Make sure the following lines exist, adding them as needed:
 
 ```
-    auto wlan0
     allow-hotplug wlan0
     iface wlan0 inet manual
     wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
-You may have the line ``wireless-power off`` in this file, which relates to power ***management*** only.  I commented it out as it resulted in errors logged during ``ifup`` and power management remained off without it.
+You may have the line ``wireless-power off`` in this file, which relates to power ***management*** only.  I've commented it out as it resulted in errors logged during ``ifup`` and power management remained off without it.
 
 ```sh
 	sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
@@ -292,6 +293,18 @@ Reinitialise the adapter, and check it's connected.
 
 Use ``iwconfig`` to view wifi adapter info and ``ifconfig`` for general network info.
 
+## Fake a hardware clock (unabridged)
+
+More complicated instructions, as used on previous versions of XBian.
+
+```sh
+	touch /etc/init.d/hwclock.sh
+	/etc/init.d/ntp restart
+	apt-get install ntpdate fake-hwclock
+	ntpdate-debian
+	dpkg-reconfigure tzdata
+	sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
+```
 
 ## Fix ssh access using public key
  
@@ -376,16 +389,3 @@ A change in IOS 6 [requires Perl Net-SDP](http://jordanburgess.com/post/38986434
 	exit
 ```
 
-
-## Fake a hardware clock (unabridged)
-
-More complicated instructions, as used on previous versions of XBian.
-
-```sh
-	touch /etc/init.d/hwclock.sh
-	/etc/init.d/ntp restart
-	apt-get install ntpdate fake-hwclock
-	ntpdate-debian
-	dpkg-reconfigure tzdata
-	sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
-```
