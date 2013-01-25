@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-25T02:55:55+00:00</updated>
+  <updated>2013-01-25T19:08:47+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -21,6 +21,8 @@
     <content type="html"><![CDATA[<p>There&rsquo;s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it&rsquo;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
 
 <p>Dropbox does make various SDKs available though, which enables a ruby or python script to be used instead of the official client.</p>
+
+<!-- more -->
 
 <h1 id="a-ready-made-solution">a ready made solution..</h1>
 
@@ -80,8 +82,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>There&rsquo;s more proper ways of doing this, but this seemed the simplest.</p>
-
-<!-- more -->
 
 <h2 id="todo">todo</h2>
 
@@ -201,7 +201,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="transfer-files">Transfer files</h2>
 
-<p>If you have previous files from your Pi stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.  For easily transferring arbitrary files , a GUI sftp client is recommended.</p>
+<p>If you have previous files from your Pi stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -241,6 +241,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <span class="line-number">18</span>
 <span class="line-number">19</span>
 <span class="line-number">20</span>
+<span class="line-number">21</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
 </span><span class="line">ssh xb
 </span><span class="line">
@@ -253,6 +254,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">sudo -s
 </span><span class="line">
 </span><span class="line"><span class="c"># Allow full use of sudo without needing password</span>
+</span><span class="line"><span class="c"># note: XBian 1.0b4 made this much less essential</span>
 </span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;%sudo  ALL=(ALL) NOPASSWD: ALL&#39;</span> &gt;&gt; /etc/sudoers
 </span><span class="line">
 </span><span class="line"><span class="c"># Prevent autorun of configuration menu,</span>
@@ -261,6 +263,14 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">
 </span><span class="line"><span class="c"># Update packages</span>
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="ttl-serial-console">TTL serial console</h2>
+
+<p>Using a TTL to USB serial connection to the Pi, I&rsquo;m unable to use <code>nano</code>, <code>top</code> and other full screen terminal programs due to screen corruption.  Changing the terminal type does at least let me use <code>nano</code>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm/&#39;</span> /etc/inittab
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
@@ -372,6 +382,62 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install motion
 </span><span class="line">cp /etc/default/motion /etc/motion/motion.conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="configure-bluetooth-adapter">Configure bluetooth adapter</h2>
+
+<p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># install bluetooth support and dependencies</span>
+</span><span class="line">agi bluez python-gobject  <span class="c"># minimal?</span>
+</span><span class="line">agi bluetooth bluez-utils  <span class="c"># full</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># for management from the desktop</span>
+</span><span class="line">agi blueman
+</span><span class="line">
+</span><span class="line"><span class="c"># check adapter is working*</span>
+</span><span class="line">hcitool dev
+</span><span class="line">
+</span><span class="line"><span class="c"># scan for devices</span>
+</span><span class="line">hcitool scan
+</span><span class="line">
+</span><span class="line"><span class="c"># pair with device, using address listed from scan</span>
+</span><span class="line">bluez-simple-agent hci0 3C:DA:F8:42:0C:AB
+</span><span class="line">
+</span><span class="line"><span class="c"># trust the device</span>
+</span><span class="line">bluez-test-device trusted 3C:DA:F8:42:0C:AB yes
+</span><span class="line">
+</span><span class="line"><span class="c"># connect to input device</span>
+</span><span class="line">bluez-test-input hci0 3C:DA:F8:42:0C:AB
+</span><span class="line">
+</span><span class="line"><span class="c"># adapter status</span>
+</span><span class="line">hciconfig
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
 
 <p><br /></p>
 
@@ -621,6 +687,8 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <id>http://jmeosbn.github.com/blog/stellaris-virtual-serial-device</id>
     <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it&rsquo;s output.</p>
 
+<!-- more -->
+
 <h2 id="device-permissions">device permissions</h2>
 
 <p>Root privileges are required to access the device on some Linux and Unix based systems, so remember to use <code>sudo</code> with commands such as <code>lm4flash</code> and <code>ttylog</code> which directly access the device.</p>
@@ -709,6 +777,8 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <updated>2012-11-15T20:40:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain</id>
     <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain">installed</a>, here&rsquo;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
+
+<!-- more -->
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -805,6 +875,8 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <id>http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain</id>
     <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
 
+<!-- more -->
+
 <p><em>(If you don&rsquo;t fancy building the toolchain, <a href="http://www.yagarto.de/">yagarto</a> offers recent binaries for Windows and Mac OS X that target ARM devices.)</em></p>
 
 <p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&rsquo;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&rsquo;ll probably try building next.</p>
@@ -860,6 +932,8 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="nv">$ </span>git init
 </span><span class="line">Initialized empty Git repository in my-project/.git/
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<!-- more -->
 
 <p>Add any new or changed files you want to track, then commit those changes to the repo.</p>
 

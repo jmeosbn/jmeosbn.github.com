@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-25T02:55:55+00:00</updated>
+  <updated>2013-01-25T19:08:47+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -21,6 +21,8 @@
     <content type="html"><![CDATA[<p>There&rsquo;s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it&rsquo;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
 
 <p>Dropbox does make various SDKs available though, which enables a ruby or python script to be used instead of the official client.</p>
+
+<!-- more -->
 
 <h1 id="a-ready-made-solution">a ready made solution..</h1>
 
@@ -70,8 +72,6 @@ fi ```
 </code></pre>
 
 <p>There&rsquo;s more proper ways of doing this, but this seemed the simplest.</p>
-
-<!-- more -->
 
 <h2 id="todo">todo</h2>
 
@@ -181,7 +181,7 @@ ssh-copy-id xbian@xbian.local ```
 
 <h2 id="transfer-files">Transfer files</h2>
 
-<p>If you have previous files from your Pi stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.  For easily transferring arbitrary files , a GUI sftp client is recommended.</p>
+<p>If you have previous files from your Pi stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.</p>
 
 <p>```sh
 	# connect to the pi, using the <code>xb</code> alias defined above
@@ -209,6 +209,7 @@ touch ~/.hushlogin
 sudo -s
 
 # Allow full use of sudo without needing password
+# note: XBian 1.0b4 made this much less essential
 echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
 
 # Prevent autorun of configuration menu,
@@ -218,6 +219,14 @@ rm /etc/profile.d/xbian-config.sh
 # Update packages
 apt-get update &amp;&amp; apt-get upgrade ```	
 </code></pre>
+
+<h2 id="ttl-serial-console">TTL serial console</h2>
+
+<p>Using a TTL to USB serial connection to the Pi, I&rsquo;m unable to use <code>nano</code>, <code>top</code> and other full screen terminal programs due to screen corruption.  Changing the terminal type does at least let me use <code>nano</code>.</p>
+
+<p><code>sh
+	sed -i '/ttyAMA0/s/vt100$/xterm/' /etc/inittab
+</code></p>
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
 
@@ -312,6 +321,39 @@ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key --&gt;
 	apt-get install motion
 	cp /etc/default/motion /etc/motion/motion.conf
 </code></p>
+
+<h2 id="configure-bluetooth-adapter">Configure bluetooth adapter</h2>
+
+<p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
+
+<p>```sh
+	# install bluetooth support and dependencies
+	agi bluez python-gobject  # minimal?
+	agi bluetooth bluez-utils  # full</p>
+
+<pre><code># for management from the desktop
+agi blueman
+
+# check adapter is working*
+hcitool dev
+
+# scan for devices
+hcitool scan
+
+# pair with device, using address listed from scan
+bluez-simple-agent hci0 3C:DA:F8:42:0C:AB
+
+# trust the device
+bluez-test-device trusted 3C:DA:F8:42:0C:AB yes
+
+# connect to input device
+bluez-test-input hci0 3C:DA:F8:42:0C:AB
+
+# adapter status
+hciconfig ```
+</code></pre>
+
+<p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
 
 <p><br /></p>
 

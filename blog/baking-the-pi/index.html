@@ -133,7 +133,7 @@
 
 <h2 id="transfer-files">Transfer files</h2>
 
-<p>If you have previous files from your Pi stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.  For easily transferring arbitrary files , a GUI sftp client is recommended.</p>
+<p>If you have previous files from your Pi stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -173,6 +173,7 @@
 <span class="line-number">18</span>
 <span class="line-number">19</span>
 <span class="line-number">20</span>
+<span class="line-number">21</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
 </span><span class="line">ssh xb
 </span><span class="line">
@@ -185,6 +186,7 @@
 </span><span class="line">sudo -s
 </span><span class="line">
 </span><span class="line"><span class="c"># Allow full use of sudo without needing password</span>
+</span><span class="line"><span class="c"># note: XBian 1.0b4 made this much less essential</span>
 </span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;%sudo  ALL=(ALL) NOPASSWD: ALL&#39;</span> &gt;&gt; /etc/sudoers
 </span><span class="line">
 </span><span class="line"><span class="c"># Prevent autorun of configuration menu,</span>
@@ -193,6 +195,14 @@
 </span><span class="line">
 </span><span class="line"><span class="c"># Update packages</span>
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="ttl-serial-console">TTL serial console</h2>
+
+<p>Using a TTL to USB serial connection to the Pi, I&rsquo;m unable to use <code>nano</code>, <code>top</code> and other full screen terminal programs due to screen corruption.  Changing the terminal type does at least let me use <code>nano</code>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm/&#39;</span> /etc/inittab
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
@@ -304,6 +314,62 @@
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install motion
 </span><span class="line">cp /etc/default/motion /etc/motion/motion.conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="configure-bluetooth-adapter">Configure bluetooth adapter</h2>
+
+<p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># install bluetooth support and dependencies</span>
+</span><span class="line">agi bluez python-gobject  <span class="c"># minimal?</span>
+</span><span class="line">agi bluetooth bluez-utils  <span class="c"># full</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># for management from the desktop</span>
+</span><span class="line">agi blueman
+</span><span class="line">
+</span><span class="line"><span class="c"># check adapter is working*</span>
+</span><span class="line">hcitool dev
+</span><span class="line">
+</span><span class="line"><span class="c"># scan for devices</span>
+</span><span class="line">hcitool scan
+</span><span class="line">
+</span><span class="line"><span class="c"># pair with device, using address listed from scan</span>
+</span><span class="line">bluez-simple-agent hci0 3C:DA:F8:42:0C:AB
+</span><span class="line">
+</span><span class="line"><span class="c"># trust the device</span>
+</span><span class="line">bluez-test-device trusted 3C:DA:F8:42:0C:AB yes
+</span><span class="line">
+</span><span class="line"><span class="c"># connect to input device</span>
+</span><span class="line">bluez-test-input hci0 3C:DA:F8:42:0C:AB
+</span><span class="line">
+</span><span class="line"><span class="c"># adapter status</span>
+</span><span class="line">hciconfig
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
 
 <p><br /></p>
 
