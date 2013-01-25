@@ -211,6 +211,39 @@ Use 'motion' or 'fswebcam', motion may need a default cfg copying
 	cp /etc/default/motion /etc/motion/motion.conf
 ```
 
+## Configure bluetooth adapter
+
+[Adapted from ctheroux](http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/).
+
+```sh
+	# install bluetooth support and dependencies
+	agi bluez python-gobject  # minimal?
+	agi bluetooth bluez-utils  # full
+
+	# for management from the desktop
+	agi blueman
+
+	# check adapter is working*
+	hcitool dev
+
+	# scan for devices
+	hcitool scan
+
+	# pair with device, using the address listed from scan
+	bluez-simple-agent hci0 XX:XX:XX:XX:XX:XX
+
+	# trust the device
+	bluez-test-device trusted XX:XX:XX:XX:XX:XX yes
+
+	# connect to input device
+	bluez-test-input hci0 XX:XX:XX:XX:XX:XX
+
+	# adapter status
+	hciconfig
+```
+
+**Note: a bluetooth adapter may be listed in ``lsusb`` and ``hciconfig``, without being recognised by ``hcitool``. This is the case with the belkin dongle I have, so use ``hcitool`` to check that a device is working properly.*
+
 
 <br />
 
