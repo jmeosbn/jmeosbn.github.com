@@ -148,6 +148,9 @@ Occasionally you'll want to use a root shell, and then be annoyed that your alia
 
 	# link each existing file into the root user's home folder
 	for i in $dotfiles; do [ -f $i ] && sudo ln -sfv ~+/$i ~root/; done
+
+	# hush login message
+	sudo touch ~root/.hushlogin
 ```
 
 
