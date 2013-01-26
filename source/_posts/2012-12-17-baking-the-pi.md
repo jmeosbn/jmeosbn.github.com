@@ -269,13 +269,21 @@ Use 'motion' or 'fswebcam', motion may need a default cfg copying
 Some useful commands and procedures
 
 
-## Backup XBMC settings
+## Backup settings
 
 - Settings, addons etc. are in ~/.xbmc
 - .xbmc/userdata - preferences etc
 - .xbmc/addons - binaries, themes
 - .xbmc/addons/packages - original downloads, can use with "install from zip"
 
+```sh
+	# backup profile settings
+	zip -ry xbmc .xbmc/
+	zip -ry dotfiles .bash_aliases .nanorc .toprc .ssh
+
+	# backup system config files
+	sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
+```
 
 ## Clear cached network adapter
 
