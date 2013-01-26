@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-26T17:56:42+00:00</updated>
+  <updated>2013-01-26T19:39:22+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -21,8 +21,6 @@
     <content type="html"><![CDATA[<p>There&rsquo;s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it&rsquo;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
 
 <p>Dropbox does make various SDKs available though, which enables a ruby or python script to be used instead of the official client.</p>
-
-<!-- more -->
 
 <h1 id="a-ready-made-solution">a ready made solution..</h1>
 
@@ -72,6 +70,8 @@ fi ```
 </code></pre>
 
 <p>There&rsquo;s more proper ways of doing this, but this seemed the simplest.</p>
+
+<!-- more -->
 
 <h2 id="todo">todo</h2>
 
@@ -217,13 +217,16 @@ echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
 
 # Disable autorun of configuration menu,
 # run manually with: 'sudo xbian-config'
-sed -i '/sudo xbian/s/^/##/' /etc/profile.d/xbian-config.sh
+sed -i '1 i return' /etc/profile.d/xbian-config.sh
 
 # Disable hideoutput from overwriting the prompt
 sed -i '/PS1=/s/^/##/' /etc/profile.d/hideoutput.sh
 
 # Update packages
-apt-get update &amp;&amp; apt-get upgrade ```	
+apt-get update &amp;&amp; apt-get upgrade
+
+# Install some utilities
+apt-get install p7zip zip ```	
 </code></pre>
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
@@ -314,7 +317,6 @@ apt-get install psmisc usbutils ```
 <h2 id="other-useful-packages">Other useful packages</h2>
 
 <p><code>sh
-	apt-get install p7zip zip
 	apt-get install fs2resize exfat-fuse
 	apt-get install clang geany
 	apt-get install sysv-rc-conf
@@ -374,7 +376,7 @@ hciconfig ```
 
 <p>Some useful commands and procedures</p>
 
-<h2 id="backup-xbmc-settings">Backup XBMC settings</h2>
+<h2 id="backup-settings">Backup settings</h2>
 
 <ul>
   <li>Settings, addons etc. are in ~/.xbmc</li>
@@ -382,6 +384,15 @@ hciconfig ```
   <li>.xbmc/addons - binaries, themes</li>
   <li>.xbmc/addons/packages - original downloads, can use with &ldquo;install from zip&rdquo;</li>
 </ul>
+
+<p>```sh
+	# backup profile settings
+	zip -ry xbmc .xbmc/
+	zip -ry dotfiles .bash_aliases .nanorc .toprc .ssh</p>
+
+<pre><code># backup system config files
+sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf ```
+</code></pre>
 
 <h2 id="clear-cached-network-adapter">Clear cached network adapter</h2>
 
@@ -556,8 +567,6 @@ chmod a+r ~/.ssh/id_rsa.pub ```
     <id>http://jmeosbn.github.com/blog/stellaris-virtual-serial-device</id>
     <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it&rsquo;s output.</p>
 
-<!-- more -->
-
 <h2 id="device-permissions">device permissions</h2>
 
 <p>Root privileges are required to access the device on some Linux and Unix based systems, so remember to use <code>sudo</code> with commands such as <code>lm4flash</code> and <code>ttylog</code> which directly access the device.</p>
@@ -626,8 +635,6 @@ $ screen /dev/tty.usbmodem* 115200
     <id>http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain</id>
     <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="/blog/compiling-the-stellaris-toolchain">installed</a>, here&rsquo;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
-<!-- more -->
-
 <p>``` sh
 	# Add the toolchain to your profile&rsquo;s path
 	# Ideally this should go into your bash profile
@@ -685,8 +692,6 @@ $ sudo killall lmicdi # or type 'fg' followed by ^C ```
     <updated>2012-11-15T20:02:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain</id>
     <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
-
-<!-- more -->
 
 <p><em>(If you don&rsquo;t fancy building the toolchain, <a href="http://www.yagarto.de/">yagarto</a> offers recent binaries for Windows and Mac OS X that target ARM devices.)</em></p>
 

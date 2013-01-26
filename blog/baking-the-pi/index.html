@@ -180,6 +180,9 @@
 <span class="line-number">25</span>
 <span class="line-number">26</span>
 <span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
 </span><span class="line">ssh xb
 </span><span class="line">
@@ -200,13 +203,16 @@
 </span><span class="line">
 </span><span class="line"><span class="c"># Disable autorun of configuration menu,</span>
 </span><span class="line"><span class="c"># run manually with: &#39;sudo xbian-config&#39;</span>
-</span><span class="line">sed -i <span class="s1">&#39;/sudo xbian/s/^/##/&#39;</span> /etc/profile.d/xbian-config.sh
+</span><span class="line">sed -i <span class="s1">&#39;1 i return&#39;</span> /etc/profile.d/xbian-config.sh
 </span><span class="line">
 </span><span class="line"><span class="c"># Disable hideoutput from overwriting the prompt</span>
 </span><span class="line">sed -i <span class="s1">&#39;/PS1=/s/^/##/&#39;</span> /etc/profile.d/hideoutput.sh
 </span><span class="line">
 </span><span class="line"><span class="c"># Update packages</span>
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
+</span><span class="line">
+</span><span class="line"><span class="c"># Install some utilities</span>
+</span><span class="line">apt-get install p7zip zip
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
@@ -318,9 +324,7 @@
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install p7zip zip
-</span><span class="line">apt-get install fs2resize exfat-fuse
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fs2resize exfat-fuse
 </span><span class="line">apt-get install clang geany
 </span><span class="line">apt-get install sysv-rc-conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
@@ -403,7 +407,7 @@
 
 <p>Some useful commands and procedures</p>
 
-<h2 id="backup-xbmc-settings">Backup XBMC settings</h2>
+<h2 id="backup-settings">Backup settings</h2>
 
 <ul>
   <li>Settings, addons etc. are in ~/.xbmc</li>
@@ -411,6 +415,20 @@
   <li>.xbmc/addons - binaries, themes</li>
   <li>.xbmc/addons/packages - original downloads, can use with &ldquo;install from zip&rdquo;</li>
 </ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
+</span><span class="line">zip -ry xbmc .xbmc/
+</span><span class="line">zip -ry dotfiles .bash_aliases .nanorc .toprc .ssh
+</span><span class="line">
+</span><span class="line"><span class="c"># backup system config files</span>
+</span><span class="line">sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="clear-cached-network-adapter">Clear cached network adapter</h2>
 
