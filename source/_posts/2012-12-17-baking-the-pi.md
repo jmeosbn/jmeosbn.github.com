@@ -109,6 +109,14 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 	apt-get install p7zip zip
 ```
 
+## TTL serial console
+
+Using a TTL to USB serial connection to the Pi, I'm unable to use full screen terminal programs due to screen corruption.  Changing the terminal type enables use of programs such as ``nano`` and ``xbian-config``.
+
+```sh
+	sed -i '/ttyAMA0/s/vt100$/xterm/' /etc/inittab
+```
+
 ## Fake a hardware clock
 
 The Pi doesn't have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  *(note: previous distros required the [unabridged instructions](#fake-a-hardware-clock-unabridged).)*
