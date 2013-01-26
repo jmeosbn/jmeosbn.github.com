@@ -4,7 +4,7 @@
   <title><![CDATA[Category: htpc | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/htpc/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-25T19:10:14+00:00</updated>
+  <updated>2013-01-26T17:45:34+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -22,7 +22,7 @@
 
 <!-- more -->
 
-<p>Jump to <a href="#first-login-tasks">First login tasks</a> if you already have a terminal session on the Pi.</p>
+<p>Jump to <a href="#first-login-tasks">first login tasks</a> if you have already set up terminal access to the Pi.</p>
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
 
@@ -86,8 +86,11 @@ ssh-copy-id xbian@xbian.local ```
 
 <pre><code># xbian-config may run here, set it up as you like then exit
 
-# Prevent display of the login message
+# Disable the login message
 touch ~/.hushlogin
+
+# Disable setting of the terminal title
+sed -i '/PS1=.*\][0-2];/s/^/##/' ~/.bashrc
 
 # Use a root shell for the following commands
 sudo -s
@@ -96,9 +99,12 @@ sudo -s
 # note: XBian 1.0b4 made this much less essential
 echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
 
-# Prevent autorun of configuration menu,
-# use 'sudo xbian-config' as required
-rm /etc/profile.d/xbian-config.sh
+# Disable autorun of configuration menu,
+# use 'sudo xbian-config' to run manually
+sed -i '/sudo xbian/s/^/##/' /etc/profile.d/xbian-config.sh
+
+# Disable hideoutput from overwriting the prompt
+sed -i '/PS1=/s/^/##/' /etc/profile.d/hideoutput.sh
 
 # Update packages
 apt-get update &amp;&amp; apt-get upgrade ```	
@@ -106,7 +112,7 @@ apt-get update &amp;&amp; apt-get upgrade ```
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
 
-<p>Using a TTL to USB serial connection to the Pi, I&rsquo;m unable to use <code>nano</code>, <code>top</code> and other full screen terminal programs due to screen corruption.  Changing the terminal type does at least let me use <code>nano</code>.</p>
+<p>Using a TTL to USB serial connection to the Pi, I&rsquo;m unable to use full screen terminal programs due to screen corruption.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
 
 <p><code>sh
 	sed -i '/ttyAMA0/s/vt100$/xterm/' /etc/inittab
@@ -136,7 +142,10 @@ apt-get update &amp;&amp; apt-get upgrade ```
 dotfiles=".profile .bashrc .bash_aliases .bash_logout .nanorc .toprc"
 
 # link each existing file into the root user's home folder
-for i in $dotfiles; do [ -f $i ] &amp;&amp; sudo ln -sfv ~+/$i ~root/; done ```
+for i in $dotfiles; do [ -f $i ] &amp;&amp; sudo ln -sfv ~+/$i ~root/; done
+
+# hush login message
+sudo touch ~root/.hushlogin ```
 </code></pre>
 
 <h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
@@ -161,14 +170,6 @@ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key --&gt;
 	apt-get install mono-devel mono-gmcs mono-csharp-shell
 </code></p>
 
-<h2 id="packages-from-raspbian">Packages from Raspbian</h2>
-
-<p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
-
-<p><code>sh
-	apt-get install psmisc usbutils omxplayer
-</code></p>
-
 <h2 id="installing-iplayer-and-4od-itv-5">Installing iPlayer (and 4od, ITV, 5)</h2>
 
 <p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc&rsquo;s addons page.</p>
@@ -183,9 +184,21 @@ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key --&gt;
 
 <p>Stuff used infrequently, or currently being tested</p>
 
-<h2 id="useful-packages">Useful packages</h2>
+<h2 id="packages-from-raspbian">Packages from Raspbian</h2>
+
+<p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
+
+<p>```sh
+	apt-get install omxplayer</p>
+
+<pre><code># included on xbian &gt;= 1.0b
+apt-get install psmisc usbutils ```
+</code></pre>
+
+<h2 id="other-useful-packages">Other useful packages</h2>
 
 <p><code>sh
+	apt-get install p7zip zip
 	apt-get install fs2resize exfat-fuse
 	apt-get install clang geany
 	apt-get install sysv-rc-conf

@@ -9,7 +9,7 @@
   <meta name="author" content="Jamie Osborne">
 
   
-  <meta name="description" content="A collection of notes for setting up a clean image of XBian (1.0 Alpha 4) on the Raspberry Pi. Jump to First login tasks if you already have a &hellip;">
+  <meta name="description" content="A collection of notes for setting up a clean image of XBian (1.0 Alpha 4) on the Raspberry Pi. Jump to first login tasks if you have already set up &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,7 +80,7 @@
 
 <!-- more -->
 
-<p>Jump to <a href="#first-login-tasks">First login tasks</a> if you already have a terminal session on the Pi.</p>
+<p>Jump to <a href="#first-login-tasks">first login tasks</a> if you have already set up terminal access to the Pi.</p>
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
 
@@ -174,13 +174,22 @@
 <span class="line-number">19</span>
 <span class="line-number">20</span>
 <span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
 </span><span class="line">ssh xb
 </span><span class="line">
 </span><span class="line"><span class="c"># xbian-config may run here, set it up as you like then exit</span>
 </span><span class="line">
-</span><span class="line"><span class="c"># Prevent display of the login message</span>
+</span><span class="line"><span class="c"># Disable the login message</span>
 </span><span class="line">touch ~/.hushlogin
+</span><span class="line">
+</span><span class="line"><span class="c"># Disable setting of the terminal title</span>
+</span><span class="line">sed -i <span class="s1">&#39;/PS1=.*\][0-2];/s/^/##/&#39;</span> ~/.bashrc
 </span><span class="line">
 </span><span class="line"><span class="c"># Use a root shell for the following commands</span>
 </span><span class="line">sudo -s
@@ -189,9 +198,12 @@
 </span><span class="line"><span class="c"># note: XBian 1.0b4 made this much less essential</span>
 </span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;%sudo  ALL=(ALL) NOPASSWD: ALL&#39;</span> &gt;&gt; /etc/sudoers
 </span><span class="line">
-</span><span class="line"><span class="c"># Prevent autorun of configuration menu,</span>
-</span><span class="line"><span class="c"># use &#39;sudo xbian-config&#39; as required</span>
-</span><span class="line">rm /etc/profile.d/xbian-config.sh
+</span><span class="line"><span class="c"># Disable autorun of configuration menu,</span>
+</span><span class="line"><span class="c"># use &#39;sudo xbian-config&#39; to run manually</span>
+</span><span class="line">sed -i <span class="s1">&#39;/sudo xbian/s/^/##/&#39;</span> /etc/profile.d/xbian-config.sh
+</span><span class="line">
+</span><span class="line"><span class="c"># Disable hideoutput from overwriting the prompt</span>
+</span><span class="line">sed -i <span class="s1">&#39;/PS1=/s/^/##/&#39;</span> /etc/profile.d/hideoutput.sh
 </span><span class="line">
 </span><span class="line"><span class="c"># Update packages</span>
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
@@ -199,7 +211,7 @@
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
 
-<p>Using a TTL to USB serial connection to the Pi, I&rsquo;m unable to use <code>nano</code>, <code>top</code> and other full screen terminal programs due to screen corruption.  Changing the terminal type does at least let me use <code>nano</code>.</p>
+<p>Using a TTL to USB serial connection to the Pi, I&rsquo;m unable to use full screen terminal programs due to screen corruption.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm/&#39;</span> /etc/inittab
@@ -229,6 +241,9 @@
 <span class="line-number">6</span>
 <span class="line-number">7</span>
 <span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># change to the home folder you want to link from</span>
 </span><span class="line"><span class="nb">cd</span> ~xbian
 </span><span class="line">
@@ -237,6 +252,9 @@
 </span><span class="line">
 </span><span class="line"><span class="c"># link each existing file into the root user&#39;s home folder</span>
 </span><span class="line"><span class="k">for </span>i in <span class="nv">$dotfiles</span>; <span class="k">do</span> <span class="o">[</span> -f <span class="nv">$i</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> sudo ln -sfv ~+/<span class="nv">$i</span> ~root/; <span class="k">done</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># hush login message</span>
+</span><span class="line">sudo touch ~root/.hushlogin
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
@@ -267,14 +285,6 @@
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-gmcs mono-csharp-shell
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="packages-from-raspbian">Packages from Raspbian</h2>
-
-<p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install psmisc usbutils omxplayer
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
 <h2 id="installing-iplayer-and-4od-itv-5">Installing iPlayer (and 4od, ITV, 5)</h2>
 
 <p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc&rsquo;s addons page.</p>
@@ -289,12 +299,28 @@
 
 <p>Stuff used infrequently, or currently being tested</p>
 
-<h2 id="useful-packages">Useful packages</h2>
+<h2 id="packages-from-raspbian">Packages from Raspbian</h2>
+
+<p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fs2resize exfat-fuse
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install omxplayer
+</span><span class="line">
+</span><span class="line"><span class="c"># included on xbian &gt;= 1.0b</span>
+</span><span class="line">apt-get install psmisc usbutils
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="other-useful-packages">Other useful packages</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install p7zip zip
+</span><span class="line">apt-get install fs2resize exfat-fuse
 </span><span class="line">apt-get install clang geany
 </span><span class="line">apt-get install sysv-rc-conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
