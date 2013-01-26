@@ -199,7 +199,7 @@
 </span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;%sudo  ALL=(ALL) NOPASSWD: ALL&#39;</span> &gt;&gt; /etc/sudoers
 </span><span class="line">
 </span><span class="line"><span class="c"># Disable autorun of configuration menu,</span>
-</span><span class="line"><span class="c"># use &#39;sudo xbian-config&#39; to run manually</span>
+</span><span class="line"><span class="c"># run manually with: &#39;sudo xbian-config&#39;</span>
 </span><span class="line">sed -i <span class="s1">&#39;/sudo xbian/s/^/##/&#39;</span> /etc/profile.d/xbian-config.sh
 </span><span class="line">
 </span><span class="line"><span class="c"># Disable hideoutput from overwriting the prompt</span>
