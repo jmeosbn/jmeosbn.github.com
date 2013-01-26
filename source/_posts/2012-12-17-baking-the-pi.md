@@ -91,6 +91,9 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 	# Disable the login message
 	touch ~/.hushlogin
 
+	# Disable setting of the terminal title
+	sed -i '/PS1=.*\][0-2];/s/^/##/' ~/.bashrc
+
 	# Use a root shell for the following commands
 	sudo -s
 
@@ -101,6 +104,9 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 	# Disable autorun of configuration menu,
 	# run manually with: 'sudo xbian-config'
 	sed -i '1 i return' /etc/profile.d/xbian-config.sh
+
+	# Prevent hideoutput from overwriting the prompt
+	sed -i '/40;0m/s/^/##/' /etc/profile.d/hideoutput.sh
 
 	# Update packages
 	apt-get update && apt-get upgrade
