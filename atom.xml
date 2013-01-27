@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-26T19:40:23+00:00</updated>
+  <updated>2013-01-27T00:51:03+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -273,8 +273,8 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="c"># run manually with: &#39;sudo xbian-config&#39;</span>
 </span><span class="line">sed -i <span class="s1">&#39;1 i return&#39;</span> /etc/profile.d/xbian-config.sh
 </span><span class="line">
-</span><span class="line"><span class="c"># Disable hideoutput from overwriting the prompt</span>
-</span><span class="line">sed -i <span class="s1">&#39;/PS1=/s/^/##/&#39;</span> /etc/profile.d/hideoutput.sh
+</span><span class="line"><span class="c"># Prevent hideoutput from overwriting the prompt</span>
+</span><span class="line">sed -i <span class="s1">&#39;/40;0m/s/^/##/&#39;</span> /etc/profile.d/hideoutput.sh
 </span><span class="line">
 </span><span class="line"><span class="c"># Update packages</span>
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade

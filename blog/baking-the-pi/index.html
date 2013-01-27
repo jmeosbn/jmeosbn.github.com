@@ -205,8 +205,8 @@
 </span><span class="line"><span class="c"># run manually with: &#39;sudo xbian-config&#39;</span>
 </span><span class="line">sed -i <span class="s1">&#39;1 i return&#39;</span> /etc/profile.d/xbian-config.sh
 </span><span class="line">
-</span><span class="line"><span class="c"># Disable hideoutput from overwriting the prompt</span>
-</span><span class="line">sed -i <span class="s1">&#39;/PS1=/s/^/##/&#39;</span> /etc/profile.d/hideoutput.sh
+</span><span class="line"><span class="c"># Prevent hideoutput from overwriting the prompt</span>
+</span><span class="line">sed -i <span class="s1">&#39;/40;0m/s/^/##/&#39;</span> /etc/profile.d/hideoutput.sh
 </span><span class="line">
 </span><span class="line"><span class="c"># Update packages</span>
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade

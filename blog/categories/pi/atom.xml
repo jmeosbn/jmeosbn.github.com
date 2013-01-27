@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-26T19:40:23+00:00</updated>
+  <updated>2013-01-27T00:51:03+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -219,8 +219,8 @@ echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
 # run manually with: 'sudo xbian-config'
 sed -i '1 i return' /etc/profile.d/xbian-config.sh
 
-# Disable hideoutput from overwriting the prompt
-sed -i '/PS1=/s/^/##/' /etc/profile.d/hideoutput.sh
+# Prevent hideoutput from overwriting the prompt
+sed -i '/40;0m/s/^/##/' /etc/profile.d/hideoutput.sh
 
 # Update packages
 apt-get update &amp;&amp; apt-get upgrade
