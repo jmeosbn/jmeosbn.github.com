@@ -78,8 +78,6 @@
 
 <div class="entry-content"><p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
 
-<!-- more -->
-
 <p><em>(If you don&rsquo;t fancy building the toolchain, <a href="http://www.yagarto.de/">yagarto</a> offers recent binaries for Windows and Mac OS X that target ARM devices.)</em></p>
 
 <p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&rsquo;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&rsquo;ll probably try building next.</p>

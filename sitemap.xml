@@ -2,34 +2,38 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://jmeosbn.github.com/blog/resources-for-using-git/</loc>
-        <lastmod>2013-01-27T01:39:32+00:00</lastmod>
+        <lastmod>2013-01-28T00:38:27+00:00</lastmod>
     </url>
     <url>
         <loc>http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain/</loc>
-        <lastmod>2013-01-27T01:39:32+00:00</lastmod>
+        <lastmod>2013-01-28T00:38:27+00:00</lastmod>
     </url>
     <url>
         <loc>http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain/</loc>
-        <lastmod>2013-01-27T01:39:32+00:00</lastmod>
+        <lastmod>2013-01-28T00:38:27+00:00</lastmod>
     </url>
     <url>
         <loc>http://jmeosbn.github.com/blog/stellaris-virtual-serial-device/</loc>
-        <lastmod>2013-01-27T01:39:32+00:00</lastmod>
+        <lastmod>2013-01-28T00:38:27+00:00</lastmod>
     </url>
     <url>
         <loc>http://jmeosbn.github.com/blog/baking-the-pi/</loc>
-        <lastmod>2013-01-27T00:50:46+00:00</lastmod>
+        <lastmod>2013-01-28T01:01:50+00:00</lastmod>
     </url>
     <url>
         <loc>http://jmeosbn.github.com/blog/pi-box/</loc>
-        <lastmod>2013-01-27T01:39:32+00:00</lastmod>
+        <lastmod>2013-01-28T00:38:27+00:00</lastmod>
     </url>
     <url>
         <loc>http://jmeosbn.github.com/blog/archives/</loc>
-        <lastmod>2013-01-27T01:39:32+00:00</lastmod>
+        <lastmod>2013-01-28T01:01:50+00:00</lastmod>
     </url>
     <url>
         <loc>http://jmeosbn.github.com/</loc>
-        <lastmod>2013-01-27T01:39:32+00:00</lastmod>
+        <lastmod>2013-01-28T01:01:50+00:00</lastmod>
+    </url>
+    <url>
+        <loc>http://jmeosbn.github.com/robots.txt</loc>
+        <lastmod>2013-01-28T00:38:27+00:00</lastmod>
     </url>
 </urlset>

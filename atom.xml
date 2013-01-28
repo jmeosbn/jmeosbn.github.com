@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-27T01:40:00+00:00</updated>
+  <updated>2013-01-28T01:02:13+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -21,8 +21,6 @@
     <content type="html"><![CDATA[<p>There&rsquo;s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it&rsquo;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
 
 <p>Dropbox does make various SDKs available though, which enables a ruby or python script to be used instead of the official client.</p>
-
-<!-- more -->
 
 <h1 id="a-ready-made-solution">a ready made solution..</h1>
 
@@ -82,6 +80,8 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>There&rsquo;s more proper ways of doing this, but this seemed the simplest.</p>
+
+<!-- more -->
 
 <h2 id="todo">todo</h2>
 
@@ -351,6 +351,34 @@ Dropbox integration made easy. This robust client gives you control over what, w
 	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 -->
 
+<h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
+
+<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi&rsquo;s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install gcc make git-core libi2c-dev
+</span><span class="line">git clone git://git.drogon.net/wiringPi
+</span><span class="line"><span class="nb">cd </span>wiringPi; ./build
+</span><span class="line">
+</span><span class="line"><span class="c"># test with gpio utility</span>
+</span><span class="line">gpio readall
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="install-dbox-dropbox-tool">Install dbox (dropbox tool)</h2>
+
+<p>dbox is a ruby client for Dropbox that can sync with the Dropbox folder hierarchy, or manage individual files.  For full details on setting up dbox and automatic sync, see the <a href="https://github.com/kenpratt/dbox">dbox</a> repo and <a href="http://jmeosbn.github.com/blog/pi-box/">my other post</a>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install gcc make ruby ruby-dev libsqlite3-dev
+</span><span class="line">gem install dbox
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <h2 id="install-mono">Install Mono</h2>
 
 <p>Basic mono setup to run and compile command line tools.</p>
@@ -363,9 +391,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc&rsquo;s addons page.</p>
 
-<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br />
-<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br />
-<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a>  </p>
+<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a>
+<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a>
+<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></p>
 
 <p><br /></p>
 
@@ -731,8 +759,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <id>http://jmeosbn.github.com/blog/stellaris-virtual-serial-device</id>
     <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it&rsquo;s output.</p>
 
-<!-- more -->
-
 <h2 id="device-permissions">device permissions</h2>
 
 <p>Root privileges are required to access the device on some Linux and Unix based systems, so remember to use <code>sudo</code> with commands such as <code>lm4flash</code> and <code>ttylog</code> which directly access the device.</p>
@@ -821,8 +847,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <updated>2012-11-15T20:40:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain</id>
     <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain">installed</a>, here&rsquo;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
-
-<!-- more -->
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -919,8 +943,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <id>http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain</id>
     <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
 
-<!-- more -->
-
 <p><em>(If you don&rsquo;t fancy building the toolchain, <a href="http://www.yagarto.de/">yagarto</a> offers recent binaries for Windows and Mac OS X that target ARM devices.)</em></p>
 
 <p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&rsquo;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&rsquo;ll probably try building next.</p>
@@ -963,9 +985,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <link href="http://jmeosbn.github.com/blog/resources-for-using-git/"/>
     <updated>2012-09-29T20:35:00+01:00</updated>
     <id>http://jmeosbn.github.com/blog/resources-for-using-git</id>
-    <content type="html"><![CDATA[<p>Here&rsquo;s some basic resources to get started pushing code to github.</p>
-
-<!-- more -->
+    <content type="html"><![CDATA[<p>Here&rsquo;s some basic resources for getting started pushing code to github.</p>
 
 <p>&ldquo;Code&rdquo; doesn&rsquo;t just mean computer source code; git is useful for tracking changes to anything that can be represented as plain text, e.g. <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
 

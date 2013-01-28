@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-27T01:40:00+00:00</updated>
+  <updated>2013-01-28T01:02:13+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -21,8 +21,6 @@
     <content type="html"><![CDATA[<p>There&rsquo;s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it&rsquo;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
 
 <p>Dropbox does make various SDKs available though, which enables a ruby or python script to be used instead of the official client.</p>
-
-<!-- more -->
 
 <h1 id="a-ready-made-solution">a ready made solution..</h1>
 
@@ -72,6 +70,8 @@ fi ```
 </code></pre>
 
 <p>There&rsquo;s more proper ways of doing this, but this seemed the simplest.</p>
+
+<!-- more -->
 
 <h2 id="todo">todo</h2>
 
@@ -226,7 +226,7 @@ sed -i '/40;0m/s/^/##/' /etc/profile.d/hideoutput.sh
 apt-get update &amp;&amp; apt-get upgrade
 
 # Install some utilities
-apt-get install p7zip zip ```	
+apt-get install p7zip zip ```
 </code></pre>
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
@@ -281,6 +281,28 @@ ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key --&gt;
 </code></pre>
 
+<h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
+
+<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi&rsquo;s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
+
+<p>```sh
+	apt-get install gcc make git-core libi2c-dev
+	git clone git://git.drogon.net/wiringPi
+	cd wiringPi; ./build</p>
+
+<pre><code># test with gpio utility
+gpio readall ```
+</code></pre>
+
+<h2 id="install-dbox-dropbox-tool">Install dbox (dropbox tool)</h2>
+
+<p>dbox is a ruby client for Dropbox that can sync with the Dropbox folder hierarchy, or manage individual files.  For full details on setting up dbox and automatic sync, see the <a href="https://github.com/kenpratt/dbox">dbox</a> repo and <a href="/blog/pi-box/">my other post</a>.</p>
+
+<p><code>sh
+	apt-get install gcc make ruby ruby-dev libsqlite3-dev
+	gem install dbox
+</code></p>
+
 <h2 id="install-mono">Install Mono</h2>
 
 <p>Basic mono setup to run and compile command line tools.</p>
@@ -293,9 +315,9 @@ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key --&gt;
 
 <p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc&rsquo;s addons page.</p>
 
-<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a><br />
-<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a><br />
-<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a>  </p>
+<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a>
+<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a>
+<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></p>
 
 <p><br /></p>
 
@@ -486,7 +508,7 @@ sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf ```
 <pre><code># no access for others
 chmod -R go-rwx ~/.ssh
 # public key can be readable
-chmod a+r ~/.ssh/id_rsa.pub ``` 
+chmod a+r ~/.ssh/id_rsa.pub ```
 </code></pre>
 
 <h2 id="download-openssh-sftp-server">Download OpenSSH sftp server</h2>
