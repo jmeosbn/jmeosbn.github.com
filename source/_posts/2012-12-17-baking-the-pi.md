@@ -170,6 +170,33 @@ These keys confirm the identity of the Pi, to prevent a malicious host from inte
 	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 -->
 
+## Build and install WiringPi
+
+[WiringPi] is a library to access the Pi's GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the ``gpio`` utility for use of the libraries from the command prompt.
+
+[WiringPi]: https://projects.drogon.net/raspberry-pi/wiringpi
+
+```sh
+	apt-get install gcc make git-core libi2c-dev
+	git clone git://git.drogon.net/wiringPi
+	cd wiringPi; ./build
+
+	# test with gpio utility
+	gpio readall
+```
+
+## Install dbox (dropbox tool)
+
+Follow the [dbox installation instructions][dbox] to set up the dropbox sdk developer keys and authorisation tokens.  To use dbox for automatic folder syncing, see my post: [Dropbox on Pi](/blog/pi-box/).
+
+[dbox]: https://github.com/kenpratt/dbox
+
+
+```sh
+	apt-get install gcc make ruby ruby-dev libsqlite3-dev
+	gem install dbox
+```
+
 ## Install Mono
 
 Basic mono setup to run and compile command line tools.
