@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-28T01:43:31+00:00</updated>
+  <updated>2013-01-28T01:47:24+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -371,7 +371,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="install-dbox-dropbox-tool">Install dbox (dropbox tool)</h2>
 
-<p>dbox is a ruby client for the dropbox SDK.  Follow the <a href="https://github.com/kenpratt/dbox">dbox installation instructions</a> to set up the required developer keys and auth tokens.   To sync folders automatically, see <a href="http://jmeosbn.github.com/blog/pi-box/">my post on dbox</a>.</p>
+<p>dbox is a ruby client for the dropbox SDK; follow the <a href="https://github.com/kenpratt/dbox">dbox installation instructions</a> to set up the required developer keys and auth tokens.   To sync folders automatically, see <a href="http://jmeosbn.github.com/blog/pi-box/">my post on dbox</a>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
