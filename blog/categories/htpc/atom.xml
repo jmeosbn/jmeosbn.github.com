@@ -4,7 +4,7 @@
   <title><![CDATA[Category: htpc | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/htpc/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-01-28T02:32:49+00:00</updated>
+  <updated>2013-01-31T23:59:07+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -110,7 +110,13 @@ sed -i '/40;0m/s/^/##/' /etc/profile.d/hideoutput.sh
 apt-get update &amp;&amp; apt-get upgrade
 
 # Install some utilities
-apt-get install p7zip zip ```
+apt-get install p7zip zip
+
+# Install gcc compiler, dev tools
+apt-get install gcc make git-core
+
+# Install scripting tools
+apt-get install ruby ruby-dev ri libsqlite3-dev ```
 </code></pre>
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
