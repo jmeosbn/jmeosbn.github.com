@@ -1,5 +1,4 @@
 User-agent: *
 Disallow: /robots.txt
-noindex: http://jmeosbn.github.com/sitemap.xml
 
-Sitemap: http://jmeosbn.github.com/sitemap.xml
+Sitemap: http://jmeosbn.github.com/sitemap.xml 
