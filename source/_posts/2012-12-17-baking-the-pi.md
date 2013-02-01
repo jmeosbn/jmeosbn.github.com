@@ -113,6 +113,12 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 
 	# Install some utilities
 	apt-get install p7zip zip
+
+	# Install gcc compiler, dev tools
+	apt-get install gcc make git-core
+
+	# Install scripting tools
+	apt-get install ruby ruby-dev ri libsqlite3-dev
 ```
 
 ## TTL serial console
