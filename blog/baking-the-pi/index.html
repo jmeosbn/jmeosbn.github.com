@@ -239,9 +239,9 @@
 
 <p>XBian includes the usbmount package to mount USB devices as soon as they are connected.  This causes the XBMC &ldquo;Remove safely&rdquo; command to fail due to root privileges being required to unmount devices not mounted by XBMC.</p>
 
-<p>Drives mounted by usbmount also have inconsistent mount points<sup id="fnref:mountpoints"><a href="#fn:mountpoints" rel="footnote">1</a></sup>, causing the XBMC media library to be unreliable, and filesystems such as NTFS will have improper file permissions<sup id="fnref:ntfs-perms"><a href="#fn:ntfs-perms" rel="footnote">2</a></sup> set.</p>
+<p>Drives mounted by usbmount also have inconsistent mount points<sup id="fnref:mountpoints"><a href="#fn:mountpoints" rel="footnote">1</a></sup>, causing the XBMC media library to be unreliable; filesystems such as NTFS will also have improper file permissions<sup id="fnref:ntfs-perms"><a href="#fn:ntfs-perms" rel="footnote">2</a></sup> set.</p>
 
-<p>Simply disabling usbmount allows XBMC to mount and unmount USB drives itself, using the udisk service <a href="https://github.com/xbmc/xbmc/blob/a72f722/xbmc/storage/linux/UDisksProvider.cpp#L120">as designed</a>.   Drives can be unmounted manually using <code>udisks</code> without being root; members of the <code>plugdev</code> group can also use <code>pumount</code>.</p>
+<p>Simply disabling usbmount allows XBMC to mount and unmount USB drives itself, using the udisk service <a href="https://github.com/xbmc/xbmc/blob/a72f722/xbmc/storage/linux/UDisksProvider.cpp#L120">as designed</a>.   Drives can be unmounted manually using <code>udisks</code> without needing to be root and members of the <code>plugdev</code> group can also use <code>pumount</code>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
