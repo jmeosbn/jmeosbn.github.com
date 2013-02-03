@@ -129,6 +129,29 @@ The display of full screen terminal programs becomes corrupted when using a TTL 
 	sed -i '/ttyAMA0/s/vt100$/xterm/' /etc/inittab
 ```
 
+## Allow XBMC to unmount USB drives
+
+XBian includes the usbmount package to mount USB devices as soon as they are connected.  This causes the XBMC "Remove safely" command to fail due to root privileges being required to unmount devices not mounted by XBMC.
+
+Additionally, drives mounted by usbmount have inconsistent mount points[^mountpoints], which cause the XBMC media library to be unreliable.  Filesystems such as NTFS will also have improper file permissions[^ntfs-perms] set.
+
+Simply disabling usbmount fixes the issues listed above by allowing XBMC to mount and unmount USB drives itself, using the udisk service [as designed].  Drives can be unmounted manually using ``udisks`` without needing to be root, and members of the ``plugdev`` group can also use ``pumount``.
+
+```sh
+	# disable the usbmount package
+	sed -i '/ENABLED=/s/=1/=0/' /etc/usbmount/usbmount.conf
+
+	# optionally remove unused usbmount directories
+	# umount /media/usb*; rmdir /media/usb*; rm /media/usb
+```
+
+[as designed]: https://github.com/xbmc/xbmc/blob/a72f722/xbmc/storage/linux/UDisksProvider.cpp#L120
+
+[^mountpoints]: USB devices are mounted to the first empty directory that's named ``/media/usb?``, where ``?`` is a number between 0 and 7.  This prevents XMBC from showing previously saved metadata for a media file, if its mount point has since changed, e.g. the drive was previously mounted at ``/media/usb0``, but is now mounted at ``/media/usb1``.  This can happen even if there is only one USB drive being used and it is connected using the same USB port.
+
+[^ntfs-perms]: e.g. All NTFS files being marked as executable.
+
+
 ## Fake a hardware clock
 
 The Pi doesn't have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  *(note: previous distros required the [unabridged instructions](#fake-a-hardware-clock-unabridged).)*
