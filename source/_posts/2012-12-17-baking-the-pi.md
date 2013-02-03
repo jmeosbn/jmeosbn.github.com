@@ -123,7 +123,7 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 
 ## TTL serial console
 
-Using a TTL to USB serial connection to the Pi, I'm unable to use full screen terminal programs due to screen corruption.  Changing the terminal type enables use of programs such as ``nano`` and ``xbian-config``.
+The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as ``nano`` and ``xbian-config``.
 
 ```sh
 	sed -i '/ttyAMA0/s/vt100$/xterm/' /etc/inittab
