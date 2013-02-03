@@ -11,6 +11,8 @@ sidebar: false
 
 If you have a Stellaris [Launchpad] - and don't want to use the [official] tools - you can mostly follow the instructions at [y3xz] to build your own toolchain on any Unix/Linux based system using the [ARM EABI Toolchain Builder][EABI].  This includes Mac OS X, but I ran into a couple of minor issues as listed below.
 
+<!-- more -->
+
 *(If you don't fancy building the toolchain, [yagarto] offers recent binaries for Windows and Mac OS X that target ARM devices.)*
 
 [Stellaris]: http://www.ti.com/product/lm4f120h5qr

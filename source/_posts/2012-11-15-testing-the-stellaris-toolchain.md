@@ -15,6 +15,8 @@ Once the [toolchain] is [installed], here's the basic steps to compile an exampl
 [installed]: /blog/compiling-the-stellaris-toolchain
 [github]: https://github.com/yuvadm/stellaris
 
+<!-- more -->
+
 ``` sh
 	# Add the toolchain to your profile's path
 	# Ideally this should go into your bash profile

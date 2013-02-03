@@ -13,6 +13,8 @@ The Stellaris [Launchpad] is able to provide a virtual serial port over the debu
 
 [Launchpad]: http://www.ti.com/ww/en/launchpad/stellaris_head.html
 
+<!-- more -->
+
 
 ## device permissions
 
