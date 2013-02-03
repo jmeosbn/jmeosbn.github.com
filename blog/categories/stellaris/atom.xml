@@ -4,7 +4,7 @@
   <title><![CDATA[Category: stellaris | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/stellaris/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-02T03:35:15+00:00</updated>
+  <updated>2013-02-03T01:45:24+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -148,7 +148,7 @@ $ sudo killall lmicdi # or type 'fg' followed by ^C ```
     <link href="http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:02:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use TI&rsquo;s <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
+    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
 
 <!-- more -->
 

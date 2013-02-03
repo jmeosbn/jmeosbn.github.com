@@ -229,10 +229,30 @@
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
 
-<p>Using a TTL to USB serial connection to the Pi, I&rsquo;m unable to use full screen terminal programs due to screen corruption.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
+<p>The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm/&#39;</span> /etc/inittab
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</h2>
+
+<p>XBian includes the usbmount package to mount USB devices as soon as they are connected.  This causes the XBMC &ldquo;Remove safely&rdquo; command to fail due to root privileges being required to unmount devices not mounted by XBMC.</p>
+
+<p>Drives mounted by usbmount also have inconsistent mount points<sup id="fnref:mountpoints"><a href="#fn:mountpoints" rel="footnote">1</a></sup>, causing the XBMC media library to be unreliable, and filesystems such as NTFS will have improper file permissions<sup id="fnref:ntfs-perms"><a href="#fn:ntfs-perms" rel="footnote">2</a></sup> set.</p>
+
+<p>Simply disabling usbmount allows XBMC to mount and unmount USB drives itself, using the udisk service <a href="https://github.com/xbmc/xbmc/blob/a72f722/xbmc/storage/linux/UDisksProvider.cpp#L120">as designed</a>.   Drives can be unmounted manually using <code>udisks</code> without being root; members of the <code>plugdev</code> group can also use <code>pumount</code>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># disable the usbmount package</span>
+</span><span class="line">sed -i <span class="s1">&#39;/ENABLED=/s/=1/=0/&#39;</span> /etc/usbmount/usbmount.conf
+</span><span class="line">
+</span><span class="line"><span class="c"># optionally remove unused usbmount directories</span>
+</span><span class="line"><span class="c"># mount | grep media/usb || rm -r /media/usb*</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
@@ -693,6 +713,16 @@
 </span><span class="line"><span class="nb">exit</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<div class="footnotes">
+  <ol>
+    <li id="fn:mountpoints">
+      <p>USB devices are mounted to the first empty directory that&rsquo;s named <code>/media/usb?</code>, where <code>?</code> is a number between 0 and 7.  This prevents XMBC from showing previously saved metadata for a media file, if its mount point has since changed, e.g. the drive was previously mounted at <code>/media/usb0</code>, but is now mounted at <code>/media/usb1</code>.  This can happen even if there is only one USB drive being used and it is connected using the same USB port.<a href="#fnref:mountpoints" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:ntfs-perms">
+      <p>e.g. All NTFS files being marked as executable.<a href="#fnref:ntfs-perms" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 </div>
 
 

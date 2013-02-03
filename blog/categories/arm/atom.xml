@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-02T03:35:15+00:00</updated>
+  <updated>2013-02-03T01:45:24+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -237,11 +237,27 @@ apt-get install ruby ruby-dev ri libsqlite3-dev ```
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
 
-<p>Using a TTL to USB serial connection to the Pi, I&rsquo;m unable to use full screen terminal programs due to screen corruption.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
+<p>The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
 
 <p><code>sh
 	sed -i '/ttyAMA0/s/vt100$/xterm/' /etc/inittab
 </code></p>
+
+<h2 id="allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</h2>
+
+<p>XBian includes the usbmount package to mount USB devices as soon as they are connected.  This causes the XBMC &ldquo;Remove safely&rdquo; command to fail due to root privileges being required to unmount devices not mounted by XBMC.</p>
+
+<p>Drives mounted by usbmount also have inconsistent mount points<sup id="fnref:mountpoints"><a href="#fn:mountpoints" rel="footnote">1</a></sup>, causing the XBMC media library to be unreliable, and filesystems such as NTFS will have improper file permissions<sup id="fnref:ntfs-perms"><a href="#fn:ntfs-perms" rel="footnote">2</a></sup> set.</p>
+
+<p>Simply disabling usbmount allows XBMC to mount and unmount USB drives itself, using the udisk service <a href="https://github.com/xbmc/xbmc/blob/a72f722/xbmc/storage/linux/UDisksProvider.cpp#L120">as designed</a>.   Drives can be unmounted manually using <code>udisks</code> without being root; members of the <code>plugdev</code> group can also use <code>pumount</code>.</p>
+
+<p>```sh
+	# disable the usbmount package
+	sed -i &lsquo;/ENABLED=/s/=1/=0/&rsquo; /etc/usbmount/usbmount.conf</p>
+
+<pre><code># optionally remove unused usbmount directories
+# mount | grep media/usb || rm -r /media/usb* ```
+</code></pre>
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
 
@@ -585,6 +601,16 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 	exit
 </code></p>
 
+<div class="footnotes">
+  <ol>
+    <li id="fn:mountpoints">
+      <p>USB devices are mounted to the first empty directory that&rsquo;s named <code>/media/usb?</code>, where <code>?</code> is a number between 0 and 7.  This prevents XMBC from showing previously saved metadata for a media file, if its mount point has since changed, e.g. the drive was previously mounted at <code>/media/usb0</code>, but is now mounted at <code>/media/usb1</code>.  This can happen even if there is only one USB drive being used and it is connected using the same USB port.<a href="#fnref:mountpoints" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:ntfs-perms">
+      <p>e.g. All NTFS files being marked as executable.<a href="#fnref:ntfs-perms" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 ]]></content>
   </entry>
   
@@ -723,7 +749,7 @@ $ sudo killall lmicdi # or type 'fg' followed by ^C ```
     <link href="http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:02:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use TI&rsquo;s <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
+    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
 
 <!-- more -->
 
