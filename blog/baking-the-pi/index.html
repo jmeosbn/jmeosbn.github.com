@@ -501,14 +501,14 @@
 </span><span class="line"><span class="c"># scan for devices</span>
 </span><span class="line">hcitool scan
 </span><span class="line">
-</span><span class="line"><span class="c"># pair with device, using address listed from scan</span>
-</span><span class="line">bluez-simple-agent hci0 3C:DA:F8:42:0C:AB
+</span><span class="line"><span class="c"># pair with device, using the address listed from scan</span>
+</span><span class="line">bluez-simple-agent hci0 XX:XX:XX:XX:XX:XX
 </span><span class="line">
 </span><span class="line"><span class="c"># trust the device</span>
-</span><span class="line">bluez-test-device trusted 3C:DA:F8:42:0C:AB yes
+</span><span class="line">bluez-test-device trusted XX:XX:XX:XX:XX:XX yes
 </span><span class="line">
 </span><span class="line"><span class="c"># connect to input device</span>
-</span><span class="line">bluez-test-input hci0 3C:DA:F8:42:0C:AB
+</span><span class="line">bluez-test-input hci0 XX:XX:XX:XX:XX:XX
 </span><span class="line">
 </span><span class="line"><span class="c"># adapter status</span>
 </span><span class="line">hciconfig

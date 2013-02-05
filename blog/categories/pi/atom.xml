@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-05T19:09:11+00:00</updated>
+  <updated>2013-02-05T19:28:57+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -442,14 +442,14 @@ hcitool dev
 # scan for devices
 hcitool scan
 
-# pair with device, using address listed from scan
-bluez-simple-agent hci0 3C:DA:F8:42:0C:AB
+# pair with device, using the address listed from scan
+bluez-simple-agent hci0 XX:XX:XX:XX:XX:XX
 
 # trust the device
-bluez-test-device trusted 3C:DA:F8:42:0C:AB yes
+bluez-test-device trusted XX:XX:XX:XX:XX:XX yes
 
 # connect to input device
-bluez-test-input hci0 3C:DA:F8:42:0C:AB
+bluez-test-input hci0 XX:XX:XX:XX:XX:XX
 
 # adapter status
 hciconfig ```
