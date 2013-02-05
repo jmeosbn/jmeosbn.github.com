@@ -18,6 +18,16 @@ Jump to [first login tasks](#first-login-tasks) if you have already set up termi
 
 [^Todo]: Install fsck.ntfs (used to fix unclean unmount)
 
+
+
+### Contents
+{:.no_toc}
+
+* TOC
+{:toc}
+{::options toc_levels="1..2" /}
+
+
 ## Basic Pi Tips
 
 * Guide for navigating XBMC with the [keyboard]
@@ -243,14 +253,13 @@ Use `wget` to download the latest versions from the links below, then open the z
 <http://code.google.com/p/xbmc-itv-player/downloads/list>
 
 
-<br />
 
-# Useful extras, not always used
+## Useful extras, not always used
 
 Stuff used infrequently, or currently being tested
 
 
-## Packages from Raspbian
+### Packages from Raspbian
 
 Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.
 
@@ -261,7 +270,7 @@ Some standard packages that are usually excluded from the xbian distro, as they 
 	apt-get install psmisc usbutils
 ```
 
-## Other useful packages
+### Other useful packages
 
 ```sh
 	apt-get install fs2resize exfat-fuse
@@ -269,13 +278,13 @@ Some standard packages that are usually excluded from the xbian distro, as they 
 	apt-get install sysv-rc-conf
 ```
 
-## Testing PVR
+### Testing PVR
 
 ```sh
 	apt-get install vdr-plugin-dvbsddevice
 ```
 
-## Setting up webcam
+### Setting up webcam
 
 Use 'motion' or 'fswebcam', motion may need a default cfg copying
 
@@ -284,7 +293,7 @@ Use 'motion' or 'fswebcam', motion may need a default cfg copying
 	cp /etc/default/motion /etc/motion/motion.conf
 ```
 
-## Configure bluetooth adapter
+### Configure bluetooth adapter
 
 [Adapted from ctheroux](http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/).
 
@@ -318,14 +327,13 @@ Use 'motion' or 'fswebcam', motion may need a default cfg copying
 **Note: a bluetooth adapter may be listed in ``lsusb`` and ``hciconfig``, without being recognised by ``hcitool``. This is the case with the belkin dongle I have, so use ``hcitool`` to check that a device is working properly.*
 
 
-<br />
 
-# Troubleshooting / backup
+## Troubleshooting and backup
 
 Some useful commands and procedures
 
 
-## Backup settings
+### Backup settings
 
 - Settings, addons etc. are in ~/.xbmc
 - .xbmc/userdata - preferences etc
@@ -341,7 +349,7 @@ Some useful commands and procedures
 	sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
-## Clear cached network adapter
+### Clear cached network adapter
 
 (needed for switching cards between devices)
 
@@ -350,22 +358,21 @@ Some useful commands and procedures
 ```
 
 
-## Quick Tips
+### Quick Tips
 
 * You can detect hdmi audio modes: `/opt/vc/bin/tvservice -a`
 * Setup CEC remote over hdmi from console: `cec-config`
 
 
-<br />
 
-# Not used/needed with recent versions
+## Not used with recent versions
 
 [^Reaper]: http://f.cl.ly/items/0S1S1Y0B3Q241Z2F0z1j/Untitled.png
 
 Previously useful functionality or workarounds
 
 
-## Manually configure WiFi adapter
+### Manually configure WiFi adapter
 
 [Instructions adapted from here](http://www.savagehomeautomation.com/raspi-airlink101).
 
@@ -412,7 +419,7 @@ Reinitialise the adapter, and check it's connected.
 
 Use ``iwconfig`` to view wifi adapter info and ``ifconfig`` for general network info.
 
-## Fake a hardware clock (unabridged)
+### Fake a hardware clock (unabridged)
 
 More complicated instructions, as used on previous versions of XBian.
 
@@ -425,7 +432,7 @@ More complicated instructions, as used on previous versions of XBian.
 	sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
 ```
 
-## Fix ssh access using public key
+### Fix ssh access using public key
 
 ```sh
 	# must be owned by root
@@ -439,7 +446,7 @@ More complicated instructions, as used on previous versions of XBian.
 	chmod a+r ~/.ssh/id_rsa.pub
 ```
 
-## Download OpenSSH sftp server
+### Download OpenSSH sftp server
 
 ```sh
 	apt-get -d install openssh-server
@@ -449,7 +456,7 @@ More complicated instructions, as used on previous versions of XBian.
 	rm -r sftp openssh-server_*.deb
 ```
 
-## Change Hostname
+### Change Hostname
 
 ```sh
     sudo nano /etc/hostname # enter the desired name
@@ -457,7 +464,7 @@ More complicated instructions, as used on previous versions of XBian.
     sudo /etc/init.d/hostname.sh start # to enable the changes
 ```
 
-## Update firmware without kernel
+### Update firmware without kernel
 
 
 ```sh
@@ -465,7 +472,7 @@ More complicated instructions, as used on previous versions of XBian.
     SKIP_KERNEL=1 rpi-update 128
 ```
 
-## Install Shairport
+### Install Shairport
 
 Instructions found [here](http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi) (alt site [here](http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/))
 
