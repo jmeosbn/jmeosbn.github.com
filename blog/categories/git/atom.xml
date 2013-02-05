@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-03T01:55:35+00:00</updated>
+  <updated>2013-02-05T19:06:28+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -18,11 +18,11 @@
     <link href="http://jmeosbn.github.com/blog/resources-for-using-git/"/>
     <updated>2012-09-29T20:35:00+01:00</updated>
     <id>http://jmeosbn.github.com/blog/resources-for-using-git</id>
-    <content type="html"><![CDATA[<p>Here&rsquo;s some basic resources to get started pushing code to github.</p>
+    <content type="html"><![CDATA[<p>Here&#8217;s some basic resources to get started pushing code to github.</p>
 
 <!-- more -->
 
-<p>&ldquo;Code&rdquo; doesn&rsquo;t just mean computer source code; git is useful for tracking changes to anything that can be represented as plain text, e.g. <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
+<p>&#8220;Code&#8221; doesn&#8217;t just mean computer source code; git is useful for tracking changes to anything that can be represented as plain text, e.g. <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
 
 <p>The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named <code>.git</code>.</p>
 
@@ -56,15 +56,15 @@ Date:   Sat Sep 29 23:30:20 2012 +0100</p>
 
 <h2 id="documentation">documentation</h2>
 
-<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&rsquo;t already include it. The same site also hosts a copy of the <a href="http://git-scm.com/docs">documentation</a>, as well as the <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
+<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&#8217;t already include it. The same site also hosts a copy of the <a href="http://git-scm.com/docs">documentation</a>, as well as the <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
 
-<p>If you don&rsquo;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&rsquo;s minimal explanatory text, but full command examples for most operations; making it a useful resource for commands you use rarely and need to quickly relearn.</p>
+<p>If you don&#8217;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&#8217;s minimal explanatory text, but full command examples for most operations; making it a useful resource for commands you use rarely and need to quickly relearn.</p>
 
 <h2 id="graphical-interfaces">graphical interfaces</h2>
 
-<p>While it&rsquo;s good to know how to use git from the command line, it&rsquo;s worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
+<p>While it&#8217;s good to know how to use git from the command line, it&#8217;s worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
 
-<p><a href="http://github.com/">Github</a> offers their own <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients, which have the advantage of closer integration with some of github&rsquo;s features, such as organisations and the &ldquo;Clone in Windows/Mac&rdquo; button found on each repo on github.</p>
+<p><a href="http://github.com/">Github</a> offers their own <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients, which have the advantage of closer integration with some of github&#8217;s features, such as organisations and the &#8220;Clone in Windows/Mac&#8221; button found on each repo on github.</p>
 
 <p><img class="center" src="http://mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" ></p>
 

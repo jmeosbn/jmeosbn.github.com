@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-03T01:55:35+00:00</updated>
+  <updated>2013-02-05T19:06:28+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jmeosbn.github.com/blog/pi-box/"/>
     <updated>2012-12-19T00:54:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/pi-box</id>
-    <content type="html"><![CDATA[<p>There&rsquo;s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it&rsquo;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
+    <content type="html"><![CDATA[<p>There&#8217;s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it&#8217;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
 
 <p>Dropbox does make various SDKs available though, which enables a ruby or python script to be used instead of the official client.</p>
 
@@ -33,7 +33,7 @@
 Dropbox integration made easy. This robust client gives you control over what, where, and when you sync with Dropbox.</p>
 </blockquote>
 
-<p>dbox syncs one file at a time, so it won&rsquo;t be as quick as the official client when syncing large amounts of files.  For most uses this will only be an issue when initially cloning a large folder.</p>
+<p>dbox syncs one file at a time, so it won&#8217;t be as quick as the official client when syncing large amounts of files.  For most uses this will only be an issue when initially cloning a large folder.</p>
 
 <h2 id="installation">installation</h2>
 
@@ -63,7 +63,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">./dboxsync.rb
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running.  If you want to see some basic info while testing, change the script so <code>LOGFILE = STDOUT</code>.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
+<p>All output is written to a log file, so it&#8217;s normal not to see any output while running.  If you want to see some basic info while testing, change the script so <code>LOGFILE = STDOUT</code>.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
 
 <p>To have the script run on startup, add the following entry to <code>/etc/rc.local</code>.</p>
 
@@ -81,7 +81,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="k">fi</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>There&rsquo;s more proper ways of doing this, but this seemed the simplest.</p>
+<p>There&#8217;s more proper ways of doing this, but this seemed the simplest.</p>
 
 <h2 id="todo">todo</h2>
 
@@ -91,27 +91,27 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="notes">notes</h2>
 
-<p>While cron or similar could be used to run dbox periodically, each separate invocation of dbox from the command line incurs a startup delay of a few seconds, during which time the Pi&rsquo;s CPU is maxed out loading ruby and the code needed to run dbox.  This isn&rsquo;t ideal and would likely cause issues if the Pi is used as a media player.</p>
+<p>While cron or similar could be used to run dbox periodically, each separate invocation of dbox from the command line incurs a startup delay of a few seconds, during which time the Pi&#8217;s CPU is maxed out loading ruby and the code needed to run dbox.  This isn&#8217;t ideal and would likely cause issues if the Pi is used as a media player.</p>
 
-<p>The sample_polling_script accesses dbox directly though it&rsquo;s ruby API, and doesn&rsquo;t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
+<p>The sample_polling_script accesses dbox directly though it&#8217;s ruby API, and doesn&#8217;t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
 
 <h1 id="alternatives">alternatives</h1>
 
-<p>Here&rsquo;s some more options I considered, in order of decreasing usefulness.</p>
+<p>Here&#8217;s some more options I considered, in order of decreasing usefulness.</p>
 
 <h2 id="one-way-sync">one way sync</h2>
 
-<p>Create a simple ruby script to sync files one way - <em>from Dropbox</em> - using the Dropbox SDK.  It&rsquo;s also possible to sync both ways in ruby, but <a href="https://github.com/kenpratt/dbox">dbox</a> has already done a great job implementing that.</p>
+<p>Create a simple ruby script to sync files one way - <em>from Dropbox</em> - using the Dropbox SDK.  It&#8217;s also possible to sync both ways in ruby, but <a href="https://github.com/kenpratt/dbox">dbox</a> has already done a great job implementing that.</p>
 
 <p>Ruby SDK <a href="https://www.dropbox.com/developers/start/setup#ruby">Tutorial</a>, <a href="https://www.dropbox.com/static/developers/dropbox-ruby-sdk-1.5.1-docs/index.html">Documentation</a>.</p>
 
 <p>eg. See the <a href="https://www.dropbox.com/static/developers/dropbox-ruby-sdk-1.5.1-docs/DropboxClient.html#method-i-delta">delta method</a> to keep local files in sync without writing too much code.</p>
 
-<p>There&rsquo;s also the cli_example.rb script included in the SDK, which provides a simple shell interface similar to FTP but does not have any syncing logic included.</p>
+<p>There&#8217;s also the cli_example.rb script included in the SDK, which provides a simple shell interface similar to FTP but does not have any syncing logic included.</p>
 
 <h2 id="linux-daemon">linux daemon</h2>
 
-<p>Dropbox does have a download for a daemon, but it&rsquo;s x86/_64 only; see the <a href="https://www.dropbox.com/install?os=lnx">Linux Download</a> page for more info.</p>
+<p>Dropbox does have a download for a daemon, but it&#8217;s x86/_64 only; see the <a href="https://www.dropbox.com/install?os=lnx">Linux Download</a> page for more info.</p>
 
 <blockquote>
   <p>The Dropbox daemon works fine on all 32-bit and 64-bit Linux servers. To install, run the following command in your Linux terminal.</p>
@@ -119,13 +119,13 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="build-from-source">build from source</h2>
 
-<p>The Dropbox source appears to be just a plugin for the nautilus file browser (and doesn&rsquo;t include the above daemon?).  This is only useful when using the desktop.</p>
+<p>The Dropbox source appears to be just a plugin for the nautilus file browser (and doesn&#8217;t include the above daemon?).  This is only useful when using the desktop.</p>
 
 <p>Download the <a href="https://www.dropbox.com/download?dl=packages/nautilus-dropbox-1.4.0.tar.bz2">source archive</a> and build as usual.  More details can be found in <a href="https://www.dropbox.com/help/247">this help topic</a>.</p>
 
 <h2 id="use-something-else">use something else</h2>
 
-<p>I also use github, sftp, scp, and rsync for file transfer, version history and keeping various things in sync; there are many ways to achieve automatic folder syncing.  However, Dropbox fulfills a role that can&rsquo;t easily be duplicated if you use many Dropbox enabled mobile apps, and do not wish the Pi to rely upon a second computer to sync through.</p>
+<p>I also use github, sftp, scp, and rsync for file transfer, version history and keeping various things in sync; there are many ways to achieve automatic folder syncing.  However, Dropbox fulfills a role that can&#8217;t easily be duplicated if you use many Dropbox enabled mobile apps, and do not wish the Pi to rely upon a second computer to sync through.</p>
 <div class="footnotes">
   <ol>
     <li id="fn:dl">
@@ -149,6 +149,29 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <!-- more -->
 
 <p>Jump to <a href="#first-login-tasks">first login tasks</a> if you have already set up terminal access to the Pi.</p>
+
+<h3 class="no_toc" id="contents">Contents</h3>
+
+<ul id="markdown-toc">
+  <li><a href="#basic-pi-tips">Basic Pi Tips</a></li>
+  <li><a href="#pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</a></li>
+  <li><a href="#transfer-files">Transfer files</a></li>
+  <li><a href="#first-login-tasks">First login tasks</a></li>
+  <li><a href="#ttl-serial-console">TTL serial console</a></li>
+  <li><a href="#allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</a></li>
+  <li><a href="#fake-a-hardware-clock">Fake a hardware clock</a></li>
+  <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
+  <li><a href="#link-settings-to-root-profile">Link settings to root profile</a></li>
+  <li><a href="#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
+  <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
+  <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
+  <li><a href="#install-mono">Install Mono</a></li>
+  <li><a href="#xbmc-extensions">XBMC Extensions</a></li>
+  <li><a href="#xbmc-settings">XBMC Settings</a></li>
+  <li><a href="#useful-extras-not-always-used">Useful extras, not always used</a></li>
+  <li><a href="#troubleshooting-and-backup">Troubleshooting and backup</a></li>
+  <li><a href="#not-used-with-recent-versions">Not used with recent versions</a></li>
+</ul>
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
 
@@ -183,7 +206,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">ssh-copy-id xbian@xbian.local
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>The easiest way to append a key to the remote user&rsquo;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn&rsquo;t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
+<p>The easiest way to append a key to the remote user&#8217;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn&#8217;t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
 <h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
@@ -219,7 +242,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="first-login-tasks">First login tasks</h2>
 
-<p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with &lsquo;exit&rsquo; or ctrl+d when finished</em>.</p>
+<p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with &#8216;exit&#8217; or ctrl+d when finished</em>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -305,9 +328,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</h2>
 
-<p>XBian includes the usbmount package to mount USB devices as soon as they are connected.  This causes the XBMC &ldquo;Remove safely&rdquo; command to fail due to root privileges being required to unmount devices not mounted by XBMC.</p>
+<p>XBian includes the usbmount package to mount USB devices as soon as they are connected.  This causes the XBMC &#8220;Remove safely&#8221; command to fail due to root privileges being required to unmount devices not mounted by XBMC.</p>
 
-<p>Additionally, drives mounted by usbmount have inconsistent mount points<sup id="fnref:mountpoints"><a href="#fn:mountpoints" rel="footnote">1</a></sup>, which causes the XBMC media library to be unreliable.  Filesystems such as NTFS will also have improper file permissions<sup id="fnref:ntfs-perms"><a href="#fn:ntfs-perms" rel="footnote">2</a></sup> set.</p>
+<p>Additionally, drives mounted by usbmount have inconsistent mount points<sup id="fnref:mountpoints"><a href="#fn:mountpoints" rel="footnote">1</a></sup>, which cause the XBMC media library to be unreliable.  Filesystems such as NTFS will also have improper file permissions<sup id="fnref:ntfs-perms"><a href="#fn:ntfs-perms" rel="footnote">2</a></sup> set.</p>
 
 <p>Simply disabling usbmount fixes the issues listed above by allowing XBMC to mount and unmount USB drives itself, using the udisk service <a href="https://github.com/xbmc/xbmc/blob/a72f722/xbmc/storage/linux/UDisksProvider.cpp#L120">as designed</a>.  Drives can be unmounted manually using <code>udisks</code> without needing to be root, and members of the <code>plugdev</code> group can also use <code>pumount</code>.</p>
 
@@ -320,24 +343,24 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">sed -i <span class="s1">&#39;/ENABLED=/s/=1/=0/&#39;</span> /etc/usbmount/usbmount.conf
 </span><span class="line">
 </span><span class="line"><span class="c"># optionally remove unused usbmount directories</span>
-</span><span class="line"><span class="c"># mount | grep media/usb || rm -r /media/usb*</span>
+</span><span class="line"><span class="c"># umount /media/usb*; rmdir /media/usb*; rm /media/usb</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
 
-<p>The Pi doesn&rsquo;t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
+<p>The Pi doesn&#8217;t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fake-hwclock
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="configure-wifi-adapter">Configure WiFi adapter</h2>
+<h2 id="configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</h2>
 
-<p>XBian includes simple menu driven WiFi configuration as part of xbian-config.  See the <a href="#manually-configure-wifi-adapter">manual instructions</a> for connecting to multiple networks.</p>
+<p>XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see the <a href="#manually-configure-wifi-adapter">manual configuration</a> for connecting to multiple networks etc.  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but <a href="#configure-bluetooth-adapter">here is the procedure</a> I used when trying to get it running.</p>
 
 <h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
 
-<p>Occasionally you&rsquo;ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
+<p>Occasionally you&#8217;ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -385,7 +408,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
 
-<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi&rsquo;s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
+<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi&#8217;s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -419,21 +442,53 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-gmcs mono-csharp-shell
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="installing-iplayer-and-4od-itv-5">Installing iPlayer (and 4od, ITV, 5)</h2>
+<h2 id="xbmc-extensions">XBMC Extensions</h2>
 
-<p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc&rsquo;s addons page.</p>
+<p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc&#8217;s addons page.</p>
 
-<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a>
-<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a>
-<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></p>
+<ul>
+  <li><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a></li>
+  <li><a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a></li>
+  <li><a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></li>
+</ul>
 
-<p><br /></p>
+<h2 id="xbmc-settings">XBMC Settings</h2>
 
-<h1 id="useful-extras-not-always-used">Useful extras, not always used</h1>
+<p>If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings by using the <a href="http://wiki.xbmc.org/?title=Advancedsettings.xml">advancedsettings.xml</a>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;video&gt;</span>
+</span><span class="line">    <span class="c">&lt;!-- hide system folders from the video files view --&gt;</span>
+</span><span class="line">    <span class="c">&lt;!-- you could also add these to &#39;excludefromscan&#39; --&gt;</span>
+</span><span class="line">    <span class="nt">&lt;excludefromlisting&gt;</span>
+</span><span class="line">    	<span class="nt">&lt;regexp&gt;</span>(\$RECYCLE.BIN|System Volume Information)<span class="nt">&lt;/regexp&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/excludefromlisting&gt;</span>
+</span><span class="line"><span class="nt">&lt;/video&gt;</span>
+</span><span class="line"><span class="nt">&lt;audio&gt;</span>
+</span><span class="line">    <span class="c">&lt;!-- do likewise for the audio files view --&gt;</span>
+</span><span class="line">    <span class="nt">&lt;excludefromlisting&gt;</span>
+</span><span class="line">        <span class="nt">&lt;regexp&gt;</span>(\$RECYCLE.BIN|System Volume Information)<span class="nt">&lt;/regexp&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/excludefromlisting&gt;</span>
+</span><span class="line"><span class="nt">&lt;/audio&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="useful-extras-not-always-used">Useful extras, not always used</h2>
 
 <p>Stuff used infrequently, or currently being tested</p>
 
-<h2 id="packages-from-raspbian">Packages from Raspbian</h2>
+<h3 id="packages-from-raspbian">Packages from Raspbian</h3>
 
 <p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
 
@@ -447,7 +502,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">apt-get install psmisc usbutils
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="other-useful-packages">Other useful packages</h2>
+<h3 id="other-useful-packages">Other useful packages</h3>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -457,15 +512,15 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">apt-get install sysv-rc-conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="testing-pvr">Testing PVR</h2>
+<h3 id="testing-pvr">Testing PVR</h3>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install vdr-plugin-dvbsddevice
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="setting-up-webcam">Setting up webcam</h2>
+<h3 id="setting-up-webcam">Setting up webcam</h3>
 
-<p>Use &lsquo;motion&rsquo; or &lsquo;fswebcam&rsquo;, motion may need a default cfg copying</p>
+<p>Use &#8216;motion&#8217; or &#8216;fswebcam&#8217;, motion may need a default cfg copying</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -473,7 +528,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">cp /etc/default/motion /etc/motion/motion.conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="configure-bluetooth-adapter">Configure bluetooth adapter</h2>
+<h3 id="configure-bluetooth-adapter">Configure bluetooth adapter</h3>
 
 <p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
 
@@ -529,19 +584,17 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
 
-<p><br /></p>
-
-<h1 id="troubleshooting--backup">Troubleshooting / backup</h1>
+<h2 id="troubleshooting-and-backup">Troubleshooting and backup</h2>
 
 <p>Some useful commands and procedures</p>
 
-<h2 id="backup-settings">Backup settings</h2>
+<h3 id="backup-settings">Backup settings</h3>
 
 <ul>
   <li>Settings, addons etc. are in ~/.xbmc</li>
   <li>.xbmc/userdata - preferences etc</li>
   <li>.xbmc/addons - binaries, themes</li>
-  <li>.xbmc/addons/packages - original downloads, can use with &ldquo;install from zip&rdquo;</li>
+  <li>.xbmc/addons/packages - original downloads, can use with &#8220;install from zip&#8221;</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -558,7 +611,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="clear-cached-network-adapter">Clear cached network adapter</h2>
+<h3 id="clear-cached-network-adapter">Clear cached network adapter</h3>
 
 <p>(needed for switching cards between devices)</p>
 
@@ -566,20 +619,18 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nb">echo</span> | sudo tee /etc/udev/rules.d/70-persistent-net.rules
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="quick-tips">Quick Tips</h2>
+<h3 id="quick-tips">Quick Tips</h3>
 
 <ul>
   <li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
   <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
 </ul>
 
-<p><br /></p>
-
-<h1 id="not-usedneeded-with-recent-versions">Not used/needed with recent versions</h1>
+<h2 id="not-used-with-recent-versions">Not used with recent versions</h2>
 
 <p>Previously useful functionality or workarounds</p>
 
-<h2 id="manually-configure-wifi-adapter">Manually configure WiFi adapter</h2>
+<h3 id="manually-configure-wifi-adapter">Manually configure WiFi adapter</h3>
 
 <p><a href="http://www.savagehomeautomation.com/raspi-airlink101">Instructions adapted from here</a>.</p>
 
@@ -589,7 +640,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/network/interfaces
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Make sure the following lines exist, adding them as needed:</p>
+<p>Make sure the following lines exist in the interfaces file, adding them as needed:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -599,13 +650,13 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I&rsquo;ve commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
+<p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I&#8217;ve commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Add your network details using the following template:</p>
+<p>Add your network details to wpa_supplicant.conf, using the following template:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -616,16 +667,16 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <span class="line-number">7</span>
 <span class="line-number">8</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">network</span><span class="o">={</span>
-</span><span class="line"><span class="nv">ssid</span><span class="o">=</span><span class="s2">&quot;YOUR-NETWORK-SSID&quot;</span>
-</span><span class="line"><span class="nv">proto</span><span class="o">=</span>WPA2
-</span><span class="line"><span class="nv">key_mgmt</span><span class="o">=</span>WPA-PSK
-</span><span class="line"><span class="nv">pairwise</span><span class="o">=</span>CCMP TKIP
-</span><span class="line"><span class="nv">group</span><span class="o">=</span>CCMP TKIP
-</span><span class="line"><span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;YOUR-WLAN-PASSWORD&quot;</span>
+</span><span class="line">  <span class="nv">ssid</span><span class="o">=</span><span class="s2">&quot;YOUR-NETWORK-SSID&quot;</span>
+</span><span class="line">  <span class="nv">proto</span><span class="o">=</span>WPA2
+</span><span class="line">  <span class="nv">key_mgmt</span><span class="o">=</span>WPA-PSK
+</span><span class="line">  <span class="nv">pairwise</span><span class="o">=</span>CCMP TKIP
+</span><span class="line">  <span class="nv">group</span><span class="o">=</span>CCMP TKIP
+</span><span class="line">  <span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;YOUR-WLAN-PASSWORD&quot;</span>
 </span><span class="line"><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Reinitialise the adapter, and check it&rsquo;s connected.</p>
+<p>Reinitialise the adapter, and check it&#8217;s connected.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -637,7 +688,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>Use <code>iwconfig</code> to view wifi adapter info and <code>ifconfig</code> for general network info.</p>
 
-<h2 id="fake-a-hardware-clock-unabridged">Fake a hardware clock (unabridged)</h2>
+<h3 id="fake-a-hardware-clock-unabridged">Fake a hardware clock (unabridged)</h3>
 
 <p>More complicated instructions, as used on previous versions of XBian.</p>
 
@@ -655,7 +706,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">sed -i <span class="s1">&#39;s/^exit 0/ntpdate-debian\nexit 0/g&#39;</span> /etc/rc.local
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="fix-ssh-access-using-public-key">Fix ssh access using public key</h2>
+<h3 id="fix-ssh-access-using-public-key">Fix ssh access using public key</h3>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -677,7 +728,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">chmod a+r ~/.ssh/id_rsa.pub
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="download-openssh-sftp-server">Download OpenSSH sftp server</h2>
+<h3 id="download-openssh-sftp-server">Download OpenSSH sftp server</h3>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -691,7 +742,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">rm -r sftp openssh-server_*.deb
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="change-hostname">Change Hostname</h2>
+<h3 id="change-hostname">Change Hostname</h3>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -701,7 +752,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">sudo /etc/init.d/hostname.sh start <span class="c"># to enable the changes</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="update-firmware-without-kernel">Update firmware without kernel</h2>
+<h3 id="update-firmware-without-kernel">Update firmware without kernel</h3>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -709,7 +760,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="nv">SKIP_KERNEL</span><span class="o">=</span>1 rpi-update 128
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="install-shairport">Install Shairport</h2>
+<h3 id="install-shairport">Install Shairport</h3>
 
 <p>Instructions found <a href="http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi">here</a> (alt site <a href="http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/">here</a>)</p>
 
@@ -784,7 +835,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <div class="footnotes">
   <ol>
     <li id="fn:mountpoints">
-      <p>USB devices are mounted to the first empty directory that&rsquo;s named <code>/media/usb?</code>, where <code>?</code> is a number between 0 and 7.  This prevents XMBC from showing previously saved metadata for a media file, if its mount point has since changed, e.g. the drive was previously mounted at <code>/media/usb0</code>, but is now mounted at <code>/media/usb1</code>.  This can happen even if there is only one USB drive being used and it is connected using the same USB port.<a href="#fnref:mountpoints" rel="reference">&#8617;</a></p>
+      <p>USB devices are mounted to the first empty directory that&#8217;s named <code>/media/usb?</code>, where <code>?</code> is a number between 0 and 7.  This prevents XMBC from showing previously saved metadata for a media file, if its mount point has since changed, e.g. the drive was previously mounted at <code>/media/usb0</code>, but is now mounted at <code>/media/usb1</code>.  This can happen even if there is only one USB drive being used and it is connected using the same USB port.<a href="#fnref:mountpoints" rel="reference">&#8617;</a></p>
     </li>
     <li id="fn:ntfs-perms">
       <p>e.g. All NTFS files being marked as executable.<a href="#fnref:ntfs-perms" rel="reference">&#8617;</a></p>
@@ -799,7 +850,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <link href="http://jmeosbn.github.com/blog/stellaris-virtual-serial-device/"/>
     <updated>2012-12-10T02:48:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/stellaris-virtual-serial-device</id>
-    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it&rsquo;s output.</p>
+    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it&#8217;s output.</p>
 
 <!-- more -->
 
@@ -821,9 +872,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>The (fairly open) rules shown above, give the user named &lsquo;<em>devuser</em>&rsquo; permission to access the launchpad&rsquo;s usb interface, along with it&rsquo;s virtual serial device.</p>
+<p>The (fairly open) rules shown above, give the user named &#8216;<em>devuser</em>&#8217; permission to access the launchpad&#8217;s usb interface, along with it&#8217;s virtual serial device.</p>
 
-<p>Note: these rules should be more specific if you have similar devices that you don&rsquo;t wish to allow access to inadvertently.</p>
+<p>Note: these rules should be more specific if you have similar devices that you don&#8217;t wish to allow access to inadvertently.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -831,7 +882,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="nv">SUBSYSTEMS</span><span class="o">==</span><span class="s2">&quot;usb&quot;</span>, ATTRS<span class="o">{</span>idVendor<span class="o">}==</span><span class="s2">&quot;1cbe&quot;</span>, ATTRS<span class="o">{</span>idProduct<span class="o">}==</span><span class="s2">&quot;00fd&quot;</span>, <span class="nv">MODE</span><span class="o">=</span><span class="s2">&quot;0660&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it&rsquo;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
+<p>The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it&#8217;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
 <p>To define these rules, the exact name, vendor, and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
 
@@ -851,7 +902,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="serial-device">serial device</h2>
 
-<p>If you want to use the serial connection to provide input or commands to the launchpad, you&rsquo;ll need a terminal emulator that can connect to a serial device.</p>
+<p>If you want to use the serial connection to provide input or commands to the launchpad, you&#8217;ll need a terminal emulator that can connect to a serial device.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -879,7 +930,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="c">#  to list other commands, type: ^A ?</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it&rsquo;s full name.</p>
+<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it&#8217;s full name.</p>
 
 <p>On OS X the device should be named similar to <code>tty.usbmodem</code>, with the serial number of the device appended.</p>
 ]]></content>
@@ -890,7 +941,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <link href="http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:40:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain">installed</a>, here&rsquo;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
+    <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain">installed</a>, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
 <!-- more -->
 
@@ -987,13 +1038,13 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <link href="http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:02:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
+    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&#8217;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
 
 <!-- more -->
 
-<p><em>(If you don&rsquo;t fancy building the toolchain, <a href="http://www.yagarto.de/">yagarto</a> offers recent binaries for Windows and Mac OS X that target ARM devices.)</em></p>
+<p><em>(If you don&#8217;t fancy building the toolchain, <a href="http://www.yagarto.de/">yagarto</a> offers recent binaries for Windows and Mac OS X that target ARM devices.)</em></p>
 
-<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&rsquo;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&rsquo;ll probably try building next.</p>
+<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&#8217;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&#8217;ll probably try building next.</p>
 
 <p>For more details on the launchpad, and the various libraries etc. that it uses, T.I. has a selection of <a href="http://www.ti.com/product/lm4f120h5qr">technical documentation</a> on their site.</p>
 
@@ -1015,13 +1066,13 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">Unable to find any ICDI devices
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn&rsquo;t check for the serial number.</p>
+<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn&#8217;t check for the serial number.</p>
 
 <p>Btw, you will get a similar error if your system requires root privileges to access the device directly over usb; try using <code>sudo</code> on linux/unix systems if you have issues.</p>
 
 <h2 id="more-links">more links</h2>
 
-<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM&rsquo;s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
+<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM&#8217;s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
 
 <p><a href="http://jmeosbn.github.com/testing-the-stellaris-toolchain">Testing the Stellaris Toolchain</a> - my overview for compiling and testing code on the device.</p>
 
@@ -1033,11 +1084,11 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <link href="http://jmeosbn.github.com/blog/resources-for-using-git/"/>
     <updated>2012-09-29T20:35:00+01:00</updated>
     <id>http://jmeosbn.github.com/blog/resources-for-using-git</id>
-    <content type="html"><![CDATA[<p>Here&rsquo;s some basic resources to get started pushing code to github.</p>
+    <content type="html"><![CDATA[<p>Here&#8217;s some basic resources to get started pushing code to github.</p>
 
 <!-- more -->
 
-<p>&ldquo;Code&rdquo; doesn&rsquo;t just mean computer source code; git is useful for tracking changes to anything that can be represented as plain text, e.g. <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
+<p>&#8220;Code&#8221; doesn&#8217;t just mean computer source code; git is useful for tracking changes to anything that can be represented as plain text, e.g. <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
 
 <p>The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named <code>.git</code>.</p>
 
@@ -1083,15 +1134,15 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="documentation">documentation</h2>
 
-<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&rsquo;t already include it. The same site also hosts a copy of the <a href="http://git-scm.com/docs">documentation</a>, as well as the <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
+<p>Git itself can be installed from <a href="http://git-scm.com/downloads">git-scm.com</a> if your OS doesn&#8217;t already include it. The same site also hosts a copy of the <a href="http://git-scm.com/docs">documentation</a>, as well as the <a href="http://git-scm.com/book">Pro Git book</a> which is a great place to start learning git.  Pro Git is also available as a commercially <a href="http://www.amazon.com/gp/product/1430218339?ie=UTF8&amp;tag=prgi-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1430218339">printed book</a> from Apress, and as a free <a href="https://github.s3.amazonaws.com/media/progit.epub">ePub</a>, <a href="https://github.s3.amazonaws.com/media/pro-git.en.mobi">mobi</a>, or <a href="https://github.s3.amazonaws.com/media/progit.en.pdf">PDF</a> download.</p>
 
-<p>If you don&rsquo;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&rsquo;s minimal explanatory text, but full command examples for most operations; making it a useful resource for commands you use rarely and need to quickly relearn.</p>
+<p>If you don&#8217;t fancy reading an entire book, then this <a href="http://www.vogella.com/articles/Git/article.html">Git Tutorial</a> gets straight to the point for those already familiar with the concepts of version control.  There&#8217;s minimal explanatory text, but full command examples for most operations; making it a useful resource for commands you use rarely and need to quickly relearn.</p>
 
 <h2 id="graphical-interfaces">graphical interfaces</h2>
 
-<p>While it&rsquo;s good to know how to use git from the command line, it&rsquo;s worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
+<p>While it&#8217;s good to know how to use git from the command line, it&#8217;s worth getting a GUI for easier building of commits etc. (you could also integrate it with your favourite editor and diff viewer)</p>
 
-<p><a href="http://github.com/">Github</a> offers their own <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients, which have the advantage of closer integration with some of github&rsquo;s features, such as organisations and the &ldquo;Clone in Windows/Mac&rdquo; button found on each repo on github.</p>
+<p><a href="http://github.com/">Github</a> offers their own <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients, which have the advantage of closer integration with some of github&#8217;s features, such as organisations and the &#8220;Clone in Windows/Mac&#8221; button found on each repo on github.</p>
 
 <p><img class="center" src="http://mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" /></p>
 

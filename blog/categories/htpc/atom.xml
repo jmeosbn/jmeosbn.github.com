@@ -4,7 +4,7 @@
   <title><![CDATA[Category: htpc | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/htpc/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-03T01:55:35+00:00</updated>
+  <updated>2013-02-05T19:06:28+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -23,6 +23,29 @@
 <!-- more -->
 
 <p>Jump to <a href="#first-login-tasks">first login tasks</a> if you have already set up terminal access to the Pi.</p>
+
+<h3 class="no_toc" id="contents">Contents</h3>
+
+<ul id="markdown-toc">
+  <li><a href="#basic-pi-tips">Basic Pi Tips</a></li>
+  <li><a href="#pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</a></li>
+  <li><a href="#transfer-files">Transfer files</a></li>
+  <li><a href="#first-login-tasks">First login tasks</a></li>
+  <li><a href="#ttl-serial-console">TTL serial console</a></li>
+  <li><a href="#allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</a></li>
+  <li><a href="#fake-a-hardware-clock">Fake a hardware clock</a></li>
+  <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
+  <li><a href="#link-settings-to-root-profile">Link settings to root profile</a></li>
+  <li><a href="#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
+  <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
+  <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
+  <li><a href="#install-mono">Install Mono</a></li>
+  <li><a href="#xbmc-extensions">XBMC Extensions</a></li>
+  <li><a href="#xbmc-settings">XBMC Settings</a></li>
+  <li><a href="#useful-extras-not-always-used">Useful extras, not always used</a></li>
+  <li><a href="#troubleshooting-and-backup">Troubleshooting and backup</a></li>
+  <li><a href="#not-used-with-recent-versions">Not used with recent versions</a></li>
+</ul>
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
 
@@ -50,7 +73,7 @@ ssh-keygen -R xbian.local
 ssh-copy-id xbian@xbian.local ```
 </code></pre>
 
-<p>The easiest way to append a key to the remote user&rsquo;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn&rsquo;t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
+<p>The easiest way to append a key to the remote user&#8217;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn&#8217;t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
 <h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
@@ -78,7 +101,7 @@ ssh-copy-id xbian@xbian.local ```
 
 <h2 id="first-login-tasks">First login tasks</h2>
 
-<p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with &lsquo;exit&rsquo; or ctrl+d when finished</em>.</p>
+<p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with &#8216;exit&#8217; or ctrl+d when finished</em>.</p>
 
 <p>```sh
 	# Login to the pi, using the <code>xb</code> alias
@@ -129,35 +152,35 @@ apt-get install ruby ruby-dev ri libsqlite3-dev ```
 
 <h2 id="allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</h2>
 
-<p>XBian includes the usbmount package to mount USB devices as soon as they are connected.  This causes the XBMC &ldquo;Remove safely&rdquo; command to fail due to root privileges being required to unmount devices not mounted by XBMC.</p>
+<p>XBian includes the usbmount package to mount USB devices as soon as they are connected.  This causes the XBMC &#8220;Remove safely&#8221; command to fail due to root privileges being required to unmount devices not mounted by XBMC.</p>
 
-<p>Additionally, drives mounted by usbmount have inconsistent mount points<sup id="fnref:mountpoints"><a href="#fn:mountpoints" rel="footnote">1</a></sup>, which causes the XBMC media library to be unreliable.  Filesystems such as NTFS will also have improper file permissions<sup id="fnref:ntfs-perms"><a href="#fn:ntfs-perms" rel="footnote">2</a></sup> set.</p>
+<p>Additionally, drives mounted by usbmount have inconsistent mount points<sup id="fnref:mountpoints"><a href="#fn:mountpoints" rel="footnote">1</a></sup>, which cause the XBMC media library to be unreliable.  Filesystems such as NTFS will also have improper file permissions<sup id="fnref:ntfs-perms"><a href="#fn:ntfs-perms" rel="footnote">2</a></sup> set.</p>
 
 <p>Simply disabling usbmount fixes the issues listed above by allowing XBMC to mount and unmount USB drives itself, using the udisk service <a href="https://github.com/xbmc/xbmc/blob/a72f722/xbmc/storage/linux/UDisksProvider.cpp#L120">as designed</a>.  Drives can be unmounted manually using <code>udisks</code> without needing to be root, and members of the <code>plugdev</code> group can also use <code>pumount</code>.</p>
 
 <p>```sh
 	# disable the usbmount package
-	sed -i &lsquo;/ENABLED=/s/=1/=0/&rsquo; /etc/usbmount/usbmount.conf</p>
+	sed -i &#8216;/ENABLED=/s/=1/=0/&#8217; /etc/usbmount/usbmount.conf</p>
 
 <pre><code># optionally remove unused usbmount directories
-# mount | grep media/usb || rm -r /media/usb* ```
+# umount /media/usb*; rmdir /media/usb*; rm /media/usb ```
 </code></pre>
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
 
-<p>The Pi doesn&rsquo;t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
+<p>The Pi doesn&#8217;t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
 
 <p><code>sh
 	apt-get install fake-hwclock
 </code></p>
 
-<h2 id="configure-wifi-adapter">Configure WiFi adapter</h2>
+<h2 id="configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</h2>
 
-<p>XBian includes simple menu driven WiFi configuration as part of xbian-config.  See the <a href="#manually-configure-wifi-adapter">manual instructions</a> for connecting to multiple networks.</p>
+<p>XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see the <a href="#manually-configure-wifi-adapter">manual configuration</a> for connecting to multiple networks etc.  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but <a href="#configure-bluetooth-adapter">here is the procedure</a> I used when trying to get it running.</p>
 
 <h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
 
-<p>Occasionally you&rsquo;ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
+<p>Occasionally you&#8217;ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
 
 <p>```sh
 	# change to the home folder you want to link from
@@ -189,7 +212,7 @@ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key --&gt;
 
 <h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
 
-<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi&rsquo;s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
+<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi&#8217;s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
 
 <p>```sh
 	apt-get install gcc make git-core libi2c-dev
@@ -217,21 +240,41 @@ gpio readall ```
 	apt-get install mono-devel mono-gmcs mono-csharp-shell
 </code></p>
 
-<h2 id="installing-iplayer-and-4od-itv-5">Installing iPlayer (and 4od, ITV, 5)</h2>
+<h2 id="xbmc-extensions">XBMC Extensions</h2>
 
-<p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc&rsquo;s addons page.</p>
+<p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc&#8217;s addons page.</p>
 
-<p><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a>
-<a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a>
-<a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></p>
+<ul>
+  <li><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a></li>
+  <li><a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a></li>
+  <li><a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></li>
+</ul>
 
-<p><br /></p>
+<h2 id="xbmc-settings">XBMC Settings</h2>
 
-<h1 id="useful-extras-not-always-used">Useful extras, not always used</h1>
+<p>If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings by using the <a href="http://wiki.xbmc.org/?title=Advancedsettings.xml">advancedsettings.xml</a>.</p>
+
+<p><code>xml
+    &lt;video&gt;
+        &lt;!-- hide system folders from the video files view --&gt;
+        &lt;!-- you could also add these to 'excludefromscan' --&gt;
+        &lt;excludefromlisting&gt;
+        	&lt;regexp&gt;(\$RECYCLE.BIN|System Volume Information)&lt;/regexp&gt;
+        &lt;/excludefromlisting&gt;
+    &lt;/video&gt;
+    &lt;audio&gt;
+        &lt;!-- do likewise for the audio files view --&gt;
+        &lt;excludefromlisting&gt;
+	        &lt;regexp&gt;(\$RECYCLE.BIN|System Volume Information)&lt;/regexp&gt;
+        &lt;/excludefromlisting&gt;
+    &lt;/audio&gt;
+</code></p>
+
+<h2 id="useful-extras-not-always-used">Useful extras, not always used</h2>
 
 <p>Stuff used infrequently, or currently being tested</p>
 
-<h2 id="packages-from-raspbian">Packages from Raspbian</h2>
+<h3 id="packages-from-raspbian">Packages from Raspbian</h3>
 
 <p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
 
@@ -242,7 +285,7 @@ gpio readall ```
 apt-get install psmisc usbutils ```
 </code></pre>
 
-<h2 id="other-useful-packages">Other useful packages</h2>
+<h3 id="other-useful-packages">Other useful packages</h3>
 
 <p><code>sh
 	apt-get install fs2resize exfat-fuse
@@ -250,22 +293,22 @@ apt-get install psmisc usbutils ```
 	apt-get install sysv-rc-conf
 </code></p>
 
-<h2 id="testing-pvr">Testing PVR</h2>
+<h3 id="testing-pvr">Testing PVR</h3>
 
 <p><code>sh
 	apt-get install vdr-plugin-dvbsddevice
 </code></p>
 
-<h2 id="setting-up-webcam">Setting up webcam</h2>
+<h3 id="setting-up-webcam">Setting up webcam</h3>
 
-<p>Use &lsquo;motion&rsquo; or &lsquo;fswebcam&rsquo;, motion may need a default cfg copying</p>
+<p>Use &#8216;motion&#8217; or &#8216;fswebcam&#8217;, motion may need a default cfg copying</p>
 
 <p><code>sh
 	apt-get install motion
 	cp /etc/default/motion /etc/motion/motion.conf
 </code></p>
 
-<h2 id="configure-bluetooth-adapter">Configure bluetooth adapter</h2>
+<h3 id="configure-bluetooth-adapter">Configure bluetooth adapter</h3>
 
 <p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
 
@@ -298,19 +341,17 @@ hciconfig ```
 
 <p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
 
-<p><br /></p>
-
-<h1 id="troubleshooting--backup">Troubleshooting / backup</h1>
+<h2 id="troubleshooting-and-backup">Troubleshooting and backup</h2>
 
 <p>Some useful commands and procedures</p>
 
-<h2 id="backup-settings">Backup settings</h2>
+<h3 id="backup-settings">Backup settings</h3>
 
 <ul>
   <li>Settings, addons etc. are in ~/.xbmc</li>
   <li>.xbmc/userdata - preferences etc</li>
   <li>.xbmc/addons - binaries, themes</li>
-  <li>.xbmc/addons/packages - original downloads, can use with &ldquo;install from zip&rdquo;</li>
+  <li>.xbmc/addons/packages - original downloads, can use with &#8220;install from zip&#8221;</li>
 </ul>
 
 <p>```sh
@@ -322,7 +363,7 @@ hciconfig ```
 sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf ```
 </code></pre>
 
-<h2 id="clear-cached-network-adapter">Clear cached network adapter</h2>
+<h3 id="clear-cached-network-adapter">Clear cached network adapter</h3>
 
 <p>(needed for switching cards between devices)</p>
 
@@ -330,20 +371,18 @@ sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf ```
     echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
 </code></p>
 
-<h2 id="quick-tips">Quick Tips</h2>
+<h3 id="quick-tips">Quick Tips</h3>
 
 <ul>
   <li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
   <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
 </ul>
 
-<p><br /></p>
-
-<h1 id="not-usedneeded-with-recent-versions">Not used/needed with recent versions</h1>
+<h2 id="not-used-with-recent-versions">Not used with recent versions</h2>
 
 <p>Previously useful functionality or workarounds</p>
 
-<h2 id="manually-configure-wifi-adapter">Manually configure WiFi adapter</h2>
+<h3 id="manually-configure-wifi-adapter">Manually configure WiFi adapter</h3>
 
 <p><a href="http://www.savagehomeautomation.com/raspi-airlink101">Instructions adapted from here</a>.</p>
 
@@ -353,7 +392,7 @@ sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf ```
 	sudo nano /etc/network/interfaces
 </code></p>
 
-<p>Make sure the following lines exist, adding them as needed:</p>
+<p>Make sure the following lines exist in the interfaces file, adding them as needed:</p>
 
 <p><code>
     allow-hotplug wlan0
@@ -361,26 +400,26 @@ sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf ```
     wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
 </code></p>
 
-<p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I&rsquo;ve commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
+<p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I&#8217;ve commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
 
 <p><code>sh
 	sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
 </code></p>
 
-<p>Add your network details using the following template:</p>
+<p>Add your network details to wpa_supplicant.conf, using the following template:</p>
 
 <p><code>
     network={
-    ssid="YOUR-NETWORK-SSID"
-    proto=WPA2
-    key_mgmt=WPA-PSK
-    pairwise=CCMP TKIP
-    group=CCMP TKIP
-    psk="YOUR-WLAN-PASSWORD"
+      ssid="YOUR-NETWORK-SSID"
+      proto=WPA2
+      key_mgmt=WPA-PSK
+      pairwise=CCMP TKIP
+      group=CCMP TKIP
+      psk="YOUR-WLAN-PASSWORD"
     }
 </code></p>
 
-<p>Reinitialise the adapter, and check it&rsquo;s connected.</p>
+<p>Reinitialise the adapter, and check it&#8217;s connected.</p>
 
 <p><code>sh
 	sudo ifdown wlan0
@@ -390,7 +429,7 @@ sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf ```
 
 <p>Use <code>iwconfig</code> to view wifi adapter info and <code>ifconfig</code> for general network info.</p>
 
-<h2 id="fake-a-hardware-clock-unabridged">Fake a hardware clock (unabridged)</h2>
+<h3 id="fake-a-hardware-clock-unabridged">Fake a hardware clock (unabridged)</h3>
 
 <p>More complicated instructions, as used on previous versions of XBian.</p>
 
@@ -403,7 +442,7 @@ sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf ```
 	sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
 </code></p>
 
-<h2 id="fix-ssh-access-using-public-key">Fix ssh access using public key</h2>
+<h3 id="fix-ssh-access-using-public-key">Fix ssh access using public key</h3>
 
 <p>```sh
 	# must be owned by root
@@ -417,7 +456,7 @@ chmod -R go-rwx ~/.ssh
 chmod a+r ~/.ssh/id_rsa.pub ```
 </code></pre>
 
-<h2 id="download-openssh-sftp-server">Download OpenSSH sftp server</h2>
+<h3 id="download-openssh-sftp-server">Download OpenSSH sftp server</h3>
 
 <p><code>sh
 	apt-get -d install openssh-server
@@ -427,7 +466,7 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 	rm -r sftp openssh-server_*.deb
 </code></p>
 
-<h2 id="change-hostname">Change Hostname</h2>
+<h3 id="change-hostname">Change Hostname</h3>
 
 <p><code>sh
     sudo nano /etc/hostname # enter the desired name
@@ -435,14 +474,14 @@ chmod a+r ~/.ssh/id_rsa.pub ```
     sudo /etc/init.d/hostname.sh start # to enable the changes
 </code></p>
 
-<h2 id="update-firmware-without-kernel">Update firmware without kernel</h2>
+<h3 id="update-firmware-without-kernel">Update firmware without kernel</h3>
 
 <p><code>sh
     wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update &amp;&amp; chmod +x /usr/bin/rpi-update
     SKIP_KERNEL=1 rpi-update 128
 </code></p>
 
-<h2 id="install-shairport">Install Shairport</h2>
+<h3 id="install-shairport">Install Shairport</h3>
 
 <p>Instructions found <a href="http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi">here</a> (alt site <a href="http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/">here</a>)</p>
 
@@ -488,7 +527,7 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 <div class="footnotes">
   <ol>
     <li id="fn:mountpoints">
-      <p>USB devices are mounted to the first empty directory that&rsquo;s named <code>/media/usb?</code>, where <code>?</code> is a number between 0 and 7.  This prevents XMBC from showing previously saved metadata for a media file, if its mount point has since changed, e.g. the drive was previously mounted at <code>/media/usb0</code>, but is now mounted at <code>/media/usb1</code>.  This can happen even if there is only one USB drive being used and it is connected using the same USB port.<a href="#fnref:mountpoints" rel="reference">&#8617;</a></p>
+      <p>USB devices are mounted to the first empty directory that&#8217;s named <code>/media/usb?</code>, where <code>?</code> is a number between 0 and 7.  This prevents XMBC from showing previously saved metadata for a media file, if its mount point has since changed, e.g. the drive was previously mounted at <code>/media/usb0</code>, but is now mounted at <code>/media/usb1</code>.  This can happen even if there is only one USB drive being used and it is connected using the same USB port.<a href="#fnref:mountpoints" rel="reference">&#8617;</a></p>
     </li>
     <li id="fn:ntfs-perms">
       <p>e.g. All NTFS files being marked as executable.<a href="#fnref:ntfs-perms" rel="reference">&#8617;</a></p>

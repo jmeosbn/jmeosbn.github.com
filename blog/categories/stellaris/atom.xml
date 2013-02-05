@@ -4,7 +4,7 @@
   <title><![CDATA[Category: stellaris | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/stellaris/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-03T01:55:35+00:00</updated>
+  <updated>2013-02-05T19:06:28+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jmeosbn.github.com/blog/stellaris-virtual-serial-device/"/>
     <updated>2012-12-10T02:48:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/stellaris-virtual-serial-device</id>
-    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it&rsquo;s output.</p>
+    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it&#8217;s output.</p>
 
 <!-- more -->
 
@@ -36,16 +36,16 @@ ATTRS{product}=="In-Circuit Debug Interface", OWNER="devuser"
 KERNEL=="ttyACM?", OWNER="devuser" ```
 </code></pre>
 
-<p>The (fairly open) rules shown above, give the user named &lsquo;<em>devuser</em>&rsquo; permission to access the launchpad&rsquo;s usb interface, along with it&rsquo;s virtual serial device.</p>
+<p>The (fairly open) rules shown above, give the user named &#8216;<em>devuser</em>&#8217; permission to access the launchpad&#8217;s usb interface, along with it&#8217;s virtual serial device.</p>
 
-<p>Note: these rules should be more specific if you have similar devices that you don&rsquo;t wish to allow access to inadvertently.</p>
+<p>Note: these rules should be more specific if you have similar devices that you don&#8217;t wish to allow access to inadvertently.</p>
 
 <p><code>sh
 	# Exact match for Stellaris LM4F120XL
 	SUBSYSTEMS=="usb", ATTRS{idVendor}=="1cbe", ATTRS{idProduct}=="00fd", MODE="0660", OWNER="devuser"
 </code></p>
 
-<p>The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it&rsquo;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
+<p>The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it&#8217;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
 <p>To define these rules, the exact name, vendor, and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
 
@@ -60,7 +60,7 @@ KERNEL=="ttyACM?", OWNER="devuser" ```
 
 <h2 id="serial-device">serial device</h2>
 
-<p>If you want to use the serial connection to provide input or commands to the launchpad, you&rsquo;ll need a terminal emulator that can connect to a serial device.</p>
+<p>If you want to use the serial connection to provide input or commands to the launchpad, you&#8217;ll need a terminal emulator that can connect to a serial device.</p>
 
 <p>``` sh
 	$ cd stellaris/boards/ek-lm4f120xl/qs-rgb
@@ -77,7 +77,7 @@ $ screen /dev/tty.usbmodem* 115200
 #  to list other commands, type: ^A ? ```
 </code></pre>
 
-<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it&rsquo;s full name.</p>
+<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it&#8217;s full name.</p>
 
 <p>On OS X the device should be named similar to <code>tty.usbmodem</code>, with the serial number of the device appended.</p>
 ]]></content>
@@ -88,12 +88,12 @@ $ screen /dev/tty.usbmodem* 115200
     <link href="http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:40:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="/blog/compiling-the-stellaris-toolchain">installed</a>, here&rsquo;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
+    <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="/blog/compiling-the-stellaris-toolchain">installed</a>, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
 <!-- more -->
 
 <p>``` sh
-	# Add the toolchain to your profile&rsquo;s path
+	# Add the toolchain to your profile&#8217;s path
 	# Ideally this should go into your bash profile
 	$ export PATH=$HOME/arm-cs-tools/bin:$PATH</p>
 
@@ -148,13 +148,13 @@ $ sudo killall lmicdi # or type 'fg' followed by ^C ```
     <link href="http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:02:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&rsquo;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
+    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&#8217;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
 
 <!-- more -->
 
-<p><em>(If you don&rsquo;t fancy building the toolchain, <a href="http://www.yagarto.de/">yagarto</a> offers recent binaries for Windows and Mac OS X that target ARM devices.)</em></p>
+<p><em>(If you don&#8217;t fancy building the toolchain, <a href="http://www.yagarto.de/">yagarto</a> offers recent binaries for Windows and Mac OS X that target ARM devices.)</em></p>
 
-<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&rsquo;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&rsquo;ll probably try building next.</p>
+<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&#8217;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&#8217;ll probably try building next.</p>
 
 <p>For more details on the launchpad, and the various libraries etc. that it uses, T.I. has a selection of <a href="http://www.ti.com/product/lm4f120h5qr">technical documentation</a> on their site.</p>
 
@@ -174,13 +174,13 @@ $ sudo killall lmicdi # or type 'fg' followed by ^C ```
 	Unable to find any ICDI devices
 </code></p>
 
-<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn&rsquo;t check for the serial number.</p>
+<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn&#8217;t check for the serial number.</p>
 
 <p>Btw, you will get a similar error if your system requires root privileges to access the device directly over usb; try using <code>sudo</code> on linux/unix systems if you have issues.</p>
 
 <h2 id="more-links">more links</h2>
 
-<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM&rsquo;s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
+<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM&#8217;s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
 
 <p><a href="/testing-the-stellaris-toolchain">Testing the Stellaris Toolchain</a> - my overview for compiling and testing code on the device.</p>
 

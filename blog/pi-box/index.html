@@ -9,7 +9,7 @@
   <meta name="author" content="Jamie Osborne">
 
   
-  <meta name="description" content="There&rsquo;s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it&rsquo;s not suitable for &hellip;">
+  <meta name="description" content="There&#8217;s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it&#8217;s not suitable for &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,7 +76,7 @@
   </header>
 
 
-<div class="entry-content"><p>There&rsquo;s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it&rsquo;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
+<div class="entry-content"><p>There&#8217;s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it&#8217;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
 
 <p>Dropbox does make various SDKs available though, which enables a ruby or python script to be used instead of the official client.</p>
 
@@ -91,7 +91,7 @@
 Dropbox integration made easy. This robust client gives you control over what, where, and when you sync with Dropbox.</p>
 </blockquote>
 
-<p>dbox syncs one file at a time, so it won&rsquo;t be as quick as the official client when syncing large amounts of files.  For most uses this will only be an issue when initially cloning a large folder.</p>
+<p>dbox syncs one file at a time, so it won&#8217;t be as quick as the official client when syncing large amounts of files.  For most uses this will only be an issue when initially cloning a large folder.</p>
 
 <h2 id="installation">installation</h2>
 
@@ -121,7 +121,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">./dboxsync.rb
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>All output is written to a log file, so it&rsquo;s normal not to see any output while running.  If you want to see some basic info while testing, change the script so <code>LOGFILE = STDOUT</code>.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
+<p>All output is written to a log file, so it&#8217;s normal not to see any output while running.  If you want to see some basic info while testing, change the script so <code>LOGFILE = STDOUT</code>.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
 
 <p>To have the script run on startup, add the following entry to <code>/etc/rc.local</code>.</p>
 
@@ -139,7 +139,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="k">fi</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>There&rsquo;s more proper ways of doing this, but this seemed the simplest.</p>
+<p>There&#8217;s more proper ways of doing this, but this seemed the simplest.</p>
 
 <h2 id="todo">todo</h2>
 
@@ -149,27 +149,27 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="notes">notes</h2>
 
-<p>While cron or similar could be used to run dbox periodically, each separate invocation of dbox from the command line incurs a startup delay of a few seconds, during which time the Pi&rsquo;s CPU is maxed out loading ruby and the code needed to run dbox.  This isn&rsquo;t ideal and would likely cause issues if the Pi is used as a media player.</p>
+<p>While cron or similar could be used to run dbox periodically, each separate invocation of dbox from the command line incurs a startup delay of a few seconds, during which time the Pi&#8217;s CPU is maxed out loading ruby and the code needed to run dbox.  This isn&#8217;t ideal and would likely cause issues if the Pi is used as a media player.</p>
 
-<p>The sample_polling_script accesses dbox directly though it&rsquo;s ruby API, and doesn&rsquo;t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
+<p>The sample_polling_script accesses dbox directly though it&#8217;s ruby API, and doesn&#8217;t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
 
 <h1 id="alternatives">alternatives</h1>
 
-<p>Here&rsquo;s some more options I considered, in order of decreasing usefulness.</p>
+<p>Here&#8217;s some more options I considered, in order of decreasing usefulness.</p>
 
 <h2 id="one-way-sync">one way sync</h2>
 
-<p>Create a simple ruby script to sync files one way - <em>from Dropbox</em> - using the Dropbox SDK.  It&rsquo;s also possible to sync both ways in ruby, but <a href="https://github.com/kenpratt/dbox">dbox</a> has already done a great job implementing that.</p>
+<p>Create a simple ruby script to sync files one way - <em>from Dropbox</em> - using the Dropbox SDK.  It&#8217;s also possible to sync both ways in ruby, but <a href="https://github.com/kenpratt/dbox">dbox</a> has already done a great job implementing that.</p>
 
 <p>Ruby SDK <a href="https://www.dropbox.com/developers/start/setup#ruby">Tutorial</a>, <a href="https://www.dropbox.com/static/developers/dropbox-ruby-sdk-1.5.1-docs/index.html">Documentation</a>.</p>
 
 <p>eg. See the <a href="https://www.dropbox.com/static/developers/dropbox-ruby-sdk-1.5.1-docs/DropboxClient.html#method-i-delta">delta method</a> to keep local files in sync without writing too much code.</p>
 
-<p>There&rsquo;s also the cli_example.rb script included in the SDK, which provides a simple shell interface similar to FTP but does not have any syncing logic included.</p>
+<p>There&#8217;s also the cli_example.rb script included in the SDK, which provides a simple shell interface similar to FTP but does not have any syncing logic included.</p>
 
 <h2 id="linux-daemon">linux daemon</h2>
 
-<p>Dropbox does have a download for a daemon, but it&rsquo;s x86/_64 only; see the <a href="https://www.dropbox.com/install?os=lnx">Linux Download</a> page for more info.</p>
+<p>Dropbox does have a download for a daemon, but it&#8217;s x86/_64 only; see the <a href="https://www.dropbox.com/install?os=lnx">Linux Download</a> page for more info.</p>
 
 <blockquote>
   <p>The Dropbox daemon works fine on all 32-bit and 64-bit Linux servers. To install, run the following command in your Linux terminal.</p>
@@ -177,13 +177,13 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="build-from-source">build from source</h2>
 
-<p>The Dropbox source appears to be just a plugin for the nautilus file browser (and doesn&rsquo;t include the above daemon?).  This is only useful when using the desktop.</p>
+<p>The Dropbox source appears to be just a plugin for the nautilus file browser (and doesn&#8217;t include the above daemon?).  This is only useful when using the desktop.</p>
 
 <p>Download the <a href="https://www.dropbox.com/download?dl=packages/nautilus-dropbox-1.4.0.tar.bz2">source archive</a> and build as usual.  More details can be found in <a href="https://www.dropbox.com/help/247">this help topic</a>.</p>
 
 <h2 id="use-something-else">use something else</h2>
 
-<p>I also use github, sftp, scp, and rsync for file transfer, version history and keeping various things in sync; there are many ways to achieve automatic folder syncing.  However, Dropbox fulfills a role that can&rsquo;t easily be duplicated if you use many Dropbox enabled mobile apps, and do not wish the Pi to rely upon a second computer to sync through.</p>
+<p>I also use github, sftp, scp, and rsync for file transfer, version history and keeping various things in sync; there are many ways to achieve automatic folder syncing.  However, Dropbox fulfills a role that can&#8217;t easily be duplicated if you use many Dropbox enabled mobile apps, and do not wish the Pi to rely upon a second computer to sync through.</p>
 <div class="footnotes">
   <ol>
     <li id="fn:dl">
