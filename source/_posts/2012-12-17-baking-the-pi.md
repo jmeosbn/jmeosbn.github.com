@@ -253,6 +253,27 @@ Use `wget` to download the latest versions from the links below, then open the z
 - <http://code.google.com/p/mossy-xbmc-repo/downloads/list>
 - <http://code.google.com/p/xbmc-itv-player/downloads/list>
 
+## XBMC Settings
+
+If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings by using the [advancedsettings.xml].
+
+[advancedsettings.xml]: http://wiki.xbmc.org/?title=Advancedsettings.xml
+
+```xml
+    <video>
+        <!-- hide system folders from the video files view -->
+        <!-- you could also add these to 'excludefromscan' -->
+        <excludefromlisting>
+        	<regexp>(\$RECYCLE.BIN|System Volume Information)</regexp>
+        </excludefromlisting>
+    </video>
+    <audio>
+        <!-- do likewise for the audio files view -->
+        <excludefromlisting>
+	        <regexp>(\$RECYCLE.BIN|System Volume Information)</regexp>
+        </excludefromlisting>
+    </audio>
+```
 
 
 ## Useful extras, not always used
