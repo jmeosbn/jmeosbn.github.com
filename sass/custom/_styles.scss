@@ -17,12 +17,27 @@ body > header {
 
 /* ----- Special Text ----- */
 
-/* superscript text */
-sup{
+/* footnote superscript text */
+sup[id^=fnref] {
   /* super is the expected setting */
   vertical-align: middle;
   /* smaller seems to be the default */
-  font-size: 70%;
+  font-size: 75%;
+}
+
+/* footnote links */
+a[rel~="footnote"] {
+  /* don't underline footnote links */
+  text-decoration: none;
+}
+
+/* footnote return links */
+a[rel~="reference"] {
+  font-size: smaller;
+  /* don't underline footnote links */
+  text-decoration: none;
+  /* add padding before link */
+  padding-left: 0.3em;
 }
 
 /* style for footnotes */
