@@ -245,13 +245,13 @@ Basic mono setup to run and compile command line tools.
 	apt-get install mono-devel mono-gmcs mono-csharp-shell
 ```
 
-## Installing iPlayer (and 4od, ITV, 5)
+## XBMC Extensions
 
 Use `wget` to download the latest versions from the links below, then open the zip files directly from xbmc's addons page.
 
-<http://code.google.com/p/xbmc-iplayerv2/downloads/list>
-<http://code.google.com/p/mossy-xbmc-repo/downloads/list>
-<http://code.google.com/p/xbmc-itv-player/downloads/list>
+- <http://code.google.com/p/xbmc-iplayerv2/downloads/list>
+- <http://code.google.com/p/mossy-xbmc-repo/downloads/list>
+- <http://code.google.com/p/xbmc-itv-player/downloads/list>
 
 
 
