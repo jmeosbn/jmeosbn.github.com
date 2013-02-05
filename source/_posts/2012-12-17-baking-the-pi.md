@@ -170,9 +170,10 @@ The Pi doesn't have a real time clock, so it usually defaults to some point in t
 	apt-get install fake-hwclock
 ```
 
-## Configure WiFi adapter
+## Configure WiFi and Bluetooth
 
-XBian includes simple menu driven WiFi configuration as part of xbian-config.  See the [manual instructions](#manually-configure-wifi-adapter) for connecting to multiple networks.
+XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see the [manual configuration](#manually-configure-wifi-adapter) for connecting to multiple networks etc.  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but [here is the procedure](#configure-bluetooth-adapter) I used when trying to get it running.
+
 
 ## Link settings to root profile
 
