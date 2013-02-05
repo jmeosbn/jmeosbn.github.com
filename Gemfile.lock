@@ -20,7 +20,7 @@ GEM
       liquid (~> 2.3)
       maruku (~> 0.5)
       pygments.rb (~> 0.3.2)
-    kramdown (0.13.8)
+    kramdown (0.14.2)
     liquid (2.3.0)
     maruku (0.6.1)
       syntax (>= 1.0.0)
