@@ -26,8 +26,7 @@ Alternatively, on Linux you can configure permissions for the device using udev 
 	$ sudo nano /etc/udev/rules.d/42-sellaris.rules
 	
 	# add the following lines:
-	ATTRS{product}=="In-Circuit Debug Interface", OWNER="devuser"
-	KERNEL=="ttyACM?", OWNER="devuser"
+	ATTRS{product}=="In-Circuit Debug Interface", OWNER="devuser" KERNEL=="ttyACM?"
 ```
 		
 The (fairly open) rules shown above, give the user named '*devuser*' permission to access the launchpad's usb interface, along with it's virtual serial device.
