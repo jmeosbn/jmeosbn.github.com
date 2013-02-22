@@ -90,12 +90,10 @@
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
-<span class="line-number">5</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo nano /etc/udev/rules.d/42-sellaris.rules
 </span><span class="line">
 </span><span class="line"><span class="c"># add the following lines:</span>
-</span><span class="line">ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
-</span><span class="line"><span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>
+</span><span class="line">ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span> <span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>The (fairly open) rules shown above, give the user named &#8216;<em>devuser</em>&#8217; permission to access the launchpad&#8217;s usb interface, along with it&#8217;s virtual serial device.</p>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-22T18:20:26+00:00</updated>
+  <updated>2013-02-22T18:28:00+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -669,8 +669,7 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 	$ sudo nano /etc/udev/rules.d/42-sellaris.rules</p>
 
 <pre><code># add the following lines:
-ATTRS{product}=="In-Circuit Debug Interface", OWNER="devuser"
-KERNEL=="ttyACM?" ```
+ATTRS{product}=="In-Circuit Debug Interface", OWNER="devuser" KERNEL=="ttyACM?" ```
 </code></pre>
 
 <p>The (fairly open) rules shown above, give the user named &#8216;<em>devuser</em>&#8217; permission to access the launchpad&#8217;s usb interface, along with it&#8217;s virtual serial device.</p>

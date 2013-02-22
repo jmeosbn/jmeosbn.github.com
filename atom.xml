@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-22T18:20:26+00:00</updated>
+  <updated>2013-02-22T18:28:00+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -864,12 +864,10 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
-<span class="line-number">5</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo nano /etc/udev/rules.d/42-sellaris.rules
 </span><span class="line">
 </span><span class="line"><span class="c"># add the following lines:</span>
-</span><span class="line">ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
-</span><span class="line"><span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>
+</span><span class="line">ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span> <span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>The (fairly open) rules shown above, give the user named &#8216;<em>devuser</em>&#8217; permission to access the launchpad&#8217;s usb interface, along with it&#8217;s virtual serial device.</p>
