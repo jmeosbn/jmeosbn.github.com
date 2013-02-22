@@ -4,7 +4,7 @@
   <title><![CDATA[Category: htpc | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/htpc/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-22T18:28:00+00:00</updated>
+  <updated>2013-02-22T18:31:20+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -44,7 +44,6 @@
   <li><a href="#useful-extras-not-always-used">Useful extras, not always used</a></li>
   <li><a href="#troubleshooting-and-backup">Troubleshooting and backup</a></li>
   <li><a href="#not-used-with-recent-versions">Not used with recent versions</a></li>
-  <li><a href="#allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</a></li>
 </ul>
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
@@ -474,7 +473,7 @@ chmod a+r ~/.ssh/id_rsa.pub ```
     SKIP_KERNEL=1 rpi-update 128
 </code></p>
 
-<h2 id="allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</h2>
+<h3 id="allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</h3>
 
 <p>XBian used to include the usbmount package to mount USB devices as soon as they are connected.  This prevented XBMC from bring able to mount and unmount USB drives itself, using the udisk service [as designed], due to root privileges being required to unmount devices mounted by usbmount.</p>
 
