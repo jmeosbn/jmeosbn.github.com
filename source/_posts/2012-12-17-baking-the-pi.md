@@ -10,7 +10,7 @@ categories: [arm, pi, htpc]
 ---
 
 
-A collection of notes for setting up a clean image of [XBian](http://www.xbian.org) (1.0 Alpha 4) on the Raspberry Pi.
+A collection of notes for setting up a clean image of [XBian](http://www.xbian.org) (1.0 Alpha 5) on the Raspberry Pi.
 
 <!-- more -->
 
@@ -104,6 +104,10 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 
 	# xbian-config may run here, set it up as you like then exit
 
+	# Disable autorun of xbian-config
+	# Use 'sudo xbian-config' to run manually
+	sed -i '/^sudo xbian-config/s/^/# /' ~/.bashrc
+
 	# Disable the login message
 	touch ~/.hushlogin
 
@@ -117,18 +121,11 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 	# note: XBian 1.0b4 made this much less essential
 	echo '%sudo  ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
-	# Disable autorun of configuration menu,
-	# run manually with: 'sudo xbian-config'
-	sed -i '1 i return' /etc/profile.d/xbian-config.sh
-
-	# Prevent hideoutput from overwriting the prompt
-	sed -i '/40;0m/s/^/##/' /etc/profile.d/hideoutput.sh
-
 	# Update packages
 	apt-get update && apt-get upgrade
 
 	# Install some utilities
-	apt-get install p7zip zip
+	apt-get install p7zip zip mediainfo
 
 	# Install gcc compiler, dev tools
 	apt-get install gcc make git-core
@@ -149,30 +146,6 @@ The display of full screen terminal programs becomes corrupted when using a TTL 
 
 
 
-## Allow XBMC to unmount USB drives
-
-XBian includes the usbmount package to mount USB devices as soon as they are connected.  This causes the XBMC "Remove safely" command to fail due to root privileges being required to unmount devices not mounted by XBMC.
-
-Additionally, drives mounted by usbmount have inconsistent mount points[^mountpoints], which cause the XBMC media library to be unreliable.  Filesystems such as NTFS will also have improper file permissions[^ntfs-perms] set.
-
-Simply disabling usbmount fixes the issues listed above by allowing XBMC to mount and unmount USB drives itself, using the udisk service [as designed].  Drives can be unmounted manually using ``udisks`` without needing to be root, and members of the ``plugdev`` group can also use ``pumount``.
-
-```sh
-	# disable the usbmount package
-	sed -i '/ENABLED=/s/=1/=0/' /etc/usbmount/usbmount.conf
-
-	# optionally remove unused usbmount directories
-	# umount /media/usb*; rmdir /media/usb*; rm /media/usb
-```
-
-[as designed]: https://github.com/xbmc/xbmc/blob/a72f722/xbmc/storage/linux/UDisksProvider.cpp#L120
-
-[^mountpoints]: USB devices are mounted to the first empty directory that's named ``/media/usb?``, where ``?`` is a number between 0 and 7.  This prevents XMBC from showing previously saved metadata for a media file, if its mount point has since changed, e.g. the drive was previously mounted at ``/media/usb0``, but is now mounted at ``/media/usb1``.  This can happen even if there is only one USB drive being used and it is connected using the same USB port.
-
-[^ntfs-perms]: e.g. All NTFS files being marked as executable.
-
-
-
 ## Fake a hardware clock
 
 The Pi doesn't have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  *(note: previous distros required the [unabridged instructions](#fake-a-hardware-clock-unabridged).)*
@@ -185,7 +158,7 @@ The Pi doesn't have a real time clock, so it usually defaults to some point in t
 
 ## Configure WiFi and Bluetooth
 
-XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see the [manual configuration](#manually-configure-wifi-adapter) for connecting to multiple networks etc.  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but [here is the procedure](#configure-bluetooth-adapter) I used when trying to get it running.
+XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see [manual configuration](#manually-configure-wifi-adapter) if you want finer control over the network settings (e.g. connecting to multiple networks).  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but [here is the procedure](#configure-bluetooth-adapter) I used when trying to get it running (confirmed working on a laptop running Ubuntu).
 
 
 
@@ -280,11 +253,11 @@ Use `wget` to download the latest versions from the links below, then open the z
 
 ## XBMC Settings
 
-If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings by using the [advancedsettings.xml].
+If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings in [advancedsettings.xml].
 
 [advancedsettings.xml]: http://wiki.xbmc.org/?title=Advancedsettings.xml
 
-```xml
+```xml ~/.xbmc/userdata/advancedsettings.xml
     <video>
         <!-- hide system folders from the video files view -->
         <!-- you could also add these to 'excludefromscan' -->
@@ -403,6 +376,18 @@ Some useful commands and procedures
 
 	# backup system config files
 	sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
+```
+
+Or using tar..
+
+```sh
+	# backup profile settings
+	tar -czf xbmc-backup.tar.gz .xbmc
+
+	# restore profile settings
+	sudo initctl stop xbmc
+	tar -xzf xbmc-backup.tar.gz
+	sudo initctl start xbmc
 ```
 
 
@@ -537,12 +522,26 @@ More complicated instructions, as used on previous versions of XBian.
 
 ### Update firmware without kernel
 
-
-
 ```sh
     wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update && chmod +x /usr/bin/rpi-update
     SKIP_KERNEL=1 rpi-update 128
 ```
+
+
+
+### Allow XBMC to unmount USB drives
+
+XBian used to include the usbmount package to mount USB devices as soon as they are connected.  This prevented XBMC from bring able to mount and unmount USB drives itself, using the udisk service [as designed], due to root privileges being required to unmount devices mounted by usbmount.
+
+```sh
+	# disable the usbmount package
+	sed -i '/ENABLED=/s/=1/=0/' /etc/usbmount/usbmount.conf
+
+	# optionally remove unused usbmount directories
+	# umount /media/usb*; rmdir /media/usb*; rm /media/usb
+```
+
+Drives can be unmounted manually using ``udisks`` without needing to be root, and members of the ``plugdev`` group can also use ``pumount``.
 
 
 
@@ -588,4 +587,6 @@ A change in IOS 6 [requires Perl Net-SDP](http://jordanburgess.com/post/38986434
 	# exit root
 	exit
 ```
+
+
 
