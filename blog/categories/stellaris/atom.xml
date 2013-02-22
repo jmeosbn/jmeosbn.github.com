@@ -4,7 +4,7 @@
   <title><![CDATA[Category: stellaris | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/stellaris/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-05T21:47:18+00:00</updated>
+  <updated>2013-02-22T18:20:26+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -33,7 +33,7 @@
 
 <pre><code># add the following lines:
 ATTRS{product}=="In-Circuit Debug Interface", OWNER="devuser"
-KERNEL=="ttyACM?", OWNER="devuser" ```
+KERNEL=="ttyACM?" ```
 </code></pre>
 
 <p>The (fairly open) rules shown above, give the user named &#8216;<em>devuser</em>&#8217; permission to access the launchpad&#8217;s usb interface, along with it&#8217;s virtual serial device.</p>

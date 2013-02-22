@@ -9,7 +9,7 @@
   <meta name="author" content="Jamie Osborne">
 
   
-  <meta name="description" content="A collection of notes for setting up a clean image of XBian (1.0 Alpha 4) on the Raspberry Pi. Jump to first login tasks if you have already set up &hellip;">
+  <meta name="description" content="A collection of notes for setting up a clean image of XBian (1.0 Alpha 5) on the Raspberry Pi. Jump to first login tasks if you have already set up &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,7 +76,7 @@
   </header>
 
 
-<div class="entry-content"><p>A collection of notes for setting up a clean image of <a href="http://www.xbian.org">XBian</a> (1.0 Alpha 4) on the Raspberry Pi.</p>
+<div class="entry-content"><p>A collection of notes for setting up a clean image of <a href="http://www.xbian.org">XBian</a> (1.0 Alpha 5) on the Raspberry Pi.</p>
 
 <!-- more -->
 
@@ -90,7 +90,6 @@
   <li><a href="#transfer-files">Transfer files</a></li>
   <li><a href="#first-login-tasks">First login tasks</a></li>
   <li><a href="#ttl-serial-console">TTL serial console</a></li>
-  <li><a href="#allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</a></li>
   <li><a href="#fake-a-hardware-clock">Fake a hardware clock</a></li>
   <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
   <li><a href="#link-settings-to-root-profile">Link settings to root profile</a></li>
@@ -103,6 +102,7 @@
   <li><a href="#useful-extras-not-always-used">Useful extras, not always used</a></li>
   <li><a href="#troubleshooting-and-backup">Troubleshooting and backup</a></li>
   <li><a href="#not-used-with-recent-versions">Not used with recent versions</a></li>
+  <li><a href="#allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</a></li>
 </ul>
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
@@ -209,13 +209,14 @@
 <span class="line-number">31</span>
 <span class="line-number">32</span>
 <span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
 </span><span class="line">ssh xb
 </span><span class="line">
 </span><span class="line"><span class="c"># xbian-config may run here, set it up as you like then exit</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Disable autorun of xbian-config</span>
+</span><span class="line"><span class="c"># to run manually: &#39;sudo xbian-config&#39;</span>
+</span><span class="line">sed -i <span class="s1">&#39;/^sudo xbian-config/s/^/# /&#39;</span> ~/.bashrc
 </span><span class="line">
 </span><span class="line"><span class="c"># Disable the login message</span>
 </span><span class="line">touch ~/.hushlogin
@@ -229,13 +230,6 @@
 </span><span class="line"><span class="c"># Allow full use of sudo without needing password</span>
 </span><span class="line"><span class="c"># note: XBian 1.0b4 made this much less essential</span>
 </span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;%sudo  ALL=(ALL) NOPASSWD: ALL&#39;</span> &gt;&gt; /etc/sudoers
-</span><span class="line">
-</span><span class="line"><span class="c"># Disable autorun of configuration menu,</span>
-</span><span class="line"><span class="c"># run manually with: &#39;sudo xbian-config&#39;</span>
-</span><span class="line">sed -i <span class="s1">&#39;1 i return&#39;</span> /etc/profile.d/xbian-config.sh
-</span><span class="line">
-</span><span class="line"><span class="c"># Prevent hideoutput from overwriting the prompt</span>
-</span><span class="line">sed -i <span class="s1">&#39;/40;0m/s/^/##/&#39;</span> /etc/profile.d/hideoutput.sh
 </span><span class="line">
 </span><span class="line"><span class="c"># Update packages</span>
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
@@ -258,26 +252,6 @@
 </pre></td><td class="code"><pre><code class="sh"><span class="line">sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm/&#39;</span> /etc/inittab
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</h2>
-
-<p>XBian includes the usbmount package to mount USB devices as soon as they are connected.  This causes the XBMC &#8220;Remove safely&#8221; command to fail due to root privileges being required to unmount devices not mounted by XBMC.</p>
-
-<p>Additionally, drives mounted by usbmount have inconsistent mount points<sup id="fnref:mountpoints"><a href="#fn:mountpoints" rel="footnote">1</a></sup>, which cause the XBMC media library to be unreliable.  Filesystems such as NTFS will also have improper file permissions<sup id="fnref:ntfs-perms"><a href="#fn:ntfs-perms" rel="footnote">2</a></sup> set.</p>
-
-<p>Simply disabling usbmount fixes the issues listed above by allowing XBMC to mount and unmount USB drives itself, using the udisk service <a href="https://github.com/xbmc/xbmc/blob/a72f722/xbmc/storage/linux/UDisksProvider.cpp#L120">as designed</a>.  Drives can be unmounted manually using <code>udisks</code> without needing to be root, and members of the <code>plugdev</code> group can also use <code>pumount</code>.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># disable the usbmount package</span>
-</span><span class="line">sed -i <span class="s1">&#39;/ENABLED=/s/=1/=0/&#39;</span> /etc/usbmount/usbmount.conf
-</span><span class="line">
-</span><span class="line"><span class="c"># optionally remove unused usbmount directories</span>
-</span><span class="line"><span class="c"># umount /media/usb*; rmdir /media/usb*; rm /media/usb</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
 
 <p>The Pi doesn&#8217;t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
@@ -288,7 +262,7 @@
 
 <h2 id="configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</h2>
 
-<p>XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see the <a href="#manually-configure-wifi-adapter">manual configuration</a> for connecting to multiple networks etc.  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but <a href="#configure-bluetooth-adapter">here is the procedure</a> I used when trying to get it running.</p>
+<p>XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see <a href="#manually-configure-wifi-adapter">manual configuration</a> if you want finer control over the network settings (e.g. connecting to multiple networks).  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but <a href="#configure-bluetooth-adapter">here is the procedure</a> I used when trying to get it running (confirmed working on a laptop running Ubuntu).</p>
 
 <h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
 
@@ -386,9 +360,9 @@
 
 <h2 id="xbmc-settings">XBMC Settings</h2>
 
-<p>If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings by using the <a href="http://wiki.xbmc.org/?title=Advancedsettings.xml">advancedsettings.xml</a>.</p>
+<p>If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings in <a href="http://wiki.xbmc.org/?title=Advancedsettings.xml">advancedsettings.xml</a>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>~/.xbmc/userdata/advancedsettings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -543,6 +517,24 @@
 </span><span class="line">sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<p>Or using tar..</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
+</span><span class="line">tar -czf xbmc-backup.tar.gz .xbmc
+</span><span class="line">
+</span><span class="line"><span class="c"># restore profile settings</span>
+</span><span class="line">sudo initctl stop xbmc
+</span><span class="line">tar -xzf xbmc-backup.tar.gz
+</span><span class="line">sudo initctl start xbmc
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <h3 id="clear-cached-network-adapter">Clear cached network adapter</h3>
 
 <p>(needed for switching cards between devices)</p>
@@ -692,6 +684,24 @@
 </span><span class="line"><span class="nv">SKIP_KERNEL</span><span class="o">=</span>1 rpi-update 128
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<h2 id="allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</h2>
+
+<p>XBian used to include the usbmount package to mount USB devices as soon as they are connected.  This prevented XBMC from bring able to mount and unmount USB drives itself, using the udisk service [as designed], due to root privileges being required to unmount devices mounted by usbmount.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># disable the usbmount package</span>
+</span><span class="line">sed -i <span class="s1">&#39;/ENABLED=/s/=1/=0/&#39;</span> /etc/usbmount/usbmount.conf
+</span><span class="line">
+</span><span class="line"><span class="c"># optionally remove unused usbmount directories</span>
+</span><span class="line"><span class="c"># umount /media/usb*; rmdir /media/usb*; rm /media/usb</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Drives can be unmounted manually using <code>udisks</code> without needing to be root, and members of the <code>plugdev</code> group can also use <code>pumount</code>.</p>
+
 <h3 id="install-shairport">Install Shairport</h3>
 
 <p>Instructions found <a href="http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi">here</a> (alt site <a href="http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/">here</a>)</p>
@@ -764,16 +774,6 @@
 </span><span class="line"><span class="nb">exit</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<div class="footnotes">
-  <ol>
-    <li id="fn:mountpoints">
-      <p>USB devices are mounted to the first empty directory that&#8217;s named <code>/media/usb?</code>, where <code>?</code> is a number between 0 and 7.  This prevents XMBC from showing previously saved metadata for a media file, if its mount point has since changed, e.g. the drive was previously mounted at <code>/media/usb0</code>, but is now mounted at <code>/media/usb1</code>.  This can happen even if there is only one USB drive being used and it is connected using the same USB port.<a href="#fnref:mountpoints" rel="reference">&#8617;</a></p>
-    </li>
-    <li id="fn:ntfs-perms">
-      <p>e.g. All NTFS files being marked as executable.<a href="#fnref:ntfs-perms" rel="reference">&#8617;</a></p>
-    </li>
-  </ol>
-</div>
 </div>
 
 
