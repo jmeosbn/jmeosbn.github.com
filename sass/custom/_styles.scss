@@ -52,6 +52,7 @@ a[rel~="reference"] {
 #markdown-toc {
   font-size: 80%;
   line-height: 1.5em;
+  a { text-decoration: none; }
 }
 
 /* style for h3 with id of 'contents' */
