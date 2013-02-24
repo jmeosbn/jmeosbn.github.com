@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-24T18:04:32+00:00</updated>
+  <updated>2013-02-24T19:22:12+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -164,28 +164,28 @@ fi ```
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
 
-<ul>
-  <li>
-    <p>XBian supports zeroconfig<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>, so it&#8217;s easier to find your Pi on the network.</p>
+<p>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a>.</p>
 
-    <pre><code>  # login using hostname
-  ssh xbian@xbian.local
-</code></pre>
-  </li>
-  <li>
-    <p>To avoid issues on a shared network, you should have a <a href="#change-hostname">unique hostname</a>.</p>
-  </li>
-  <li>
-    <p>Otherwise, you can <a href="#find-the-ip-address">find the Pi&#8217;s network IP address</a> and use that to login.</p>
+<h3 id="connecting-to-the-pi">Connecting to the Pi</h3>
 
-    <pre><code>  # login using IP address
-  ssh xbian@192.168.1.10
+<p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian also supports zeroconfig<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>, so it&#8217;s easier to find your Pi on the network.</p>
+
+<p><code>sh
+	# login using zeroconfig
+	ssh xbian@xbian.local
+</code></p>
+
+<p>Otherwise, you can <a href="#find-the-ip-address">find the Pi&#8217;s network IP address</a> and use that to login.</p>
+
+<p>```sh
+	# login using IP address
+	ssh xbian@192.168.1.10</p>
+
+<pre><code># login as user pi on raspbian
+ssh pi@192.168.1.10 ```
 </code></pre>
-  </li>
-  <li>
-    <p>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a>.</p>
-  </li>
-</ul>
+
+<p>You should set a <a href="#change-hostname">unique hostname</a> when sharing a network with other Pis.</p>
 
 <h2 id="pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</h2>
 
@@ -409,15 +409,17 @@ apt-get install psmisc usbutils ```
 
 <h3 id="find-the-ip-address">Find the IP address</h3>
 
-<p>You can get the IP addresses from your Pi by running <code>ifconfig 2&gt;&amp;1 | grep inet</code> on the device - use the one that starts similar (has the same subnet) to the IP address you will be connecting from.</p>
+<p>You can get the IP address from your Pi, by running either of the following commands locally on the device.</p>
 
-<p>If it isn&#8217;t possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can try viewing &#8216;Attached Devices&#8217; in your Router&#8217;s setup, or scan the network, as in the <a href="http://www.recantha.co.uk/blog/?p=2397">findPi script</a> below.</p>
+<p>```sh
+ip r | grep -o &#8216;src.*&#8217;</p>
 
-<pre><code>#!/bin/bash
-# findPi: Find all Pi's on the LAN
-fping -a -r1 -g 192.168.254.0/24 &amp;&gt; /dev/null
-arp -n | fgrep " b8:27:eb"
-</code></pre>
+<p>ifconfig 2&gt;&amp;1 | grep cast | grep -o &#8216;inet [^ ]*&#8217;
+```</p>
+
+<p>Connect to the address that has the same subnet (starts similar) as the IP address you will be connecting from, ignoring the localhost address (127.0.0.1).</p>
+
+<p>If it isn&#8217;t possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can either <a href="http://www.recantha.co.uk/blog/?p=2397">scan the network</a> or view &#8216;Attached Devices&#8217; in your Router&#8217;s setup.  Look for a matching hostname or MAC address (which will start with <code>b8:27:eb</code> for the on-board LAN).</p>
 
 <h3 id="change-hostname">Change Hostname</h3>
 
