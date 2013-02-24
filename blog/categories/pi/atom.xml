@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-22T18:31:20+00:00</updated>
+  <updated>2013-02-24T18:04:32+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -165,8 +165,26 @@ fi ```
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
 
 <ul>
-  <li>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a></li>
-  <li>Login using hostname with zeroconfig: <code>ssh user@host.local</code></li>
+  <li>
+    <p>XBian supports zeroconfig<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>, so it&#8217;s easier to find your Pi on the network.</p>
+
+    <pre><code>  # login using hostname
+  ssh xbian@xbian.local
+</code></pre>
+  </li>
+  <li>
+    <p>To avoid issues on a shared network, you should have a <a href="#change-hostname">unique hostname</a>.</p>
+  </li>
+  <li>
+    <p>Otherwise, you can <a href="#find-the-ip-address">find the Pi&#8217;s network IP address</a> and use that to login.</p>
+
+    <pre><code>  # login using IP address
+  ssh xbian@192.168.1.10
+</code></pre>
+  </li>
+  <li>
+    <p>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a>.</p>
+  </li>
 </ul>
 
 <h2 id="pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</h2>
@@ -225,7 +243,7 @@ ssh-copy-id xbian@xbian.local ```
 <pre><code># xbian-config may run here, set it up as you like then exit
 
 # Disable autorun of xbian-config
-# to run manually: 'sudo xbian-config'
+# Use 'sudo xbian-config' to run manually
 sed -i '/^sudo xbian-config/s/^/# /' ~/.bashrc
 
 # Disable the login message
@@ -245,7 +263,7 @@ echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
 apt-get update &amp;&amp; apt-get upgrade
 
 # Install some utilities
-apt-get install p7zip zip
+apt-get install p7zip zip mediainfo
 
 # Install gcc compiler, dev tools
 apt-get install gcc make git-core
@@ -387,6 +405,28 @@ apt-get install psmisc usbutils ```
 	apt-get install fs2resize exfat-fuse
 	apt-get install clang geany
 	apt-get install sysv-rc-conf
+</code></p>
+
+<h3 id="find-the-ip-address">Find the IP address</h3>
+
+<p>You can get the IP addresses from your Pi by running <code>ifconfig 2&gt;&amp;1 | grep inet</code> on the device - use the one that starts similar (has the same subnet) to the IP address you will be connecting from.</p>
+
+<p>If it isn&#8217;t possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can try viewing &#8216;Attached Devices&#8217; in your Router&#8217;s setup, or scan the network, as in the <a href="http://www.recantha.co.uk/blog/?p=2397">findPi script</a> below.</p>
+
+<pre><code>#!/bin/bash
+# findPi: Find all Pi's on the LAN
+fping -a -r1 -g 192.168.254.0/24 &amp;&gt; /dev/null
+arp -n | fgrep " b8:27:eb"
+</code></pre>
+
+<h3 id="change-hostname">Change Hostname</h3>
+
+<p>If it&#8217;s likely the Pi won&#8217;t be the only one using the local network, then it should be given a unique host name.</p>
+
+<p><code>sh
+    sudo nano /etc/hostname # enter the desired name
+    sudo nano /etc/hosts # replace the hostname
+    sudo /etc/init.d/hostname.sh start # to enable the changes
 </code></p>
 
 <h3 id="testing-pvr">Testing PVR</h3>
@@ -574,14 +614,6 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 	rm -r sftp openssh-server_*.deb
 </code></p>
 
-<h3 id="change-hostname">Change Hostname</h3>
-
-<p><code>sh
-    sudo nano /etc/hostname # enter the desired name
-    sudo nano /etc/hosts # replace the hostname
-    sudo /etc/init.d/hostname.sh start # to enable the changes
-</code></p>
-
 <h3 id="update-firmware-without-kernel">Update firmware without kernel</h3>
 
 <p><code>sh
@@ -646,6 +678,13 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 	exit
 </code></p>
 
+<div class="footnotes">
+  <ol>
+    <li id="fn:hostname">
+      <p>It should be possible to connect with the hostname even without zeroconfig, e.g. <code>xbian@xbian</code> or <code>pi@raspberrypi</code> (on raspbian), but I&#8217;ve had no luck with this.<a href="#fnref:hostname" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 ]]></content>
   </entry>
   

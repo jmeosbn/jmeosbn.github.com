@@ -107,8 +107,26 @@
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
 
 <ul>
-  <li>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a></li>
-  <li>Login using hostname with zeroconfig: <code>ssh user@host.local</code></li>
+  <li>
+    <p>XBian supports zeroconfig<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>, so it&#8217;s easier to find your Pi on the network.</p>
+
+    <pre><code>  # login using hostname
+  ssh xbian@xbian.local
+</code></pre>
+  </li>
+  <li>
+    <p>To avoid issues on a shared network, you should have a <a href="#change-hostname">unique hostname</a>.</p>
+  </li>
+  <li>
+    <p>Otherwise, you can <a href="#find-the-ip-address">find the Pi&#8217;s network IP address</a> and use that to login.</p>
+
+    <pre><code>  # login using IP address
+  ssh xbian@192.168.1.10
+</code></pre>
+  </li>
+  <li>
+    <p>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a>.</p>
+  </li>
 </ul>
 
 <h2 id="pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</h2>
@@ -214,7 +232,7 @@
 </span><span class="line"><span class="c"># xbian-config may run here, set it up as you like then exit</span>
 </span><span class="line">
 </span><span class="line"><span class="c"># Disable autorun of xbian-config</span>
-</span><span class="line"><span class="c"># to run manually: &#39;sudo xbian-config&#39;</span>
+</span><span class="line"><span class="c"># Use &#39;sudo xbian-config&#39; to run manually</span>
 </span><span class="line">sed -i <span class="s1">&#39;/^sudo xbian-config/s/^/# /&#39;</span> ~/.bashrc
 </span><span class="line">
 </span><span class="line"><span class="c"># Disable the login message</span>
@@ -234,7 +252,7 @@
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
 </span><span class="line">
 </span><span class="line"><span class="c"># Install some utilities</span>
-</span><span class="line">apt-get install p7zip zip
+</span><span class="line">apt-get install p7zip zip mediainfo
 </span><span class="line">
 </span><span class="line"><span class="c"># Install gcc compiler, dev tools</span>
 </span><span class="line">apt-get install gcc make git-core
@@ -415,6 +433,30 @@
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fs2resize exfat-fuse
 </span><span class="line">apt-get install clang geany
 </span><span class="line">apt-get install sysv-rc-conf
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="find-the-ip-address">Find the IP address</h3>
+
+<p>You can get the IP addresses from your Pi by running <code>ifconfig 2&gt;&amp;1 | grep inet</code> on the device - use the one that starts similar (has the same subnet) to the IP address you will be connecting from.</p>
+
+<p>If it isn&#8217;t possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can try viewing &#8216;Attached Devices&#8217; in your Router&#8217;s setup, or scan the network, as in the <a href="http://www.recantha.co.uk/blog/?p=2397">findPi script</a> below.</p>
+
+<pre><code>#!/bin/bash
+# findPi: Find all Pi's on the LAN
+fping -a -r1 -g 192.168.254.0/24 &amp;&gt; /dev/null
+arp -n | fgrep " b8:27:eb"
+</code></pre>
+
+<h3 id="change-hostname">Change Hostname</h3>
+
+<p>If it&#8217;s likely the Pi won&#8217;t be the only one using the local network, then it should be given a unique host name.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/hostname <span class="c"># enter the desired name</span>
+</span><span class="line">sudo nano /etc/hosts <span class="c"># replace the hostname</span>
+</span><span class="line">sudo /etc/init.d/hostname.sh start <span class="c"># to enable the changes</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="testing-pvr">Testing PVR</h3>
@@ -665,16 +707,6 @@
 </span><span class="line">rm -r sftp openssh-server_*.deb
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h3 id="change-hostname">Change Hostname</h3>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/hostname <span class="c"># enter the desired name</span>
-</span><span class="line">sudo nano /etc/hosts <span class="c"># replace the hostname</span>
-</span><span class="line">sudo /etc/init.d/hostname.sh start <span class="c"># to enable the changes</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
 <h3 id="update-firmware-without-kernel">Update firmware without kernel</h3>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -773,6 +805,13 @@
 </span><span class="line"><span class="nb">exit</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<div class="footnotes">
+  <ol>
+    <li id="fn:hostname">
+      <p>It should be possible to connect with the hostname even without zeroconfig, e.g. <code>xbian@xbian</code> or <code>pi@raspberrypi</code> (on raspbian), but I&#8217;ve had no luck with this.<a href="#fnref:hostname" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 </div>
 
 
