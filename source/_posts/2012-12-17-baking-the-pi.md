@@ -31,8 +31,34 @@ Jump to [first login tasks](#first-login-tasks) if you have already set up termi
 
 ## Basic Pi Tips
 
-* Guide for navigating XBMC with the [keyboard]
-* Login using hostname with zeroconfig: `ssh user@host.local`
+
+Guide for navigating XBMC with the [keyboard].
+
+
+### Connecting to the Pi
+
+
+XBian names the default user account ``xbian``, other distributions normally use ``pi``.  The default password is ``raspberry``.  XBian also supports zeroconfig[^hostname], so it's easier to find your Pi on the network.
+
+```sh
+	# login using zeroconfig
+	ssh xbian@xbian.local
+```
+
+Otherwise, you can [find the Pi's network IP address](#find-the-ip-address) and use that to login.
+
+```sh
+	# login using IP address
+	ssh xbian@192.168.1.10
+
+	# login as user pi on raspbian
+	ssh pi@192.168.1.10
+```
+
+*Note: If multiple Pis are active on the same network, they should be given [unique hostnames](#change-hostname).*
+
+
+[^hostname]: It should be possible to connect with the hostname even without zeroconfig, e.g. ``xbian@xbian`` or ``pi@raspberrypi`` (on raspbian), but I've had no luck with this.
 
 [keyboard]: http://wiki.xbmc.org/index.php?title=Keyboard
 
@@ -184,7 +210,7 @@ Occasionally you'll want to use a root shell, and then be annoyed that your alia
 
 ## Generate new RSA host keys
 
-These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have more than one Pi.
+These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have [more than one Pi](#change-hostname) on the same network.
 
 ```sh
 	rm /etc/ssh/ssh_host_*
@@ -300,6 +326,36 @@ Some standard packages that are usually excluded from the xbian distro, as they 
 	apt-get install fs2resize exfat-fuse
 	apt-get install clang geany
 	apt-get install sysv-rc-conf
+```
+
+
+
+### Find the IP address
+
+You can get the IP address from your Pi, by running either of the following commands locally on the device.
+
+```sh
+ip r | grep -o 'src.*'
+
+ifconfig | grep cast | grep -o 'addr:[^ ]*'
+```
+
+Connect to the address that has the same subnet (starts similar) as the IP address you will be connecting from, ignoring the localhost address (127.0.0.1).
+
+If it isn't possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can either [scan the network][findPi script] or view 'Attached Devices' in your Router's setup.  Look for a matching hostname or MAC address (which will start with ``b8:27:eb`` for the on-board LAN).
+
+[findPi script]:http://www.recantha.co.uk/blog/?p=2397
+
+
+
+### Change Hostname
+
+If it's likely the Pi won't be the only one using the local network, then it should be given a unique host name.
+
+```sh
+    sudo nano /etc/hostname # enter the desired name
+    sudo nano /etc/hosts # replace the hostname
+    sudo /etc/init.d/hostname.sh start # to enable the changes
 ```
 
 
@@ -506,16 +562,6 @@ More complicated instructions, as used on previous versions of XBian.
 	dpkg-deb -X openssh-server_*.deb sftp
 	cp sftp/usr/lib/openssh/sftp-server /usr/lib/
 	rm -r sftp openssh-server_*.deb
-```
-
-
-
-### Change Hostname
-
-```sh
-    sudo nano /etc/hostname # enter the desired name
-    sudo nano /etc/hosts # replace the hostname
-    sudo /etc/init.d/hostname.sh start # to enable the changes
 ```
 
 
