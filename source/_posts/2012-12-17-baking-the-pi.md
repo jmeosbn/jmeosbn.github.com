@@ -105,7 +105,7 @@ Locally define the alias `xb`, to be used in place of `xbian@xbian.local` with c
 
 
 
-## Transfer files
+### Transfer files
 
 If you have previous files from your Pi stored locally, you can transfer them using `sftp`, `scp`, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.
 
@@ -214,7 +214,7 @@ These keys confirm the identity of the Pi, to prevent a malicious host from inte
 
 ```sh
 	rm /etc/ssh/ssh_host_*
-	/usr/sbin/dpkg-reconfigure openssh-server
+	dpkg-reconfigure openssh-server
 
 	# remove old host key from clients using:
 	# ssh-keygen -R xbian.local
@@ -223,23 +223,6 @@ These keys confirm the identity of the Pi, to prevent a malicious host from inte
 	ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 -->
-
-
-
-## Build and install WiringPi
-
-[WiringPi] is a library to access the Pi's GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the ``gpio`` utility for use of the libraries from the command prompt.
-
-[WiringPi]: https://projects.drogon.net/raspberry-pi/wiringpi
-
-```sh
-	apt-get install gcc make git-core libi2c-dev
-	git clone git://git.drogon.net/wiringPi
-	cd wiringPi; ./build
-
-	# test with gpio utility
-	gpio readall
-```
 
 
 
@@ -263,6 +246,23 @@ Both XBian and Raspbian have system setup menus, but neither seem to setup the c
 	# Configure time zone and locale
 	dpkg-reconfigure tzdata
 	dpkg-reconfigure locales
+```
+
+
+
+## Build and install WiringPi
+
+[WiringPi] is a library to access the Pi's GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the ``gpio`` utility for use of the libraries from the command prompt.
+
+[WiringPi]: https://projects.drogon.net/raspberry-pi/wiringpi
+
+```sh
+	apt-get install gcc make git-core libi2c-dev
+	git clone git://git.drogon.net/wiringPi
+	cd wiringPi; ./build
+
+	# test with gpio utility
+	gpio readall
 ```
 
 
@@ -291,16 +291,6 @@ Basic mono setup to run and compile command line tools.
 
 
 
-## XBMC Extensions
-
-Use `wget` to download the latest versions from the links below, then open the zip files directly from xbmc's addons page.
-
-- <http://code.google.com/p/xbmc-iplayerv2/downloads/list>
-- <http://code.google.com/p/mossy-xbmc-repo/downloads/list>
-- <http://code.google.com/p/xbmc-itv-player/downloads/list>
-
-
-
 ## XBMC Settings
 
 If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings in [advancedsettings.xml].
@@ -322,6 +312,14 @@ If you are storing media in the root folder of an NTFS formatted hard drive, you
         </excludefromlisting>
     </audio>
 ```
+
+### XBMC Extensions
+
+Use `wget` to download the latest versions from the links below, then open the zip files directly from xbmc's addons page.
+
+- <http://code.google.com/p/xbmc-iplayerv2/downloads/list>
+- <http://code.google.com/p/mossy-xbmc-repo/downloads/list>
+- <http://code.google.com/p/xbmc-itv-player/downloads/list>
 
 
 
@@ -436,12 +434,6 @@ Use 'motion' or 'fswebcam', motion may need a default cfg copying
 
 
 
-## Troubleshooting and backup
-
-Some useful commands and procedures
-
-
-
 ### Backup settings
 
 - Settings, addons etc. are in ~/.xbmc
@@ -486,15 +478,6 @@ Or using tar..
 
 * You can detect hdmi audio modes: `/opt/vc/bin/tvservice -a`
 * Setup CEC remote over hdmi from console: `cec-config`
-
-
-
-
-## Not used with recent versions
-
-[^Reaper]: http://f.cl.ly/items/0S1S1Y0B3Q241Z2F0z1j/Untitled.png
-
-Previously useful functionality or workarounds
 
 
 
