@@ -243,6 +243,30 @@ These keys confirm the identity of the Pi, to prevent a malicious host from inte
 
 
 
+## Regional system settings
+
+Both XBian and Raspbian have system setup menus, but neither seem to setup the console keyboard correctly for the en_GB layout.  The current solution I use is to install ``keyboard-configuration``, which only seems to work once ``console-setup`` is also installed.
+
+*The latter package will change the console font, but this can be reverted during the commands shown below. Just choose the font you prefer, or choose 'Do not change the boot/kernel font'.*
+
+```sh
+	# Packages needed to change keyboard layout
+	apt-get install console-setup keyboard-configuration
+
+	# Configure keyboard settings
+	dpkg-reconfigure keyboard-configuration
+
+	# Configure console font
+	# accept the defaults until the font selection screen
+	dpkg-reconfigure console-setup
+
+	# Configure time zone and locale
+	dpkg-reconfigure tzdata
+	dpkg-reconfigure locales
+```
+
+
+
 ## Install dbox (dropbox tool)
 
 Follow the [dbox installation instructions][dbox] to set up the dropbox sdk developer keys and authorisation tokens.  To use dbox for automatic folder syncing, see my post: [Dropbox on Pi](/blog/pi-box/).
