@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-26T20:26:35+00:00</updated>
+  <updated>2013-02-26T20:28:15+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -162,8 +162,8 @@ Dropbox integration made easy. This robust client gives you control over what, w
   <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
   <li><a href="#link-settings-to-root-profile">Link settings to root profile</a></li>
   <li><a href="#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
-  <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
   <li><a href="#regional-system-settings">Regional system settings</a></li>
+  <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
   <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
   <li><a href="#install-mono">Install Mono</a></li>
   <li><a href="#xbmc-settings">XBMC Settings</a></li>
@@ -400,24 +400,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
 	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 -->
 
-<h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
-
-<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi&#8217;s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install gcc make git-core libi2c-dev
-</span><span class="line">git clone git://git.drogon.net/wiringPi
-</span><span class="line"><span class="nb">cd </span>wiringPi; ./build
-</span><span class="line">
-</span><span class="line"><span class="c"># test with gpio utility</span>
-</span><span class="line">gpio readall
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
 <h2 id="regional-system-settings">Regional system settings</h2>
 
 <p>Both XBian and Raspbian have system setup menus, but neither seem to setup the console keyboard correctly for the en_GB layout.  The current solution I use is to install <code>keyboard-configuration</code>, which only seems to work once <code>console-setup</code> is also installed.</p>
@@ -450,6 +432,24 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="c"># Configure time zone and locale</span>
 </span><span class="line">dpkg-reconfigure tzdata
 </span><span class="line">dpkg-reconfigure locales
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
+
+<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi&#8217;s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install gcc make git-core libi2c-dev
+</span><span class="line">git clone git://git.drogon.net/wiringPi
+</span><span class="line"><span class="nb">cd </span>wiringPi; ./build
+</span><span class="line">
+</span><span class="line"><span class="c"># test with gpio utility</span>
+</span><span class="line">gpio readall
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="install-dbox-dropbox-tool">Install dbox (dropbox tool)</h2>

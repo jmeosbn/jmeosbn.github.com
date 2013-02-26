@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-02-26T20:26:35+00:00</updated>
+  <updated>2013-02-26T20:28:15+00:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -152,8 +152,8 @@ fi ```
   <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
   <li><a href="#link-settings-to-root-profile">Link settings to root profile</a></li>
   <li><a href="#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
-  <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
   <li><a href="#regional-system-settings">Regional system settings</a></li>
+  <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
   <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
   <li><a href="#install-mono">Install Mono</a></li>
   <li><a href="#xbmc-settings">XBMC Settings</a></li>
@@ -322,19 +322,6 @@ ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key --&gt;
 </code></pre>
 
-<h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
-
-<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi&#8217;s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
-
-<p>```sh
-	apt-get install gcc make git-core libi2c-dev
-	git clone git://git.drogon.net/wiringPi
-	cd wiringPi; ./build</p>
-
-<pre><code># test with gpio utility
-gpio readall ```
-</code></pre>
-
 <h2 id="regional-system-settings">Regional system settings</h2>
 
 <p>Both XBian and Raspbian have system setup menus, but neither seem to setup the console keyboard correctly for the en_GB layout.  The current solution I use is to install <code>keyboard-configuration</code>, which only seems to work once <code>console-setup</code> is also installed.</p>
@@ -355,6 +342,19 @@ dpkg-reconfigure console-setup
 # Configure time zone and locale
 dpkg-reconfigure tzdata
 dpkg-reconfigure locales ```
+</code></pre>
+
+<h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
+
+<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi&#8217;s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
+
+<p>```sh
+	apt-get install gcc make git-core libi2c-dev
+	git clone git://git.drogon.net/wiringPi
+	cd wiringPi; ./build</p>
+
+<pre><code># test with gpio utility
+gpio readall ```
 </code></pre>
 
 <h2 id="install-dbox-dropbox-tool">Install dbox (dropbox tool)</h2>
