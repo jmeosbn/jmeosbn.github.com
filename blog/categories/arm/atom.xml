@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-04-11T14:35:47+01:00</updated>
+  <updated>2013-06-07T03:31:22+01:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jmeosbn.github.com/blog/pi-box/"/>
     <updated>2012-12-19T00:54:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/pi-box</id>
-    <content type="html"><![CDATA[<p>There&#8217;s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it&#8217;s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
+    <content type="html"><![CDATA[<p>There’s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it’s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
 
 <p>Dropbox does make various SDKs available though, which enables a ruby or python script to be used instead of the official client.</p>
 
@@ -33,7 +33,7 @@
 Dropbox integration made easy. This robust client gives you control over what, where, and when you sync with Dropbox.</p>
 </blockquote>
 
-<p>dbox syncs one file at a time, so it won&#8217;t be as quick as the official client when syncing large amounts of files.  For most uses this will only be an issue when initially cloning a large folder.</p>
+<p>dbox syncs one file at a time, so it won’t be as quick as the official client when syncing large amounts of files.  For most uses this will only be an issue when initially cloning a large folder.</p>
 
 <h2 id="installation">installation</h2>
 
@@ -58,7 +58,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 	./dboxsync.rb
 </code></p>
 
-<p>All output is written to a log file, so it&#8217;s normal not to see any output while running.  If you want to see some basic info while testing, change the script so <code>LOGFILE = STDOUT</code>.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
+<p>All output is written to a log file, so it’s normal not to see any output while running.  If you want to see some basic info while testing, change the script so <code>LOGFILE = STDOUT</code>.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
 
 <p>To have the script run on startup, add the following entry to <code>/etc/rc.local</code>.</p>
 
@@ -71,7 +71,7 @@ if ! pgrep -f dboxsync; then
 fi ```
 </code></pre>
 
-<p>There&#8217;s more proper ways of doing this, but this seemed the simplest.</p>
+<p>There’s more proper ways of doing this, but this seemed the simplest.</p>
 
 <h2 id="todo">todo</h2>
 
@@ -81,27 +81,27 @@ fi ```
 
 <h2 id="notes">notes</h2>
 
-<p>While cron or similar could be used to run dbox periodically, each separate invocation of dbox from the command line incurs a startup delay of a few seconds, during which time the Pi&#8217;s CPU is maxed out loading ruby and the code needed to run dbox.  This isn&#8217;t ideal and would likely cause issues if the Pi is used as a media player.</p>
+<p>While cron or similar could be used to run dbox periodically, each separate invocation of dbox from the command line incurs a startup delay of a few seconds, during which time the Pi’s CPU is maxed out loading ruby and the code needed to run dbox.  This isn’t ideal and would likely cause issues if the Pi is used as a media player.</p>
 
-<p>The sample_polling_script accesses dbox directly though it&#8217;s ruby API, and doesn&#8217;t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
+<p>The sample_polling_script accesses dbox directly though it’s ruby API, and doesn’t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
 
 <h1 id="alternatives">alternatives</h1>
 
-<p>Here&#8217;s some more options I considered, in order of decreasing usefulness.</p>
+<p>Here’s some more options I considered, in order of decreasing usefulness.</p>
 
 <h2 id="one-way-sync">one way sync</h2>
 
-<p>Create a simple ruby script to sync files one way - <em>from Dropbox</em> - using the Dropbox SDK.  It&#8217;s also possible to sync both ways in ruby, but <a href="https://github.com/kenpratt/dbox">dbox</a> has already done a great job implementing that.</p>
+<p>Create a simple ruby script to sync files one way - <em>from Dropbox</em> - using the Dropbox SDK.  It’s also possible to sync both ways in ruby, but <a href="https://github.com/kenpratt/dbox">dbox</a> has already done a great job implementing that.</p>
 
 <p>Ruby SDK <a href="https://www.dropbox.com/developers/start/setup#ruby">Tutorial</a>, <a href="https://www.dropbox.com/static/developers/dropbox-ruby-sdk-1.5.1-docs/index.html">Documentation</a>.</p>
 
 <p>eg. See the <a href="https://www.dropbox.com/static/developers/dropbox-ruby-sdk-1.5.1-docs/DropboxClient.html#method-i-delta">delta method</a> to keep local files in sync without writing too much code.</p>
 
-<p>There&#8217;s also the cli_example.rb script included in the SDK, which provides a simple shell interface similar to FTP but does not have any syncing logic included.</p>
+<p>There’s also the cli_example.rb script included in the SDK, which provides a simple shell interface similar to FTP but does not have any syncing logic included.</p>
 
 <h2 id="linux-daemon">linux daemon</h2>
 
-<p>Dropbox does have a download for a daemon, but it&#8217;s x86/_64 only; see the <a href="https://www.dropbox.com/install?os=lnx">Linux Download</a> page for more info.</p>
+<p>Dropbox does have a download for a daemon, but it’s x86/_64 only; see the <a href="https://www.dropbox.com/install?os=lnx">Linux Download</a> page for more info.</p>
 
 <blockquote>
   <p>The Dropbox daemon works fine on all 32-bit and 64-bit Linux servers. To install, run the following command in your Linux terminal.</p>
@@ -109,13 +109,13 @@ fi ```
 
 <h2 id="build-from-source">build from source</h2>
 
-<p>The Dropbox source appears to be just a plugin for the nautilus file browser (and doesn&#8217;t include the above daemon?).  This is only useful when using the desktop.</p>
+<p>The Dropbox source appears to be just a plugin for the nautilus file browser (and doesn’t include the above daemon?).  This is only useful when using the desktop.</p>
 
 <p>Download the <a href="https://www.dropbox.com/download?dl=packages/nautilus-dropbox-1.4.0.tar.bz2">source archive</a> and build as usual.  More details can be found in <a href="https://www.dropbox.com/help/247">this help topic</a>.</p>
 
 <h2 id="use-something-else">use something else</h2>
 
-<p>I also use github, sftp, scp, and rsync for file transfer, version history and keeping various things in sync; there are many ways to achieve automatic folder syncing.  However, Dropbox fulfills a role that can&#8217;t easily be duplicated if you use many Dropbox enabled mobile apps, and do not wish the Pi to rely upon a second computer to sync through.</p>
+<p>I also use github, sftp, scp, and rsync for file transfer, version history and keeping various things in sync; there are many ways to achieve automatic folder syncing.  However, Dropbox fulfills a role that can’t easily be duplicated if you use many Dropbox enabled mobile apps, and do not wish the Pi to rely upon a second computer to sync through.</p>
 <div class="footnotes">
   <ol>
     <li id="fn:dl">
@@ -145,6 +145,7 @@ fi ```
 <ul id="markdown-toc">
   <li><a href="#basic-pi-tips">Basic Pi Tips</a></li>
   <li><a href="#pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</a></li>
+  <li><a href="#transfer-files">Transfer files</a></li>
   <li><a href="#first-login-tasks">First login tasks</a></li>
   <li><a href="#ttl-serial-console">TTL serial console</a></li>
   <li><a href="#fake-a-hardware-clock">Fake a hardware clock</a></li>
@@ -155,8 +156,10 @@ fi ```
   <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
   <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
   <li><a href="#install-mono">Install Mono</a></li>
-  <li><a href="#xbmc-settings">XBMC Settings</a></li>
+  <li><a href="#setup-xbmc">Setup XBMC</a></li>
   <li><a href="#useful-extras-not-always-used">Useful extras, not always used</a></li>
+  <li><a href="#troubleshooting-and-backup">Troubleshooting and backup</a></li>
+  <li><a href="#not-used-with-recent-versions">Not used with recent versions</a></li>
 </ul>
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
@@ -165,14 +168,14 @@ fi ```
 
 <h3 id="connecting-to-the-pi">Connecting to the Pi</h3>
 
-<p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian also supports zeroconfig<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>, so it&#8217;s easier to find your Pi on the network.</p>
+<p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian also supports zeroconfig<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>, so it’s easier to find your Pi on the network.</p>
 
 <p><code>sh
 	# login using zeroconfig
 	ssh xbian@xbian.local
 </code></p>
 
-<p>Otherwise, you can <a href="#find-the-ip-address">find the Pi&#8217;s network IP address</a> and use that to login.</p>
+<p>Otherwise, you can <a href="#find-the-ip-address">find the Pi’s network IP address</a> and use that to login.</p>
 
 <p>```sh
 	# login using IP address
@@ -203,7 +206,7 @@ ssh-keygen -R xbian.local
 ssh-copy-id xbian@xbian.local ```
 </code></pre>
 
-<p>The easiest way to append a key to the remote user&#8217;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn&#8217;t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
+<p>The easiest way to append a key to the remote user’s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn’t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
 <h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
@@ -216,7 +219,7 @@ ssh-copy-id xbian@xbian.local ```
 	  Hostname  xbian.local' &gt;&gt; ~/.ssh/config
 </code></p>
 
-<h3 id="transfer-files">Transfer files</h3>
+<h2 id="transfer-files">Transfer files</h2>
 
 <p>If you have previous files from your Pi stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.</p>
 
@@ -231,7 +234,7 @@ ssh-copy-id xbian@xbian.local ```
 
 <h2 id="first-login-tasks">First login tasks</h2>
 
-<p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with &#8216;exit&#8217; or ctrl+d when finished</em>.</p>
+<p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with ‘exit’ or ctrl+d when finished</em>.</p>
 
 <p>```sh
 	# Login to the pi, using the <code>xb</code> alias
@@ -259,14 +262,16 @@ echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
 # Update packages
 apt-get update &amp;&amp; apt-get upgrade
 
-# Install some utilities
-apt-get install p7zip zip mediainfo
+# Install some utilities and services
+apt-get install p7zip zip mediainfo avahi-daemon
 
 # Install gcc compiler, dev tools
 apt-get install gcc make git-core
 
 # Install scripting tools
-apt-get install ruby ruby-dev ri libsqlite3-dev ```
+apt-get install ruby ruby-dev ri libsqlite3-dev npm
+# Fix node binary being named nodejs
+cd /usr/bin; sudo ln -s nodejs node; cd ```
 </code></pre>
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
@@ -279,7 +284,7 @@ apt-get install ruby ruby-dev ri libsqlite3-dev ```
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
 
-<p>The Pi doesn&#8217;t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
+<p>The Pi doesn’t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
 
 <p><code>sh
 	apt-get install fake-hwclock
@@ -291,7 +296,7 @@ apt-get install ruby ruby-dev ri libsqlite3-dev ```
 
 <h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
 
-<p>Occasionally you&#8217;ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
+<p>Occasionally you’ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
 
 <p>```sh
 	# change to the home folder you want to link from
@@ -325,7 +330,7 @@ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key --&gt;
 
 <p>Both XBian and Raspbian have system setup menus, but neither seem to setup the console keyboard correctly for the en_GB layout.  The current solution I use is to install <code>keyboard-configuration</code>, which only seems to work once <code>console-setup</code> is also installed.</p>
 
-<p><em>The latter package will change the console font, but this can be reverted during the commands shown below. Just choose the font you prefer, or choose &#8216;Do not change the boot/kernel font&#8217;.</em></p>
+<p><em>The latter package will change the console font, but this can be reverted during the commands shown below. Just choose the font you prefer, or choose ‘Do not change the boot/kernel font’.</em></p>
 
 <p>```sh
 	# Packages needed to change keyboard layout
@@ -345,7 +350,7 @@ dpkg-reconfigure locales ```
 
 <h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
 
-<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi&#8217;s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
+<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi’s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
 
 <p>```sh
 	apt-get install gcc make git-core libi2c-dev
@@ -373,7 +378,19 @@ gpio readall ```
 	apt-get install mono-devel mono-gmcs mono-csharp-shell
 </code></p>
 
-<h2 id="xbmc-settings">XBMC Settings</h2>
+<h2 id="setup-xbmc">Setup XBMC</h2>
+
+<h3 id="xbmc-extensions">XBMC Extensions</h3>
+
+<p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc’s addons page.</p>
+
+<ul>
+  <li><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a></li>
+  <li><a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a></li>
+  <li><a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></li>
+</ul>
+
+<h3 id="xbmc-settings">XBMC Settings</h3>
 
 <p>If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings in <a href="http://wiki.xbmc.org/?title=Advancedsettings.xml">advancedsettings.xml</a>.</p>
 
@@ -392,16 +409,6 @@ gpio readall ```
         &lt;/excludefromlisting&gt;
     &lt;/audio&gt;
 </code></p>
-
-<h3 id="xbmc-extensions">XBMC Extensions</h3>
-
-<p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc&#8217;s addons page.</p>
-
-<ul>
-  <li><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a></li>
-  <li><a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a></li>
-  <li><a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></li>
-</ul>
 
 <h2 id="useful-extras-not-always-used">Useful extras, not always used</h2>
 
@@ -431,18 +438,18 @@ apt-get install psmisc usbutils ```
 <p>You can get the IP address from your Pi, by running either of the following commands locally on the device.</p>
 
 <p>```sh
-ip r | grep -o &#8216;src.*&#8217;</p>
+ip r | grep -o ‘src.*’</p>
 
-<p>ifconfig 2&gt;&amp;1 | grep cast | grep -o &#8216;inet [^ ]*&#8217;
+<p>ifconfig 2&gt;&amp;1 | grep cast | grep -o ‘inet [^ ]*’
 ```</p>
 
 <p>Connect to the address that has the same subnet (starts similar) as the IP address you will be connecting from, ignoring the localhost address (127.0.0.1).</p>
 
-<p>If it isn&#8217;t possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can either <a href="http://www.recantha.co.uk/blog/?p=2397">scan the network</a> or view &#8216;Attached Devices&#8217; in your Router&#8217;s setup.  Look for a matching hostname or MAC address (which will start with <code>b8:27:eb</code> for the on-board LAN).</p>
+<p>If it isn’t possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can either <a href="http://www.recantha.co.uk/blog/?p=2397">scan the network</a> or view ‘Attached Devices’ in your Router’s setup.  Look for a matching hostname or MAC address (which will start with <code>b8:27:eb</code> for the on-board LAN).</p>
 
 <h3 id="change-hostname">Change Hostname</h3>
 
-<p>If it&#8217;s likely the Pi won&#8217;t be the only one using the local network, then it should be given a unique host name.</p>
+<p>If it’s likely the Pi won’t be the only one using the local network, then it should be given a unique host name.</p>
 
 <p><code>sh
     sudo nano /etc/hostname # enter the desired name
@@ -458,7 +465,7 @@ ip r | grep -o &#8216;src.*&#8217;</p>
 
 <h3 id="setting-up-webcam">Setting up webcam</h3>
 
-<p>Use &#8216;motion&#8217; or &#8216;fswebcam&#8217;, motion may need a default cfg copying</p>
+<p>Use ‘motion’ or ‘fswebcam’, motion may need a default cfg copying</p>
 
 <p><code>sh
 	apt-get install motion
@@ -498,13 +505,17 @@ hciconfig ```
 
 <p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
 
+<h2 id="troubleshooting-and-backup">Troubleshooting and backup</h2>
+
+<p>Some useful commands and procedures</p>
+
 <h3 id="backup-settings">Backup settings</h3>
 
 <ul>
   <li>Settings, addons etc. are in ~/.xbmc</li>
   <li>.xbmc/userdata - preferences etc</li>
   <li>.xbmc/addons - binaries, themes</li>
-  <li>.xbmc/addons/packages - original downloads, can use with &#8220;install from zip&#8221;</li>
+  <li>.xbmc/addons/packages - original downloads, can use with “install from zip”</li>
 </ul>
 
 <p>```sh
@@ -543,6 +554,10 @@ sudo initctl start xbmc ```
   <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
 </ul>
 
+<h2 id="not-used-with-recent-versions">Not used with recent versions</h2>
+
+<p>Previously useful functionality or workarounds</p>
+
 <h3 id="manually-configure-wifi-adapter">Manually configure WiFi adapter</h3>
 
 <p><a href="http://www.savagehomeautomation.com/raspi-airlink101">Instructions adapted from here</a>.</p>
@@ -561,7 +576,7 @@ sudo initctl start xbmc ```
     wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
 </code></p>
 
-<p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I&#8217;ve commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
+<p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I’ve commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
 
 <p><code>sh
 	sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
@@ -580,7 +595,7 @@ sudo initctl start xbmc ```
     }
 </code></p>
 
-<p>Reinitialise the adapter, and check it&#8217;s connected.</p>
+<p>Reinitialise the adapter, and check it’s connected.</p>
 
 <p><code>sh
 	sudo ifdown wlan0
@@ -640,7 +655,7 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 
 <p>```sh
 	# disable the usbmount package
-	sed -i &#8216;/ENABLED=/s/=1/=0/&#8217; /etc/usbmount/usbmount.conf</p>
+	sed -i ‘/ENABLED=/s/=1/=0/’ /etc/usbmount/usbmount.conf</p>
 
 <pre><code># optionally remove unused usbmount directories
 # umount /media/usb*; rmdir /media/usb*; rm /media/usb ```
@@ -694,7 +709,7 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 <div class="footnotes">
   <ol>
     <li id="fn:hostname">
-      <p>It should be possible to connect with the hostname even without zeroconfig, e.g. <code>xbian@xbian</code> or <code>pi@raspberrypi</code> (on raspbian), but I&#8217;ve had no luck with this.<a href="#fnref:hostname" rel="reference">&#8617;</a></p>
+      <p>It should be possible to connect with the hostname even without zeroconfig, e.g. <code>xbian@xbian</code> or <code>pi@raspberrypi</code> (on raspbian), but I’ve had no luck with this.<a href="#fnref:hostname" rel="reference">&#8617;</a></p>
     </li>
   </ol>
 </div>
@@ -706,7 +721,7 @@ chmod a+r ~/.ssh/id_rsa.pub ```
     <link href="http://jmeosbn.github.com/blog/stellaris-virtual-serial-device/"/>
     <updated>2012-12-10T02:48:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/stellaris-virtual-serial-device</id>
-    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it&#8217;s output.</p>
+    <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it’s output.</p>
 
 <!-- more -->
 
@@ -723,16 +738,16 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 ATTRS{product}=="In-Circuit Debug Interface", OWNER="devuser" KERNEL=="ttyACM?" ```
 </code></pre>
 
-<p>The (fairly open) rules shown above, give the user named &#8216;<em>devuser</em>&#8217; permission to access the launchpad&#8217;s usb interface, along with it&#8217;s virtual serial device.</p>
+<p>The (fairly open) rules shown above, give the user named ‘<em>devuser</em>’ permission to access the launchpad’s usb interface, along with it’s virtual serial device.</p>
 
-<p>Note: these rules should be more specific if you have similar devices that you don&#8217;t wish to allow access to inadvertently.</p>
+<p>Note: these rules should be more specific if you have similar devices that you don’t wish to allow access to inadvertently.</p>
 
 <p><code>sh
 	# Exact match for Stellaris LM4F120XL
 	SUBSYSTEMS=="usb", ATTRS{idVendor}=="1cbe", ATTRS{idProduct}=="00fd", MODE="0660", OWNER="devuser"
 </code></p>
 
-<p>The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it&#8217;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
+<p>The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it’s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
 <p>To define these rules, the exact name, vendor, and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
 
@@ -747,7 +762,7 @@ ATTRS{product}=="In-Circuit Debug Interface", OWNER="devuser" KERNEL=="ttyACM?" 
 
 <h2 id="serial-device">serial device</h2>
 
-<p>If you want to use the serial connection to provide input or commands to the launchpad, you&#8217;ll need a terminal emulator that can connect to a serial device.</p>
+<p>If you want to use the serial connection to provide input or commands to the launchpad, you’ll need a terminal emulator that can connect to a serial device.</p>
 
 <p>``` sh
 	$ cd stellaris/boards/ek-lm4f120xl/qs-rgb
@@ -764,7 +779,7 @@ $ screen /dev/tty.usbmodem* 115200
 #  to list other commands, type: ^A ? ```
 </code></pre>
 
-<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it&#8217;s full name.</p>
+<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it’s full name.</p>
 
 <p>On OS X the device should be named similar to <code>tty.usbmodem</code>, with the serial number of the device appended.</p>
 ]]></content>
@@ -775,12 +790,12 @@ $ screen /dev/tty.usbmodem* 115200
     <link href="http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:40:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="/blog/compiling-the-stellaris-toolchain">installed</a>, here&#8217;s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
+    <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="/blog/compiling-the-stellaris-toolchain">installed</a>, here’s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
 <!-- more -->
 
 <p>``` sh
-	# Add the toolchain to your profile&#8217;s path
+	# Add the toolchain to your profile’s path
 	# Ideally this should go into your bash profile
 	$ export PATH=$HOME/arm-cs-tools/bin:$PATH</p>
 
@@ -835,13 +850,13 @@ $ sudo killall lmicdi # or type 'fg' followed by ^C ```
     <link href="http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:02:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don&#8217;t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
+    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don’t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
 
 <!-- more -->
 
-<p><em>(If you don&#8217;t fancy building the toolchain, <a href="http://www.yagarto.de/">yagarto</a> offers recent binaries for Windows and Mac OS X that target ARM devices.)</em></p>
+<p><em>(If you don’t fancy building the toolchain, <a href="http://www.yagarto.de/">yagarto</a> offers recent binaries for Windows and Mac OS X that target ARM devices.)</em></p>
 
-<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I&#8217;ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I&#8217;ll probably try building next.</p>
+<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I’ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I’ll probably try building next.</p>
 
 <p>For more details on the launchpad, and the various libraries etc. that it uses, T.I. has a selection of <a href="http://www.ti.com/product/lm4f120h5qr">technical documentation</a> on their site.</p>
 
@@ -861,13 +876,13 @@ $ sudo killall lmicdi # or type 'fg' followed by ^C ```
 	Unable to find any ICDI devices
 </code></p>
 
-<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn&#8217;t check for the serial number.</p>
+<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn’t check for the serial number.</p>
 
 <p>Btw, you will get a similar error if your system requires root privileges to access the device directly over usb; try using <code>sudo</code> on linux/unix systems if you have issues.</p>
 
 <h2 id="more-links">more links</h2>
 
-<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM&#8217;s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
+<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM’s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
 
 <p><a href="/testing-the-stellaris-toolchain">Testing the Stellaris Toolchain</a> - my overview for compiling and testing code on the device.</p>
 

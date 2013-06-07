@@ -80,6 +80,7 @@
 <ul id="markdown-toc">
   <li><a href="#basic-pi-tips">Basic Pi Tips</a></li>
   <li><a href="#pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</a></li>
+  <li><a href="#transfer-files">Transfer files</a></li>
   <li><a href="#first-login-tasks">First login tasks</a></li>
   <li><a href="#ttl-serial-console">TTL serial console</a></li>
   <li><a href="#fake-a-hardware-clock">Fake a hardware clock</a></li>
@@ -90,8 +91,10 @@
   <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
   <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
   <li><a href="#install-mono">Install Mono</a></li>
-  <li><a href="#xbmc-settings">XBMC Settings</a></li>
+  <li><a href="#setup-xbmc">Setup XBMC</a></li>
   <li><a href="#useful-extras-not-always-used">Useful extras, not always used</a></li>
+  <li><a href="#troubleshooting-and-backup">Troubleshooting and backup</a></li>
+  <li><a href="#not-used-with-recent-versions">Not used with recent versions</a></li>
 </ul>
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
@@ -100,7 +103,7 @@
 
 <h3 id="connecting-to-the-pi">Connecting to the Pi</h3>
 
-<p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian also supports zeroconfig<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>, so it&#8217;s easier to find your Pi on the network.</p>
+<p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian also supports zeroconfig<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>, so it’s easier to find your Pi on the network.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -108,7 +111,7 @@
 </span><span class="line">ssh xbian@xbian.local
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Otherwise, you can <a href="#find-the-ip-address">find the Pi&#8217;s network IP address</a> and use that to login.</p>
+<p>Otherwise, you can <a href="#find-the-ip-address">find the Pi’s network IP address</a> and use that to login.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -150,7 +153,7 @@
 </span><span class="line">ssh-copy-id xbian@xbian.local
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>The easiest way to append a key to the remote user&#8217;s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn&#8217;t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
+<p>The easiest way to append a key to the remote user’s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn’t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
 <h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
@@ -166,7 +169,7 @@
 </span><span class="line"><span class="s1">  Hostname  xbian.local&#39;</span> &gt;&gt; ~/.ssh/config
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h3 id="transfer-files">Transfer files</h3>
+<h2 id="transfer-files">Transfer files</h2>
 
 <p>If you have previous files from your Pi stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.</p>
 
@@ -186,7 +189,7 @@
 
 <h2 id="first-login-tasks">First login tasks</h2>
 
-<p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with &#8216;exit&#8217; or ctrl+d when finished</em>.</p>
+<p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with ‘exit’ or ctrl+d when finished</em>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -221,6 +224,8 @@
 <span class="line-number">31</span>
 <span class="line-number">32</span>
 <span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
 </span><span class="line">ssh xb
 </span><span class="line">
@@ -246,14 +251,16 @@
 </span><span class="line"><span class="c"># Update packages</span>
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
 </span><span class="line">
-</span><span class="line"><span class="c"># Install some utilities</span>
-</span><span class="line">apt-get install p7zip zip mediainfo
+</span><span class="line"><span class="c"># Install some utilities and services</span>
+</span><span class="line">apt-get install p7zip zip mediainfo avahi-daemon
 </span><span class="line">
 </span><span class="line"><span class="c"># Install gcc compiler, dev tools</span>
 </span><span class="line">apt-get install gcc make git-core
 </span><span class="line">
 </span><span class="line"><span class="c"># Install scripting tools</span>
-</span><span class="line">apt-get install ruby ruby-dev ri libsqlite3-dev
+</span><span class="line">apt-get install ruby ruby-dev ri libsqlite3-dev npm
+</span><span class="line"><span class="c"># Fix node binary being named nodejs</span>
+</span><span class="line"><span class="nb">cd</span> /usr/bin; sudo ln -s nodejs node; <span class="nb">cd</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
@@ -266,7 +273,7 @@
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
 
-<p>The Pi doesn&#8217;t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
+<p>The Pi doesn’t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fake-hwclock
@@ -278,7 +285,7 @@
 
 <h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
 
-<p>Occasionally you&#8217;ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
+<p>Occasionally you’ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -328,7 +335,7 @@
 
 <p>Both XBian and Raspbian have system setup menus, but neither seem to setup the console keyboard correctly for the en_GB layout.  The current solution I use is to install <code>keyboard-configuration</code>, which only seems to work once <code>console-setup</code> is also installed.</p>
 
-<p><em>The latter package will change the console font, but this can be reverted during the commands shown below. Just choose the font you prefer, or choose &#8216;Do not change the boot/kernel font&#8217;.</em></p>
+<p><em>The latter package will change the console font, but this can be reverted during the commands shown below. Just choose the font you prefer, or choose ‘Do not change the boot/kernel font’.</em></p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -360,7 +367,7 @@
 
 <h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
 
-<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi&#8217;s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
+<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi’s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -394,7 +401,19 @@
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-gmcs mono-csharp-shell
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="xbmc-settings">XBMC Settings</h2>
+<h2 id="setup-xbmc">Setup XBMC</h2>
+
+<h3 id="xbmc-extensions">XBMC Extensions</h3>
+
+<p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc’s addons page.</p>
+
+<ul>
+  <li><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a></li>
+  <li><a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a></li>
+  <li><a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></li>
+</ul>
+
+<h3 id="xbmc-settings">XBMC Settings</h3>
 
 <p>If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings in <a href="http://wiki.xbmc.org/?title=Advancedsettings.xml">advancedsettings.xml</a>.</p>
 
@@ -425,16 +444,6 @@
 </span><span class="line">    <span class="nt">&lt;/excludefromlisting&gt;</span>
 </span><span class="line"><span class="nt">&lt;/audio&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h3 id="xbmc-extensions">XBMC Extensions</h3>
-
-<p>Use <code>wget</code> to download the latest versions from the links below, then open the zip files directly from xbmc&#8217;s addons page.</p>
-
-<ul>
-  <li><a href="http://code.google.com/p/xbmc-iplayerv2/downloads/list">http://code.google.com/p/xbmc-iplayerv2/downloads/list</a></li>
-  <li><a href="http://code.google.com/p/mossy-xbmc-repo/downloads/list">http://code.google.com/p/mossy-xbmc-repo/downloads/list</a></li>
-  <li><a href="http://code.google.com/p/xbmc-itv-player/downloads/list">http://code.google.com/p/xbmc-itv-player/downloads/list</a></li>
-</ul>
 
 <h2 id="useful-extras-not-always-used">Useful extras, not always used</h2>
 
@@ -478,11 +487,11 @@
 
 <p>Connect to the address that has the same subnet (starts similar) as the IP address you will be connecting from, ignoring the localhost address (127.0.0.1).</p>
 
-<p>If it isn&#8217;t possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can either <a href="http://www.recantha.co.uk/blog/?p=2397">scan the network</a> or view &#8216;Attached Devices&#8217; in your Router&#8217;s setup.  Look for a matching hostname or MAC address (which will start with <code>b8:27:eb</code> for the on-board LAN).</p>
+<p>If it isn’t possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can either <a href="http://www.recantha.co.uk/blog/?p=2397">scan the network</a> or view ‘Attached Devices’ in your Router’s setup.  Look for a matching hostname or MAC address (which will start with <code>b8:27:eb</code> for the on-board LAN).</p>
 
 <h3 id="change-hostname">Change Hostname</h3>
 
-<p>If it&#8217;s likely the Pi won&#8217;t be the only one using the local network, then it should be given a unique host name.</p>
+<p>If it’s likely the Pi won’t be the only one using the local network, then it should be given a unique host name.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -500,7 +509,7 @@
 
 <h3 id="setting-up-webcam">Setting up webcam</h3>
 
-<p>Use &#8216;motion&#8217; or &#8216;fswebcam&#8217;, motion may need a default cfg copying</p>
+<p>Use ‘motion’ or ‘fswebcam’, motion may need a default cfg copying</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -564,13 +573,17 @@
 
 <p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
 
+<h2 id="troubleshooting-and-backup">Troubleshooting and backup</h2>
+
+<p>Some useful commands and procedures</p>
+
 <h3 id="backup-settings">Backup settings</h3>
 
 <ul>
   <li>Settings, addons etc. are in ~/.xbmc</li>
   <li>.xbmc/userdata - preferences etc</li>
   <li>.xbmc/addons - binaries, themes</li>
-  <li>.xbmc/addons/packages - original downloads, can use with &#8220;install from zip&#8221;</li>
+  <li>.xbmc/addons/packages - original downloads, can use with “install from zip”</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -620,6 +633,10 @@
   <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
 </ul>
 
+<h2 id="not-used-with-recent-versions">Not used with recent versions</h2>
+
+<p>Previously useful functionality or workarounds</p>
+
 <h3 id="manually-configure-wifi-adapter">Manually configure WiFi adapter</h3>
 
 <p><a href="http://www.savagehomeautomation.com/raspi-airlink101">Instructions adapted from here</a>.</p>
@@ -640,7 +657,7 @@
 </span><span class="line">wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I&#8217;ve commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
+<p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I’ve commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
@@ -666,7 +683,7 @@
 </span><span class="line"><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Reinitialise the adapter, and check it&#8217;s connected.</p>
+<p>Reinitialise the adapter, and check it’s connected.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -833,7 +850,7 @@
 <div class="footnotes">
   <ol>
     <li id="fn:hostname">
-      <p>It should be possible to connect with the hostname even without zeroconfig, e.g. <code>xbian@xbian</code> or <code>pi@raspberrypi</code> (on raspbian), but I&#8217;ve had no luck with this.<a href="#fnref:hostname" rel="reference">&#8617;</a></p>
+      <p>It should be possible to connect with the hostname even without zeroconfig, e.g. <code>xbian@xbian</code> or <code>pi@raspberrypi</code> (on raspbian), but I’ve had no luck with this.<a href="#fnref:hostname" rel="reference">&#8617;</a></p>
     </li>
   </ol>
 </div>

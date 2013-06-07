@@ -69,7 +69,7 @@
   </header>
 
 
-<div class="entry-content"><p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it&#8217;s output.</p>
+<div class="entry-content"><p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it’s output.</p>
 
 <!-- more -->
 
@@ -89,9 +89,9 @@
 </span><span class="line">ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span> <span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>The (fairly open) rules shown above, give the user named &#8216;<em>devuser</em>&#8217; permission to access the launchpad&#8217;s usb interface, along with it&#8217;s virtual serial device.</p>
+<p>The (fairly open) rules shown above, give the user named ‘<em>devuser</em>’ permission to access the launchpad’s usb interface, along with it’s virtual serial device.</p>
 
-<p>Note: these rules should be more specific if you have similar devices that you don&#8217;t wish to allow access to inadvertently.</p>
+<p>Note: these rules should be more specific if you have similar devices that you don’t wish to allow access to inadvertently.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -99,7 +99,7 @@
 </span><span class="line"><span class="nv">SUBSYSTEMS</span><span class="o">==</span><span class="s2">&quot;usb&quot;</span>, ATTRS<span class="o">{</span>idVendor<span class="o">}==</span><span class="s2">&quot;1cbe&quot;</span>, ATTRS<span class="o">{</span>idProduct<span class="o">}==</span><span class="s2">&quot;00fd&quot;</span>, <span class="nv">MODE</span><span class="o">=</span><span class="s2">&quot;0660&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it&#8217;s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
+<p>The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it’s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
 <p>To define these rules, the exact name, vendor, and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
 
@@ -119,7 +119,7 @@
 
 <h2 id="serial-device">serial device</h2>
 
-<p>If you want to use the serial connection to provide input or commands to the launchpad, you&#8217;ll need a terminal emulator that can connect to a serial device.</p>
+<p>If you want to use the serial connection to provide input or commands to the launchpad, you’ll need a terminal emulator that can connect to a serial device.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -147,7 +147,7 @@
 </span><span class="line"><span class="c">#  to list other commands, type: ^A ?</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it&#8217;s full name.</p>
+<p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it’s full name.</p>
 
 <p>On OS X the device should be named similar to <code>tty.usbmodem</code>, with the serial number of the device appended.</p>
 </div>
