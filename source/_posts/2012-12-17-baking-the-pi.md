@@ -105,7 +105,7 @@ Locally define the alias `xb`, to be used in place of `xbian@xbian.local` with c
 
 
 
-### Transfer files
+## Transfer files
 
 If you have previous files from your Pi stored locally, you can transfer them using `sftp`, `scp`, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.
 
@@ -150,14 +150,16 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 	# Update packages
 	apt-get update && apt-get upgrade
 
-	# Install some utilities
-	apt-get install p7zip zip mediainfo
+	# Install some utilities and services
+	apt-get install p7zip zip mediainfo avahi-daemon
 
 	# Install gcc compiler, dev tools
 	apt-get install gcc make git-core
 
 	# Install scripting tools
-	apt-get install ruby ruby-dev ri libsqlite3-dev
+	apt-get install ruby ruby-dev ri libsqlite3-dev npm
+	# Fix node binary being named nodejs
+	cd /usr/bin; sudo ln -s nodejs node; cd
 ```
 
 
@@ -210,7 +212,7 @@ Occasionally you'll want to use a root shell, and then be annoyed that your alia
 
 ## Generate new RSA host keys
 
-These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have [more than one Pi](#change-hostname) on the same network.
+These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have [more than one Pi](#change-hostname).
 
 ```sh
 	rm /etc/ssh/ssh_host_*
@@ -291,7 +293,19 @@ Basic mono setup to run and compile command line tools.
 
 
 
-## XBMC Settings
+## Setup XBMC
+
+### XBMC Extensions
+
+Use `wget` to download the latest versions from the links below, then open the zip files directly from xbmc's addons page.
+
+- <http://code.google.com/p/xbmc-iplayerv2/downloads/list>
+- <http://code.google.com/p/mossy-xbmc-repo/downloads/list>
+- <http://code.google.com/p/xbmc-itv-player/downloads/list>
+
+
+
+### XBMC Settings
 
 If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings in [advancedsettings.xml].
 
@@ -312,14 +326,6 @@ If you are storing media in the root folder of an NTFS formatted hard drive, you
         </excludefromlisting>
     </audio>
 ```
-
-### XBMC Extensions
-
-Use `wget` to download the latest versions from the links below, then open the zip files directly from xbmc's addons page.
-
-- <http://code.google.com/p/xbmc-iplayerv2/downloads/list>
-- <http://code.google.com/p/mossy-xbmc-repo/downloads/list>
-- <http://code.google.com/p/xbmc-itv-player/downloads/list>
 
 
 
@@ -359,7 +365,7 @@ You can get the IP address from your Pi, by running either of the following comm
 ```sh
 ip r | grep -o 'src.*'
 
-ifconfig | grep cast | grep -o 'addr:[^ ]*'
+ifconfig 2>&1 | grep cast | grep -o 'inet [^ ]*'
 ```
 
 Connect to the address that has the same subnet (starts similar) as the IP address you will be connecting from, ignoring the localhost address (127.0.0.1).
@@ -434,6 +440,12 @@ Use 'motion' or 'fswebcam', motion may need a default cfg copying
 
 
 
+## Troubleshooting and backup
+
+Some useful commands and procedures
+
+
+
 ### Backup settings
 
 - Settings, addons etc. are in ~/.xbmc
@@ -478,6 +490,15 @@ Or using tar..
 
 * You can detect hdmi audio modes: `/opt/vc/bin/tvservice -a`
 * Setup CEC remote over hdmi from console: `cec-config`
+
+
+
+
+## Not used with recent versions
+
+[^Reaper]: http://f.cl.ly/items/0S1S1Y0B3Q241Z2F0z1j/Untitled.png
+
+Previously useful functionality or workarounds
 
 
 
