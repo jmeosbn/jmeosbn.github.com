@@ -108,6 +108,7 @@ task :new_post, :title do |t, args|
     post.puts "---"
     post.puts ""
     post.puts "layout: post"
+    post.puts "author: "
     post.puts "title: \"#{title.gsub(/&/,'&amp;')}\""
     post.puts "date: #{Time.now.strftime('%Y-%m-%d %H:%M')}"
     post.puts "comments: true"
@@ -147,12 +148,16 @@ task :new_page, :filename do |t, args|
     puts "Creating new page: #{file}"
     open(file, 'w') do |page|
       page.puts "---"
+      page.puts ""
       page.puts "layout: page"
       page.puts "title: \"#{title}\""
       page.puts "date: #{Time.now.strftime('%Y-%m-%d %H:%M')}"
       page.puts "comments: true"
       page.puts "sharing: true"
-      page.puts "footer: true"
+      page.puts ""
+      page.puts "footer: false"
+      page.puts "sidebar: true"
+      page.puts ""
       page.puts "---"
     end
   else
