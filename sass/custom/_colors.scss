@@ -1,84 +1,89 @@
+/*
+  Theme changes for lighter background/text
+*/
+
+// header title colours
+$title-color: #f2f2f2;
+$subtitle-color: #aaa;
+
+// main background colours
+$page-bg:     #555555;
+$header-bg:   dimgrey;
+$sidebar-bg:  #f2f2f2;
+$main-bg:     #f8f8f8;
+$nav-bg:      $header-bg;
+
+// image used for background
+$noise-bg: top left !default;
+// $noise-bg: image-url('noise.png') top left !default;
+
+// set colour of text
+$text-color: #555555;
+$sidebar-color: $text-color;
+
+// set colour of visited links
+$link-color: lighten(#1863A1, 3);
+$link-color-visited: $link-color;
+$link-color-hover: $link-color;
+
+// set light text colour
+// $text-color-light: #aaa !default;
+
+// set colour of sidebar links on hover
+$sidebar-link-color: $sidebar-color;
+$sidebar-link-color-hover: $link-color;
+//$sidebar-link-color: saturate(gray, 10);
+//$sidebar-link-color-hover: darken(black, 9);
+
+// remove gradient
+$nav-bg-front:    $nav-bg;
+$nav-bg-back:     $nav-bg;
+
+// navigation link colour
+$nav-color: darken($nav-bg, 50);
+
+// navigation borders
+$nav-border-top:  $nav-bg;
+$nav-border-bottom:  $nav-bg;
+//$nav-border-bottom: darken($nav-bg, 15);
+//$nav-border-right:  $nav-bg;
+//$nav-border-left:   $nav-bg;
+
+// code blocks theme
+$solarized: light;
+$base3: #ffffff;                  // background - white
+$base2: lighten($base3, 2);       // border
+
+// solarized dark
+//$base03:  darken(#003366, 4);     // background - dark blue
+//$base02: lighten($base03, 2);     // border / gist footer
+//$base01: lighten(#586e75, 20);    // comments
+//$base1:  lighten(#93a1a1, 20);    // text
+
+// solarized light
+//$base3: #ffffff;                  // background - white
+//$base3: #f8f8ff;                  // background - blueish white
+//$base2: lighten($base3, 2);       // border
+
+
+// -------
+
 // Here you can easily change your sites's color scheme.
 // To give it a try, uncomment some of the lines below rebuild your blog, and see how it works.
 // If you need a handy color picker try http://hslpicker.com
 
-/* main background colours */
-$header-bg:   dimgrey;
-$sidebar-bg:  #f2f2f2;
-$page-bg:     #555555;
-$main-bg:     #f8f8f8;
-
-/* header title colours */
-$title-color: #f2f2f2;
-$subtitle-color: #aaa;
-
-/* code blocks theme */
-$solarized: light;
-
-/* solarized dark
-$base03:  darken(#003366, 4);     // background - dark blue
-$base02: lighten($base03, 2);     // border / gist footer
-$base01: lighten(#586e75, 20);    // comments
-$base1:  lighten(#93a1a1, 20);    // text
-*/
-
-/* solarized light */
-$base3: #ffffff;                  // background - white
-/*$base3: #f8f8ff;                  // background - blueish white*/
-$base2: lighten($base3, 2);       // border
-
-/* image used for background */
-$noise-bg: top left !default;
-/* $noise-bg: image-url('noise.png') top left !default; */
-
-/* Set colour of text */
-$text-color: #555555;
-$sidebar-color: $text-color;
-
-/* Set colour of visited links */
-$link-color: lighten(#1863A1, 3);
-$link-color-visited: $link-color;
-/*$link-color-hover: $link-color;*/
-
-/* Set colour of sidebar links on hover */
-$sidebar-link-color: #555555;
-/*$sidebar-link-color-hover: #555555;*/
-
-
-/* minimal page footer */
-body > footer {
-  color: lighten(#555555, 25) !important;
-  background-color: $main-bg !important;
-  background-image: none !important;
-  text-shadow: none !important;
-  padding-top: 0.35em !important;
-  padding-bottom: 0.35em !important;
-  margin-bottom: 0em !important;
-  border-radius: 0px !important;
-  border-top: 0px !important;
-  a { color: lighten(#555555, 25) !important; }
-}
-div#main {
-  border-bottom: 0px solid !important;
-}
-
-
-/*
-   Custom Examples
-*/
+//$header-bg: #263347;
 //$subtitle-color: lighten($header-bg, 58);
 //$nav-bg: desaturate(lighten(#8fc17a, 18), 5);
-
-//$nav-color: darken($nav-bg, 38);
 //$nav-bg-front: image-url('noise.png');
 //$nav-bg-back: linear-gradient(lighten($nav-bg, 8), $nav-bg, darken($nav-bg, 11));
-
 //$sidebar-bg: desaturate(#eceff5, 8);
+//$sidebar-link-color: saturate(#526f9a, 10);
+//$sidebar-link-color-hover: darken(#7ab662, 9);
 //$footer-bg: #ccc !default;
-
 //$footer-bg-front: image-url('noise.png');
 //$footer-bg-back: linear-gradient(lighten($footer-bg, 8), $footer-bg, darken($footer-bg, 11));
-//$footer-link-color: darken($footer-bg, 38);
+
 
 /* To use the light Solarized highlighting theme uncomment the following line */
 //$solarized: light;
