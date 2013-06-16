@@ -1,0 +1,25 @@
+/*
+  Code Blocks
+*/
+
+/* Increase size of code text */
+.mono { font-size: 0.85em !important; }
+
+// don't show line-numbers in code blocks
+div.highlight {
+  td.gutter { display: none; }
+  td.code   {
+    padding-left: 0.15em;
+    padding-right: 0.15em;
+  }
+}
+
+// don't show line_numbers in gist blocks
+td.line_numbers { display: none; }
+div.data > .highlight { width: 100%; }
+.gist-file table { width: 100%; }
+
+// smaller gist footer and margin
+.gist-meta { padding-top: .3em !important; }
+.gist-meta { padding-bottom: .3em !important; }
+div.data > .highlight { margin-bottom: 1px; }
