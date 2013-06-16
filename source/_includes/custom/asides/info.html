@@ -1,14 +1,14 @@
 <section>
 	<h1>Contact</h1>
   <ul id="contact">
-		{% if site.github_user %}
+		{% if site.github_user and site.github_show_about %}
     <li class="gh_user">
-		  <a href="https://github.com/{{site.github_user}}">@{{site.github_user}}</a> on github
+      <a href="https://github.com/{{site.github_user}}">@{{site.github_user}}</a> on github
     </li>
 		{% endif %}
-		{% if site.twitter_user %}
+		{% if site.twitter_user and site.twitter_show_about %}
     <li class="tw_user">
-	    <p><a href="http://twitter.com/{{site.twitter_user}}">@{{ site.twitter_user }}</a> on twitter</p>
+      <p><a href="http://twitter.com/{{site.twitter_user}}">@{{ site.twitter_user }}</a> on twitter</p>
     </li>
 		{% endif %}
   </ul>
