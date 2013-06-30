@@ -10,7 +10,7 @@ categories: [arm, pi, htpc]
 ---
 
 
-A collection of notes for setting up a clean image of [XBian](http://www.xbian.org) (1.0 Alpha 5) on the Raspberry Pi.
+A collection of notes for setting up a clean image of [XBian](http://www.xbian.org) (1.0 Beta 1) on the Raspberry Pi.
 
 <!-- more -->
 
@@ -132,7 +132,7 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 
 	# Disable autorun of xbian-config
 	# Use 'sudo xbian-config' to run manually
-	sed -i '/^sudo xbian-config/s/^/# /' ~/.bashrc
+	echo 0 > .xbian-config-start
 
 	# Disable the login message
 	touch ~/.hushlogin
@@ -316,13 +316,13 @@ If you are storing media in the root folder of an NTFS formatted hard drive, you
         <!-- hide system folders from the video files view -->
         <!-- you could also add these to 'excludefromscan' -->
         <excludefromlisting>
-        	<regexp>(\$RECYCLE.BIN|System Volume Information)</regexp>
+            <regexp>(\$RECYCLE.BIN|System Volume Information)</regexp>
         </excludefromlisting>
     </video>
     <audio>
         <!-- do likewise for the audio files view -->
         <excludefromlisting>
-	        <regexp>(\$RECYCLE.BIN|System Volume Information)</regexp>
+            <regexp>(\$RECYCLE.BIN|System Volume Information)</regexp>
         </excludefromlisting>
     </audio>
 ```
