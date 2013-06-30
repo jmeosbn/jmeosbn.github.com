@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-06-23T11:58:07+01:00</updated>
+  <updated>2013-06-30T15:23:19+01:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -134,7 +134,7 @@ fi ```
     <link href="http://jmeosbn.github.com/blog/baking-the-pi/"/>
     <updated>2012-12-17T19:13:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/baking-the-pi</id>
-    <content type="html"><![CDATA[<p>A collection of notes for setting up a clean image of <a href="http://www.xbian.org">XBian</a> (1.0 Alpha 5) on the Raspberry Pi.</p>
+    <content type="html"><![CDATA[<p>A collection of notes for setting up a clean image of <a href="http://www.xbian.org">XBian</a> (1.0 Beta 1) on the Raspberry Pi.</p>
 
 <!-- more -->
 
@@ -244,7 +244,7 @@ ssh-copy-id xbian@xbian.local ```
 
 # Disable autorun of xbian-config
 # Use 'sudo xbian-config' to run manually
-sed -i '/^sudo xbian-config/s/^/# /' ~/.bashrc
+echo 0 &gt; .xbian-config-start
 
 # Disable the login message
 touch ~/.hushlogin
@@ -399,13 +399,13 @@ gpio readall ```
         &lt;!-- hide system folders from the video files view --&gt;
         &lt;!-- you could also add these to 'excludefromscan' --&gt;
         &lt;excludefromlisting&gt;
-        	&lt;regexp&gt;(\$RECYCLE.BIN|System Volume Information)&lt;/regexp&gt;
+            &lt;regexp&gt;(\$RECYCLE.BIN|System Volume Information)&lt;/regexp&gt;
         &lt;/excludefromlisting&gt;
     &lt;/video&gt;
     &lt;audio&gt;
         &lt;!-- do likewise for the audio files view --&gt;
         &lt;excludefromlisting&gt;
-	        &lt;regexp&gt;(\$RECYCLE.BIN|System Volume Information)&lt;/regexp&gt;
+            &lt;regexp&gt;(\$RECYCLE.BIN|System Volume Information)&lt;/regexp&gt;
         &lt;/excludefromlisting&gt;
     &lt;/audio&gt;
 </code></p>

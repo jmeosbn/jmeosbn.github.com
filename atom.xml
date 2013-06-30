@@ -4,7 +4,7 @@
   <title><![CDATA[git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-06-23T11:58:07+01:00</updated>
+  <updated>2013-06-30T15:23:19+01:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -144,7 +144,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <link href="http://jmeosbn.github.com/blog/baking-the-pi/"/>
     <updated>2012-12-17T19:13:00+00:00</updated>
     <id>http://jmeosbn.github.com/blog/baking-the-pi</id>
-    <content type="html"><![CDATA[<p>A collection of notes for setting up a clean image of <a href="http://www.xbian.org">XBian</a> (1.0 Alpha 5) on the Raspberry Pi.</p>
+    <content type="html"><![CDATA[<p>A collection of notes for setting up a clean image of <a href="http://www.xbian.org">XBian</a> (1.0 Beta 1) on the Raspberry Pi.</p>
 
 <!-- more -->
 
@@ -308,7 +308,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">
 </span><span class="line"><span class="c"># Disable autorun of xbian-config</span>
 </span><span class="line"><span class="c"># Use &#39;sudo xbian-config&#39; to run manually</span>
-</span><span class="line">sed -i <span class="s1">&#39;/^sudo xbian-config/s/^/# /&#39;</span> ~/.bashrc
+</span><span class="line"><span class="nb">echo </span>0 &gt; .xbian-config-start
 </span><span class="line">
 </span><span class="line"><span class="c"># Disable the login message</span>
 </span><span class="line">touch ~/.hushlogin
@@ -509,7 +509,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">    <span class="c">&lt;!-- hide system folders from the video files view --&gt;</span>
 </span><span class="line">    <span class="c">&lt;!-- you could also add these to &#39;excludefromscan&#39; --&gt;</span>
 </span><span class="line">    <span class="nt">&lt;excludefromlisting&gt;</span>
-</span><span class="line">    	<span class="nt">&lt;regexp&gt;</span>(\$RECYCLE.BIN|System Volume Information)<span class="nt">&lt;/regexp&gt;</span>
+</span><span class="line">        <span class="nt">&lt;regexp&gt;</span>(\$RECYCLE.BIN|System Volume Information)<span class="nt">&lt;/regexp&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/excludefromlisting&gt;</span>
 </span><span class="line"><span class="nt">&lt;/video&gt;</span>
 </span><span class="line"><span class="nt">&lt;audio&gt;</span>
