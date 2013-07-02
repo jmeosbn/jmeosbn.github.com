@@ -164,6 +164,18 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 
 
 
+## Change Hostname
+
+If it's likely the Pi won't be the only one using the local network, then it should be given a unique host name.
+
+```sh
+	nano /etc/hostname               # enter the desired name
+	nano /etc/hosts                  # replace the hostname
+	/etc/init.d/hostname.sh start    # to enable the changes
+```
+
+
+
 ## TTL serial console
 
 The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as ``nano`` and ``xbian-config``.
@@ -373,18 +385,6 @@ Connect to the address that has the same subnet (starts similar) as the IP addre
 If it isn't possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can either [scan the network][findPi script] or view 'Attached Devices' in your Router's setup.  Look for a matching hostname or MAC address (which will start with ``b8:27:eb`` for the on-board LAN).
 
 [findPi script]:http://www.recantha.co.uk/blog/?p=2397
-
-
-
-### Change Hostname
-
-If it's likely the Pi won't be the only one using the local network, then it should be given a unique host name.
-
-```sh
-    sudo nano /etc/hostname # enter the desired name
-    sudo nano /etc/hosts # replace the hostname
-    sudo /etc/init.d/hostname.sh start # to enable the changes
-```
 
 
 
