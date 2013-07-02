@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-07-01T19:51:55+01:00</updated>
+  <updated>2013-07-02T21:42:55+01:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -147,11 +147,12 @@ fi ```
   <li><a href="#pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</a></li>
   <li><a href="#transfer-files">Transfer files</a></li>
   <li><a href="#first-login-tasks">First login tasks</a></li>
-  <li><a href="#ttl-serial-console">TTL serial console</a></li>
+  <li><a href="#change-hostname">Change Hostname</a></li>
   <li><a href="#fake-a-hardware-clock">Fake a hardware clock</a></li>
   <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
   <li><a href="#link-settings-to-root-profile">Link settings to root profile</a></li>
   <li><a href="#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
+  <li><a href="#ttl-serial-console">TTL serial console</a></li>
   <li><a href="#regional-system-settings">Regional system settings</a></li>
   <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
   <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
@@ -274,12 +275,14 @@ apt-get install ruby ruby-dev ri libsqlite3-dev npm
 cd /usr/bin; sudo ln -s nodejs node; cd ```
 </code></pre>
 
-<h2 id="ttl-serial-console">TTL serial console</h2>
+<h2 id="change-hostname">Change Hostname</h2>
 
-<p>The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
+<p>If it’s likely the Pi won’t be the only one using the local network, then it should be given a unique host name.</p>
 
 <p><code>sh
-	sed -i '/ttyAMA0/s/vt100$/xterm/' /etc/inittab
+	sudo nano /etc/hostname               # enter the desired name
+	sudo nano /etc/hosts                  # replace the hostname
+	sudo /etc/init.d/hostname.sh start    # to enable the changes
 </code></p>
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
@@ -325,6 +328,14 @@ sudo touch ~root/.hushlogin ```
 ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key --&gt;
 </code></pre>
+
+<h2 id="ttl-serial-console">TTL serial console</h2>
+
+<p>The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
+
+<p><code>sh
+	sed -i '/ttyAMA0/s/vt100$/xterm/' /etc/inittab
+</code></p>
 
 <h2 id="regional-system-settings">Regional system settings</h2>
 
@@ -446,16 +457,6 @@ ip r | grep -o ‘src.*’</p>
 <p>Connect to the address that has the same subnet (starts similar) as the IP address you will be connecting from, ignoring the localhost address (127.0.0.1).</p>
 
 <p>If it isn’t possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can either <a href="http://www.recantha.co.uk/blog/?p=2397">scan the network</a> or view ‘Attached Devices’ in your Router’s setup.  Look for a matching hostname or MAC address (which will start with <code>b8:27:eb</code> for the on-board LAN).</p>
-
-<h3 id="change-hostname">Change Hostname</h3>
-
-<p>If it’s likely the Pi won’t be the only one using the local network, then it should be given a unique host name.</p>
-
-<p><code>sh
-    sudo nano /etc/hostname # enter the desired name
-    sudo nano /etc/hosts # replace the hostname
-    sudo /etc/init.d/hostname.sh start # to enable the changes
-</code></p>
 
 <h3 id="testing-pvr">Testing PVR</h3>
 
