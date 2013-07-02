@@ -176,16 +176,6 @@ If it's likely the Pi won't be the only one using the local network, then it sho
 
 
 
-## TTL serial console
-
-The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as ``nano`` and ``xbian-config``.
-
-```sh
-	sed -i '/ttyAMA0/s/vt100$/xterm/' /etc/inittab
-```
-
-
-
 ## Fake a hardware clock
 
 The Pi doesn't have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  *(note: previous distros required the [unabridged instructions](#fake-a-hardware-clock-unabridged).)*
@@ -237,6 +227,16 @@ These keys confirm the identity of the Pi, to prevent a malicious host from inte
 	ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 -->
+
+
+
+## TTL serial console
+
+The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as ``nano`` and ``xbian-config``.
+
+```sh
+	sed -i '/ttyAMA0/s/vt100$/xterm/' /etc/inittab
+```
 
 
 
