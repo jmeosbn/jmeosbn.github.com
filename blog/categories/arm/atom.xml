@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | git-log(1)]]></title>
   <link href="http://jmeosbn.github.com/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-07-03T18:43:41+01:00</updated>
+  <updated>2013-07-04T19:13:02+01:00</updated>
   <id>http://jmeosbn.github.com/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -144,14 +144,14 @@ fi ```
 
 <ul id="markdown-toc">
   <li><a href="#basic-pi-tips">Basic Pi Tips</a></li>
-  <li><a href="#pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</a></li>
+  <li><a href="#pre-setup-on-pc-laptop-etc">Pre-setup; on PC, laptop, etc.</a></li>
   <li><a href="#transfer-files">Transfer files</a></li>
   <li><a href="#first-login-tasks">First login tasks</a></li>
   <li><a href="#change-hostname">Change Hostname</a></li>
   <li><a href="#fake-a-hardware-clock">Fake a hardware clock</a></li>
-  <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
   <li><a href="#link-settings-to-root-profile">Link settings to root profile</a></li>
   <li><a href="#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
+  <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
   <li><a href="#ttl-serial-console">TTL serial console</a></li>
   <li><a href="#regional-system-settings">Regional system settings</a></li>
   <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
@@ -169,14 +169,14 @@ fi ```
 
 <h3 id="connecting-to-the-pi">Connecting to the Pi</h3>
 
-<p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian also supports zeroconfig<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>, so it’s easier to find your Pi on the network.</p>
+<p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian includes support for zeroconfig (via avahi-daemon), so it’s easier to find your Pi on the network<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>.</p>
 
 <p><code>sh
 	# login using zeroconfig
 	ssh xbian@xbian.local
 </code></p>
 
-<p>Otherwise, you can <a href="#find-the-ip-address">find the Pi’s network IP address</a> and use that to login.</p>
+<p>If zeroconfig can’t be used, you can <a href="#find-the-ip-address">find the Pi’s network IP address</a> and use that to login.</p>
 
 <p>```sh
 	# login using IP address
@@ -188,7 +188,7 @@ ssh pi@192.168.1.10 ```
 
 <p><em>Note: If multiple Pis are active on the same network, they should be given <a href="#change-hostname">unique hostnames</a>.</em></p>
 
-<h2 id="pre-setup-on-pc-laptop-etc">Pre-setup, on PC, laptop, etc.</h2>
+<h2 id="pre-setup-on-pc-laptop-etc">Pre-setup; on PC, laptop, etc.</h2>
 
 <p>Before setting up the Pi remotely, there are some things to do locally to ease logging in when using SSH.  This will obviate the need to enter a password, or specify the full host name each time we access the Pi.</p>
 
@@ -211,7 +211,7 @@ ssh-copy-id xbian@xbian.local ```
 
 <h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
-<p>Locally define the alias <code>xb</code>, to be used in place of <code>xbian@xbian.local</code> with commands such as <code>ssh xb</code> and <code>sftp xb</code>.  Enter the text below as a single command, or manually paste the quoted text into <code>~/.ssh/config</code> using <code>nano</code> or similar.</p>
+<p>Locally define the alias <code>xb</code>, to be used in place of <code>xbian@xbian.local</code> with commands such as <code>ssh xb</code> and <code>sftp xb</code>.  Enter the text below as a single command, or manually paste the quoted text into <code>~/.ssh/config</code> using <code>nano</code> or similar (the IP address can be used for Hostname if preferred).</p>
 
 <p><code>sh
 	echo '
@@ -256,15 +256,21 @@ sed -i '/PS1=.*\][0-2];/s/^/##/' ~/.bashrc
 # Use a root shell for the following commands
 sudo -s
 
+# Change password for root and xbian users
+passwd &amp;&amp; passwd xbian
+
 # Allow full use of sudo without needing password
-# note: XBian 1.0b4 made this much less essential
+# note: XBian 1.0a4 made this much less essential
 echo '%sudo  ALL=(ALL) NOPASSWD: ALL' &gt;&gt; /etc/sudoers
+
+# Allow boot partition to be mounted
+sed -i '/\s\/boot\s/s/,noauto//' /etc/fstab
 
 # Update packages
 apt-get update &amp;&amp; apt-get upgrade
 
 # Install some utilities and services
-apt-get install p7zip zip mediainfo avahi-daemon
+apt-get install p7zip zip curl mediainfo avahi-daemon
 
 # Install gcc compiler, dev tools
 apt-get install gcc make git-core
@@ -292,10 +298,6 @@ cd /usr/bin; sudo ln -s nodejs node; cd ```
 <p><code>sh
 	apt-get install fake-hwclock
 </code></p>
-
-<h2 id="configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</h2>
-
-<p>XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see <a href="#manually-configure-wifi-adapter">manual configuration</a> if you want finer control over the network settings (e.g. connecting to multiple networks).  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but <a href="#configure-bluetooth-adapter">here is the procedure</a> I used when trying to get it running (confirmed working on a laptop running Ubuntu).</p>
 
 <h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
 
@@ -328,6 +330,10 @@ sudo touch ~root/.hushlogin ```
 ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key --&gt;
 </code></pre>
+
+<h2 id="configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</h2>
+
+<p>XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see <a href="#manually-configure-wifi-adapter">manual configuration</a> if you want finer control over the network settings (e.g. connecting to multiple networks).  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but <a href="#configure-bluetooth-adapter">here is the procedure</a> I used when trying to get it running (confirmed working on a laptop running Ubuntu).</p>
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
 
@@ -652,7 +658,7 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 
 <h3 id="allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</h3>
 
-<p>XBian used to include the usbmount package to mount USB devices as soon as they are connected.  This prevented XBMC from bring able to mount and unmount USB drives itself, using the udisk service [as designed], due to root privileges being required to unmount devices mounted by usbmount.</p>
+<p>XBian used to include the usbmount package to mount USB devices as soon as they are connected.  This prevented XBMC from bring able to use the udisk service to mount and unmount USB drives itself, due to root privileges being required to unmount devices mounted by usbmount.</p>
 
 <p>```sh
 	# disable the usbmount package
@@ -667,6 +673,8 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 <h3 id="install-shairport">Install Shairport</h3>
 
 <p>Instructions found <a href="http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi">here</a> (alt site <a href="http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/">here</a>)</p>
+
+<p>More recent instructions: http://lifehacker.com/5978594/turn-a-raspberry-pi-into-an-airplay-receiver-for-streaming-music-in-your-living-room</p>
 
 <p>A change in IOS 6 <a href="http://jordanburgess.com/post/38986434391/raspberry-pi-airplay">requires Perl Net-SDP</a> module to installed.</p>
 
@@ -706,7 +714,6 @@ chmod a+r ~/.ssh/id_rsa.pub ```
 	# exit root
 	exit
 </code></p>
-
 <div class="footnotes">
   <ol>
     <li id="fn:hostname">
