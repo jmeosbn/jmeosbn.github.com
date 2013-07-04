@@ -192,10 +192,6 @@ The Pi doesn't have a real time clock, so it usually defaults to some point in t
 
 
 
-## Configure WiFi and Bluetooth
-
-XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see [manual configuration](#manually-configure-wifi-adapter) if you want finer control over the network settings (e.g. connecting to multiple networks).  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but [here is the procedure](#configure-bluetooth-adapter) I used when trying to get it running (confirmed working on a laptop running Ubuntu).
-
 
 
 ## Link settings to root profile
@@ -234,6 +230,10 @@ These keys confirm the identity of the Pi, to prevent a malicious host from inte
 	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 -->
 
+
+## Configure WiFi and Bluetooth
+
+XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see [manual configuration](#manually-configure-wifi-adapter) if you want finer control over the network settings (e.g. connecting to multiple networks).  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but [here is the procedure](#configure-bluetooth-adapter) I used when trying to get it running (confirmed working on a laptop running Ubuntu).
 
 
 ## TTL serial console
