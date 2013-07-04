@@ -143,15 +143,21 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 	# Use a root shell for the following commands
 	sudo -s
 
+	# Change password for root and xbian users
+	passwd && passwd xbian
+
 	# Allow full use of sudo without needing password
 	# note: XBian 1.0a4 made this much less essential
 	echo '%sudo  ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+	# Allow boot partition to be mounted
+	sed -i '/\s\/boot\s/s/,noauto//' /etc/fstab
 
 	# Update packages
 	apt-get update && apt-get upgrade
 
 	# Install some utilities and services
-	apt-get install p7zip zip mediainfo avahi-daemon
+	apt-get install p7zip zip curl mediainfo avahi-daemon
 
 	# Install gcc compiler, dev tools
 	apt-get install gcc make git-core
