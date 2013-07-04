@@ -19,14 +19,12 @@ Jump to [first login tasks](#first-login-tasks) if you have already set up termi
 [^Todo]: Install fsck.ntfs (used to fix unclean unmount)
 
 
-
 ### Contents
 {:.no_toc}
 
 * TOC
 {:toc}
 {::options toc_levels="1..2" /}
-
 
 
 ## Basic Pi Tips
@@ -61,7 +59,6 @@ If zeroconfig can't be used, you can [find the Pi's network IP address](#find-th
 [^hostname]: It should be possible to connect with the hostname even without zeroconfig, e.g. ``xbian@xbian`` or ``pi@raspberrypi`` (on raspbian), but I've had no luck with this.
 
 [keyboard]: http://wiki.xbmc.org/index.php?title=Keyboard
-
 
 
 ## Pre-setup; on PC, laptop, etc.
@@ -104,7 +101,6 @@ Locally define the alias `xb`, to be used in place of `xbian@xbian.local` with c
 ```
 
 
-
 ## Transfer files
 
 If you have previous files from your Pi stored locally, you can transfer them using `sftp`, `scp`, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.
@@ -117,7 +113,6 @@ If you have previous files from your Pi stored locally, you can transfer them us
 
 	# you can also use ctlr+d to logout
 ```
-
 
 
 ## First login tasks
@@ -169,7 +164,6 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 ```
 
 
-
 ## Change Hostname
 
 If it's likely the Pi won't be the only one using the local network, then it should be given a unique host name.
@@ -181,7 +175,6 @@ If it's likely the Pi won't be the only one using the local network, then it sho
 ```
 
 
-
 ## Fake a hardware clock
 
 The Pi doesn't have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  *(note: previous distros required the [unabridged instructions](#fake-a-hardware-clock-unabridged).)*
@@ -189,9 +182,6 @@ The Pi doesn't have a real time clock, so it usually defaults to some point in t
 ```sh
 	apt-get install fake-hwclock
 ```
-
-
-
 
 
 ## Link settings to root profile
@@ -211,7 +201,6 @@ Occasionally you'll want to use a root shell, and then be annoyed that your alia
 	# hush login message
 	sudo touch ~root/.hushlogin
 ```
-
 
 
 ## Generate new RSA host keys
@@ -245,7 +234,6 @@ The display of full screen terminal programs becomes corrupted when using a TTL 
 ```
 
 
-
 ## Regional system settings
 
 Both XBian and Raspbian have system setup menus, but neither seem to setup the console keyboard correctly for the en_GB layout.  The current solution I use is to install ``keyboard-configuration``, which only seems to work once ``console-setup`` is also installed.
@@ -269,7 +257,6 @@ Both XBian and Raspbian have system setup menus, but neither seem to setup the c
 ```
 
 
-
 ## Build and install WiringPi
 
 [WiringPi] is a library to access the Pi's GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the ``gpio`` utility for use of the libraries from the command prompt.
@@ -286,7 +273,6 @@ Both XBian and Raspbian have system setup menus, but neither seem to setup the c
 ```
 
 
-
 ## Install dbox (dropbox tool)
 
 Follow the [dbox installation instructions][dbox] to set up the dropbox sdk developer keys and authorisation tokens.  To use dbox for automatic folder syncing, see my post: [Dropbox on Pi](/blog/pi-box/).
@@ -300,7 +286,6 @@ Follow the [dbox installation instructions][dbox] to set up the dropbox sdk deve
 ```
 
 
-
 ## Install Mono
 
 Basic mono setup to run and compile command line tools.
@@ -310,8 +295,8 @@ Basic mono setup to run and compile command line tools.
 ```
 
 
-
 ## Setup XBMC
+
 
 ### XBMC Extensions
 
@@ -320,7 +305,6 @@ Use `wget` to download the latest versions from the links below, then open the z
 - <http://code.google.com/p/xbmc-iplayerv2/downloads/list>
 - <http://code.google.com/p/mossy-xbmc-repo/downloads/list>
 - <http://code.google.com/p/xbmc-itv-player/downloads/list>
-
 
 
 ### XBMC Settings
@@ -346,11 +330,9 @@ If you are storing media in the root folder of an NTFS formatted hard drive, you
 ```
 
 
-
 ## Useful extras, not always used
 
 Stuff used infrequently, or currently being tested
-
 
 
 ### Packages from Raspbian
@@ -365,7 +347,6 @@ Some standard packages that are usually excluded from the xbian distro, as they 
 ```
 
 
-
 ### Other useful packages
 
 ```sh
@@ -373,7 +354,6 @@ Some standard packages that are usually excluded from the xbian distro, as they 
 	apt-get install clang geany
 	apt-get install sysv-rc-conf
 ```
-
 
 
 ### Find the IP address
@@ -393,12 +373,12 @@ If it isn't possible to run a command locally on the Pi (e.g. there is no monito
 [findPi script]:http://www.recantha.co.uk/blog/?p=2397
 
 
-
 ### Testing PVR
 
 ```sh
 	apt-get install vdr-plugin-dvbsddevice
 ```
+
 
 ### Setting up webcam
 
@@ -408,7 +388,6 @@ Use 'motion' or 'fswebcam', motion may need a default cfg copying
 	apt-get install motion
 	cp /etc/default/motion /etc/motion/motion.conf
 ```
-
 
 
 ### Configure bluetooth adapter
@@ -445,11 +424,9 @@ Use 'motion' or 'fswebcam', motion may need a default cfg copying
 **Note: a bluetooth adapter may be listed in ``lsusb`` and ``hciconfig``, without being recognised by ``hcitool``. This is the case with the belkin dongle I have, so use ``hcitool`` to check that a device is working properly.*
 
 
-
 ## Troubleshooting and backup
 
 Some useful commands and procedures
-
 
 
 ### Backup settings
@@ -481,7 +458,6 @@ Or using tar..
 ```
 
 
-
 ### Clear cached network adapter
 
 (needed for switching cards between devices)
@@ -491,13 +467,10 @@ Or using tar..
 ```
 
 
-
 ### Quick Tips
 
 * You can detect hdmi audio modes: `/opt/vc/bin/tvservice -a`
 * Setup CEC remote over hdmi from console: `cec-config`
-
-
 
 
 ## Not used with recent versions
@@ -505,7 +478,6 @@ Or using tar..
 [^Reaper]: http://f.cl.ly/items/0S1S1Y0B3Q241Z2F0z1j/Untitled.png
 
 Previously useful functionality or workarounds
-
 
 
 ### Manually configure WiFi adapter
@@ -556,7 +528,6 @@ Reinitialise the adapter, and check it's connected.
 Use ``iwconfig`` to view wifi adapter info and ``ifconfig`` for general network info.
 
 
-
 ### Fake a hardware clock (unabridged)
 
 More complicated instructions, as used on previous versions of XBian.
@@ -569,7 +540,6 @@ More complicated instructions, as used on previous versions of XBian.
 	dpkg-reconfigure tzdata
 	sed -i 's/^exit 0/ntpdate-debian\nexit 0/g' /etc/rc.local
 ```
-
 
 
 ### Fix ssh access using public key
@@ -587,7 +557,6 @@ More complicated instructions, as used on previous versions of XBian.
 ```
 
 
-
 ### Download OpenSSH sftp server
 
 ```sh
@@ -599,14 +568,12 @@ More complicated instructions, as used on previous versions of XBian.
 ```
 
 
-
 ### Update firmware without kernel
 
 ```sh
     wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update && chmod +x /usr/bin/rpi-update
     SKIP_KERNEL=1 rpi-update 128
 ```
-
 
 
 ### Allow XBMC to unmount USB drives
@@ -622,7 +589,6 @@ XBian used to include the usbmount package to mount USB devices as soon as they 
 ```
 
 Drives can be unmounted manually using ``udisks`` without needing to be root, and members of the ``plugdev`` group can also use ``pumount``.
-
 
 
 ### Install Shairport
@@ -669,6 +635,3 @@ A change in IOS 6 [requires Perl Net-SDP](http://jordanburgess.com/post/38986434
 	# exit root
 	exit
 ```
-
-
-
