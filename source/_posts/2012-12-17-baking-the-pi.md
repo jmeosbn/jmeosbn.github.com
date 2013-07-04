@@ -38,14 +38,14 @@ Guide for navigating XBMC with the [keyboard].
 ### Connecting to the Pi
 
 
-XBian names the default user account ``xbian``, other distributions normally use ``pi``.  The default password is ``raspberry``.  XBian also supports zeroconfig[^hostname], so it's easier to find your Pi on the network.
+XBian names the default user account ``xbian``, other distributions normally use ``pi``.  The default password is ``raspberry``.  XBian includes support for zeroconfig (via avahi-daemon), so it's easier to find your Pi on the network[^hostname].
 
 ```sh
 	# login using zeroconfig
 	ssh xbian@xbian.local
 ```
 
-Otherwise, you can [find the Pi's network IP address](#find-the-ip-address) and use that to login.
+If zeroconfig can't be used, you can [find the Pi's network IP address](#find-the-ip-address) and use that to login.
 
 ```sh
 	# login using IP address
@@ -64,7 +64,7 @@ Otherwise, you can [find the Pi's network IP address](#find-the-ip-address) and 
 
 
 
-## Pre-setup, on PC, laptop, etc.
+## Pre-setup; on PC, laptop, etc.
 
 Before setting up the Pi remotely, there are some things to do locally to ease logging in when using SSH.  This will obviate the need to enter a password, or specify the full host name each time we access the Pi.
 
@@ -94,7 +94,7 @@ The easiest way to append a key to the remote user's `~/.ssh/authorized_keys` fi
 
 ### Add an alias to .ssh/config
 
-Locally define the alias `xb`, to be used in place of `xbian@xbian.local` with commands such as `ssh xb` and `sftp xb`.  Enter the text below as a single command, or manually paste the quoted text into ``~/.ssh/config`` using ``nano`` or similar.
+Locally define the alias `xb`, to be used in place of `xbian@xbian.local` with commands such as `ssh xb` and `sftp xb`.  Enter the text below as a single command, or manually paste the quoted text into ``~/.ssh/config`` using ``nano`` or similar (the IP address can be used for Hostname if preferred).
 
 ```sh
 	echo '
@@ -144,7 +144,7 @@ Most of the commands below need root privileges on the Pi, as they alter the sys
 	sudo -s
 
 	# Allow full use of sudo without needing password
-	# note: XBian 1.0b4 made this much less essential
+	# note: XBian 1.0a4 made this much less essential
 	echo '%sudo  ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 	# Update packages
@@ -605,7 +605,7 @@ More complicated instructions, as used on previous versions of XBian.
 
 ### Allow XBMC to unmount USB drives
 
-XBian used to include the usbmount package to mount USB devices as soon as they are connected.  This prevented XBMC from bring able to mount and unmount USB drives itself, using the udisk service [as designed], due to root privileges being required to unmount devices mounted by usbmount.
+XBian used to include the usbmount package to mount USB devices as soon as they are connected.  This prevented XBMC from bring able to use the udisk service to mount and unmount USB drives itself, due to root privileges being required to unmount devices mounted by usbmount.
 
 ```sh
 	# disable the usbmount package
@@ -622,6 +622,8 @@ Drives can be unmounted manually using ``udisks`` without needing to be root, an
 ### Install Shairport
 
 Instructions found [here](http://tomsolari.id.au/post/27169019561/airplay-music-streaming-on-raspberry-pi) (alt site [here](http://cheeftun.appspot.com/trouch.com/2012/08/03/airpi-airplay-audio-with-raspberry/))
+
+More recent instructions: http://lifehacker.com/5978594/turn-a-raspberry-pi-into-an-airplay-receiver-for-streaming-music-in-your-living-room
 
 A change in IOS 6 [requires Perl Net-SDP](http://jordanburgess.com/post/38986434391/raspberry-pi-airplay) module to installed.
 
