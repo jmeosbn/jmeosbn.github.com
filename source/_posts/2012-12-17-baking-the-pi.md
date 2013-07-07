@@ -24,7 +24,6 @@ Jump to [first login tasks](#first-login-tasks) if you have already set up termi
 
 * TOC
 {:toc}
-{::options toc_levels="1..2" /}
 
 
 ## Basic Pi Tips
