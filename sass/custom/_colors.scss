@@ -8,7 +8,7 @@ $subtitle-color: #aaa;
 
 // main background colours
 $page-bg:     #444;
-$header-bg:   dimgrey;
+$header-bg:   #696969;
 $sidebar-bg:  #f4f4f4;
 $main-bg:     #f8f8f8;
 $nav-bg:      $header-bg;
@@ -34,6 +34,9 @@ $sidebar-link-color: $sidebar-color;
 $sidebar-link-color-hover: $link-color;
 //$sidebar-link-color: saturate(gray, 10);
 //$sidebar-link-color-hover: darken(black, 9);
+
+// sidebar border
+// $sidebar-border: desaturate(darken($sidebar-bg, 7), 10) !default;
 
 // remove gradient
 $nav-bg-front:    $nav-bg;
