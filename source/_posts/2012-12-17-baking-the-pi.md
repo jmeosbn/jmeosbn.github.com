@@ -18,10 +18,6 @@ Jump to [first login tasks](#first-login-tasks) if you have already set up termi
 
 [^Todo]: Install fsck.ntfs (used to fix unclean unmount)
 
-
-### Contents
-{:.no_toc}
-
 * TOC
 {:toc}
 
