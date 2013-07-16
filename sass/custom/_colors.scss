@@ -2,15 +2,20 @@
   Theme changes for lighter background/text
 */
 
+$basecolor: #0f64aa;
+$hi-lights: desaturate($basecolor, 10);
+$off-white: scale-color($basecolor, $lightness: 96%);
+$off-white: change-color($off-white, $red: green($off-white));
+
 // header title colours
 $title-color: #f2f2f2;
 $subtitle-color: #aaa;
 
 // main background colours
 $page-bg:     #444;
-$header-bg:   #696969;
-$sidebar-bg:  #f4f4f4;
-$main-bg:     #f8f8f8;
+$header-bg:   lighten($page-bg, 14);
+$sidebar-bg:  $title-color;
+$main-bg:     lighten($title-color, 2);
 $nav-bg:      $header-bg;
 
 // image used for background
@@ -18,11 +23,11 @@ $noise-bg: top left !default;
 // $noise-bg: image-url('noise.png') top left !default;
 
 // set colour of text
-$text-color: #555555;
+$text-color: #555;
 $sidebar-color: $text-color;
 
 // set colour of visited links
-$link-color: lighten(#1863A1, 3);
+$link-color: $hi-lights;
 $link-color-visited: $link-color;
 $link-color-hover: $link-color;
 
