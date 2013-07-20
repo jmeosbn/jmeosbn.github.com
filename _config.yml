@@ -92,12 +92,16 @@ github_show_about: false
 
 # Twitter
 twitter_user: jmeosbn
-twitter_tweet_count: 1
+twitter_tweet_count: 3
 twitter_show_replies: false
+twitter_show_retweets: true
+twitter_show_dates: false
+twitter_show_users: false
 twitter_follow_button: false
 twitter_show_follower_count: false
 twitter_tweet_button: true
 twitter_show_about: true
+twitter_widget_id:
 
 # Google +1
 google_plus_one: false
