@@ -16,9 +16,6 @@ body {
 // set all article h1 titles
 article h1 {
   font-size: 1.5em !important;
-  @media only screen and (min-width: 550px) {
-    font-size: 1.7em !important;
-  }
   font-weight: normal;
 }
 
@@ -44,8 +41,7 @@ blockquote {
 
 // set title link colour and decoration
 article h1 a:hover {
-  text-decoration: none !important;
-  // color: lighten($title-color, 15) !important;
+  // text-decoration: none !important;
 }
 
 // do not transition link colours
@@ -127,7 +123,7 @@ a[rel~="reference"] {
 #markdown-toc {
   font-size: 0.8em;
   line-height: 1.5em;
-  a { text-decoration: none; }
+  a { text-decoration: none; &:hover { text-decoration: underline; }}
 }
 
 // style for h3 with id of 'contents'
