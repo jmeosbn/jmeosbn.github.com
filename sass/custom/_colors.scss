@@ -9,14 +9,15 @@ $off-white: change-color($off-white, $red: green($off-white));
 
 // header title colours
 $title-color: #f2f2f2;
-$subtitle-color: #aaa;
+//$subtitle-color: #aaa;
 
 // main background colours
-$page-bg:     #444;
-$header-bg:   lighten($page-bg, 14);
-$sidebar-bg:  $title-color;
-$main-bg:     lighten($title-color, 2);
-$nav-bg:      $header-bg;
+$page-bg:         #444;
+$main-bg:         lighten($title-color, 2);
+$header-bg:       lighten($page-bg, 14);
+$nav-bg:          $header-bg;
+$sidebar-bg:      $title-color;
+$footer-bg:       $header-bg;
 
 // image used for background
 $noise-bg: top left !default;
@@ -41,6 +42,7 @@ $sidebar-link-color-hover: $link-color;
 //$sidebar-link-color-hover: darken(black, 9);
 
 // sidebar border
+$sidebar-border: darken($sidebar-bg, 7);
 // $sidebar-border: desaturate(darken($sidebar-bg, 7), 10) !default;
 
 // remove gradient
@@ -48,7 +50,9 @@ $nav-bg-front:    $nav-bg;
 $nav-bg-back:     $nav-bg;
 
 // navigation link colour
-$nav-color: darken($nav-bg, 50);
+$nav-color:  $title-color;
+$nav-color-hover: $link-color;
+
 
 // navigation borders
 $nav-border-top:  $nav-bg;
