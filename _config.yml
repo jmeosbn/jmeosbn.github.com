@@ -100,6 +100,7 @@ twitter_show_dates: false
 twitter_show_users: false
 twitter_follow_button: false
 twitter_show_follower_count: false
+twitter_count: none
 twitter_tweet_button: true
 twitter_show_about: true
 twitter_widget_id:
