@@ -88,27 +88,27 @@
 
 <!-- more -->
 
-<p>Jump to <a href="#first-login-tasks">first login tasks</a> if you have already set up terminal access to the Pi.</p>
+<p>Jump to <a href="/blog/baking-the-pi/#first-login-tasks">first login tasks</a> if you have already set up terminal access to the Pi.</p>
 
 <ul id="markdown-toc">
-  <li><a href="#basic-pi-tips">Basic Pi Tips</a></li>
-  <li><a href="#pre-setup-on-pc-laptop-etc">Pre-setup; on PC, laptop, etc.</a></li>
-  <li><a href="#transfer-files">Transfer files</a></li>
-  <li><a href="#first-login-tasks">First login tasks</a></li>
-  <li><a href="#change-hostname">Change Hostname</a></li>
-  <li><a href="#fake-a-hardware-clock">Fake a hardware clock</a></li>
-  <li><a href="#link-settings-to-root-profile">Link settings to root profile</a></li>
-  <li><a href="#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
-  <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
-  <li><a href="#ttl-serial-console">TTL serial console</a></li>
-  <li><a href="#regional-system-settings">Regional system settings</a></li>
-  <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
-  <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
-  <li><a href="#install-mono">Install Mono</a></li>
-  <li><a href="#setup-xbmc">Setup XBMC</a></li>
-  <li><a href="#useful-extras-not-always-used">Useful extras, not always used</a></li>
-  <li><a href="#troubleshooting-and-backup">Troubleshooting and backup</a></li>
-  <li><a href="#not-used-with-recent-versions">Not used with recent versions</a></li>
+  <li><a href="/blog/baking-the-pi/#basic-pi-tips">Basic Pi Tips</a></li>
+  <li><a href="/blog/baking-the-pi/#pre-setup-on-pc-laptop-etc">Pre-setup; on PC, laptop, etc.</a></li>
+  <li><a href="/blog/baking-the-pi/#transfer-files">Transfer files</a></li>
+  <li><a href="/blog/baking-the-pi/#first-login-tasks">First login tasks</a></li>
+  <li><a href="/blog/baking-the-pi/#change-hostname">Change Hostname</a></li>
+  <li><a href="/blog/baking-the-pi/#fake-a-hardware-clock">Fake a hardware clock</a></li>
+  <li><a href="/blog/baking-the-pi/#link-settings-to-root-profile">Link settings to root profile</a></li>
+  <li><a href="/blog/baking-the-pi/#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
+  <li><a href="/blog/baking-the-pi/#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
+  <li><a href="/blog/baking-the-pi/#ttl-serial-console">TTL serial console</a></li>
+  <li><a href="/blog/baking-the-pi/#regional-system-settings">Regional system settings</a></li>
+  <li><a href="/blog/baking-the-pi/#build-and-install-wiringpi">Build and install WiringPi</a></li>
+  <li><a href="/blog/baking-the-pi/#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
+  <li><a href="/blog/baking-the-pi/#install-mono">Install Mono</a></li>
+  <li><a href="/blog/baking-the-pi/#setup-xbmc">Setup XBMC</a></li>
+  <li><a href="/blog/baking-the-pi/#useful-extras-not-always-used">Useful extras, not always used</a></li>
+  <li><a href="/blog/baking-the-pi/#troubleshooting-and-backup">Troubleshooting and backup</a></li>
+  <li><a href="/blog/baking-the-pi/#not-used-with-recent-versions">Not used with recent versions</a></li>
 </ul>
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
@@ -117,7 +117,7 @@
 
 <h3 id="connecting-to-the-pi">Connecting to the Pi</h3>
 
-<p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian includes support for zeroconfig (via avahi-daemon), so it’s easier to find your Pi on the network<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>.</p>
+<p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian includes support for zeroconfig (via avahi-daemon), so it’s easier to find your Pi on the network<sup id="fnref:hostname"><a href="/blog/baking-the-pi/#fn:hostname" rel="footnote">1</a></sup>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -125,7 +125,7 @@
 </span><span class="line">ssh xbian@xbian.local
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>If zeroconfig can’t be used, you can <a href="#find-the-ip-address">find the Pi’s network IP address</a> and use that to login.</p>
+<p>If zeroconfig can’t be used, you can <a href="/blog/baking-the-pi/#find-the-ip-address">find the Pi’s network IP address</a> and use that to login.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -139,7 +139,7 @@
 </span><span class="line">ssh pi@192.168.1.10
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><em>Note: If multiple Pis are active on the same network, they should be given <a href="#change-hostname">unique hostnames</a>.</em></p>
+<p><em>Note: If multiple Pis are active on the same network, they should be given <a href="/blog/baking-the-pi/#change-hostname">unique hostnames</a>.</em></p>
 
 <h2 id="pre-setup-on-pc-laptop-etc">Pre-setup; on PC, laptop, etc.</h2>
 
@@ -303,7 +303,7 @@
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
 
-<p>The Pi doesn’t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
+<p>The Pi doesn’t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="/blog/baking-the-pi/#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fake-hwclock
@@ -339,7 +339,7 @@
 
 <h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
-<p>These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have <a href="#change-hostname">more than one Pi</a>.</p>
+<p>These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have <a href="/blog/baking-the-pi/#change-hostname">more than one Pi</a>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -359,7 +359,7 @@
 
 <h2 id="configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</h2>
 
-<p>XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see <a href="#manually-configure-wifi-adapter">manual configuration</a> if you want finer control over the network settings (e.g. connecting to multiple networks).  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but <a href="#configure-bluetooth-adapter">here is the procedure</a> I used when trying to get it running (confirmed working on a laptop running Ubuntu).</p>
+<p>XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see <a href="/blog/baking-the-pi/#manually-configure-wifi-adapter">manual configuration</a> if you want finer control over the network settings (e.g. connecting to multiple networks).  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but <a href="/blog/baking-the-pi/#configure-bluetooth-adapter">here is the procedure</a> I used when trying to get it running (confirmed working on a laptop running Ubuntu).</p>
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
 
@@ -877,7 +877,7 @@
 <div class="footnotes">
   <ol>
     <li id="fn:hostname">
-      <p>It should be possible to connect with the hostname even without zeroconfig, e.g. <code>xbian@xbian</code> or <code>pi@raspberrypi</code> (on raspbian), but I’ve had no luck with this.<a href="#fnref:hostname" rel="reference">&#8617;</a></p>
+      <p>It should be possible to connect with the hostname even without zeroconfig, e.g. <code>xbian@xbian</code> or <code>pi@raspberrypi</code> (on raspbian), but I’ve had no luck with this.<a href="/blog/baking-the-pi/#fnref:hostname" rel="reference">&#8617;</a></p>
     </li>
   </ol>
 </div>
