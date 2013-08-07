@@ -1,39 +1,39 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://jmeosbn.github.com/blog/resources-for-using-git/</loc>
+        <loc>http://jmeosbn.github.io/blog/resources-for-using-git/</loc>
         <lastmod>2013-06-07T03:17:15+01:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain/</loc>
+        <loc>http://jmeosbn.github.io/blog/compiling-the-stellaris-toolchain/</loc>
         <lastmod>2013-02-05T19:27:58+00:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain/</loc>
+        <loc>http://jmeosbn.github.io/blog/testing-the-stellaris-toolchain/</loc>
         <lastmod>2013-02-05T19:27:58+00:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/blog/stellaris-virtual-serial-device/</loc>
+        <loc>http://jmeosbn.github.io/blog/stellaris-virtual-serial-device/</loc>
         <lastmod>2013-06-07T00:09:20+01:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/blog/baking-the-pi/</loc>
+        <loc>http://jmeosbn.github.io/blog/baking-the-pi/</loc>
         <lastmod>2013-07-24T02:22:19+01:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/blog/pi-box/</loc>
+        <loc>http://jmeosbn.github.io/blog/pi-box/</loc>
         <lastmod>2013-07-07T02:07:46+01:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/blog/archives/</loc>
+        <loc>http://jmeosbn.github.io/blog/archives/</loc>
         <lastmod>2013-08-04T19:59:56+01:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/</loc>
+        <loc>http://jmeosbn.github.io/</loc>
         <lastmod>2013-08-04T19:59:18+01:00</lastmod>
     </url>
     <url>
-        <loc>http://jmeosbn.github.com/robots.txt</loc>
+        <loc>http://jmeosbn.github.io/robots.txt</loc>
         <lastmod>2013-07-15T21:10:41+01:00</lastmod>
     </url>
 </urlset>

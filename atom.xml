@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[git-log(1)]]></title>
-  <link href="http://jmeosbn.github.com/atom.xml" rel="self"/>
-  <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-08-07T02:44:25+01:00</updated>
-  <id>http://jmeosbn.github.com/</id>
+  <title><![CDATA[jmeosbn]]></title>
+  <link href="http://jmeosbn.github.io/atom.xml" rel="self"/>
+  <link href="http://jmeosbn.github.io/"/>
+  <updated>2013-08-07T03:21:26+01:00</updated>
+  <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Dropbox on Pi]]></title>
-    <link href="http://jmeosbn.github.com/blog/pi-box/"/>
+    <link href="http://jmeosbn.github.io/blog/pi-box/"/>
     <updated>2012-12-19T00:54:00+00:00</updated>
-    <id>http://jmeosbn.github.com/blog/pi-box</id>
+    <id>http://jmeosbn.github.io/blog/pi-box</id>
     <content type="html"><![CDATA[<p>There’s currently no build of the Dropbox sync client that runs on ARM devices; while there is source available, it’s not suitable for automatic, unattended sync on a Raspberry Pi that may not have any windowing system installed.</p>
 
 <p>Dropbox does make various SDKs available though, which enables a ruby or python script to be used instead of the official client.</p>
@@ -47,7 +47,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page, to configure your keys and clone your Dropbox folder.</p>
 
-<p>To run dbox periodically, download<sup id="fnref:dl"><a href="http://jmeosbn.github.com/blog/pi-box/#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a> and make it executable, then replace the example keys and path settings with your own.</p>
+<p>To run dbox periodically, download<sup id="fnref:dl"><a href="http://jmeosbn.github.io/blog/pi-box/#fn:dl" rel="footnote">1</a></sup> the <a href="https://github.com/kenpratt/dbox/blob/master/sample_polling_script.rb">example script</a> and make it executable, then replace the example keys and path settings with your own.</p>
 
 <!--	cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb -->
 
@@ -93,7 +93,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>While cron or similar could be used to run dbox periodically, each separate invocation of dbox from the command line incurs a startup delay of a few seconds, during which time the Pi’s CPU is maxed out loading ruby and the code needed to run dbox.  This isn’t ideal and would likely cause issues if the Pi is used as a media player.</p>
 
-<p>The sample_polling_script accesses dbox directly though it’s ruby API, and doesn’t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="http://jmeosbn.github.com/blog/pi-box/#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
+<p>The sample_polling_script accesses dbox directly though it’s ruby API, and doesn’t exit during each polling interval.  Therefore, code remains cached in memory<sup id="fnref:mem"><a href="http://jmeosbn.github.io/blog/pi-box/#fn:mem" rel="footnote">2</a></sup> and the delay occurs only once upon startup; this is a great advantage over running the command line version periodically.</p>
 
 <h1 id="alternatives">alternatives</h1>
 
@@ -129,10 +129,10 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <div class="footnotes">
   <ol>
     <li id="fn:dl">
-      <p>the script is also included in the installed gem:  <code>cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb</code><a href="http://jmeosbn.github.com/blog/pi-box/#fnref:dl" rel="reference">&#8617;</a></p>
+      <p>the script is also included in the installed gem:  <code>cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb</code><a href="http://jmeosbn.github.io/blog/pi-box/#fnref:dl" rel="reference">&#8617;</a></p>
     </li>
     <li id="fn:mem">
-      <p>memory usage starts at ~8MB after startup, and evens out to ~12MB after many polling loops; polling takes a second or two, during which CPU usage is around 5%, peaking at ~12%.  Contrast with the CLI version which uses a similar amount of memory, but takes several seconds to complete each sync, and includes the overhead of almost total CPU usage for half that time.<a href="http://jmeosbn.github.com/blog/pi-box/#fnref:mem" rel="reference">&#8617;</a></p>
+      <p>memory usage starts at ~8MB after startup, and evens out to ~12MB after many polling loops; polling takes a second or two, during which CPU usage is around 5%, peaking at ~12%.  Contrast with the CLI version which uses a similar amount of memory, but takes several seconds to complete each sync, and includes the overhead of almost total CPU usage for half that time.<a href="http://jmeosbn.github.io/blog/pi-box/#fnref:mem" rel="reference">&#8617;</a></p>
     </li>
   </ol>
 </div>
@@ -141,34 +141,34 @@ Dropbox integration made easy. This robust client gives you control over what, w
   
   <entry>
     <title type="html"><![CDATA[Home Theatre Pi (HTPi)]]></title>
-    <link href="http://jmeosbn.github.com/blog/baking-the-pi/"/>
+    <link href="http://jmeosbn.github.io/blog/baking-the-pi/"/>
     <updated>2012-12-17T19:13:00+00:00</updated>
-    <id>http://jmeosbn.github.com/blog/baking-the-pi</id>
+    <id>http://jmeosbn.github.io/blog/baking-the-pi</id>
     <content type="html"><![CDATA[<p>A collection of notes for setting up a clean image of <a href="http://www.xbian.org">XBian</a> (1.0 Beta 1) on the Raspberry Pi.</p>
 
 <!-- more -->
 
-<p>Jump to <a href="http://jmeosbn.github.com/blog/baking-the-pi/#first-login-tasks">first login tasks</a> if you have already set up terminal access to the Pi.</p>
+<p>Jump to <a href="http://jmeosbn.github.io/blog/baking-the-pi/#first-login-tasks">first login tasks</a> if you have already set up terminal access to the Pi.</p>
 
 <ul id="markdown-toc">
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#basic-pi-tips">Basic Pi Tips</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#pre-setup-on-pc-laptop-etc">Pre-setup; on PC, laptop, etc.</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#transfer-files">Transfer files</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#first-login-tasks">First login tasks</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#change-hostname">Change Hostname</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#fake-a-hardware-clock">Fake a hardware clock</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#link-settings-to-root-profile">Link settings to root profile</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#ttl-serial-console">TTL serial console</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#regional-system-settings">Regional system settings</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#build-and-install-wiringpi">Build and install WiringPi</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#install-mono">Install Mono</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#setup-xbmc">Setup XBMC</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#useful-extras-not-always-used">Useful extras, not always used</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#troubleshooting-and-backup">Troubleshooting and backup</a></li>
-  <li><a href="http://jmeosbn.github.com/blog/baking-the-pi/#not-used-with-recent-versions">Not used with recent versions</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#basic-pi-tips">Basic Pi Tips</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#pre-setup-on-pc-laptop-etc">Pre-setup; on PC, laptop, etc.</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#transfer-files">Transfer files</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#first-login-tasks">First login tasks</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#change-hostname">Change Hostname</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#fake-a-hardware-clock">Fake a hardware clock</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#link-settings-to-root-profile">Link settings to root profile</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#ttl-serial-console">TTL serial console</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#regional-system-settings">Regional system settings</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#build-and-install-wiringpi">Build and install WiringPi</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#install-mono">Install Mono</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#setup-xbmc">Setup XBMC</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#useful-extras-not-always-used">Useful extras, not always used</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#troubleshooting-and-backup">Troubleshooting and backup</a></li>
+  <li><a href="http://jmeosbn.github.io/blog/baking-the-pi/#not-used-with-recent-versions">Not used with recent versions</a></li>
 </ul>
 
 <h2 id="basic-pi-tips">Basic Pi Tips</h2>
@@ -177,7 +177,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h3 id="connecting-to-the-pi">Connecting to the Pi</h3>
 
-<p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian includes support for zeroconfig (via avahi-daemon), so it’s easier to find your Pi on the network<sup id="fnref:hostname"><a href="http://jmeosbn.github.com/blog/baking-the-pi/#fn:hostname" rel="footnote">1</a></sup>.</p>
+<p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian includes support for zeroconfig (via avahi-daemon), so it’s easier to find your Pi on the network<sup id="fnref:hostname"><a href="http://jmeosbn.github.io/blog/baking-the-pi/#fn:hostname" rel="footnote">1</a></sup>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -185,7 +185,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">ssh xbian@xbian.local
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>If zeroconfig can’t be used, you can <a href="http://jmeosbn.github.com/blog/baking-the-pi/#find-the-ip-address">find the Pi’s network IP address</a> and use that to login.</p>
+<p>If zeroconfig can’t be used, you can <a href="http://jmeosbn.github.io/blog/baking-the-pi/#find-the-ip-address">find the Pi’s network IP address</a> and use that to login.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -199,7 +199,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">ssh pi@192.168.1.10
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><em>Note: If multiple Pis are active on the same network, they should be given <a href="http://jmeosbn.github.com/blog/baking-the-pi/#change-hostname">unique hostnames</a>.</em></p>
+<p><em>Note: If multiple Pis are active on the same network, they should be given <a href="http://jmeosbn.github.io/blog/baking-the-pi/#change-hostname">unique hostnames</a>.</em></p>
 
 <h2 id="pre-setup-on-pc-laptop-etc">Pre-setup; on PC, laptop, etc.</h2>
 
@@ -363,7 +363,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
 
-<p>The Pi doesn’t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="http://jmeosbn.github.com/blog/baking-the-pi/#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
+<p>The Pi doesn’t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="http://jmeosbn.github.io/blog/baking-the-pi/#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fake-hwclock
@@ -399,7 +399,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
-<p>These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have <a href="http://jmeosbn.github.com/blog/baking-the-pi/#change-hostname">more than one Pi</a>.</p>
+<p>These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have <a href="http://jmeosbn.github.io/blog/baking-the-pi/#change-hostname">more than one Pi</a>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -419,7 +419,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</h2>
 
-<p>XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see <a href="http://jmeosbn.github.com/blog/baking-the-pi/#manually-configure-wifi-adapter">manual configuration</a> if you want finer control over the network settings (e.g. connecting to multiple networks).  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but <a href="http://jmeosbn.github.com/blog/baking-the-pi/#configure-bluetooth-adapter">here is the procedure</a> I used when trying to get it running (confirmed working on a laptop running Ubuntu).</p>
+<p>XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see <a href="http://jmeosbn.github.io/blog/baking-the-pi/#manually-configure-wifi-adapter">manual configuration</a> if you want finer control over the network settings (e.g. connecting to multiple networks).  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but <a href="http://jmeosbn.github.io/blog/baking-the-pi/#configure-bluetooth-adapter">here is the procedure</a> I used when trying to get it running (confirmed working on a laptop running Ubuntu).</p>
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
 
@@ -483,7 +483,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h2 id="install-dbox-dropbox-tool">Install dbox (dropbox tool)</h2>
 
-<p>Follow the <a href="https://github.com/kenpratt/dbox">dbox installation instructions</a> to set up the dropbox sdk developer keys and authorisation tokens.  To use dbox for automatic folder syncing, see my post: <a href="http://jmeosbn.github.com/blog/pi-box/">Dropbox on Pi</a>.</p>
+<p>Follow the <a href="https://github.com/kenpratt/dbox">dbox installation instructions</a> to set up the dropbox sdk developer keys and authorisation tokens.  To use dbox for automatic folder syncing, see my post: <a href="http://jmeosbn.github.io/blog/pi-box/">Dropbox on Pi</a>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -937,7 +937,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <div class="footnotes">
   <ol>
     <li id="fn:hostname">
-      <p>It should be possible to connect with the hostname even without zeroconfig, e.g. <code>xbian@xbian</code> or <code>pi@raspberrypi</code> (on raspbian), but I’ve had no luck with this.<a href="http://jmeosbn.github.com/blog/baking-the-pi/#fnref:hostname" rel="reference">&#8617;</a></p>
+      <p>It should be possible to connect with the hostname even without zeroconfig, e.g. <code>xbian@xbian</code> or <code>pi@raspberrypi</code> (on raspbian), but I’ve had no luck with this.<a href="http://jmeosbn.github.io/blog/baking-the-pi/#fnref:hostname" rel="reference">&#8617;</a></p>
     </li>
   </ol>
 </div>
@@ -946,9 +946,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
   
   <entry>
     <title type="html"><![CDATA[Stellaris Virtual Serial Device]]></title>
-    <link href="http://jmeosbn.github.com/blog/stellaris-virtual-serial-device/"/>
+    <link href="http://jmeosbn.github.io/blog/stellaris-virtual-serial-device/"/>
     <updated>2012-12-10T02:48:00+00:00</updated>
-    <id>http://jmeosbn.github.com/blog/stellaris-virtual-serial-device</id>
+    <id>http://jmeosbn.github.io/blog/stellaris-virtual-serial-device</id>
     <content type="html"><![CDATA[<p>The Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it’s output.</p>
 
 <!-- more -->
@@ -1035,10 +1035,10 @@ Dropbox integration made easy. This robust client gives you control over what, w
   
   <entry>
     <title type="html"><![CDATA[Testing the Stellaris Toolchain]]></title>
-    <link href="http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain/"/>
+    <link href="http://jmeosbn.github.io/blog/testing-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:40:00+00:00</updated>
-    <id>http://jmeosbn.github.com/blog/testing-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain">installed</a>, here’s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
+    <id>http://jmeosbn.github.io/blog/testing-the-stellaris-toolchain</id>
+    <content type="html"><![CDATA[<p>Once the <a href="https://github.com/jsnyder/arm-eabi-toolchain">toolchain</a> is <a href="http://jmeosbn.github.io/blog/compiling-the-stellaris-toolchain">installed</a>, here’s the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on <a href="https://github.com/yuvadm/stellaris">github</a>.</p>
 
 <!-- more -->
 
@@ -1132,9 +1132,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
   
   <entry>
     <title type="html"><![CDATA[Compiling the Stellaris Toolchain]]></title>
-    <link href="http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain/"/>
+    <link href="http://jmeosbn.github.io/blog/compiling-the-stellaris-toolchain/"/>
     <updated>2012-11-15T20:02:00+00:00</updated>
-    <id>http://jmeosbn.github.com/blog/compiling-the-stellaris-toolchain</id>
+    <id>http://jmeosbn.github.io/blog/compiling-the-stellaris-toolchain</id>
     <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don’t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
 
 <!-- more -->
@@ -1171,16 +1171,16 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM’s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
 
-<p><a href="http://jmeosbn.github.com/testing-the-stellaris-toolchain">Testing the Stellaris Toolchain</a> - my overview for compiling and testing code on the device.</p>
+<p><a href="http://jmeosbn.github.io/testing-the-stellaris-toolchain">Testing the Stellaris Toolchain</a> - my overview for compiling and testing code on the device.</p>
 
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Resources for Using Git]]></title>
-    <link href="http://jmeosbn.github.com/blog/resources-for-using-git/"/>
+    <link href="http://jmeosbn.github.io/blog/resources-for-using-git/"/>
     <updated>2012-09-29T20:35:00+01:00</updated>
-    <id>http://jmeosbn.github.com/blog/resources-for-using-git</id>
+    <id>http://jmeosbn.github.io/blog/resources-for-using-git</id>
     <content type="html"><![CDATA[<p>Here’s some basic resources to get started pushing code to github.</p>
 
 <!-- more -->

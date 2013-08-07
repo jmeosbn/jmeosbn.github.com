@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: htpc | git-log(1)]]></title>
-  <link href="http://jmeosbn.github.com/blog/categories/htpc/atom.xml" rel="self"/>
-  <link href="http://jmeosbn.github.com/"/>
-  <updated>2013-08-07T02:44:25+01:00</updated>
-  <id>http://jmeosbn.github.com/</id>
+  <title><![CDATA[Category: htpc | jmeosbn]]></title>
+  <link href="http://jmeosbn.github.io/blog/categories/htpc/atom.xml" rel="self"/>
+  <link href="http://jmeosbn.github.io/"/>
+  <updated>2013-08-07T03:21:26+01:00</updated>
+  <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Home Theatre Pi (HTPi)]]></title>
-    <link href="http://jmeosbn.github.com/blog/baking-the-pi/"/>
+    <link href="http://jmeosbn.github.io/blog/baking-the-pi/"/>
     <updated>2012-12-17T19:13:00+00:00</updated>
-    <id>http://jmeosbn.github.com/blog/baking-the-pi</id>
+    <id>http://jmeosbn.github.io/blog/baking-the-pi</id>
     <content type="html"><![CDATA[<p>A collection of notes for setting up a clean image of <a href="http://www.xbian.org">XBian</a> (1.0 Beta 1) on the Raspberry Pi.</p>
 
 <!-- more -->
