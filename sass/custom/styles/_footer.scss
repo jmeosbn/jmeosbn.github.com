@@ -16,7 +16,7 @@ body > footer {
   a {
     color: $text-color-light !important;
     text-decoration: inherit;
-    &:hover { color: $link-color-hover !important; }
+    &:hover { color: $nav-color-hover !important; }
   }
 }
 div#main {
