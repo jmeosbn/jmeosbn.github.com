@@ -3,8 +3,6 @@
 layout: post
 title: "Home Theatre Pi (HTPi)"
 date: 2012-12-17 19:13
-comments: true
-sidebar: false
 categories: [arm, pi, htpc]
 
 ---
