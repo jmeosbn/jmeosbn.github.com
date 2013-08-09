@@ -46,7 +46,7 @@
 
 </head>
 
-<body   class="no-sidebar"  >
+<body   >
   <header role="banner"><hgroup>
   <h1><a href="/">jmeosbn</a></h1>
   
@@ -953,6 +953,82 @@
 </article>
 
 </div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1><a href="/blog/archives">Recent</a></h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/pi-box/">Dropbox on Pi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/baking-the-pi/">Home Theatre Pi (HTPi)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/stellaris-virtual-serial-device/">Stellaris Virtual Serial Device</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/testing-the-stellaris-toolchain/">Testing the Stellaris Toolchain</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/compiling-the-stellaris-toolchain/">Compiling the Stellaris Toolchain</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/resources-for-using-git/">Resources for Using Git</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1><a href="https://github.com/jmeosbn">GitHub</a></h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jmeosbn',
+            count: 15,
+            skip_forks: true,
+            skip_sites: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+
+
+
+
+  <h1><a href="https://twitter.com/intent/user?screen_name=jmeosbn">Twitter</a></h1>
+
+
+
+
+</section>
+
+  
+</aside>
 
 
     </div>
