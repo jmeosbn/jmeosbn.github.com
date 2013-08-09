@@ -6,7 +6,9 @@
 body > header { display: none; }
 
 // match nav bar padding to header
-body > nav { padding-bottom: 0.6em; }
+@media only screen and (min-width: 550px) {
+  body > nav { padding-bottom: 0.6em; }
+}
 
 // don't wrap navigation links
 .main-navigation { white-space:nowrap; }
@@ -21,7 +23,7 @@ body > nav { .subscription { display: none; } }
 nav fieldset[role="search"] { display: none; }
 
 // don't show mailing list
-nav a[rel="subscribe-email-no-icon"] { display: none; }
+nav a[rel^="subscribe-email"] { display: none; }
 
 // Less padding between nav items
 body > nav > ul > li { margin-right: .6em; a { padding: 0; } }
@@ -29,15 +31,37 @@ body > nav > ul > li { margin-right: .6em; a { padding: 0; } }
 /*
   Improvements for mobile browsers
 */
-@media only screen and (max-width: 767px) {
+@media not screen and (min-width: 768px) {
+  // adjust header and nav bar padding
+  body > nav { padding-bottom: 0.6em; }
+
   // smaller search box
   nav form { width: 7em !important; }
 }
-@media only screen and (max-width: 479px) {
+@media not screen and (min-width: 550px) {
+  // smaller title font
+  body > header { font-size: 0.85em; }
+
+  // smaller navigation font
+  // body > nav { font-size: 0.85em; }
+
+  // adjust header and nav bar padding
+  body > header { padding-top: 1.1em; }
+  // body > nav { padding-bottom: 0.6em; padding-top: 0em; }
+
+  // less padding between nav items
+  body > nav > ul {
+    li { margin-right: 0.2em; a { padding: 0; } }
+    li + li { margin-left: 0.5em; }
+  }
+
   // don't show search field in nav bar
   nav fieldset[role="search"] { display: none; }
 }
-@media only screen and (max-width: 350px) {
+@media not screen and (min-width: 350px) {
+  // hide RSS link
+  // nav a[rel^="subscribe-rss"] { display: none; }
+
   // hide subscription and group links
   body > nav { .subscription { display: none; } }
   body > nav { [rel="_group"] { display: none; } }
