@@ -7,7 +7,7 @@ description: git-log(1)
   {% assign index = true %}
   {% for post in paginator.posts %}
   {% assign content = post.content %}
-    <article>
+    <article {% if post.image %} class="withimage" {% endif %}>
       {% include article.html %}
     </article>
   {% endfor %}
