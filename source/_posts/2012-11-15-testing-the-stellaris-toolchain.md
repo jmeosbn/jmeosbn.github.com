@@ -1,11 +1,7 @@
----
-
 layout: post
-title: "Testing the Stellaris Toolchain"
+title: Testing the Stellaris Toolchain
 date: 2012-11-15 20:40
-categories: [stellaris, arm]
-
----
+categories: stellaris arm
 
 Once the [toolchain] is [installed], here's the basic steps to compile an example and get the code onto the launchpad.  A mirror for the Stellaris example code and other pieces is available on [github].
 

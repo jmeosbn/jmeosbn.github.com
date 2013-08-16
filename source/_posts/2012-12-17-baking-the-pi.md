@@ -1,12 +1,7 @@
----
-
 layout: post
-title: "Home Theatre Pi (HTPi)"
+title: Home Theatre Pi (HTPi)
 date: 2012-12-17 19:13
-categories: [arm, pi, htpc]
-
----
-
+categories: arm pi htpc
 
 A collection of notes for setting up a clean image of [XBian](http://www.xbian.org) (1.0 Beta 1) on the Raspberry Pi.
 

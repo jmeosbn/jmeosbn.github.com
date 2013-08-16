@@ -1,11 +1,7 @@
----
-
 layout: post
-title: "Compiling the Stellaris Toolchain"
+title: Compiling the Stellaris Toolchain
 date: 2012-11-15 20:02
-categories: [stellaris, arm]
-
----
+categories: stellaris arm
 
 If you have a Stellaris [Launchpad] - and don't want to use the [official] tools - you can mostly follow the instructions at [y3xz] to build your own toolchain on any Unix/Linux based system using the [ARM EABI Toolchain Builder][EABI].  This includes Mac OS X, but I ran into a couple of minor issues as listed below.
 

@@ -1,11 +1,7 @@
----
-
 layout: post
-title: "Resources for Using Git"
+title: Resources for Using Git
 date: 2012-09-29 20:35
-categories: [git, tools]
-
----
+categories: git tools
 
 Here's some basic resources to get started pushing code to github.
 
