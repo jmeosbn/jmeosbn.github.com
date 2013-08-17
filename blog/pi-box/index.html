@@ -125,11 +125,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>Before installing dbox, make sure you have any needed packages.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo apt-get install ruby ruby-dev libsqlite3-dev
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo apt-get install ruby ruby-dev libsqlite3-dev
 </span><span class="line">sudo gem install dbox
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page, to configure your keys and clone your Dropbox folder.</p>
 
@@ -137,35 +135,24 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <!--	cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb -->
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">wget https://raw.github.com/kenpratt/dbox/master/sample_polling_script.rb
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">wget https://raw.github.com/kenpratt/dbox/master/sample_polling_script.rb
 </span><span class="line">mv ./sample_polling_script.rb dboxsync.rb
 </span><span class="line">chmod +x dboxsync.rb
 </span><span class="line">nano dboxsync.rb
 </span><span class="line">./dboxsync.rb
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>All output is written to a log file, so it’s normal not to see any output while running.  If you want to see some basic info while testing, change the script so <code>LOGFILE = STDOUT</code>.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
 
 <p>To have the script run on startup, add the following entry to <code>/etc/rc.local</code>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/rc.local
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo nano /etc/rc.local
 </span><span class="line">
 </span><span class="line"><span class="c"># add the following</span>
 </span><span class="line"><span class="k">if</span> ! pgrep -f dboxsync; <span class="k">then</span>
 </span><span class="line"><span class="k">  </span>sudo -u xbian nice -n 10 /home/xbian/dboxsync.rb &amp;
 </span><span class="line"><span class="k">fi</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>There’s more proper ways of doing this, but this seemed the simplest.</p>
 

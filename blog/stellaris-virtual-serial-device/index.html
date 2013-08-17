@@ -114,61 +114,37 @@
 
 <p>Alternatively, on Linux you can configure permissions for the device using udev rules:</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo nano /etc/udev/rules.d/42-sellaris.rules
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo nano /etc/udev/rules.d/42-sellaris.rules
 </span><span class="line">
 </span><span class="line"><span class="c"># add the following lines:</span>
 </span><span class="line">ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span> <span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>The (fairly open) rules shown above, give the user named ‘<em>devuser</em>’ permission to access the launchpad’s usb interface, along with it’s virtual serial device.</p>
 
 <p>Note: these rules should be more specific if you have similar devices that you don’t wish to allow access to inadvertently.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Exact match for Stellaris LM4F120XL</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># Exact match for Stellaris LM4F120XL</span>
 </span><span class="line"><span class="nv">SUBSYSTEMS</span><span class="o">==</span><span class="s2">&quot;usb&quot;</span>, ATTRS<span class="o">{</span>idVendor<span class="o">}==</span><span class="s2">&quot;1cbe&quot;</span>, ATTRS<span class="o">{</span>idProduct<span class="o">}==</span><span class="s2">&quot;00fd&quot;</span>, <span class="nv">MODE</span><span class="o">=</span><span class="s2">&quot;0660&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it’s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
 <p>To define these rules, the exact name, vendor, and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>dmesg
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span>dmesg
 </span><span class="line"><span class="c"># &lt;snip&gt;</span>
 </span><span class="line"><span class="o">[</span>39911.201497<span class="o">]</span> usb 1-1.2.3: New USB device found, <span class="nv">idVendor</span><span class="o">=</span>1cbe, <span class="nv">idProduct</span><span class="o">=</span>00fd
 </span><span class="line"><span class="o">[</span>39911.201537<span class="o">]</span> usb 1-1.2.3: Product: In-Circuit Debug Interface
 </span><span class="line"><span class="o">[</span>39911.201551<span class="o">]</span> usb 1-1.2.3: Manufacturer: Texas Instruments
 </span><span class="line"><span class="o">[</span>39911.344575<span class="o">]</span> cdc_acm 1-1.2.3:1.0: ttyACM0: USB ACM device
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="serial-device">serial device</h2>
 
 <p>If you want to use the serial connection to provide input or commands to the launchpad, you’ll need a terminal emulator that can connect to a serial device.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/qs-rgb
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/qs-rgb
 </span><span class="line"><span class="nv">$ </span>make
 </span><span class="line"><span class="nv">$ </span>lm4flash gcc/qs-rgb.bin
 </span><span class="line">
@@ -180,7 +156,7 @@
 </span><span class="line">
 </span><span class="line"><span class="c"># Kill the connection by typing: ^A k</span>
 </span><span class="line"><span class="c">#  to list other commands, type: ^A ?</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it’s full name.</p>
 

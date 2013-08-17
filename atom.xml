@@ -4,7 +4,7 @@
   <title><![CDATA[jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2013-08-16T22:58:59+01:00</updated>
+  <updated>2013-08-18T00:37:02+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -39,11 +39,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>Before installing dbox, make sure you have any needed packages.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo apt-get install ruby ruby-dev libsqlite3-dev
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo apt-get install ruby ruby-dev libsqlite3-dev
 </span><span class="line">sudo gem install dbox
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Then follow the rest of the instructions from the <a href="https://github.com/kenpratt/dbox">dbox</a> page, to configure your keys and clone your Dropbox folder.</p>
 
@@ -51,35 +49,24 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <!--	cp /var/lib/gems/1.9.1/gems/dbox-0.7.2/sample_polling_script.rb dboxsync.rb -->
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">wget https://raw.github.com/kenpratt/dbox/master/sample_polling_script.rb
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">wget https://raw.github.com/kenpratt/dbox/master/sample_polling_script.rb
 </span><span class="line">mv ./sample_polling_script.rb dboxsync.rb
 </span><span class="line">chmod +x dboxsync.rb
 </span><span class="line">nano dboxsync.rb
 </span><span class="line">./dboxsync.rb
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>All output is written to a log file, so it’s normal not to see any output while running.  If you want to see some basic info while testing, change the script so <code>LOGFILE = STDOUT</code>.  To show the full syncing progress and other debug info, set the level of the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html">logger class</a> by changing the script so it reads <code>LOGGER.level = Logger::DEBUG</code>.</p>
 
 <p>To have the script run on startup, add the following entry to <code>/etc/rc.local</code>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/rc.local
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo nano /etc/rc.local
 </span><span class="line">
 </span><span class="line"><span class="c"># add the following</span>
 </span><span class="line"><span class="k">if</span> ! pgrep -f dboxsync; <span class="k">then</span>
 </span><span class="line"><span class="k">  </span>sudo -u xbian nice -n 10 /home/xbian/dboxsync.rb &amp;
 </span><span class="line"><span class="k">fi</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>There’s more proper ways of doing this, but this seemed the simplest.</p>
 
@@ -179,25 +166,18 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian includes support for zeroconfig (via avahi-daemon), so it’s easier to find your Pi on the network<sup id="fnref:hostname"><a href="http://jmeosbn.github.io/blog/baking-the-pi/#fn:hostname" rel="footnote">1</a></sup>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># login using zeroconfig</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># login using zeroconfig</span>
 </span><span class="line">ssh xbian@xbian.local
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>If zeroconfig can’t be used, you can <a href="http://jmeosbn.github.io/blog/baking-the-pi/#find-the-ip-address">find the Pi’s network IP address</a> and use that to login.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># login using IP address</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># login using IP address</span>
 </span><span class="line">ssh xbian@192.168.1.10
 </span><span class="line">
 </span><span class="line"><span class="c"># login as user pi on raspbian</span>
 </span><span class="line">ssh pi@192.168.1.10
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p><em>Note: If multiple Pis are active on the same network, they should be given <a href="http://jmeosbn.github.io/blog/baking-the-pi/#change-hostname">unique hostnames</a>.</em></p>
 
@@ -209,15 +189,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>If generating a new key pair, accept the default key location as suggested by <code>ssh-keygen</code> below.  While a passphrase is optional, anyone can use a copy of the unencrypted private key to authenticate with your identity.  Many operating systems are preconfigured to use <code>ssh-agent</code> or a similar utility, to avoid having to enter a passphrase multiple times (if at all).</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># generate a key pair if none already exists</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># generate a key pair if none already exists</span>
 </span><span class="line"><span class="nb">test</span> -f ~/.ssh/id_rsa.pub <span class="o">||</span> ssh-keygen
 </span><span class="line">
 </span><span class="line"><span class="c"># remove any old, conflicting host entries</span>
@@ -225,7 +197,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">
 </span><span class="line"><span class="c"># password is required until the key is installed</span>
 </span><span class="line">ssh-copy-id xbian@xbian.local
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>The easiest way to append a key to the remote user’s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn’t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
@@ -233,80 +205,29 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>Locally define the alias <code>xb</code>, to be used in place of <code>xbian@xbian.local</code> with commands such as <code>ssh xb</code> and <code>sftp xb</code>.  Enter the text below as a single command, or manually paste the quoted text into <code>~/.ssh/config</code> using <code>nano</code> or similar (the IP address can be used for Hostname if preferred).</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nb">echo</span> <span class="s1">&#39;</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> <span class="s1">&#39;</span>
 </span><span class="line"><span class="s1">Host xb</span>
 </span><span class="line"><span class="s1">  User  xbian</span>
 </span><span class="line"><span class="s1">  Hostname  xbian.local&#39;</span> &gt;&gt; ~/.ssh/config
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="transfer-files">Transfer files</h2>
 
 <p>If you have previous files from your Pi stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># connect to the pi, using the `xb` alias defined above</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># connect to the pi, using the `xb` alias defined above</span>
 </span><span class="line">sftp xb
 </span><span class="line">sftp&gt; put .bash_aliases
 </span><span class="line">sftp&gt; <span class="nb">exit</span>
 </span><span class="line">
 </span><span class="line"><span class="c"># you can also use ctlr+d to logout</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="first-login-tasks">First login tasks</h2>
 
 <p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with ‘exit’ or ctrl+d when finished</em>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
 </span><span class="line">ssh xb
 </span><span class="line">
 </span><span class="line"><span class="c"># xbian-config may run here, set it up as you like then exit</span>
@@ -347,44 +268,29 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">apt-get install ruby ruby-dev ri libsqlite3-dev npm
 </span><span class="line"><span class="c"># Fix node binary being named nodejs</span>
 </span><span class="line"><span class="nb">cd</span> /usr/bin; sudo ln -s nodejs node; <span class="nb">cd</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="change-hostname">Change Hostname</h2>
 
 <p>If it’s likely the Pi won’t be the only one using the local network, then it should be given a unique host name.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">nano /etc/hostname               <span class="c"># enter the desired name</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">nano /etc/hostname               <span class="c"># enter the desired name</span>
 </span><span class="line">nano /etc/hosts                  <span class="c"># replace the hostname</span>
 </span><span class="line">/etc/init.d/hostname.sh start    <span class="c"># to enable the changes</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
 
 <p>The Pi doesn’t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="http://jmeosbn.github.io/blog/baking-the-pi/#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fake-hwclock
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install fake-hwclock
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
 
 <p>Occasionally you’ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># change to the home folder you want to link from</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># change to the home folder you want to link from</span>
 </span><span class="line"><span class="nb">cd</span> ~xbian
 </span><span class="line">
 </span><span class="line"><span class="c"># define a list of dot files to link</span>
@@ -395,23 +301,18 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">
 </span><span class="line"><span class="c"># hush login message</span>
 </span><span class="line">sudo touch ~root/.hushlogin
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
 <p>These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have <a href="http://jmeosbn.github.io/blog/baking-the-pi/#change-hostname">more than one Pi</a>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">rm /etc/ssh/ssh_host_*
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">rm /etc/ssh/ssh_host_*
 </span><span class="line">dpkg-reconfigure openssh-server
 </span><span class="line">
 </span><span class="line"><span class="c"># remove old host key from clients using:</span>
 </span><span class="line"><span class="c"># ssh-keygen -R xbian.local</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 <!--
 	ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
@@ -425,9 +326,8 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm/&#39;</span> /etc/inittab
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm/&#39;</span> /etc/inittab
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="regional-system-settings">Regional system settings</h2>
 
@@ -435,20 +335,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p><em>The latter package will change the console font, but this can be reverted during the commands shown below. Just choose the font you prefer, or choose ‘Do not change the boot/kernel font’.</em></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Packages needed to change keyboard layout</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># Packages needed to change keyboard layout</span>
 </span><span class="line">apt-get install console-setup keyboard-configuration
 </span><span class="line">
 </span><span class="line"><span class="c"># Configure keyboard settings</span>
@@ -461,43 +348,34 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="c"># Configure time zone and locale</span>
 </span><span class="line">dpkg-reconfigure tzdata
 </span><span class="line">dpkg-reconfigure locales
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
 
 <p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi’s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install gcc make git-core libi2c-dev
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install gcc make git-core libi2c-dev
 </span><span class="line">git clone git://git.drogon.net/wiringPi
 </span><span class="line"><span class="nb">cd </span>wiringPi; ./build
 </span><span class="line">
 </span><span class="line"><span class="c"># test with gpio utility</span>
 </span><span class="line">gpio readall
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="install-dbox-dropbox-tool">Install dbox (dropbox tool)</h2>
 
 <p>Follow the <a href="https://github.com/kenpratt/dbox">dbox installation instructions</a> to set up the dropbox sdk developer keys and authorisation tokens.  To use dbox for automatic folder syncing, see my post: <a href="http://jmeosbn.github.io/blog/pi-box/">Dropbox on Pi</a>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install gcc make ruby ruby-dev libsqlite3-dev
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install gcc make ruby ruby-dev libsqlite3-dev
 </span><span class="line">gem install dbox
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="install-mono">Install Mono</h2>
 
 <p>Basic mono setup to run and compile command line tools.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-gmcs mono-csharp-shell
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-gmcs mono-csharp-shell
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="setup-xbmc">Setup XBMC</h2>
 
@@ -515,20 +393,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings in <a href="http://wiki.xbmc.org/?title=Advancedsettings.xml">advancedsettings.xml</a>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>~/.xbmc/userdata/advancedsettings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;video&gt;</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>~/.xbmc/userdata/advancedsettings.xml</span></figcaption><div class="highlight"><pre><code class="xml"><span class="line"><span class="nt">&lt;video&gt;</span>
 </span><span class="line">    <span class="c">&lt;!-- hide system folders from the video files view --&gt;</span>
 </span><span class="line">    <span class="c">&lt;!-- you could also add these to &#39;excludefromscan&#39; --&gt;</span>
 </span><span class="line">    <span class="nt">&lt;excludefromlisting&gt;</span>
@@ -541,7 +406,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">        <span class="nt">&lt;regexp&gt;</span>(\$RECYCLE.BIN|System Volume Information)<span class="nt">&lt;/regexp&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/excludefromlisting&gt;</span>
 </span><span class="line"><span class="nt">&lt;/audio&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="useful-extras-not-always-used">Useful extras, not always used</h2>
 
@@ -551,37 +416,27 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install omxplayer
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install omxplayer
 </span><span class="line">
 </span><span class="line"><span class="c"># included on xbian &gt;= 1.0b</span>
 </span><span class="line">apt-get install psmisc usbutils
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="other-useful-packages">Other useful packages</h3>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fs2resize exfat-fuse
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install fs2resize exfat-fuse
 </span><span class="line">apt-get install clang geany
 </span><span class="line">apt-get install sysv-rc-conf
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="find-the-ip-address">Find the IP address</h3>
 
 <p>You can get the IP address from your Pi, by running either of the following commands locally on the device.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">ip r | grep -o <span class="s1">&#39;src.*&#39;</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">ip r | grep -o <span class="s1">&#39;src.*&#39;</span>
 </span><span class="line">
 </span><span class="line">ifconfig 2&gt;&amp;1 | grep cast | grep -o <span class="s1">&#39;inet [^ ]*&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Connect to the address that has the same subnet (starts similar) as the IP address you will be connecting from, ignoring the localhost address (127.0.0.1).</p>
 
@@ -589,49 +444,22 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <h3 id="testing-pvr">Testing PVR</h3>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install vdr-plugin-dvbsddevice
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install vdr-plugin-dvbsddevice
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="setting-up-webcam">Setting up webcam</h3>
 
 <p>Use ‘motion’ or ‘fswebcam’, motion may need a default cfg copying</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install motion
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install motion
 </span><span class="line">cp /etc/default/motion /etc/motion/motion.conf
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="configure-bluetooth-adapter">Configure bluetooth adapter</h3>
 
 <p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># install bluetooth support and dependencies</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># install bluetooth support and dependencies</span>
 </span><span class="line">agi bluez python-gobject  <span class="c"># minimal?</span>
 </span><span class="line">agi bluetooth bluez-utils  <span class="c"># full</span>
 </span><span class="line">
@@ -655,7 +483,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">
 </span><span class="line"><span class="c"># adapter status</span>
 </span><span class="line">hciconfig
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
 
@@ -672,45 +500,31 @@ Dropbox integration made easy. This robust client gives you control over what, w
   <li>.xbmc/addons/packages - original downloads, can use with “install from zip”</li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
 </span><span class="line">zip -ry xbmc .xbmc/
 </span><span class="line">zip -ry dotfiles .bash_aliases .nanorc .toprc .ssh
 </span><span class="line">
 </span><span class="line"><span class="c"># backup system config files</span>
 </span><span class="line">sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Or using tar..</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
 </span><span class="line">tar -czf xbmc-backup.tar.gz .xbmc
 </span><span class="line">
 </span><span class="line"><span class="c"># restore profile settings</span>
 </span><span class="line">sudo initctl stop xbmc
 </span><span class="line">tar -xzf xbmc-backup.tar.gz
 </span><span class="line">sudo initctl start xbmc
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="clear-cached-network-adapter">Clear cached network adapter</h3>
 
 <p>(needed for switching cards between devices)</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nb">echo</span> | sudo tee /etc/udev/rules.d/70-persistent-net.rules
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> | sudo tee /etc/udev/rules.d/70-persistent-net.rules
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="quick-tips">Quick Tips</h3>
 
@@ -729,37 +543,24 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>Use <code>lsusb</code> to check that the adapter is recognised, and <code>lsmod</code> to check the kernel module (e.g. <code>8192cu</code>) is loaded.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/network/interfaces
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo nano /etc/network/interfaces
+</span></code></pre></div></figure></notextile></div>
 
 <p>Make sure the following lines exist in the interfaces file, adding them as needed:</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">allow-hotplug wlan0
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">allow-hotplug wlan0
 </span><span class="line">iface wlan0 inet manual
 </span><span class="line">wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I’ve commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+</span></code></pre></div></figure></notextile></div>
 
 <p>Add your network details to wpa_supplicant.conf, using the following template:</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">network</span><span class="o">={</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">network</span><span class="o">={</span>
 </span><span class="line">  <span class="nv">ssid</span><span class="o">=</span><span class="s2">&quot;YOUR-NETWORK-SSID&quot;</span>
 </span><span class="line">  <span class="nv">proto</span><span class="o">=</span>WPA2
 </span><span class="line">  <span class="nv">key_mgmt</span><span class="o">=</span>WPA-PSK
@@ -767,17 +568,14 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">  <span class="nv">group</span><span class="o">=</span>CCMP TKIP
 </span><span class="line">  <span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;YOUR-WLAN-PASSWORD&quot;</span>
 </span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Reinitialise the adapter, and check it’s connected.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo ifdown wlan0
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo ifdown wlan0
 </span><span class="line">sudo ifup wlan0
 </span><span class="line"><span class="c"># you may get some errors here, even when successful</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Use <code>iwconfig</code> to view wifi adapter info and <code>ifconfig</code> for general network info.</p>
 
@@ -785,32 +583,17 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>More complicated instructions, as used on previous versions of XBian.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">touch /etc/init.d/hwclock.sh
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">touch /etc/init.d/hwclock.sh
 </span><span class="line">/etc/init.d/ntp restart
 </span><span class="line">apt-get install ntpdate fake-hwclock
 </span><span class="line">ntpdate-debian
 </span><span class="line">dpkg-reconfigure tzdata
 </span><span class="line">sed -i <span class="s1">&#39;s/^exit 0/ntpdate-debian\nexit 0/g&#39;</span> /etc/rc.local
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="fix-ssh-access-using-public-key">Fix ssh access using public key</h3>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># must be owned by root</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># must be owned by root</span>
 </span><span class="line">chown root: ~ ~/.ssh
 </span><span class="line"><span class="c"># no write for others</span>
 </span><span class="line">chmod <span class="nv">a</span><span class="o">=</span>rx,u+w  ~
@@ -819,45 +602,33 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">chmod -R go-rwx ~/.ssh
 </span><span class="line"><span class="c"># public key can be readable</span>
 </span><span class="line">chmod a+r ~/.ssh/id_rsa.pub
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="download-openssh-sftp-server">Download OpenSSH sftp server</h3>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get -d install openssh-server
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get -d install openssh-server
 </span><span class="line">cp /var/cache/apt/archives/openssh-server_*.deb .
 </span><span class="line">dpkg-deb -X openssh-server_*.deb sftp
 </span><span class="line">cp sftp/usr/lib/openssh/sftp-server /usr/lib/
 </span><span class="line">rm -r sftp openssh-server_*.deb
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="update-firmware-without-kernel">Update firmware without kernel</h3>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update <span class="o">&amp;&amp;</span> chmod +x /usr/bin/rpi-update
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update <span class="o">&amp;&amp;</span> chmod +x /usr/bin/rpi-update
 </span><span class="line"><span class="nv">SKIP_KERNEL</span><span class="o">=</span>1 rpi-update 128
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</h3>
 
 <p>XBian used to include the usbmount package to mount USB devices as soon as they are connected.  This prevented XBMC from bring able to use the udisk service to mount and unmount USB drives itself, due to root privileges being required to unmount devices mounted by usbmount.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># disable the usbmount package</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># disable the usbmount package</span>
 </span><span class="line">sed -i <span class="s1">&#39;/ENABLED=/s/=1/=0/&#39;</span> /etc/usbmount/usbmount.conf
 </span><span class="line">
 </span><span class="line"><span class="c"># optionally remove unused usbmount directories</span>
 </span><span class="line"><span class="c"># umount /media/usb*; rmdir /media/usb*; rm /media/usb</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Drives can be unmounted manually using <code>udisks</code> without needing to be root, and members of the <code>plugdev</code> group can also use <code>pumount</code>.</p>
 
@@ -869,47 +640,16 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>A change in IOS 6 <a href="http://jordanburgess.com/post/38986434391/raspberry-pi-airplay">requires Perl Net-SDP</a> module to installed.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">git clone https://github.com/njh/perl-net-sdp.git perl-net-sdp
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">git clone https://github.com/njh/perl-net-sdp.git perl-net-sdp
 </span><span class="line"><span class="nb">cd </span>perl-net-sdp
 </span><span class="line">perl Build.PL
 </span><span class="line">sudo ./Build
 </span><span class="line">sudo ./Build <span class="nb">test</span>
 </span><span class="line">sudo ./Build install
 </span><span class="line"><span class="nb">cd</span> ..
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># do as root</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># do as root</span>
 </span><span class="line">sudo -s
 </span><span class="line">apt-get install alsa-utils
 </span><span class="line">modprobe snd_bcm2835
@@ -933,7 +673,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">/etc/init.d/shairport start
 </span><span class="line"><span class="c"># exit root</span>
 </span><span class="line"><span class="nb">exit</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 <div class="footnotes">
   <ol>
     <li id="fn:hostname">
@@ -959,61 +699,37 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>Alternatively, on Linux you can configure permissions for the device using udev rules:</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo nano /etc/udev/rules.d/42-sellaris.rules
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span>sudo nano /etc/udev/rules.d/42-sellaris.rules
 </span><span class="line">
 </span><span class="line"><span class="c"># add the following lines:</span>
 </span><span class="line">ATTRS<span class="o">{</span>product<span class="o">}==</span><span class="s2">&quot;In-Circuit Debug Interface&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span> <span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;ttyACM?&quot;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>The (fairly open) rules shown above, give the user named ‘<em>devuser</em>’ permission to access the launchpad’s usb interface, along with it’s virtual serial device.</p>
 
 <p>Note: these rules should be more specific if you have similar devices that you don’t wish to allow access to inadvertently.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Exact match for Stellaris LM4F120XL</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># Exact match for Stellaris LM4F120XL</span>
 </span><span class="line"><span class="nv">SUBSYSTEMS</span><span class="o">==</span><span class="s2">&quot;usb&quot;</span>, ATTRS<span class="o">{</span>idVendor<span class="o">}==</span><span class="s2">&quot;1cbe&quot;</span>, ATTRS<span class="o">{</span>idProduct<span class="o">}==</span><span class="s2">&quot;00fd&quot;</span>, <span class="nv">MODE</span><span class="o">=</span><span class="s2">&quot;0660&quot;</span>, <span class="nv">OWNER</span><span class="o">=</span><span class="s2">&quot;devuser&quot;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>The device in this rule is strictly defined, and read/write permissions have been explicitly set for it.  Also, because the whole device is matched directly (rather than it’s individual interfaces), only one rule is required.  You could also try assigning the device to a group, using <code>GROUP="devgroup"</code>.</p>
 
 <p>To define these rules, the exact name, vendor, and/or product id needs to be known.  You can check these values using <code>dmesg</code> after connecting your device; the lines of interest are shown below.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>dmesg
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span>dmesg
 </span><span class="line"><span class="c"># &lt;snip&gt;</span>
 </span><span class="line"><span class="o">[</span>39911.201497<span class="o">]</span> usb 1-1.2.3: New USB device found, <span class="nv">idVendor</span><span class="o">=</span>1cbe, <span class="nv">idProduct</span><span class="o">=</span>00fd
 </span><span class="line"><span class="o">[</span>39911.201537<span class="o">]</span> usb 1-1.2.3: Product: In-Circuit Debug Interface
 </span><span class="line"><span class="o">[</span>39911.201551<span class="o">]</span> usb 1-1.2.3: Manufacturer: Texas Instruments
 </span><span class="line"><span class="o">[</span>39911.344575<span class="o">]</span> cdc_acm 1-1.2.3:1.0: ttyACM0: USB ACM device
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="serial-device">serial device</h2>
 
 <p>If you want to use the serial connection to provide input or commands to the launchpad, you’ll need a terminal emulator that can connect to a serial device.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/qs-rgb
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>stellaris/boards/ek-lm4f120xl/qs-rgb
 </span><span class="line"><span class="nv">$ </span>make
 </span><span class="line"><span class="nv">$ </span>lm4flash gcc/qs-rgb.bin
 </span><span class="line">
@@ -1025,7 +741,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">
 </span><span class="line"><span class="c"># Kill the connection by typing: ^A k</span>
 </span><span class="line"><span class="c">#  to list other commands, type: ^A ?</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Use of the wildcard in <code>ttyACM?</code> allows for the times the device may get assigned a different number, e.g. when power cycling or reconnecting.  If you have another ttyACM device connected then you should probably use it’s full name.</p>
 
@@ -1042,22 +758,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <!-- more -->
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Add the toolchain to your profile&#39;s path</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># Add the toolchain to your profile&#39;s path</span>
 </span><span class="line"><span class="c"># Ideally this should go into your bash profile</span>
 </span><span class="line"><span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$HOME</span>/arm-cs-tools/bin:<span class="nv">$PATH</span>
 </span><span class="line">
@@ -1072,37 +773,13 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="c"># Try making a source modification</span>
 </span><span class="line"><span class="nv">$ </span>nano project0.c
 </span><span class="line"><span class="nv">$ </span>make <span class="o">&amp;&amp;</span> lm4flash gcc/project0.bin
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="debugging">debugging</h2>
 
 <p><a href="https://github.com/utzig/lm4tools">lm4tools</a> has a bridge to enable TCP over USB, so code running on the device can be debugged using gdb from the compiled toolchain.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># build with debug symbols</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># build with debug symbols</span>
 </span><span class="line"><span class="nv">$ </span>make clean <span class="o">&amp;&amp;</span> make <span class="nv">DEBUG</span><span class="o">=</span>1
 </span><span class="line"><span class="nv">$ </span>lm4flash gcc/project0.bin
 </span><span class="line">
@@ -1126,7 +803,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">
 </span><span class="line"><span class="c"># quit lmicdi to allow use of lm4flash</span>
 </span><span class="line"><span class="nv">$ </span>sudo killall lmicdi <span class="c"># or type &#39;fg&#39; followed by ^C</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 ]]></content>
   </entry>
   
@@ -1155,13 +832,10 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p><strong>Update: The dev has <a href="https://github.com/utzig/lm4tools/commit/99d501b">committed</a> a workaround that fixes <code>lm4flash</code> on OS X.</strong></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>./lm4flash project0.bin
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span>./lm4flash project0.bin
 </span><span class="line">Unable to get device serial number: LIBUSB_ERROR_OTHER
 </span><span class="line">Unable to find any ICDI devices
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn’t check for the serial number.</p>
 
@@ -1189,45 +863,30 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p>The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named <code>.git</code>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Initialise a new git repo</span><a href="http://git-scm.com/docs/git-init">git-init</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>my-project
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Initialise a new git repo</span><a href="http://git-scm.com/docs/git-init">git-init</a></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>my-project
 </span><span class="line"><span class="nv">$ </span>git init
 </span><span class="line">Initialized empty Git repository in my-project/.git/
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Add any new or changed files you want to track, then commit those changes to the repo.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Add and commit changes</span><a href="http://git-scm.com/docs/git-add">git-add</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">echo </span>About My-Project &gt; README.md
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Add and commit changes</span><a href="http://git-scm.com/docs/git-add">git-add</a></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">echo </span>About My-Project &gt; README.md
 </span><span class="line"><span class="nv">$ </span>git add . <span class="c"># add all files recursively</span>
 </span><span class="line"><span class="nv">$ </span>git commit -m <span class="s1">&#39;First Commit&#39;</span>
 </span><span class="line"><span class="o">[</span>master <span class="o">(</span>root-commit<span class="o">)</span> cdab15f<span class="o">]</span> First Commit
 </span><span class="line"> 1 file changed, 1 insertion<span class="o">(</span>+<span class="o">)</span>
 </span><span class="line"> create mode 100644 README.md
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>View recent commits using <code>git log</code>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>View recent commits</span><a href="http://git-scm.com/docs/git-log">git-log</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">$ </span>git log
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>View recent commits</span><a href="http://git-scm.com/docs/git-log">git-log</a></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span>git log
 </span><span class="line">commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
 </span><span class="line">Author: Jamie Osborne &lt;jmeosbn@your-email.com&gt;
 </span><span class="line">Date:   Sat Sep 29 23:30:20 2012 +0100
 </span><span class="line">
 </span><span class="line">    First Commit
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="documentation">documentation</h2>
 

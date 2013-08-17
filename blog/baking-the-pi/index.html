@@ -139,25 +139,18 @@
 
 <p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian includes support for zeroconfig (via avahi-daemon), so it’s easier to find your Pi on the network<sup id="fnref:hostname"><a href="/blog/baking-the-pi/#fn:hostname" rel="footnote">1</a></sup>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># login using zeroconfig</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># login using zeroconfig</span>
 </span><span class="line">ssh xbian@xbian.local
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>If zeroconfig can’t be used, you can <a href="/blog/baking-the-pi/#find-the-ip-address">find the Pi’s network IP address</a> and use that to login.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># login using IP address</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># login using IP address</span>
 </span><span class="line">ssh xbian@192.168.1.10
 </span><span class="line">
 </span><span class="line"><span class="c"># login as user pi on raspbian</span>
 </span><span class="line">ssh pi@192.168.1.10
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p><em>Note: If multiple Pis are active on the same network, they should be given <a href="/blog/baking-the-pi/#change-hostname">unique hostnames</a>.</em></p>
 
@@ -169,15 +162,7 @@
 
 <p>If generating a new key pair, accept the default key location as suggested by <code>ssh-keygen</code> below.  While a passphrase is optional, anyone can use a copy of the unencrypted private key to authenticate with your identity.  Many operating systems are preconfigured to use <code>ssh-agent</code> or a similar utility, to avoid having to enter a passphrase multiple times (if at all).</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># generate a key pair if none already exists</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># generate a key pair if none already exists</span>
 </span><span class="line"><span class="nb">test</span> -f ~/.ssh/id_rsa.pub <span class="o">||</span> ssh-keygen
 </span><span class="line">
 </span><span class="line"><span class="c"># remove any old, conflicting host entries</span>
@@ -185,7 +170,7 @@
 </span><span class="line">
 </span><span class="line"><span class="c"># password is required until the key is installed</span>
 </span><span class="line">ssh-copy-id xbian@xbian.local
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>The easiest way to append a key to the remote user’s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn’t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
@@ -193,80 +178,29 @@
 
 <p>Locally define the alias <code>xb</code>, to be used in place of <code>xbian@xbian.local</code> with commands such as <code>ssh xb</code> and <code>sftp xb</code>.  Enter the text below as a single command, or manually paste the quoted text into <code>~/.ssh/config</code> using <code>nano</code> or similar (the IP address can be used for Hostname if preferred).</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nb">echo</span> <span class="s1">&#39;</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> <span class="s1">&#39;</span>
 </span><span class="line"><span class="s1">Host xb</span>
 </span><span class="line"><span class="s1">  User  xbian</span>
 </span><span class="line"><span class="s1">  Hostname  xbian.local&#39;</span> &gt;&gt; ~/.ssh/config
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="transfer-files">Transfer files</h2>
 
 <p>If you have previous files from your Pi stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># connect to the pi, using the `xb` alias defined above</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># connect to the pi, using the `xb` alias defined above</span>
 </span><span class="line">sftp xb
 </span><span class="line">sftp&gt; put .bash_aliases
 </span><span class="line">sftp&gt; <span class="nb">exit</span>
 </span><span class="line">
 </span><span class="line"><span class="c"># you can also use ctlr+d to logout</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="first-login-tasks">First login tasks</h2>
 
 <p>Most of the commands below need root privileges on the Pi, as they alter the system configuration.  To run a single command with root privileges, prepend the <code>sudo</code> command to it.  To run many commands this way without typing <code>sudo</code> each time, first start a root shell with <code>sudo -s</code>; <em>remember to logout with ‘exit’ or ctrl+d when finished</em>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi, using the `xb` alias</span>
 </span><span class="line">ssh xb
 </span><span class="line">
 </span><span class="line"><span class="c"># xbian-config may run here, set it up as you like then exit</span>
@@ -307,44 +241,29 @@
 </span><span class="line">apt-get install ruby ruby-dev ri libsqlite3-dev npm
 </span><span class="line"><span class="c"># Fix node binary being named nodejs</span>
 </span><span class="line"><span class="nb">cd</span> /usr/bin; sudo ln -s nodejs node; <span class="nb">cd</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="change-hostname">Change Hostname</h2>
 
 <p>If it’s likely the Pi won’t be the only one using the local network, then it should be given a unique host name.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">nano /etc/hostname               <span class="c"># enter the desired name</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">nano /etc/hostname               <span class="c"># enter the desired name</span>
 </span><span class="line">nano /etc/hosts                  <span class="c"># replace the hostname</span>
 </span><span class="line">/etc/init.d/hostname.sh start    <span class="c"># to enable the changes</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="fake-a-hardware-clock">Fake a hardware clock</h2>
 
 <p>The Pi doesn’t have a real time clock, so it usually defaults to some point in the past until the time can be set correctly using the Internet.  To make the clock more consistent across power cycles, it can be initialised using the last recorded date and time.  <em>(note: previous distros required the <a href="/blog/baking-the-pi/#fake-a-hardware-clock-unabridged">unabridged instructions</a>.)</em></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fake-hwclock
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install fake-hwclock
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
 
 <p>Occasionally you’ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># change to the home folder you want to link from</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># change to the home folder you want to link from</span>
 </span><span class="line"><span class="nb">cd</span> ~xbian
 </span><span class="line">
 </span><span class="line"><span class="c"># define a list of dot files to link</span>
@@ -355,23 +274,18 @@
 </span><span class="line">
 </span><span class="line"><span class="c"># hush login message</span>
 </span><span class="line">sudo touch ~root/.hushlogin
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
 
 <p>These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have <a href="/blog/baking-the-pi/#change-hostname">more than one Pi</a>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">rm /etc/ssh/ssh_host_*
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">rm /etc/ssh/ssh_host_*
 </span><span class="line">dpkg-reconfigure openssh-server
 </span><span class="line">
 </span><span class="line"><span class="c"># remove old host key from clients using:</span>
 </span><span class="line"><span class="c"># ssh-keygen -R xbian.local</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 <!--
 	ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 	ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
@@ -385,9 +299,8 @@
 
 <p>The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm/&#39;</span> /etc/inittab
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm/&#39;</span> /etc/inittab
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="regional-system-settings">Regional system settings</h2>
 
@@ -395,20 +308,7 @@
 
 <p><em>The latter package will change the console font, but this can be reverted during the commands shown below. Just choose the font you prefer, or choose ‘Do not change the boot/kernel font’.</em></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># Packages needed to change keyboard layout</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># Packages needed to change keyboard layout</span>
 </span><span class="line">apt-get install console-setup keyboard-configuration
 </span><span class="line">
 </span><span class="line"><span class="c"># Configure keyboard settings</span>
@@ -421,43 +321,34 @@
 </span><span class="line"><span class="c"># Configure time zone and locale</span>
 </span><span class="line">dpkg-reconfigure tzdata
 </span><span class="line">dpkg-reconfigure locales
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
 
 <p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi’s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install gcc make git-core libi2c-dev
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install gcc make git-core libi2c-dev
 </span><span class="line">git clone git://git.drogon.net/wiringPi
 </span><span class="line"><span class="nb">cd </span>wiringPi; ./build
 </span><span class="line">
 </span><span class="line"><span class="c"># test with gpio utility</span>
 </span><span class="line">gpio readall
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="install-dbox-dropbox-tool">Install dbox (dropbox tool)</h2>
 
 <p>Follow the <a href="https://github.com/kenpratt/dbox">dbox installation instructions</a> to set up the dropbox sdk developer keys and authorisation tokens.  To use dbox for automatic folder syncing, see my post: <a href="/blog/pi-box/">Dropbox on Pi</a>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install gcc make ruby ruby-dev libsqlite3-dev
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install gcc make ruby ruby-dev libsqlite3-dev
 </span><span class="line">gem install dbox
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="install-mono">Install Mono</h2>
 
 <p>Basic mono setup to run and compile command line tools.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-gmcs mono-csharp-shell
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-gmcs mono-csharp-shell
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="setup-xbmc">Setup XBMC</h2>
 
@@ -475,20 +366,7 @@
 
 <p>If you are storing media in the root folder of an NTFS formatted hard drive, you may see some system folders while using the video/audio file views.  You can hide these system folders, change other advanced xbmc behaviour, or preset/lock standard settings in <a href="http://wiki.xbmc.org/?title=Advancedsettings.xml">advancedsettings.xml</a>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>~/.xbmc/userdata/advancedsettings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;video&gt;</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>~/.xbmc/userdata/advancedsettings.xml</span></figcaption><div class="highlight"><pre><code class="xml"><span class="line"><span class="nt">&lt;video&gt;</span>
 </span><span class="line">    <span class="c">&lt;!-- hide system folders from the video files view --&gt;</span>
 </span><span class="line">    <span class="c">&lt;!-- you could also add these to &#39;excludefromscan&#39; --&gt;</span>
 </span><span class="line">    <span class="nt">&lt;excludefromlisting&gt;</span>
@@ -501,7 +379,7 @@
 </span><span class="line">        <span class="nt">&lt;regexp&gt;</span>(\$RECYCLE.BIN|System Volume Information)<span class="nt">&lt;/regexp&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/excludefromlisting&gt;</span>
 </span><span class="line"><span class="nt">&lt;/audio&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="useful-extras-not-always-used">Useful extras, not always used</h2>
 
@@ -511,37 +389,27 @@
 
 <p>Some standard packages that are usually excluded from the xbian distro, as they are not required for use of xbmc only.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install omxplayer
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install omxplayer
 </span><span class="line">
 </span><span class="line"><span class="c"># included on xbian &gt;= 1.0b</span>
 </span><span class="line">apt-get install psmisc usbutils
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="other-useful-packages">Other useful packages</h3>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install fs2resize exfat-fuse
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install fs2resize exfat-fuse
 </span><span class="line">apt-get install clang geany
 </span><span class="line">apt-get install sysv-rc-conf
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="find-the-ip-address">Find the IP address</h3>
 
 <p>You can get the IP address from your Pi, by running either of the following commands locally on the device.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">ip r | grep -o <span class="s1">&#39;src.*&#39;</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">ip r | grep -o <span class="s1">&#39;src.*&#39;</span>
 </span><span class="line">
 </span><span class="line">ifconfig 2&gt;&amp;1 | grep cast | grep -o <span class="s1">&#39;inet [^ ]*&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Connect to the address that has the same subnet (starts similar) as the IP address you will be connecting from, ignoring the localhost address (127.0.0.1).</p>
 
@@ -549,49 +417,22 @@
 
 <h3 id="testing-pvr">Testing PVR</h3>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install vdr-plugin-dvbsddevice
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install vdr-plugin-dvbsddevice
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="setting-up-webcam">Setting up webcam</h3>
 
 <p>Use ‘motion’ or ‘fswebcam’, motion may need a default cfg copying</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get install motion
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install motion
 </span><span class="line">cp /etc/default/motion /etc/motion/motion.conf
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="configure-bluetooth-adapter">Configure bluetooth adapter</h3>
 
 <p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># install bluetooth support and dependencies</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># install bluetooth support and dependencies</span>
 </span><span class="line">agi bluez python-gobject  <span class="c"># minimal?</span>
 </span><span class="line">agi bluetooth bluez-utils  <span class="c"># full</span>
 </span><span class="line">
@@ -615,7 +456,7 @@
 </span><span class="line">
 </span><span class="line"><span class="c"># adapter status</span>
 </span><span class="line">hciconfig
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
 
@@ -632,45 +473,31 @@
   <li>.xbmc/addons/packages - original downloads, can use with “install from zip”</li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
 </span><span class="line">zip -ry xbmc .xbmc/
 </span><span class="line">zip -ry dotfiles .bash_aliases .nanorc .toprc .ssh
 </span><span class="line">
 </span><span class="line"><span class="c"># backup system config files</span>
 </span><span class="line">sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Or using tar..</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
 </span><span class="line">tar -czf xbmc-backup.tar.gz .xbmc
 </span><span class="line">
 </span><span class="line"><span class="c"># restore profile settings</span>
 </span><span class="line">sudo initctl stop xbmc
 </span><span class="line">tar -xzf xbmc-backup.tar.gz
 </span><span class="line">sudo initctl start xbmc
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="clear-cached-network-adapter">Clear cached network adapter</h3>
 
 <p>(needed for switching cards between devices)</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nb">echo</span> | sudo tee /etc/udev/rules.d/70-persistent-net.rules
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> | sudo tee /etc/udev/rules.d/70-persistent-net.rules
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="quick-tips">Quick Tips</h3>
 
@@ -689,37 +516,24 @@
 
 <p>Use <code>lsusb</code> to check that the adapter is recognised, and <code>lsmod</code> to check the kernel module (e.g. <code>8192cu</code>) is loaded.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/network/interfaces
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo nano /etc/network/interfaces
+</span></code></pre></div></figure></notextile></div>
 
 <p>Make sure the following lines exist in the interfaces file, adding them as needed:</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">allow-hotplug wlan0
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">allow-hotplug wlan0
 </span><span class="line">iface wlan0 inet manual
 </span><span class="line">wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>You may have the line <code>wireless-power off</code> in this file, which relates to power <strong><em>management</em></strong> only.  I’ve commented it out as it resulted in errors logged during <code>ifup</code> and power management remained off without it.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+</span></code></pre></div></figure></notextile></div>
 
 <p>Add your network details to wpa_supplicant.conf, using the following template:</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="nv">network</span><span class="o">={</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">network</span><span class="o">={</span>
 </span><span class="line">  <span class="nv">ssid</span><span class="o">=</span><span class="s2">&quot;YOUR-NETWORK-SSID&quot;</span>
 </span><span class="line">  <span class="nv">proto</span><span class="o">=</span>WPA2
 </span><span class="line">  <span class="nv">key_mgmt</span><span class="o">=</span>WPA-PSK
@@ -727,17 +541,14 @@
 </span><span class="line">  <span class="nv">group</span><span class="o">=</span>CCMP TKIP
 </span><span class="line">  <span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;YOUR-WLAN-PASSWORD&quot;</span>
 </span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Reinitialise the adapter, and check it’s connected.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">sudo ifdown wlan0
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo ifdown wlan0
 </span><span class="line">sudo ifup wlan0
 </span><span class="line"><span class="c"># you may get some errors here, even when successful</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Use <code>iwconfig</code> to view wifi adapter info and <code>ifconfig</code> for general network info.</p>
 
@@ -745,32 +556,17 @@
 
 <p>More complicated instructions, as used on previous versions of XBian.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">touch /etc/init.d/hwclock.sh
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">touch /etc/init.d/hwclock.sh
 </span><span class="line">/etc/init.d/ntp restart
 </span><span class="line">apt-get install ntpdate fake-hwclock
 </span><span class="line">ntpdate-debian
 </span><span class="line">dpkg-reconfigure tzdata
 </span><span class="line">sed -i <span class="s1">&#39;s/^exit 0/ntpdate-debian\nexit 0/g&#39;</span> /etc/rc.local
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="fix-ssh-access-using-public-key">Fix ssh access using public key</h3>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># must be owned by root</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># must be owned by root</span>
 </span><span class="line">chown root: ~ ~/.ssh
 </span><span class="line"><span class="c"># no write for others</span>
 </span><span class="line">chmod <span class="nv">a</span><span class="o">=</span>rx,u+w  ~
@@ -779,45 +575,33 @@
 </span><span class="line">chmod -R go-rwx ~/.ssh
 </span><span class="line"><span class="c"># public key can be readable</span>
 </span><span class="line">chmod a+r ~/.ssh/id_rsa.pub
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="download-openssh-sftp-server">Download OpenSSH sftp server</h3>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">apt-get -d install openssh-server
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get -d install openssh-server
 </span><span class="line">cp /var/cache/apt/archives/openssh-server_*.deb .
 </span><span class="line">dpkg-deb -X openssh-server_*.deb sftp
 </span><span class="line">cp sftp/usr/lib/openssh/sftp-server /usr/lib/
 </span><span class="line">rm -r sftp openssh-server_*.deb
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="update-firmware-without-kernel">Update firmware without kernel</h3>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update <span class="o">&amp;&amp;</span> chmod +x /usr/bin/rpi-update
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update <span class="o">&amp;&amp;</span> chmod +x /usr/bin/rpi-update
 </span><span class="line"><span class="nv">SKIP_KERNEL</span><span class="o">=</span>1 rpi-update 128
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <h3 id="allow-xbmc-to-unmount-usb-drives">Allow XBMC to unmount USB drives</h3>
 
 <p>XBian used to include the usbmount package to mount USB devices as soon as they are connected.  This prevented XBMC from bring able to use the udisk service to mount and unmount USB drives itself, due to root privileges being required to unmount devices mounted by usbmount.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># disable the usbmount package</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># disable the usbmount package</span>
 </span><span class="line">sed -i <span class="s1">&#39;/ENABLED=/s/=1/=0/&#39;</span> /etc/usbmount/usbmount.conf
 </span><span class="line">
 </span><span class="line"><span class="c"># optionally remove unused usbmount directories</span>
 </span><span class="line"><span class="c"># umount /media/usb*; rmdir /media/usb*; rm /media/usb</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
 <p>Drives can be unmounted manually using <code>udisks</code> without needing to be root, and members of the <code>plugdev</code> group can also use <code>pumount</code>.</p>
 
@@ -829,47 +613,16 @@
 
 <p>A change in IOS 6 <a href="http://jordanburgess.com/post/38986434391/raspberry-pi-airplay">requires Perl Net-SDP</a> module to installed.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line">git clone https://github.com/njh/perl-net-sdp.git perl-net-sdp
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">git clone https://github.com/njh/perl-net-sdp.git perl-net-sdp
 </span><span class="line"><span class="nb">cd </span>perl-net-sdp
 </span><span class="line">perl Build.PL
 </span><span class="line">sudo ./Build
 </span><span class="line">sudo ./Build <span class="nb">test</span>
 </span><span class="line">sudo ./Build install
 </span><span class="line"><span class="nb">cd</span> ..
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-</pre></td><td class="code"><pre><code class="sh"><span class="line"><span class="c"># do as root</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># do as root</span>
 </span><span class="line">sudo -s
 </span><span class="line">apt-get install alsa-utils
 </span><span class="line">modprobe snd_bcm2835
@@ -893,7 +646,7 @@
 </span><span class="line">/etc/init.d/shairport start
 </span><span class="line"><span class="c"># exit root</span>
 </span><span class="line"><span class="nb">exit</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></div></figure></notextile></div>
 <div class="footnotes">
   <ol>
     <li id="fn:hostname">
