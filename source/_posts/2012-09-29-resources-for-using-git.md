@@ -62,5 +62,3 @@ They do lack some more advanced features though so I mostly prefer [GitX](http:/
 ## other info
 
 Btw, if you just want to share some code snippets somewhere while maintaining versioning etc., then check out [gists](https://gist.github.com/), a feature of github.
-
-*This article was originally posted at: [http://jmeosbn.github.com](http://jmeosbn.github.com/blog/resources-for-using-git/)*
