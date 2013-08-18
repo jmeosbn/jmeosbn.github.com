@@ -5,21 +5,23 @@ categories: git tools
 
 Here's some basic resources to get started pushing code to github.
 
+Note: As well as computer source code, git is useful for tracking changes to anything that can be represented as plain text, e.g. [German Law](http://www.wired.com/wiredenterprise/2012/08/bundestag/).
+
+The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named `.git`.
+
 <!-- more -->
 
-Note: "Code" doesn't just mean computer source code; git is useful for tracking changes to anything that can be represented as plain text, e.g. [German Law](http://www.wired.com/wiredenterprise/2012/08/bundestag/).
+To [initialise](http://git-scm.com/docs/git-init) a new git repo, simply run `git-init`.
 
-The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named ```.git```.
-
-``` sh Initialise a new git repo http://git-scm.com/docs/git-init git-init
+``` sh
 $ cd my-project
 $ git init
 Initialized empty Git repository in my-project/.git/
 ```
 
-Add any new or changed files you want to track, then commit those changes to the repo.
+[Add](http://git-scm.com/docs/git-add) any new or changed files you want to track, then [commit](http://git-scm.com/docs/git-commit) those changes to the repo.
 
-``` sh Add and commit changes http://git-scm.com/docs/git-add git-add
+``` sh
 $ echo About My-Project > README.md
 $ git add . # add all files recursively
 $ git commit -m 'First Commit'
@@ -28,9 +30,9 @@ $ git commit -m 'First Commit'
  create mode 100644 README.md
 ```
 
-View recent commits using ```git log```.
+[View recent commits](http://git-scm.com/docs/git-log) using `git log`.
 
-``` sh View recent commits http://git-scm.com/docs/git-log git-log
+``` sh
 $ git log
 commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
 Author: Jamie Osborne <jmeosbn@your-email.com>
@@ -51,12 +53,14 @@ While it's good to know how to use git from the command line, it's worth getting
 
 [Github](http://github.com/) offers their own [Mac](http://mac.github.com/) and [Windows](http://windows.github.com/) GUI clients, which have the advantage of closer integration with some of github's features, such as organisations and the "Clone in Windows/Mac" button found on each repo on github.
 
-{% img center http://mac.github.com/images/promo-screenshot.png GitHub for Mac %}
+![GitHub for Mac](promo-screenshot.png)
 
 They do lack some more advanced features though so I mostly prefer [GitX](http://gitx.laullon.com/) on the Mac, though [plenty more GUIs](http://git-scm.com/downloads/guis) exist on various platforms.
 
-{% img center http://gitx.laullon.com/commit.png 512 GitX %}
+![GitX](commit.png)
 
 ## other info
 
 Btw, if you just want to share some code snippets somewhere while maintaining versioning etc., then check out [gists](https://gist.github.com/), a feature of github.
+
+*This article was originally posted at: [http://jmeosbn.github.com](http://jmeosbn.github.com/blog/resources-for-using-git/)*
