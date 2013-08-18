@@ -21,7 +21,7 @@ article h3 { font-size: 1.2em !important; }
 
 // normal font size for blockquotes
 blockquote {
-  font-size: 1.1em;
+  font-size: 1em !important;
   margin-left: 3%;
   margin-right: 10%;
   border-left: 4px solid $text-color-light !important;
