@@ -4,7 +4,7 @@
   <title><![CDATA[jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2013-08-18T19:28:37+01:00</updated>
+  <updated>2013-08-18T19:58:36+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -911,8 +911,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <h2 id="other-info">other info</h2>
 
 <p>Btw, if you just want to share some code snippets somewhere while maintaining versioning etc., then check out <a href="https://gist.github.com/">gists</a>, a feature of github.</p>
-
-<p><em>This article was originally posted at: <a href="http://jmeosbn.github.com/blog/resources-for-using-git/">http://jmeosbn.github.com</a></em></p>
 ]]></content>
   </entry>
   
