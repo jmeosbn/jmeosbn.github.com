@@ -1,7 +1,7 @@
-layout: post
-title: Stellaris Virtual Serial Device
-date: 2012-12-10 02:48
-categories: stellaris arm
+layout:       post
+title:        Stellaris Virtual Serial Device
+categories:   stellaris arm
+date:         2012-12-10 02:48
 
 The Stellaris [Launchpad] is able to provide a virtual serial port over the debug USB interface.  Data can be sent in either direction using this serial connection, to interact with program execution, or log it's output.
 
