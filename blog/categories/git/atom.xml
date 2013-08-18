@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2013-08-18T00:37:02+01:00</updated>
+  <updated>2013-08-18T01:12:42+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -20,21 +20,23 @@
     <id>http://jmeosbn.github.io/blog/resources-for-using-git</id>
     <content type="html"><![CDATA[<p>Here’s some basic resources to get started pushing code to github.</p>
 
-<!-- more -->
-
-<p>Note: “Code” doesn’t just mean computer source code; git is useful for tracking changes to anything that can be represented as plain text, e.g. <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
+<p>Note: As well as computer source code, git is useful for tracking changes to anything that can be represented as plain text, e.g. <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
 
 <p>The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named <code>.git</code>.</p>
 
-<p><code>sh Initialise a new git repo http://git-scm.com/docs/git-init git-init
+<!-- more -->
+
+<p>To <a href="http://git-scm.com/docs/git-init">initialise</a> a new git repo, simply run <code>git-init</code>.</p>
+
+<p><code>sh
 $ cd my-project
 $ git init
 Initialized empty Git repository in my-project/.git/
 </code></p>
 
-<p>Add any new or changed files you want to track, then commit those changes to the repo.</p>
+<p><a href="http://git-scm.com/docs/git-add">Add</a> any new or changed files you want to track, then <a href="http://git-scm.com/docs/git-commit">commit</a> those changes to the repo.</p>
 
-<p><code>sh Add and commit changes http://git-scm.com/docs/git-add git-add
+<p><code>sh
 $ echo About My-Project &gt; README.md
 $ git add . # add all files recursively
 $ git commit -m 'First Commit'
@@ -43,9 +45,9 @@ $ git commit -m 'First Commit'
  create mode 100644 README.md
 </code></p>
 
-<p>View recent commits using <code>git log</code>.</p>
+<p><a href="http://git-scm.com/docs/git-log">View recent commits</a> using <code>git log</code>.</p>
 
-<p>``` sh View recent commits http://git-scm.com/docs/git-log git-log
+<p>``` sh
 $ git log
 commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
 Author: Jamie Osborne <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#106;&#109;&#101;&#111;&#115;&#098;&#110;&#064;&#121;&#111;&#117;&#114;&#045;&#101;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">&#106;&#109;&#101;&#111;&#115;&#098;&#110;&#064;&#121;&#111;&#117;&#114;&#045;&#101;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;</a>
@@ -66,15 +68,17 @@ Date:   Sat Sep 29 23:30:20 2012 +0100</p>
 
 <p><a href="http://github.com/">Github</a> offers their own <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients, which have the advantage of closer integration with some of github’s features, such as organisations and the “Clone in Windows/Mac” button found on each repo on github.</p>
 
-<p><img class="center" src="http://mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" ></p>
+<p><img src="promo-screenshot.png" alt="GitHub for Mac" /></p>
 
 <p>They do lack some more advanced features though so I mostly prefer <a href="http://gitx.laullon.com/">GitX</a> on the Mac, though <a href="http://git-scm.com/downloads/guis">plenty more GUIs</a> exist on various platforms.</p>
 
-<p><img class="center" src="http://gitx.laullon.com/commit.png" width="512" title="GitX" ></p>
+<p><img src="commit.png" alt="GitX" /></p>
 
 <h2 id="other-info">other info</h2>
 
 <p>Btw, if you just want to share some code snippets somewhere while maintaining versioning etc., then check out <a href="https://gist.github.com/">gists</a>, a feature of github.</p>
+
+<p><em>This article was originally posted at: <a href="http://jmeosbn.github.com/blog/resources-for-using-git/">http://jmeosbn.github.com</a></em></p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2013-08-18T00:37:02+01:00</updated>
+  <updated>2013-08-18T01:12:42+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -857,20 +857,22 @@ Dropbox integration made easy. This robust client gives you control over what, w
     <id>http://jmeosbn.github.io/blog/resources-for-using-git</id>
     <content type="html"><![CDATA[<p>Here’s some basic resources to get started pushing code to github.</p>
 
-<!-- more -->
-
-<p>Note: “Code” doesn’t just mean computer source code; git is useful for tracking changes to anything that can be represented as plain text, e.g. <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
+<p>Note: As well as computer source code, git is useful for tracking changes to anything that can be represented as plain text, e.g. <a href="http://www.wired.com/wiredenterprise/2012/08/bundestag/">German Law</a>.</p>
 
 <p>The simplest use of git is to create the repo locally, stored in the same folder as the source (known as the working tree) and named <code>.git</code>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Initialise a new git repo</span><a href="http://git-scm.com/docs/git-init">git-init</a></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>my-project
+<!-- more -->
+
+<p>To <a href="http://git-scm.com/docs/git-init">initialise</a> a new git repo, simply run <code>git-init</code>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>my-project
 </span><span class="line"><span class="nv">$ </span>git init
 </span><span class="line">Initialized empty Git repository in my-project/.git/
 </span></code></pre></div></figure></notextile></div>
 
-<p>Add any new or changed files you want to track, then commit those changes to the repo.</p>
+<p><a href="http://git-scm.com/docs/git-add">Add</a> any new or changed files you want to track, then <a href="http://git-scm.com/docs/git-commit">commit</a> those changes to the repo.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Add and commit changes</span><a href="http://git-scm.com/docs/git-add">git-add</a></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">echo </span>About My-Project &gt; README.md
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span><span class="nb">echo </span>About My-Project &gt; README.md
 </span><span class="line"><span class="nv">$ </span>git add . <span class="c"># add all files recursively</span>
 </span><span class="line"><span class="nv">$ </span>git commit -m <span class="s1">&#39;First Commit&#39;</span>
 </span><span class="line"><span class="o">[</span>master <span class="o">(</span>root-commit<span class="o">)</span> cdab15f<span class="o">]</span> First Commit
@@ -878,9 +880,9 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"> create mode 100644 README.md
 </span></code></pre></div></figure></notextile></div>
 
-<p>View recent commits using <code>git log</code>.</p>
+<p><a href="http://git-scm.com/docs/git-log">View recent commits</a> using <code>git log</code>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>View recent commits</span><a href="http://git-scm.com/docs/git-log">git-log</a></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span>git log
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">$ </span>git log
 </span><span class="line">commit cdab15f2036b0b8b1c8fbfceab6357c8e56a0d5f
 </span><span class="line">Author: Jamie Osborne &lt;jmeosbn@your-email.com&gt;
 </span><span class="line">Date:   Sat Sep 29 23:30:20 2012 +0100
@@ -900,15 +902,17 @@ Dropbox integration made easy. This robust client gives you control over what, w
 
 <p><a href="http://github.com/">Github</a> offers their own <a href="http://mac.github.com/">Mac</a> and <a href="http://windows.github.com/">Windows</a> GUI clients, which have the advantage of closer integration with some of github’s features, such as organisations and the “Clone in Windows/Mac” button found on each repo on github.</p>
 
-<p><img class="center" src="http://mac.github.com/images/promo-screenshot.png" title="GitHub for Mac" /></p>
+<p><img src="http://jmeosbn.github.io/blog/resources-for-using-git/promo-screenshot.png" alt="GitHub for Mac" /></p>
 
 <p>They do lack some more advanced features though so I mostly prefer <a href="http://gitx.laullon.com/">GitX</a> on the Mac, though <a href="http://git-scm.com/downloads/guis">plenty more GUIs</a> exist on various platforms.</p>
 
-<p><img class="center" src="http://gitx.laullon.com/commit.png" width="512" title="GitX" /></p>
+<p><img src="http://jmeosbn.github.io/blog/resources-for-using-git/commit.png" alt="GitX" /></p>
 
 <h2 id="other-info">other info</h2>
 
 <p>Btw, if you just want to share some code snippets somewhere while maintaining versioning etc., then check out <a href="https://gist.github.com/">gists</a>, a feature of github.</p>
+
+<p><em>This article was originally posted at: <a href="http://jmeosbn.github.com/blog/resources-for-using-git/">http://jmeosbn.github.com</a></em></p>
 ]]></content>
   </entry>
   
