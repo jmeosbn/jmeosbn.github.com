@@ -1,23 +1,28 @@
-// Import google web fonts
+// google web fonts
 @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,300italic);
 
-// Set default fonts for sans and serif
-$sans: 'Source Sans Pro', sans-serif;
-$serif: $sans;
+// default fonts for sans and serif
+$sans                        : 'Source Sans Pro', sans-serif;
+$serif                       : $sans;
 
-// Font to use for headings
-$heading-font-family: $sans;
-$header-title-font-family: $sans;
-$header-subtitle-font-family: $sans;
+// font to use for headers
+$heading-font-family         : $sans;
 
-// set header title size
-$header-font-size: 0.8em;
+// site header font
+$header-title-font-family    : $sans;
+$header-subtitle-font-family : $sans;
+
+// site navigation font
+$navbar-font-family          : $sans;
+
+// site header title size
+$header-font-size            : 0.8em;
 
 // set font weights
-$header-font-weight  : 300;
-$heading-font-weight : 400;
-$article-font-weight : 300;
-$nav-font-weight     : 300;
+$article-font-weight         : 300;
+$heading-font-weight         : normal;
+$navbar-font-weight          : 300;
+$header-font-weight          : normal;
 
 // Font to use for monospaced text
 // $mono: 'Source Code Pro', Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace !default;
