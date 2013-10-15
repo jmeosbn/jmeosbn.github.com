@@ -210,7 +210,9 @@ These keys confirm the identity of the Pi, to prevent a malicious host from inte
 
 ## Configure WiFi and Bluetooth
 
-XBian includes simple WiFi configuration as part of the xbian-config setup menu,  see [manual configuration](#manually-configure-wifi-adapter) if you want finer control over the network settings (e.g. connecting to multiple networks).  My bluetooth adapter is not supported in the current build of Raspbian/XBian, but [here is the procedure](#configure-bluetooth-adapter) I used when trying to get it running (confirmed working on a laptop running Ubuntu).
+XBian now includes simple WiFi configuration as part of the xbian-config setup menu.  See the [manual configuration](#manually-configure-wifi-adapter) if you want finer control over the network settings (e.g. connecting to multiple networks).
+
+My bluetooth adapter is not supported in the current build of Raspbian/XBian, but [here is the procedure](#configure-bluetooth-adapter) I used when trying to get it running (confirmed working on a laptop running Ubuntu).
 
 
 ## TTL serial console
