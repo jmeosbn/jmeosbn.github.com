@@ -121,11 +121,11 @@
   <li><a href="#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
   <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
   <li><a href="#ttl-serial-console">TTL serial console</a></li>
+  <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
+  <li><a href="#install-mono">Install Mono</a></li>
   <li><a href="#install-aircrack-and-related-tools">Install aircrack and related tools</a></li>
   <li><a href="#regional-system-settings">Regional system settings</a></li>
-  <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
   <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
-  <li><a href="#install-mono">Install Mono</a></li>
   <li><a href="#setup-xbmc">Setup XBMC</a></li>
   <li><a href="#useful-extras-not-always-used">Useful extras, not always used</a></li>
   <li><a href="#troubleshooting-and-backup">Troubleshooting and backup</a></li>
@@ -308,6 +308,28 @@
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">  sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm/&#39;</span> /etc/inittab
 </span></code></pre></div></figure></notextile></div>
 
+<h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
+
+<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi’s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">  apt-get install gcc make git-core libi2c-dev
+</span><span class="line">  git clone git://git.drogon.net/wiringPi
+</span><span class="line">  <span class="nb">cd </span>wiringPi; ./build
+</span><span class="line">
+</span><span class="line">  <span class="c"># test with gpio utility</span>
+</span><span class="line">  gpio readall
+</span><span class="line">
+</span><span class="line">  <span class="c"># install ruby gem (optional)</span>
+</span><span class="line">  gem install wiringpi
+</span></code></pre></div></figure></notextile></div>
+
+<h2 id="install-mono">Install Mono</h2>
+
+<p>Basic mono setup to run and compile command line tools.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">  apt-get install mono-devel mono-gmcs mono-csharp-shell
+</span></code></pre></div></figure></notextile></div>
+
 <h2 id="install-aircrack-and-related-tools">Install aircrack and related tools</h2>
 
 <p>Taken from <a href="http://blog.petrilopia.net/linux/raspberry-pi-install-aircrackng-suite/">blog.petrilopia.net</a>.</p>
@@ -360,34 +382,12 @@
 </span><span class="line">  dpkg-reconfigure locales
 </span></code></pre></div></figure></notextile></div>
 
-<h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
-
-<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi’s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">  apt-get install gcc make git-core libi2c-dev
-</span><span class="line">  git clone git://git.drogon.net/wiringPi
-</span><span class="line">  <span class="nb">cd </span>wiringPi; ./build
-</span><span class="line">
-</span><span class="line">  <span class="c"># test with gpio utility</span>
-</span><span class="line">  gpio readall
-</span><span class="line">
-</span><span class="line">  <span class="c"># install ruby gem (optional)</span>
-</span><span class="line">  gem install wiringpi
-</span></code></pre></div></figure></notextile></div>
-
 <h2 id="install-dbox-dropbox-tool">Install dbox (dropbox tool)</h2>
 
 <p>Follow the <a href="https://github.com/kenpratt/dbox">dbox installation instructions</a> to set up the dropbox sdk developer keys and authorisation tokens.  To use dbox for automatic folder syncing, see my post: <a href="/blog/pi-box/">Dropbox on Pi</a>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">  apt-get install gcc make ruby ruby-dev libsqlite3-dev
 </span><span class="line">  gem install dbox
-</span></code></pre></div></figure></notextile></div>
-
-<h2 id="install-mono">Install Mono</h2>
-
-<p>Basic mono setup to run and compile command line tools.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">  apt-get install mono-devel mono-gmcs mono-csharp-shell
 </span></code></pre></div></figure></notextile></div>
 
 <h2 id="setup-xbmc">Setup XBMC</h2>
