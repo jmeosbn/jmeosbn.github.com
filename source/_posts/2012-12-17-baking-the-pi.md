@@ -227,6 +227,34 @@ The display of full screen terminal programs becomes corrupted when using a TTL 
 ```
 
 
+## Build and install WiringPi
+
+[WiringPi] is a library to access the Pi's GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the ``gpio`` utility for use of the libraries from the command prompt.
+
+[WiringPi]: https://projects.drogon.net/raspberry-pi/wiringpi
+
+```sh
+  apt-get install gcc make git-core libi2c-dev
+  git clone git://git.drogon.net/wiringPi
+  cd wiringPi; ./build
+
+  # test with gpio utility
+  gpio readall
+
+  # install ruby gem (optional)
+  gem install wiringpi
+```
+
+
+## Install Mono
+
+Basic mono setup to run and compile command line tools.
+
+```sh
+  apt-get install mono-devel mono-gmcs mono-csharp-shell
+```
+
+
 ## Install aircrack and related tools
 
 Taken from [blog.petrilopia.net][petrilopia].
@@ -286,25 +314,6 @@ Both XBian and Raspbian have system setup menus, but neither seem to setup the c
 ```
 
 
-## Build and install WiringPi
-
-[WiringPi] is a library to access the Pi's GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the ``gpio`` utility for use of the libraries from the command prompt.
-
-[WiringPi]: https://projects.drogon.net/raspberry-pi/wiringpi
-
-```sh
-  apt-get install gcc make git-core libi2c-dev
-  git clone git://git.drogon.net/wiringPi
-  cd wiringPi; ./build
-
-  # test with gpio utility
-  gpio readall
-
-  # install ruby gem (optional)
-  gem install wiringpi
-```
-
-
 ## Install dbox (dropbox tool)
 
 Follow the [dbox installation instructions][dbox] to set up the dropbox sdk developer keys and authorisation tokens.  To use dbox for automatic folder syncing, see my post: [Dropbox on Pi](/blog/pi-box/).
@@ -315,15 +324,6 @@ Follow the [dbox installation instructions][dbox] to set up the dropbox sdk deve
 ```sh
   apt-get install gcc make ruby ruby-dev libsqlite3-dev
   gem install dbox
-```
-
-
-## Install Mono
-
-Basic mono setup to run and compile command line tools.
-
-```sh
-  apt-get install mono-devel mono-gmcs mono-csharp-shell
 ```
 
 
