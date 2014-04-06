@@ -184,7 +184,7 @@ Occasionally you'll want to use a root shell, and then be annoyed that your alia
 cd ~xbian
 
 # define a list of dot files to link
-dotfiles=".profile .bashrc .bash_aliases .bash_logout .nanorc .toprc"
+dotfiles=".profile .bashrc .bash_aliases .bash_logout .nanorc .toprc .gemrc"
 
 # link each existing file into the root user's home folder
 for i in $dotfiles; do [ -f $i ] && sudo ln -sfv ~+/$i ~root/; done
