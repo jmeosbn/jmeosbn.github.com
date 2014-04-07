@@ -255,12 +255,30 @@ gem install wiringpi
 ```
 
 
-## Install Mono
+## Remove the desktop environment
 
-Basic mono setup to run and compile command line tools.
+If you only plan to run the terminal environment (including self-hosted programs such as XBMC), then a lot of space can be recovered by removing x11 and related packages.
 
 ```sh
-apt-get install mono-devel mono-gmcs mono-csharp-shell
+# desktop
+apt-get purge x11-common libx11-.* lxde-icon-theme xkb-data
+apt-get purge fonts-freefont-ttf libraspberrypi0
+
+# cleaning up
+(cd ~pi; rm -rf Desktop python_games ocr_pi.png)
+apt-get autoremove
+apt-get clean
+```
+
+*Note: this task is not normally required for distros such as xbian.*
+
+
+## Install Mono
+
+Install Mono development tools, runtime, and interactive shell.
+
+```sh
+apt-get install mono-devel mono-csharp-shell
 ```
 
 
