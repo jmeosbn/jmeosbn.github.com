@@ -122,7 +122,9 @@
   <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
   <li><a href="#ttl-serial-console">TTL serial console</a></li>
   <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
+  <li><a href="#remove-the-desktop-environment">Remove the desktop environment</a></li>
   <li><a href="#install-mono">Install Mono</a></li>
+  <li><a href="#install-xbian-onto-a-raspbian-image">Install XBian onto a Raspbian image</a></li>
   <li><a href="#install-aircrack-and-related-tools">Install aircrack and related tools</a></li>
   <li><a href="#regional-system-settings">Regional system settings</a></li>
   <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
@@ -232,6 +234,10 @@
 </span><span class="line"><span class="c"># Update packages</span>
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
 </span><span class="line">
+</span><span class="line"><span class="c"># Configure time zone and locale</span>
+</span><span class="line">dpkg-reconfigure tzdata
+</span><span class="line">dpkg-reconfigure locales
+</span><span class="line">
 </span><span class="line"><span class="c"># Install some utilities and services</span>
 </span><span class="line">apt-get install p7zip zip curl mediainfo avahi-daemon iw
 </span><span class="line">
@@ -242,6 +248,9 @@
 </span><span class="line">apt-get install ruby ruby-dev ri libsqlite3-dev npm
 </span><span class="line"><span class="c"># Fix node binary being named nodejs</span>
 </span><span class="line"><span class="nb">cd</span> /usr/bin; sudo ln -s nodejs node; <span class="nb">cd</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Install node packages</span>
+</span><span class="line">npm install -g node-gyp
 </span><span class="line">
 </span><span class="line"><span class="c"># Install rmate for TextMate editing over ssh</span>
 </span><span class="line">gem install rmate
@@ -331,12 +340,86 @@ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 </span><span class="line">gem install wiringpi
 </span></code></pre></div></figure></notextile></div>
 
+<h2 id="remove-the-desktop-environment">Remove the desktop environment</h2>
+
+<p>If you only plan to run the terminal environment (including self-hosted programs such as XBMC), then a lot of space can be recovered by removing x11 and related packages.</p>
+
+<p><em>TODO: mono depends upon libx11-6, so it’ll need to be (re)installed afterwards.</em></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># desktop</span>
+</span><span class="line">apt-get purge x11-common libx11-.* xkb-data xdg-utils menu-xdg
+</span><span class="line">apt-get purge desktop-file-utils fonts-freefont-ttf
+</span><span class="line">apt-get purge libraspberrypi0 raspberrypi-artwork lxde-icon-theme
+</span><span class="line">
+</span><span class="line"><span class="c"># network drives</span>
+</span><span class="line">apt-get purge cifs-utils samba-common smbclient nfs-common
+</span><span class="line">
+</span><span class="line"><span class="c"># other</span>
+</span><span class="line">apt-get purge liblapack3 libatlas3-base
+</span><span class="line">
+</span><span class="line"><span class="c"># cleaning up</span>
+</span><span class="line"><span class="o">(</span><span class="nb">cd</span> ~pi; rm -rf Desktop python_games ocr_pi.png<span class="o">)</span>
+</span><span class="line">apt-get autoremove
+</span><span class="line">apt-get clean
+</span></code></pre></div></figure></notextile></div>
+
+<p><em>Note: this task is not normally required for distros such as xbian.</em></p>
+
 <h2 id="install-mono">Install Mono</h2>
 
-<p>Basic mono setup to run and compile command line tools.</p>
+<p>Install Mono development tools, runtime, and interactive shell.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install mono-devel <span class="c"># mono-gmcs mono-csharp-shell</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-utils mono-csharp-shell
 </span></code></pre></div></figure></notextile></div>
+
+<!--
+pkg-count
+353 mono-complete
+214 cli-common-dev
+172 mono-devel
+168 libmono-cil-dev
+
+# for a minimal cli toolchain:
+apt-get install mono-mcs mono-xbuild mono-csharp-shell
+-->
+
+<h2 id="install-xbian-onto-a-raspbian-image">Install XBian onto a Raspbian image</h2>
+
+<p>From <a href="http://forum.xbian.org/thread-1850.html">Installing XBIAN directly on RASPBIAN IMG</a></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># install xbian repo</span>
+</span><span class="line">wget http://xbian.brantje.com/pool/stable/main/x/xbian-package-repo/xbian-package-repo_1.0.0_armhf.deb
+</span><span class="line">dpkg -i xbian-package-repo_1.0.0_armhf.deb
+</span><span class="line">
+</span><span class="line"><span class="c"># enable staging and development repositories and update</span>
+</span><span class="line">sed -i <span class="s1">&#39;/ staging\|devel main/s/^#\+ //&#39;</span> /etc/apt/sources.list.d/xbian.list
+</span><span class="line">apt-get update
+</span><span class="line"><span class="c"># revert previous edit</span>
+</span><span class="line">sed -i <span class="s1">&#39;/ staging\|devel main/s/^/### /&#39;</span> /etc/apt/sources.list.d/xbian.list
+</span><span class="line">
+</span><span class="line"><span class="c"># install xbian/xbmc</span>
+</span><span class="line">apt-get install xbian-package-xbianhome xbian-package-kernel
+</span><span class="line">
+</span><span class="line"><span class="c"># reboot required to make file system changes, and conversion to btrfs</span>
+</span><span class="line">sed -i /rootfstype/s/btrfs/ext4/ /boot/cmdline.txt <span class="c"># do not use btrfs</span>
+</span><span class="line">reboot
+</span><span class="line">
+</span><span class="line"><span class="c"># install remaining xbian packages</span>
+</span><span class="line">apt-get install xbian-update xbian-package-rasp-switching
+</span><span class="line"><span class="c"># Note:</span>
+</span><span class="line"><span class="c"># a warning for removal of &#39;sysvinit&#39; will be displayed,</span>
+</span><span class="line"><span class="c"># as xbian replaces it with the &#39;upstart&#39; service manager.</span>
+</span><span class="line"><span class="c"># Also, cmdline.txt should remain unchanged, with new</span>
+</span><span class="line"><span class="c"># parameters written to /boot/cmdline.new.</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># boot to desktop</span>
+</span><span class="line"><span class="c"># apt-get install lightdm</span>
+</span></code></pre></div></figure></notextile></div>
+
+<p>XBMC can be started with “start XBMC”, Raspbian X desktop with “service lightdm start”. </p>
+
+<p>if you Raspbian setup used to boot into X with PI user automatically, you can keep this and indeed start / load XBMC quick and easy way - even jumping back and forth between XBMC and you X Desktop. We can click “Logout”, put “xbian” as user to log in and XBMC starts. If you quit XBMC, X will come again. No reboots needed.
+Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC). There is how you RPI will boot if you select what service for autostart:</p>
 
 <h2 id="install-aircrack-and-related-tools">Install aircrack and related tools</h2>
 

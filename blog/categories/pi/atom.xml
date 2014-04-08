@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-04-06T22:40:35+01:00</updated>
+  <updated>2014-04-08T23:19:26+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -164,9 +164,11 @@ fi ```
   <li><a href="#allow-full-use-of-sudo-without-needing-password">Allow full use of sudo without needing password</a></li>
   <li><a href="#allow-boot-partition-to-be-mounted">Allow boot partition to be mounted</a></li>
   <li><a href="#update-packages">Update packages</a></li>
+  <li><a href="#configure-time-zone-and-locale">Configure time zone and locale</a></li>
   <li><a href="#install-some-utilities-and-services">Install some utilities and services</a></li>
   <li><a href="#install-gcc-compiler-dev-tools">Install gcc compiler, dev tools</a></li>
   <li><a href="#install-scripting-tools">Install scripting tools</a></li>
+  <li><a href="#install-node-packages">Install node packages</a></li>
   <li><a href="#install-rmate-for-textmate-editing-over-ssh">Install rmate for TextMate editing over ssh</a>    <ul>
       <li><a href="#change-hostname">Change Hostname</a></li>
       <li><a href="#fake-a-hardware-clock">Fake a hardware clock</a></li>
@@ -187,7 +189,21 @@ fi ```
   </li>
   <li><a href="#test-with-gpio-utility">test with gpio utility</a></li>
   <li><a href="#install-ruby-gem-optional">install ruby gem (optional)</a>    <ul>
+      <li><a href="#remove-the-desktop-environment">Remove the desktop environment</a></li>
+    </ul>
+  </li>
+  <li><a href="#network-drives">network drives</a></li>
+  <li><a href="#other">other</a></li>
+  <li><a href="#cleaning-up">cleaning up</a>    <ul>
       <li><a href="#install-mono">Install Mono</a></li>
+      <li><a href="#install-xbian-onto-a-raspbian-image">Install XBian onto a Raspbian image</a></li>
+    </ul>
+  </li>
+  <li><a href="#enable-staging-and-development-repositories-and-update">enable staging and development repositories and update</a></li>
+  <li><a href="#install-xbianxbmc">install xbian/xbmc</a></li>
+  <li><a href="#reboot-required-to-make-file-system-changes-and-conversion-to-btrfs">reboot required to make file system changes, and conversion to btrfs</a></li>
+  <li><a href="#install-remaining-xbian-packages">install remaining xbian packages</a></li>
+  <li><a href="#boot-to-desktop">boot to desktop</a>    <ul>
       <li><a href="#install-aircrack-and-related-tools">Install aircrack and related tools</a></li>
     </ul>
   </li>
@@ -200,7 +216,7 @@ fi ```
   </li>
   <li><a href="#configure-keyboard-settings">Configure keyboard settings</a></li>
   <li><a href="#configure-console-font">Configure console font</a></li>
-  <li><a href="#configure-time-zone-and-locale">Configure time zone and locale</a>    <ul>
+  <li><a href="#configure-time-zone-and-locale-1">Configure time zone and locale</a>    <ul>
       <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
       <li><a href="#setup-xbmc">Setup XBMC</a></li>
       <li><a href="#useful-extras-not-always-used">Useful extras, not always used</a></li>
@@ -332,6 +348,10 @@ echo ‘%sudo  ALL=(ALL) NOPASSWD: ALL’ » /etc/sudoers</p>
 <h1 id="update-packages">Update packages</h1>
 <p>apt-get update &amp;&amp; apt-get upgrade</p>
 
+<h1 id="configure-time-zone-and-locale">Configure time zone and locale</h1>
+<p>dpkg-reconfigure tzdata
+dpkg-reconfigure locales</p>
+
 <h1 id="install-some-utilities-and-services">Install some utilities and services</h1>
 <p>apt-get install p7zip zip curl mediainfo avahi-daemon iw</p>
 
@@ -342,6 +362,9 @@ echo ‘%sudo  ALL=(ALL) NOPASSWD: ALL’ » /etc/sudoers</p>
 <p>apt-get install ruby ruby-dev ri libsqlite3-dev npm
 # Fix node binary being named nodejs
 cd /usr/bin; sudo ln -s nodejs node; cd</p>
+
+<h1 id="install-node-packages">Install node packages</h1>
+<p>npm install -g node-gyp</p>
 
 <h1 id="install-rmate-for-textmate-editing-over-ssh">Install rmate for TextMate editing over ssh</h1>
 <p>gem install rmate
@@ -438,13 +461,89 @@ cd wiringPi; ./build</p>
 <p>gem install wiringpi
 ```</p>
 
+<h2 id="remove-the-desktop-environment">Remove the desktop environment</h2>
+
+<p>If you only plan to run the terminal environment (including self-hosted programs such as XBMC), then a lot of space can be recovered by removing x11 and related packages.</p>
+
+<p><em>TODO: mono depends upon libx11-6, so it’ll need to be (re)installed afterwards.</em></p>
+
+<p>```sh
+# desktop
+apt-get purge x11-common libx11-.* xkb-data xdg-utils menu-xdg
+apt-get purge desktop-file-utils fonts-freefont-ttf
+apt-get purge libraspberrypi0 raspberrypi-artwork lxde-icon-theme</p>
+
+<h1 id="network-drives">network drives</h1>
+<p>apt-get purge cifs-utils samba-common smbclient nfs-common</p>
+
+<h1 id="other">other</h1>
+<p>apt-get purge liblapack3 libatlas3-base</p>
+
+<h1 id="cleaning-up">cleaning up</h1>
+<p>(cd ~pi; rm -rf Desktop python_games ocr_pi.png)
+apt-get autoremove
+apt-get clean
+```</p>
+
+<p><em>Note: this task is not normally required for distros such as xbian.</em></p>
+
 <h2 id="install-mono">Install Mono</h2>
 
-<p>Basic mono setup to run and compile command line tools.</p>
+<p>Install Mono development tools, runtime, and interactive shell.</p>
 
 <p><code>sh
-apt-get install mono-devel # mono-gmcs mono-csharp-shell
+apt-get install mono-devel mono-utils mono-csharp-shell
 </code></p>
+
+<!--
+pkg-count
+353 mono-complete
+214 cli-common-dev
+172 mono-devel
+168 libmono-cil-dev
+
+# for a minimal cli toolchain:
+apt-get install mono-mcs mono-xbuild mono-csharp-shell
+-->
+
+<h2 id="install-xbian-onto-a-raspbian-image">Install XBian onto a Raspbian image</h2>
+
+<p>From <a href="http://forum.xbian.org/thread-1850.html">Installing XBIAN directly on RASPBIAN IMG</a></p>
+
+<p>```sh
+# install xbian repo
+wget http://xbian.brantje.com/pool/stable/main/x/xbian-package-repo/xbian-package-repo<em>1.0.0_armhf.deb
+dpkg -i xbian-package-repo</em>1.0.0_armhf.deb</p>
+
+<h1 id="enable-staging-and-development-repositories-and-update">enable staging and development repositories and update</h1>
+<p>sed -i ‘/ staging|devel main/s/^#+ //’ /etc/apt/sources.list.d/xbian.list
+apt-get update
+# revert previous edit
+sed -i ‘/ staging|devel main/s/^/### /’ /etc/apt/sources.list.d/xbian.list</p>
+
+<h1 id="install-xbianxbmc">install xbian/xbmc</h1>
+<p>apt-get install xbian-package-xbianhome xbian-package-kernel</p>
+
+<h1 id="reboot-required-to-make-file-system-changes-and-conversion-to-btrfs">reboot required to make file system changes, and conversion to btrfs</h1>
+<p>sed -i /rootfstype/s/btrfs/ext4/ /boot/cmdline.txt # do not use btrfs
+reboot</p>
+
+<h1 id="install-remaining-xbian-packages">install remaining xbian packages</h1>
+<p>apt-get install xbian-update xbian-package-rasp-switching
+# Note:
+# a warning for removal of ‘sysvinit’ will be displayed,
+# as xbian replaces it with the ‘upstart’ service manager.
+# Also, cmdline.txt should remain unchanged, with new
+# parameters written to /boot/cmdline.new.</p>
+
+<h1 id="boot-to-desktop">boot to desktop</h1>
+<p># apt-get install lightdm
+```</p>
+
+<p>XBMC can be started with “start XBMC”, Raspbian X desktop with “service lightdm start”. </p>
+
+<p>if you Raspbian setup used to boot into X with PI user automatically, you can keep this and indeed start / load XBMC quick and easy way - even jumping back and forth between XBMC and you X Desktop. We can click “Logout”, put “xbian” as user to log in and XBMC starts. If you quit XBMC, X will come again. No reboots needed.
+Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC). There is how you RPI will boot if you select what service for autostart:</p>
 
 <h2 id="install-aircrack-and-related-tools">Install aircrack and related tools</h2>
 
@@ -496,7 +595,7 @@ apt-get install console-setup keyboard-configuration</p>
 <p># accept the defaults until the font selection screen
 dpkg-reconfigure console-setup</p>
 
-<h1 id="configure-time-zone-and-locale">Configure time zone and locale</h1>
+<h1 id="configure-time-zone-and-locale-1">Configure time zone and locale</h1>
 <p>dpkg-reconfigure tzdata
 dpkg-reconfigure locales
 ```</p>
