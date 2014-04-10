@@ -4,7 +4,7 @@
   <title><![CDATA[jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-04-10T22:39:20+01:00</updated>
+  <updated>2014-04-10T22:41:52+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -453,21 +453,22 @@ apt-get install mono-mcs mono-xbuild mono-csharp-shell
 </span><span class="line">reboot
 </span><span class="line">
 </span><span class="line"><span class="c"># install remaining xbian packages</span>
-</span><span class="line">apt-get install xbian-update xbian-package-rasp-switching
-</span><span class="line"><span class="c"># Note:</span>
-</span><span class="line"><span class="c"># a warning for removal of &#39;sysvinit&#39; will be displayed,</span>
+</span><span class="line"><span class="c"># Note: a warning for removal of &#39;sysvinit&#39; will be displayed,</span>
 </span><span class="line"><span class="c"># as xbian replaces it with the &#39;upstart&#39; service manager.</span>
 </span><span class="line"><span class="c"># Also, cmdline.txt should remain unchanged, with new</span>
 </span><span class="line"><span class="c"># parameters written to /boot/cmdline.new.</span>
+</span><span class="line">apt-get install xbian-update xbian-package-rasp-switching
+</span><span class="line">
+</span><span class="line"><span class="c"># XBMC can now be started with &quot;start XBMC&quot;</span>
 </span><span class="line">
 </span><span class="line"><span class="c"># boot to desktop</span>
 </span><span class="line"><span class="c"># apt-get install lightdm</span>
 </span></code></pre></div></figure></notextile></div>
 
-<p>XBMC can be started with “start XBMC”, Raspbian X desktop with “service lightdm start”.</p>
+<!-- XBMC can be started with "start XBMC", Raspbian X desktop with "service lightdm start".
 
-<p>if you Raspbian setup used to boot into X with PI user automatically, you can keep this and indeed start / load XBMC quick and easy way - even jumping back and forth between XBMC and you X Desktop. We can click “Logout”, put “xbian” as user to log in and XBMC starts. If you quit XBMC, X will come again. No reboots needed.
-Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC). There is how you RPI will boot if you select what service for autostart:</p>
+if you Raspbian setup used to boot into X with PI user automatically, you can keep this and indeed start / load XBMC quick and easy way - even jumping back and forth between XBMC and you X Desktop. We can click "Logout", put "xbian" as user to log in and XBMC starts. If you quit XBMC, X will come again. No reboots needed.
+Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC). There is how you RPI will boot if you select what service for autostart: -->
 
 <h2 id="install-aircrack-and-related-tools">Install aircrack and related tools</h2>
 

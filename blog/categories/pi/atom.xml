@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-04-10T22:39:20+01:00</updated>
+  <updated>2014-04-10T22:41:52+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -206,6 +206,7 @@ fi ```
   <li><a href="#install-xbianxbmc">install xbian/xbmc</a></li>
   <li><a href="#reboot-required-to-make-file-system-changes-and-conversion-to-btrfs">reboot required to make file system changes, and conversion to btrfs</a></li>
   <li><a href="#install-remaining-xbian-packages">install remaining xbian packages</a></li>
+  <li><a href="#xbmc-can-now-be-started-with-start-xbmc">XBMC can now be started with “start XBMC”</a></li>
   <li><a href="#boot-to-desktop">boot to desktop</a>    <ul>
       <li><a href="#install-aircrack-and-related-tools">Install aircrack and related tools</a></li>
     </ul>
@@ -554,21 +555,22 @@ sed -i ‘/ staging|devel main/s/^/### /’ /etc/apt/sources.list.d/xbian.list</
 reboot</p>
 
 <h1 id="install-remaining-xbian-packages">install remaining xbian packages</h1>
-<p>apt-get install xbian-update xbian-package-rasp-switching
-# Note:
-# a warning for removal of ‘sysvinit’ will be displayed,
+<p># Note: a warning for removal of ‘sysvinit’ will be displayed,
 # as xbian replaces it with the ‘upstart’ service manager.
 # Also, cmdline.txt should remain unchanged, with new
-# parameters written to /boot/cmdline.new.</p>
+# parameters written to /boot/cmdline.new.
+apt-get install xbian-update xbian-package-rasp-switching</p>
+
+<h1 id="xbmc-can-now-be-started-with-start-xbmc">XBMC can now be started with “start XBMC”</h1>
 
 <h1 id="boot-to-desktop">boot to desktop</h1>
 <p># apt-get install lightdm
 ```</p>
 
-<p>XBMC can be started with “start XBMC”, Raspbian X desktop with “service lightdm start”.</p>
+<!-- XBMC can be started with "start XBMC", Raspbian X desktop with "service lightdm start".
 
-<p>if you Raspbian setup used to boot into X with PI user automatically, you can keep this and indeed start / load XBMC quick and easy way - even jumping back and forth between XBMC and you X Desktop. We can click “Logout”, put “xbian” as user to log in and XBMC starts. If you quit XBMC, X will come again. No reboots needed.
-Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC). There is how you RPI will boot if you select what service for autostart:</p>
+if you Raspbian setup used to boot into X with PI user automatically, you can keep this and indeed start / load XBMC quick and easy way - even jumping back and forth between XBMC and you X Desktop. We can click "Logout", put "xbian" as user to log in and XBMC starts. If you quit XBMC, X will come again. No reboots needed.
+Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC). There is how you RPI will boot if you select what service for autostart: -->
 
 <h2 id="install-aircrack-and-related-tools">Install aircrack and related tools</h2>
 
