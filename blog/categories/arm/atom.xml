@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-04-08T23:19:26+01:00</updated>
+  <updated>2014-04-10T22:39:20+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -184,6 +184,9 @@ fi ```
   <li><a href="#remove-old-host-key-from-clients-using">remove old host key from clients using:</a>    <ul>
       <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
       <li><a href="#ttl-serial-console">TTL serial console</a></li>
+    </ul>
+  </li>
+  <li><a href="#manually-set-correct-size-for-the-client-window">manually set correct size for the client window</a>    <ul>
       <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
     </ul>
   </li>
@@ -286,7 +289,7 @@ test -f ~/.ssh/id_rsa.pub || ssh-keygen</p>
 <p>ssh-copy-id xbian@xbian.local
 ```</p>
 
-<p>The easiest way to append a key to the remote user’s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn’t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
+<p>The easiest way to append a key to the remote user’s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source (or <a href="https://github.com/beautifulcode/ssh-copy-id-for-OSX">github</a>) if your system doesn’t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
 <h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
@@ -439,11 +442,33 @@ dropbearkey -t rsa -f /etc/dropbear/dropbear_rsa_host_key
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
 
-<p>The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
+<p>Connecting to the pi without a network can be achieved over serial cable: e.g. <code>screen /dev/tty.usbserial 115200</code>.</p>
+
+<p>Unfortunately, the display of full screen terminal programs becomes corrupted when using
+a TTL to USB serial connection to the Pi from Mac OS X. Changing the terminal type to
+match your system’s <code>$TERM</code> variable enables use of programs such as <code>nano</code> and
+<code>xbian-config</code> without screen corruption.</p>
 
 <p><code>sh
-sed -i '/ttyAMA0/s/vt100$/xterm/' /etc/inittab
+sed -i '/ttyAMA0/s/vt100$/xterm-256color/' /etc/inittab
 </code></p>
+
+<p>Additionally, using <code>screen</code> results in display size issues if your terminal does not
+match the 80x24 columns and lines assumed when logging in over serial. (This does not
+occur when using <code>ssh</code> as the client’s current terminal size is communicated to the ssh
+server.)</p>
+
+<p>```sh
+# print the current size assumed by the host
+stty size
+# returns: 24 80</p>
+
+<h1 id="manually-set-correct-size-for-the-client-window">manually set correct size for the client window</h1>
+<p>stty rows 18
+stty cols 70
+```</p>
+
+<p>A script is available <a href="https://github.com/akkana/scripts/blob/master/termsize">on github</a> (found via <a href="http://shallowsky.com/blog/hardware/serial-24-line-terminals.html">shallowsky.com</a>) that will determine your <em>actual</em> terminal window size and set it correctly on the Pi.  The script can be run from <code>.bashrc</code> or similar.</p>
 
 <h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
 
@@ -540,7 +565,7 @@ reboot</p>
 <p># apt-get install lightdm
 ```</p>
 
-<p>XBMC can be started with “start XBMC”, Raspbian X desktop with “service lightdm start”. </p>
+<p>XBMC can be started with “start XBMC”, Raspbian X desktop with “service lightdm start”.</p>
 
 <p>if you Raspbian setup used to boot into X with PI user automatically, you can keep this and indeed start / load XBMC quick and easy way - even jumping back and forth between XBMC and you X Desktop. We can click “Logout”, put “xbian” as user to log in and XBMC starts. If you quit XBMC, X will come again. No reboots needed.
 Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC). There is how you RPI will boot if you select what service for autostart:</p>
