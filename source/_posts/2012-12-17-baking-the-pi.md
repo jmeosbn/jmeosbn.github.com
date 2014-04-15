@@ -432,113 +432,6 @@ If it isn't possible to run a command locally on the Pi (e.g. there is no monito
 [findPi script]:http://www.recantha.co.uk/blog/?p=2397
 
 
-### Testing PVR
-
-```sh
-apt-get install vdr-plugin-dvbsddevice
-```
-
-
-### Setting up webcam
-
-Use 'motion' or 'fswebcam', motion may need a default cfg copying
-
-```sh
-apt-get install motion
-cp /etc/default/motion /etc/motion/motion.conf
-```
-
-
-### Configure bluetooth adapter
-
-[Adapted from ctheroux](http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/).
-
-```sh
-# install bluetooth support and dependencies
-agi bluez python-gobject  # minimal?
-agi bluetooth bluez-utils  # full
-
-# for management from the desktop
-agi blueman
-
-# check adapter is working*
-hcitool dev
-
-# scan for devices
-hcitool scan
-
-# pair with device, using the address listed from scan
-bluez-simple-agent hci0 XX:XX:XX:XX:XX:XX
-
-# trust the device
-bluez-test-device trusted XX:XX:XX:XX:XX:XX yes
-
-# connect to input device
-bluez-test-input hci0 XX:XX:XX:XX:XX:XX
-
-# adapter status
-hciconfig
-```
-
-**Note: a bluetooth adapter may be listed in ``lsusb`` and ``hciconfig``, without being recognised by ``hcitool``. This is the case with the belkin dongle I have, so use ``hcitool`` to check that a device is working properly.*
-
-
-## Troubleshooting and backup
-
-Some useful commands and procedures
-
-
-### Backup settings
-
-- Settings, addons etc. are in ~/.xbmc
-- .xbmc/userdata - preferences etc
-- .xbmc/addons - binaries, themes
-- .xbmc/addons/packages - original downloads, can use with "install from zip"
-
-```sh
-# backup profile settings
-zip -ry xbmc .xbmc/
-zip -ry dotfiles .bash_aliases .nanorc .toprc .ssh
-
-# backup system config files
-sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
-```
-
-Or using tar..
-
-```sh
-# backup profile settings
-tar -czf xbmc-backup.tar.gz .xbmc
-
-# restore profile settings
-sudo initctl stop xbmc
-tar -xzf xbmc-backup.tar.gz
-sudo initctl start xbmc
-```
-
-
-### Clear cached network adapter
-
-(needed for switching cards between devices)
-
-```sh
-echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
-```
-
-
-### Quick Tips
-
-* You can detect hdmi audio modes: `/opt/vc/bin/tvservice -a`
-* Setup CEC remote over hdmi from console: `cec-config`
-
-
-## Not used with recent versions
-
-[^Reaper]: http://f.cl.ly/items/0S1S1Y0B3Q241Z2F0z1j/Untitled.png
-
-Previously useful functionality or workarounds
-
-
 ### Manually configure WiFi adapter
 
 [Instructions adapted from here](http://www.savagehomeautomation.com/raspi-airlink101).
@@ -587,6 +480,116 @@ sudo ifup wlan0
 Use ``iwconfig`` to view wifi adapter info and ``ifconfig`` for general network info.
 
 
+### Configure bluetooth adapter
+
+[Adapted from ctheroux](http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/).
+
+```sh
+# install bluetooth support and dependencies
+agi bluez python-gobject  # minimal?
+agi bluetooth bluez-utils  # full
+
+# for management from the desktop
+agi blueman
+
+# check adapter is working*
+hcitool dev
+
+# scan for devices
+hcitool scan
+
+# pair with device, using the address listed from scan
+bluez-simple-agent hci0 XX:XX:XX:XX:XX:XX
+
+# trust the device
+bluez-test-device trusted XX:XX:XX:XX:XX:XX yes
+
+# connect to input device
+bluez-test-input hci0 XX:XX:XX:XX:XX:XX
+
+# adapter status
+hciconfig
+```
+
+**Note: a bluetooth adapter may be listed in ``lsusb`` and ``hciconfig``, without being recognised by ``hcitool``. This is the case with the belkin dongle I have, so use ``hcitool`` to check that a device is working properly.*
+
+
+### Testing PVR
+
+```sh
+apt-get install vdr-plugin-dvbsddevice
+```
+
+
+### Setup webcam
+
+Use 'motion' or 'fswebcam', motion may need a default cfg copying
+
+```sh
+apt-get install motion
+cp /etc/default/motion /etc/motion/motion.conf
+```
+
+
+## Troubleshooting and backup
+
+Some useful commands and procedures
+
+
+### Quick Tips
+
+* You can detect hdmi audio modes: `/opt/vc/bin/tvservice -a`
+* Setup CEC remote over hdmi from console: `cec-config`
+
+
+### Backup settings
+
+- Settings, addons etc. are in ~/.xbmc
+- .xbmc/userdata - preferences etc
+- .xbmc/addons - binaries, themes
+- .xbmc/addons/packages - original downloads, can use with "install from zip"
+
+```sh
+# backup profile settings
+zip -FS -ry xbmc .xbmc/
+zip -FS -ry dotfiles .bash_aliases .nanorc .toprc .ssh
+
+# backup system config files
+sudo zip -FS -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
+```
+
+Or using tar..
+
+```sh
+# backup profile settings
+tar -czf xbmc-backup.tar.gz .xbmc
+
+# restore profile settings
+sudo initctl stop xbmc
+tar -xzf xbmc-backup.tar.gz
+sudo initctl start xbmc
+```
+
+
+<!-- endofpost -->
+
+
+## Not used with recent versions
+
+[^Reaper]: http://f.cl.ly/items/0S1S1Y0B3Q241Z2F0z1j/Untitled.png
+
+Previously useful functionality or workarounds
+
+
+### Clear cached network adapter
+
+(needed for switching cards between devices)
+
+```sh
+echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
+```
+
+
 ### Fake a hardware clock (unabridged)
 
 More complicated instructions, as used on previous versions of XBian.
@@ -618,9 +621,11 @@ chmod a+r ~/.ssh/id_rsa.pub
 
 ### Download OpenSSH sftp server
 
+If sftp is not already on your system (such as when using dropbear), it can't be installed
+manually without installing the entire openssh package.
+
 ```sh
-apt-get -d install openssh-server
-cp /var/cache/apt/archives/openssh-server_*.deb .
+apt-get download openssh-server
 dpkg-deb -X openssh-server_*.deb sftp
 cp sftp/usr/lib/openssh/sftp-server /usr/lib/
 rm -r sftp openssh-server_*.deb
