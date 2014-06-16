@@ -1,43 +1,60 @@
 ## MMD Meta
 
-Created by Jamie Osborne, MIT License.
-
-[Upstream GitHub project](https://github.com/jmeosbn/mmd_meta)
-
-
-### Description
-
 Support MultiMarkdown formatted metadata in Jekyll posts.
 
 
 ### Usage
 
-Use MultiMarkdown style metadata in place of YAML frontmatter:
-https://github.com/fletcher/MultiMarkdown/wiki/MultiMarkdown-Syntax-Guide
+Use MultiMarkdown style [metadata] in place of YAML [frontmatter].
 
-Only supports Jekyll posts (as pages must start with `---`).
+[metadata]: https://github.com/fletcher/MultiMarkdown/wiki/MultiMarkdown-Syntax-Guide
+[frontmatter]: http://jekyllrb.com/docs/frontmatter/
 
-Converts MultiMarkdown keys to lowercase, e.g. 'Author' -> 'author'.
+
+### Notes
+
+Automatically sets default metadata for layout style.
+
+Only supports posts (Jekyll pages must start with `---`).
+
+Converts MultiMarkdown keys to lowercase and strips spaces.
+
+Converts MultiMarkdown page variables into liquid tags.
 
 
 ### Example
 
-A post starting with:
+A post using MultiMarkdown style metadata and variables:
 
-    Layout: post
-    Title: My Blog Post
-    Date: 2013-07-03
-    Author: Fletcher T. Penney
+    Title:        My Blog Post
+    Date:         2013-07-03
+    Author:       Fletcher T. Penney
+    Another Key:  some data
 
-    This is the post content
+    Post content, with embedded page variables: [%Title] and [%Another Key].
 
-Will be read as if you had:
+
+Will be read as if it had YAML style metadata and liquid tags:
 
     ---
-    layout: post
-    title: My Blog Post
-    date: 2013-07-03
-    author: Fletcher T. Penney
+    layout:       post
+    title:        My Blog Post
+    date:         2013-07-03
+    author:       Fletcher T. Penney
+    anotherkey:   some data
     ---
 
-    This is the post content
+    Post content, with embedded page variables: {{ page.title }} and {{ page.anotherkey }}.
+
+_note: no value needed to be set for the layout field_
+
+
+### Author
+
+Created by [Jamie Osborne](https://github.com/jmeosbn).
+
+[Upstream GitHub project](https://github.com/jmeosbn/mmd_meta)
+
+### License
+
+[MIT License](LICENSE).
