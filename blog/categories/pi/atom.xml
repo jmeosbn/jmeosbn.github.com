@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-07-01T03:54:50+01:00</updated>
+  <updated>2014-07-01T03:57:41+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -12,6 +12,220 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Making a Pi Disk Image]]></title>
+    <link href="http://jmeosbn.github.io/blog/making-a-pi-disk-image/"/>
+    <updated>2014-06-30T21:13:00+01:00</updated>
+    <id>http://jmeosbn.github.io/blog/making-a-pi-disk-image</id>
+    <content type="html"><![CDATA[<p>After setting up the Raspberry Pi, it’s a good idea to make your own installation image
+from it. This mainly involves using the <code>dd</code> command to clone the SD card into a file.
+However, there are some extra steps that can be used to produce a smaller file, and to
+provide a helpful login message to anyone using the image.</p>
+
+<!-- more -->
+
+<h3 id="preparation-on-the-running-system">Preparation on the running system</h3>
+
+<p>After setting up your Raspberry Pi - but before shutting it down - prepare the installed
+system for imaging.</p>
+
+<p>```sh
+# login as root
+sudo -s</p>
+
+<h1 id="make-sure-sfill-tool-is-installed">make sure sfill tool is installed</h1>
+<p>apt-get install secure-delete
+```</p>
+
+<p>Edit the login message to detail setup tasks required on logon:</p>
+
+<p>```sh
+echo -e “\e[47;30;1m
+Please generate new host keys by using the following commands:
+  rm /etc/ssh/ssh_host_*
+  dpkg-reconfigure openssh-server</p>
+
+<p>Set user and root passwords with ‘sudo passwd $(logname) &amp;&amp; sudo passwd’</p>
+
+<p>You should also use ‘sudo raspi-config’ to change the hostname
+and expand the filesystem to fill the SD card.</p>
+
+<p>Use the following command to suppress this message in future:
+  touch ~/.hushlogin
+\e[0m” | sudo tee /etc/motd</p>
+
+<h1 id="ensure-the-message-is-shown">ensure the message is shown</h1>
+<p>rm -f /home/$(logname)/.hushlogin
+```</p>
+
+<p>Clean up the system by removing any unneeded files and private user data.</p>
+
+<p>```sh
+# clean up downloaded packages, log, caches, etc.
+apt-get clean
+find /var/log -type f -delete
+du -sch /var/cache/*
+df -h /</p>
+
+<h1 id="backup-files-from-your-home-directory-before-removal">backup files from your home directory before removal</h1>
+<p>cd /home/$(logname)
+zip -FS -ry1 /media/KEY/pihome.zip .</p>
+
+<h1 id="remove-any-other-unneeded-or-private-user-data">remove any other unneeded or private user data</h1>
+<p>nano /etc/network/interfaces
+nano /etc/wpa_supplicant/wpa_supplicant.conf</p>
+
+<h1 id="list-of-temp-files-in-home-dir">list of temp files in home dir</h1>
+<p>tmpfiles=”.<em>_history .lesshst *.log .cache/ .hushlogin”
+# list of config files in home dir
+dotfiles=”.config/ .local/ .git</em> .gem/ .npm/ .ssh__/”
+# remove transient and config files for root and user home
+for u in /home/$(logname) /root; do echo &amp;&amp;
+  cd $u &amp;&amp; pwd &amp;&amp; rm -rfv $tmpfiles $dotfiles
+  ls -A
+done
+```</p>
+
+<p>Zero fill the unused SD card space for better compression. This can also be done within a
+desktop Linux environment, and may be a little faster that way<sup id="fnref:sfill"><a href="#fn:sfill" rel="footnote">1</a></sup> (but needs more
+command line effort).</p>
+
+<p>```sh
+# zero fill the filesystem
+sfill -z -l -l -f -v /boot /</p>
+
+<h1 id="zero-fill-the-swap-file">zero fill the swap file</h1>
+<p>swapoff -a
+dd if=/dev/zero of=/var/swap bs=1M count=100
+mkswap /var/swap</p>
+
+<h1 id="shutdown-and-remove-the-card">shutdown and remove the card</h1>
+<p>halt
+```</p>
+
+<p>Here’s the basic command to copy an SD card into a file. The size is correct for the
+current Raspbian image at <a href="http://raspberrypi.org">raspberrypi.org</a>, and can be confirmed
+by viewing the size of the original uncompressed image, e.g. <code>unzip -l raspbian.zip</code>, or
+by using <code>fdisk</code><sup id="fnref:fdisk"><a href="#fn:fdisk" rel="footnote">2</a></sup>.</p>
+
+<p>```sh
+# location and size of SD card
+dev=/dev/rdisk2
+size=2825</p>
+
+<h1 id="create-the-image">create the image</h1>
+<p>date=$(date +%Y%m%d)
+name=raspbian-minimal
+sudo dd if=$dev of=$name.img count=$size bs=1m</p>
+
+<h1 id="compress-the-image-using-7z-without-bcj-filter">compress the image using 7z (without BCJ filter)</h1>
+<p>7z a -mf- $date-$name.img.7z $name.img
+```</p>
+
+<!--
+If the image is going to be compressed straightaway, it's also possible to read and
+compress in one operation.  This will be much slower than reading the SD card normally.
+
+```sh
+# read the sd card and compress using 7z
+sudo dd if=$dev count=$size bs=1m | 7z a -mf- -si$name.img $date-$name.img.7z
+```
+ -->
+
+<!--
+
+The above method is sufficient to take a backup of a card that's had some initial setup,
+but hasn't yet had it's filesystem expanded and does not require mounting the filesystem
+for further modifications. Otherwise, skip to the more detailed instructions to cleanup
+the image and determine it's correct size.
+
+[ubuntu]: http://www.ubuntu.com/download/desktop/
+
+
+
+```sh
+# reduce size of the main partition in gparted
+# (to minimise the sd card read/write time)
+
+# set device path for sd card
+dev=/dev/sdc
+
+# check the filesystems
+umount ${dev}?
+fsck -pfv ${dev}?
+
+# extract partition info
+partedm() { usage="Usage: partedm dev part field unit"
+            [ $# -ne 4 ] && echo $usage && return
+            parted -m $1 unit $4 print |
+            grep "^$2" | cut -d: -f$3 | tr -d TGMKB; }
+size=$((($(partedm $dev 2 3 b)+1) /1024/1024))
+boot=$(partedm $dev 1 2 b)
+main=$(partedm $dev 2 2 b)
+echo "total size = $size MB
+ boot starts at  $boot bytes
+ main starts at $main bytes"
+
+# copy the sd card - using calculated size of image
+dd if=$dev of=$name.img bs=1M count=${size}
+
+# mount image file and zero fill free space
+for part in boot main; do
+  mkdir -p $part
+  mount -o loop,offset=${!part} $name-basic.img $part &&
+    sfill -z -l -l -f -v $part
+done
+
+# zero fill the swap file
+dd if=/dev/zero of=main/var/swap bs=1M count=100
+mkswap main/var/swap
+
+# unmount (after making any final changes)
+umount boot main && rm -rf boot main
+
+# compress the image using 7z (without BCJ filter)
+7z a -mf- $name.img.7z $name.img
+```
+
+ -->
+
+<!--
+# make image on Mac OS X
+dev=/dev/rdisk2
+fdisk $dev
+bc -l <<< '(122880+3481600)/2/1024'
+dd if=$dev of=$name.img bs=1m count=$size
+-->
+
+<!-- OFFSET=`fdisk -lu $IMAGE | grep -m 1 Linux$ | awk '{ print $2 *512 }'` -->
+<div class="footnotes">
+  <ol>
+    <li id="fn:sfill">
+      <p>Normally, <code>sfill</code> seems to run just as fast from the raspberry pi - since the
+SD card speed is the main factor - and space saved is similar to mounting offline.
+However, with recent images, I’ve found <code>sfill</code> to take a long time to complete after
+filling the disk (but before “Wiping inodes”).<a href="#fnref:sfill" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:fdisk">
+      <p>Use <code>fdisk</code> to obtain the partition table from the SD card, then calculate the
+total amount to copy using <code>bc</code>:</p>
+
+      <pre><code># confirm the above values
+sudo fdisk $dev  # append '-l' flag on linux
+
+# on OS X, add the last partition start to its size
+bc -l &lt;&lt;&lt; '(122880+5662720)/2/1024'
+
+# on Linux, use the last partition block
+bc -l &lt;&lt;&lt; '(5785599+1)/2/1024'
+</code></pre>
+      <p><a href="#fnref:fdisk" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Dropbox on Pi]]></title>

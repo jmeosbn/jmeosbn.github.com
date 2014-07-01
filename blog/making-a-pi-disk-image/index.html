@@ -1,0 +1,494 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Making a Pi Disk Image - jmeosbn</title>
+  <meta name="author" content="Jamie Osborne">
+
+  
+  <meta name="description" content="After setting up the Raspberry Pi, it’s a good idea to make your own installation image
+from it. This mainly involves using the dd command to clone &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jmeosbn.github.io/blog/making-a-pi-disk-image/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/print.css" media="print" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="jmeosbn" type="application/atom+xml">
+  
+  <!-- Google site verification -->
+  <meta name="google-site-verification" content="PubgJ00VUIj1r0qaB3oR0KwXirQKu3XAhBh0YduPdS0" />
+
+  <!-- Link to full license file -->
+  <link rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-42399191-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jmeosbn</a></h1>
+  
+</hgroup>
+
+</header>
+  
+    <nav role="navigation"><ul class="main-navigation" data-subscription="rss">
+    <li><a href="/">jmeosbn</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+
+  
+  <li><a href="feed://jmeosbn.github.io/atom.xml" rel="subscribe-rss-no-icon" title="Subscribe via RSS">rss</a></li>
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jmeosbn.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+</nav>
+  
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Making a Pi Disk Image</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-30T21:13:00+01:00" pubdate data-updated="true">Jun 30<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>After setting up the Raspberry Pi, it’s a good idea to make your own installation image
+from it. This mainly involves using the <code>dd</code> command to clone the SD card into a file.
+However, there are some extra steps that can be used to produce a smaller file, and to
+provide a helpful login message to anyone using the image.</p>
+
+<!-- more -->
+
+<h3 id="preparation-on-the-running-system">Preparation on the running system</h3>
+
+<p>After setting up your Raspberry Pi - but before shutting it down - prepare the installed
+system for imaging.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># login as root</span>
+</span><span class="line">sudo -s
+</span><span class="line">
+</span><span class="line"><span class="c"># make sure sfill tool is installed</span>
+</span><span class="line">apt-get install secure-delete
+</span></code></pre></div></figure></notextile></div>
+
+<p>Edit the login message to detail setup tasks required on logon:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> -e <span class="s2">&quot;\e[47;30;1m</span>
+</span><span class="line"><span class="s2">Please generate new host keys by using the following commands:</span>
+</span><span class="line"><span class="s2">  rm /etc/ssh/ssh_host_*</span>
+</span><span class="line"><span class="s2">  dpkg-reconfigure openssh-server</span>
+</span><span class="line">
+</span><span class="line"><span class="s2">Set user and root passwords with &#39;sudo passwd $(logname) &amp;&amp; sudo passwd&#39;</span>
+</span><span class="line">
+</span><span class="line"><span class="s2">You should also use &#39;sudo raspi-config&#39; to change the hostname</span>
+</span><span class="line"><span class="s2">and expand the filesystem to fill the SD card.</span>
+</span><span class="line">
+</span><span class="line"><span class="s2">Use the following command to suppress this message in future:</span>
+</span><span class="line"><span class="s2">  touch ~/.hushlogin</span>
+</span><span class="line"><span class="s2">\e[0m&quot;</span> | sudo tee /etc/motd
+</span><span class="line">
+</span><span class="line"><span class="c"># ensure the message is shown</span>
+</span><span class="line">rm -f /home/<span class="k">$(</span>logname<span class="k">)</span>/.hushlogin
+</span></code></pre></div></figure></notextile></div>
+
+<p>Clean up the system by removing any unneeded files and private user data.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># clean up downloaded packages, log, caches, etc.</span>
+</span><span class="line">apt-get clean
+</span><span class="line">find /var/log -type f -delete
+</span><span class="line">du -sch /var/cache/*
+</span><span class="line">df -h /
+</span><span class="line">
+</span><span class="line"><span class="c"># backup files from your home directory before removal</span>
+</span><span class="line"><span class="nb">cd</span> /home/<span class="k">$(</span>logname<span class="k">)</span>
+</span><span class="line">zip -FS -ry1 /media/KEY/pihome.zip .
+</span><span class="line">
+</span><span class="line"><span class="c"># remove any other unneeded or private user data</span>
+</span><span class="line">nano /etc/network/interfaces
+</span><span class="line">nano /etc/wpa_supplicant/wpa_supplicant.conf
+</span><span class="line">
+</span><span class="line"><span class="c"># list of temp files in home dir</span>
+</span><span class="line"><span class="nv">tmpfiles</span><span class="o">=</span><span class="s2">&quot;.*_history .lesshst *.log .cache/ .hushlogin&quot;</span>
+</span><span class="line"><span class="c"># list of config files in home dir</span>
+</span><span class="line"><span class="nv">dotfiles</span><span class="o">=</span><span class="s2">&quot;.config/ .local/ .git* .gem/ .npm/ .ssh__/&quot;</span>
+</span><span class="line"><span class="c"># remove transient and config files for root and user home</span>
+</span><span class="line"><span class="k">for </span>u in /home/<span class="k">$(</span>logname<span class="k">)</span> /root; <span class="k">do </span><span class="nb">echo</span> <span class="o">&amp;&amp;</span>
+</span><span class="line">  <span class="nb">cd</span> <span class="nv">$u</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> <span class="o">&amp;&amp;</span> rm -rfv <span class="nv">$tmpfiles</span> <span class="nv">$dotfiles</span>
+</span><span class="line">  ls -A
+</span><span class="line"><span class="k">done</span>
+</span></code></pre></div></figure></notextile></div>
+
+<p>Zero fill the unused SD card space for better compression. This can also be done within a
+desktop Linux environment, and may be a little faster that way<sup id="fnref:sfill"><a href="#fn:sfill" rel="footnote">1</a></sup> (but needs more
+command line effort).</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># zero fill the filesystem</span>
+</span><span class="line">sfill -z -l -l -f -v /boot /
+</span><span class="line">
+</span><span class="line"><span class="c"># zero fill the swap file</span>
+</span><span class="line">swapoff -a
+</span><span class="line">dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>/var/swap <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>100
+</span><span class="line">mkswap /var/swap
+</span><span class="line">
+</span><span class="line"><span class="c"># shutdown and remove the card</span>
+</span><span class="line">halt
+</span></code></pre></div></figure></notextile></div>
+
+<p>Here’s the basic command to copy an SD card into a file. The size is correct for the
+current Raspbian image at <a href="http://raspberrypi.org">raspberrypi.org</a>, and can be confirmed
+by viewing the size of the original uncompressed image, e.g. <code>unzip -l raspbian.zip</code>, or
+by using <code>fdisk</code><sup id="fnref:fdisk"><a href="#fn:fdisk" rel="footnote">2</a></sup>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># location and size of SD card</span>
+</span><span class="line"><span class="nv">dev</span><span class="o">=</span>/dev/rdisk2
+</span><span class="line"><span class="nv">size</span><span class="o">=</span>2825
+</span><span class="line">
+</span><span class="line"><span class="c"># create the image</span>
+</span><span class="line"><span class="nv">date</span><span class="o">=</span><span class="k">$(</span>date +%Y%m%d<span class="k">)</span>
+</span><span class="line"><span class="nv">name</span><span class="o">=</span>raspbian-minimal
+</span><span class="line">sudo dd <span class="k">if</span><span class="o">=</span><span class="nv">$dev</span> <span class="nv">of</span><span class="o">=</span><span class="nv">$name</span>.img <span class="nv">count</span><span class="o">=</span><span class="nv">$size</span> <span class="nv">bs</span><span class="o">=</span>1m
+</span><span class="line">
+</span><span class="line"><span class="c"># compress the image using 7z (without BCJ filter)</span>
+</span><span class="line">7z a -mf- <span class="nv">$date</span>-<span class="nv">$name</span>.img.7z <span class="nv">$name</span>.img
+</span></code></pre></div></figure></notextile></div>
+
+<!--
+If the image is going to be compressed straightaway, it's also possible to read and
+compress in one operation.  This will be much slower than reading the SD card normally.
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><pre><code class='sh'><span class='line'><span class="c"># read the sd card and compress using 7z</span>
+</span><span class='line'>sudo dd <span class="k">if</span><span class="o">=</span><span class="nv">$dev</span> <span class="nv">count</span><span class="o">=</span><span class="nv">$size</span> <span class="nv">bs</span><span class="o">=</span>1m | 7z a -mf- -si<span class="nv">$name</span>.img <span class="nv">$date</span>-<span class="nv">$name</span>.img.7z
+</span></code></pre></div></figure>
+ &#8211;>
+
+<!--
+
+The above method is sufficient to take a backup of a card that's had some initial setup,
+but hasn't yet had it's filesystem expanded and does not require mounting the filesystem
+for further modifications. Otherwise, skip to the more detailed instructions to cleanup
+the image and determine it's correct size.
+
+[ubuntu]: http://www.ubuntu.com/download/desktop/
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><pre><code class='sh'><span class='line'><span class="c"># reduce size of the main partition in gparted</span>
+</span><span class='line'><span class="c"># (to minimise the sd card read/write time)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># set device path for sd card</span>
+</span><span class='line'><span class="nv">dev</span><span class="o">=</span>/dev/sdc
+</span><span class='line'>
+</span><span class='line'><span class="c"># check the filesystems</span>
+</span><span class='line'>umount <span class="k">${</span><span class="nv">dev</span><span class="k">}</span>?
+</span><span class='line'>fsck -pfv <span class="k">${</span><span class="nv">dev</span><span class="k">}</span>?
+</span><span class='line'>
+</span><span class='line'><span class="c"># extract partition info</span>
+</span><span class='line'>partedm<span class="o">()</span> <span class="o">{</span> <span class="nv">usage</span><span class="o">=</span><span class="s2">&quot;Usage: partedm dev part field unit&quot;</span>
+</span><span class='line'>            <span class="o">[</span> <span class="nv">$# </span>-ne 4 <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="nv">$usage</span> <span class="o">&amp;&amp;</span> <span class="k">return</span>
+</span><span class='line'><span class="k">            </span>parted -m <span class="nv">$1</span> unit <span class="nv">$4</span> print |
+</span><span class='line'>            grep <span class="s2">&quot;^$2&quot;</span> | cut -d: -f<span class="nv">$3</span> | tr -d TGMKB; <span class="o">}</span>
+</span><span class='line'><span class="nv">size</span><span class="o">=</span><span class="k">$((</span><span class="o">(</span><span class="k">$(</span>partedm <span class="nv">$dev</span> 2 3 b<span class="k">)</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">/</span><span class="m">1024</span><span class="o">/</span><span class="m">1024</span><span class="k">))</span>
+</span><span class='line'><span class="nv">boot</span><span class="o">=</span><span class="k">$(</span>partedm <span class="nv">$dev</span> 1 2 b<span class="k">)</span>
+</span><span class='line'><span class="nv">main</span><span class="o">=</span><span class="k">$(</span>partedm <span class="nv">$dev</span> 2 2 b<span class="k">)</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;total size = $size MB</span>
+</span><span class='line'><span class="s2"> boot starts at  $boot bytes</span>
+</span><span class='line'><span class="s2"> main starts at $main bytes&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># copy the sd card - using calculated size of image</span>
+</span><span class='line'>dd <span class="k">if</span><span class="o">=</span><span class="nv">$dev</span> <span class="nv">of</span><span class="o">=</span><span class="nv">$name</span>.img <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span><span class="k">${</span><span class="nv">size</span><span class="k">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># mount image file and zero fill free space</span>
+</span><span class='line'><span class="k">for </span>part in boot main; <span class="k">do</span>
+</span><span class='line'><span class="k">  </span>mkdir -p <span class="nv">$part</span>
+</span><span class='line'>  mount -o loop,offset<span class="o">=</span><span class="k">${</span><span class="p">!part</span><span class="k">}</span> <span class="nv">$name</span>-basic.img <span class="nv">$part</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>    sfill -z -l -l -f -v <span class="nv">$part</span>
+</span><span class='line'><span class="k">done</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># zero fill the swap file</span>
+</span><span class='line'>dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>main/var/swap <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>100
+</span><span class='line'>mkswap main/var/swap
+</span><span class='line'>
+</span><span class='line'><span class="c"># unmount (after making any final changes)</span>
+</span><span class='line'>umount boot main <span class="o">&amp;&amp;</span> rm -rf boot main
+</span><span class='line'>
+</span><span class='line'><span class="c"># compress the image using 7z (without BCJ filter)</span>
+</span><span class='line'>7z a -mf- <span class="nv">$name</span>.img.7z <span class="nv">$name</span>.img
+</span></code></pre></div></figure>
+
+ &#8211;>
+
+<!--
+# make image on Mac OS X
+dev=/dev/rdisk2
+fdisk $dev
+bc -l <<< '(122880+3481600)/2/1024'
+dd if=$dev of=$name.img bs=1m count=$size
+-->
+
+<!-- OFFSET=`fdisk -lu $IMAGE | grep -m 1 Linux$ | awk '{ print $2 *512 }'` -->
+<div class="footnotes">
+  <ol>
+    <li id="fn:sfill">
+      <p>Normally, <code>sfill</code> seems to run just as fast from the raspberry pi - since the
+SD card speed is the main factor - and space saved is similar to mounting offline.
+However, with recent images, I’ve found <code>sfill</code> to take a long time to complete after
+filling the disk (but before “Wiping inodes”).<a href="#fnref:sfill" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:fdisk">
+      <p>Use <code>fdisk</code> to obtain the partition table from the SD card, then calculate the
+total amount to copy using <code>bc</code>:</p>
+
+      <pre><code># confirm the above values
+sudo fdisk $dev  # append '-l' flag on linux
+
+# on OS X, add the last partition start to its size
+bc -l &lt;&lt;&lt; '(122880+5662720)/2/1024'
+
+# on Linux, use the last partition block
+bc -l &lt;&lt;&lt; '(5785599+1)/2/1024'
+</code></pre>
+      <p><a href="#fnref:fdisk" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jamie Osborne</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-30T21:13:00+01:00" pubdate data-updated="true">Jun 30<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/arm/'>arm</a>, <a class='category' href='/blog/categories/pi/'>pi</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jmeosbn.github.io/blog/making-a-pi-disk-image/" data-via="jmeosbn" data-counturl="http://jmeosbn.github.io/blog/making-a-pi-disk-image/" data-count="none">Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/windows-8.1-efi-install/" title="Previous Post: Windows 8.1 - EFI install">&laquo; Windows 8.1 - EFI install</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1><a href="/blog/archives">Recent</a></h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/making-a-pi-disk-image/">Making a Pi Disk Image</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/windows-8.1-efi-install/">Windows 8.1 - EFI install</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/pi-box/">Dropbox on Pi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/baking-the-pi/">Home Theatre Pi (HTPi)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/stellaris-virtual-serial-device/">Stellaris Virtual Serial Device</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/testing-the-stellaris-toolchain/">Testing the Stellaris Toolchain</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/compiling-the-stellaris-toolchain/">Compiling the Stellaris Toolchain</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/resources-for-using-git/">Resources for Using Git</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1><a href="https://github.com/jmeosbn">GitHub</a></h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jmeosbn',
+            count: 15,
+            skip_forks: true,
+            skip_sites: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+
+
+
+
+  <h1><a href="https://twitter.com/intent/user?screen_name=jmeosbn">Twitter</a></h1>
+
+
+
+
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><hr class="footer-rule">
+
+<div id="copyright">
+  Copyright &copy; 2012 - 2014
+</div>
+
+
+<div id="license">
+  <a rel="license" href="http://git.io/jmeosbn-license" title="Except where otherwise noted, content on this site is licensed under a Creative Commons BY-NC-SA 3.0 License">
+  
+    <span id="license_text">CC BY-NC-SA 3.0</span>
+  
+  </a>
+</div>
+
+
+<div id="siteauthor">Jamie Osborne</div>
+
+<div id="footer">
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</div>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

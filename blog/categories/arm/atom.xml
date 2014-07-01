@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-07-01T03:54:50+01:00</updated>
+  <updated>2014-07-01T03:57:41+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -12,6 +12,220 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Making a Pi Disk Image]]></title>
+    <link href="http://jmeosbn.github.io/blog/making-a-pi-disk-image/"/>
+    <updated>2014-06-30T21:13:00+01:00</updated>
+    <id>http://jmeosbn.github.io/blog/making-a-pi-disk-image</id>
+    <content type="html"><![CDATA[<p>After setting up the Raspberry Pi, it’s a good idea to make your own installation image
+from it. This mainly involves using the <code>dd</code> command to clone the SD card into a file.
+However, there are some extra steps that can be used to produce a smaller file, and to
+provide a helpful login message to anyone using the image.</p>
+
+<!-- more -->
+
+<h3 id="preparation-on-the-running-system">Preparation on the running system</h3>
+
+<p>After setting up your Raspberry Pi - but before shutting it down - prepare the installed
+system for imaging.</p>
+
+<p>```sh
+# login as root
+sudo -s</p>
+
+<h1 id="make-sure-sfill-tool-is-installed">make sure sfill tool is installed</h1>
+<p>apt-get install secure-delete
+```</p>
+
+<p>Edit the login message to detail setup tasks required on logon:</p>
+
+<p>```sh
+echo -e “\e[47;30;1m
+Please generate new host keys by using the following commands:
+  rm /etc/ssh/ssh_host_*
+  dpkg-reconfigure openssh-server</p>
+
+<p>Set user and root passwords with ‘sudo passwd $(logname) &amp;&amp; sudo passwd’</p>
+
+<p>You should also use ‘sudo raspi-config’ to change the hostname
+and expand the filesystem to fill the SD card.</p>
+
+<p>Use the following command to suppress this message in future:
+  touch ~/.hushlogin
+\e[0m” | sudo tee /etc/motd</p>
+
+<h1 id="ensure-the-message-is-shown">ensure the message is shown</h1>
+<p>rm -f /home/$(logname)/.hushlogin
+```</p>
+
+<p>Clean up the system by removing any unneeded files and private user data.</p>
+
+<p>```sh
+# clean up downloaded packages, log, caches, etc.
+apt-get clean
+find /var/log -type f -delete
+du -sch /var/cache/*
+df -h /</p>
+
+<h1 id="backup-files-from-your-home-directory-before-removal">backup files from your home directory before removal</h1>
+<p>cd /home/$(logname)
+zip -FS -ry1 /media/KEY/pihome.zip .</p>
+
+<h1 id="remove-any-other-unneeded-or-private-user-data">remove any other unneeded or private user data</h1>
+<p>nano /etc/network/interfaces
+nano /etc/wpa_supplicant/wpa_supplicant.conf</p>
+
+<h1 id="list-of-temp-files-in-home-dir">list of temp files in home dir</h1>
+<p>tmpfiles=”.<em>_history .lesshst *.log .cache/ .hushlogin”
+# list of config files in home dir
+dotfiles=”.config/ .local/ .git</em> .gem/ .npm/ .ssh__/”
+# remove transient and config files for root and user home
+for u in /home/$(logname) /root; do echo &amp;&amp;
+  cd $u &amp;&amp; pwd &amp;&amp; rm -rfv $tmpfiles $dotfiles
+  ls -A
+done
+```</p>
+
+<p>Zero fill the unused SD card space for better compression. This can also be done within a
+desktop Linux environment, and may be a little faster that way<sup id="fnref:sfill"><a href="#fn:sfill" rel="footnote">1</a></sup> (but needs more
+command line effort).</p>
+
+<p>```sh
+# zero fill the filesystem
+sfill -z -l -l -f -v /boot /</p>
+
+<h1 id="zero-fill-the-swap-file">zero fill the swap file</h1>
+<p>swapoff -a
+dd if=/dev/zero of=/var/swap bs=1M count=100
+mkswap /var/swap</p>
+
+<h1 id="shutdown-and-remove-the-card">shutdown and remove the card</h1>
+<p>halt
+```</p>
+
+<p>Here’s the basic command to copy an SD card into a file. The size is correct for the
+current Raspbian image at <a href="http://raspberrypi.org">raspberrypi.org</a>, and can be confirmed
+by viewing the size of the original uncompressed image, e.g. <code>unzip -l raspbian.zip</code>, or
+by using <code>fdisk</code><sup id="fnref:fdisk"><a href="#fn:fdisk" rel="footnote">2</a></sup>.</p>
+
+<p>```sh
+# location and size of SD card
+dev=/dev/rdisk2
+size=2825</p>
+
+<h1 id="create-the-image">create the image</h1>
+<p>date=$(date +%Y%m%d)
+name=raspbian-minimal
+sudo dd if=$dev of=$name.img count=$size bs=1m</p>
+
+<h1 id="compress-the-image-using-7z-without-bcj-filter">compress the image using 7z (without BCJ filter)</h1>
+<p>7z a -mf- $date-$name.img.7z $name.img
+```</p>
+
+<!--
+If the image is going to be compressed straightaway, it's also possible to read and
+compress in one operation.  This will be much slower than reading the SD card normally.
+
+```sh
+# read the sd card and compress using 7z
+sudo dd if=$dev count=$size bs=1m | 7z a -mf- -si$name.img $date-$name.img.7z
+```
+ -->
+
+<!--
+
+The above method is sufficient to take a backup of a card that's had some initial setup,
+but hasn't yet had it's filesystem expanded and does not require mounting the filesystem
+for further modifications. Otherwise, skip to the more detailed instructions to cleanup
+the image and determine it's correct size.
+
+[ubuntu]: http://www.ubuntu.com/download/desktop/
+
+
+
+```sh
+# reduce size of the main partition in gparted
+# (to minimise the sd card read/write time)
+
+# set device path for sd card
+dev=/dev/sdc
+
+# check the filesystems
+umount ${dev}?
+fsck -pfv ${dev}?
+
+# extract partition info
+partedm() { usage="Usage: partedm dev part field unit"
+            [ $# -ne 4 ] && echo $usage && return
+            parted -m $1 unit $4 print |
+            grep "^$2" | cut -d: -f$3 | tr -d TGMKB; }
+size=$((($(partedm $dev 2 3 b)+1) /1024/1024))
+boot=$(partedm $dev 1 2 b)
+main=$(partedm $dev 2 2 b)
+echo "total size = $size MB
+ boot starts at  $boot bytes
+ main starts at $main bytes"
+
+# copy the sd card - using calculated size of image
+dd if=$dev of=$name.img bs=1M count=${size}
+
+# mount image file and zero fill free space
+for part in boot main; do
+  mkdir -p $part
+  mount -o loop,offset=${!part} $name-basic.img $part &&
+    sfill -z -l -l -f -v $part
+done
+
+# zero fill the swap file
+dd if=/dev/zero of=main/var/swap bs=1M count=100
+mkswap main/var/swap
+
+# unmount (after making any final changes)
+umount boot main && rm -rf boot main
+
+# compress the image using 7z (without BCJ filter)
+7z a -mf- $name.img.7z $name.img
+```
+
+ -->
+
+<!--
+# make image on Mac OS X
+dev=/dev/rdisk2
+fdisk $dev
+bc -l <<< '(122880+3481600)/2/1024'
+dd if=$dev of=$name.img bs=1m count=$size
+-->
+
+<!-- OFFSET=`fdisk -lu $IMAGE | grep -m 1 Linux$ | awk '{ print $2 *512 }'` -->
+<div class="footnotes">
+  <ol>
+    <li id="fn:sfill">
+      <p>Normally, <code>sfill</code> seems to run just as fast from the raspberry pi - since the
+SD card speed is the main factor - and space saved is similar to mounting offline.
+However, with recent images, I’ve found <code>sfill</code> to take a long time to complete after
+filling the disk (but before “Wiping inodes”).<a href="#fnref:sfill" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:fdisk">
+      <p>Use <code>fdisk</code> to obtain the partition table from the SD card, then calculate the
+total amount to copy using <code>bc</code>:</p>
+
+      <pre><code># confirm the above values
+sudo fdisk $dev  # append '-l' flag on linux
+
+# on OS X, add the last partition start to its size
+bc -l &lt;&lt;&lt; '(122880+5662720)/2/1024'
+
+# on Linux, use the last partition block
+bc -l &lt;&lt;&lt; '(5785599+1)/2/1024'
+</code></pre>
+      <p><a href="#fnref:fdisk" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Dropbox on Pi]]></title>
@@ -1032,50 +1246,6 @@ Ending remote debugging.
 # quit lmicdi to allow use of lm4flash
 $ sudo killall lmicdi # or type 'fg' followed by ^C ```
 </code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Compiling the Stellaris Toolchain]]></title>
-    <link href="http://jmeosbn.github.io/blog/compiling-the-stellaris-toolchain/"/>
-    <updated>2012-11-15T20:02:00+00:00</updated>
-    <id>http://jmeosbn.github.io/blog/compiling-the-stellaris-toolchain</id>
-    <content type="html"><![CDATA[<p>If you have a Stellaris <a href="http://www.ti.com/ww/en/launchpad/stellaris_head.html">Launchpad</a> - and don’t want to use the <a href="http://www.ti.com/tool/SW-EK-LM4F120XL">official</a> tools - you can mostly follow the instructions at <a href="http://blog.y3xz.com/blog/2012/10/29/an-open-toolchain-for-the-ti-stellaris/">y3xz</a> to build your own toolchain on any Unix/Linux based system using the <a href="https://github.com/jsnyder/arm-eabi-toolchain">ARM EABI Toolchain Builder</a>.  This includes Mac OS X, but I ran into a couple of minor issues as listed below.</p>
-
-<!-- more -->
-
-<p><em>(If you don’t fancy building the toolchain, <a href="http://www.yagarto.de/">yagarto</a> offers recent binaries for Windows and Mac OS X that target ARM devices.)</em></p>
-
-<p>Note, the libraries included with the Codesourcery Lite <a href="http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition">toolchain</a> used here <a href="https://sourcery.mentor.com/GNUToolchain/release2322?@template=datasheet">do not support</a> the hardware FPU of the ARM <a href="http://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4">Cortex-M4F</a>, using software floating point code instead.  There is a <a href="https://github.com/prattmic/arm-cortex-m4-hardfloat-toolchain">hardfloat-toolchain</a> builder (which I’ve not used yet), and ARM is maintaining a <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> targeting embedded ARM processors, which I’ll probably try building next.</p>
-
-<p>For more details on the launchpad, and the various libraries etc. that it uses, T.I. has a selection of <a href="http://www.ti.com/product/lm4f120h5qr">technical documentation</a> on their site.</p>
-
-<h2 id="toolchain">toolchain</h2>
-
-<p>The makefile failed to download the source archive, so <a href="https://sourcery.mentor.com/GNUToolchain/package10384/public/arm-none-eabi/arm-2012.03-56-arm-none-eabi.src.tar.bz2">download</a> it manually into the root of the toolchain repo.  Make will continue so long as the filename and checksum matches.</p>
-
-<h2 id="lm4tools">lm4tools</h2>
-
-<p>The <code>lm4flash</code> tool included in <a href="https://github.com/utzig/lm4tools/commit/cc466b1">recent</a> versions of <a href="https://github.com/utzig/lm4tools">lm4tools</a> is unable to read the serial number of the device on OS X, so compiled code cannot be flashed to the launchpad device.</p>
-
-<p><strong>Update: The dev has <a href="https://github.com/utzig/lm4tools/commit/99d501b">committed</a> a workaround that fixes <code>lm4flash</code> on OS X.</strong></p>
-
-<p><code>sh
-	$ ./lm4flash project0.bin
-	Unable to get device serial number: LIBUSB_ERROR_OTHER
-	Unable to find any ICDI devices
-</code></p>
-
-<p>Newer versions of lm4tools require a kernel extension to be installed on OS X (this will prevent access to the virtual serial device), see the <a href="https://github.com/utzig/lm4tools/issues/8">issue</a> on github for more info.  The simplest workaround is to checkout and build commit <a href="https://github.com/utzig/lm4tools/commit/ea3c905">ea3c905</a>, which doesn’t check for the serial number.</p>
-
-<p>Btw, you will get a similar error if your system requires root privileges to access the device directly over usb; try using <code>sudo</code> on linux/unix systems if you have issues.</p>
-
-<h2 id="more-links">more links</h2>
-
-<p><a href="http://hertaville.com/2012/05/28/gcc-arm-toolchain-stm32f0discovery/">Setting up the GCC ARM Toolchain</a> - focuses on using ARM’s <a href="https://launchpad.net/gcc-arm-embedded/+download">GCC toolchain</a> on Windows</p>
-
-<p><a href="/testing-the-stellaris-toolchain">Testing the Stellaris Toolchain</a> - my overview for compiling and testing code on the device.</p>
-
 ]]></content>
   </entry>
   
