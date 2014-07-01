@@ -1,4 +1,3 @@
-layout:       post
 title:        Stellaris Virtual Serial Device
 categories:   stellaris arm
 date:         2012-12-10 02:48

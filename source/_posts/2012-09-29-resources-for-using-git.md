@@ -1,4 +1,3 @@
-layout:       post
 title:        Resources for Using Git
 categories:   git tools
 date:         2012-09-29 20:35

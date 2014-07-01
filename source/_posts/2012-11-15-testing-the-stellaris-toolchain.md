@@ -1,4 +1,3 @@
-layout:       post
 title:        Testing the Stellaris Toolchain
 categories:   stellaris arm
 date:         2012-11-15 20:40

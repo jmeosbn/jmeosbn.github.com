@@ -1,4 +1,3 @@
-layout:       post
 title:        Home Theatre Pi (HTPi)
 categories:   arm pi htpc
 date:         2012-12-17 19:13

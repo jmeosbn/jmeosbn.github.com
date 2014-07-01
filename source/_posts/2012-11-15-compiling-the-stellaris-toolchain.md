@@ -1,4 +1,3 @@
-layout:       post
 title:        Compiling the Stellaris Toolchain
 categories:   stellaris arm
 date:         2012-11-15 20:02
