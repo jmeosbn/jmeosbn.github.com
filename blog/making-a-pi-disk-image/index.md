@@ -98,7 +98,7 @@ halt
 
 Here's the basic command to copy an SD card into a file. The size is correct for the
 current Raspbian image at [raspberrypi.org](http://raspberrypi.org), and can be confirmed
-by viewing the size of the original uncompressed image, e.g. `unzip -l raspbian.zip`, or
+by viewing the size of the original uncompressed image: `unzip -l raspbian.zip`, or
 by using `fdisk`[^fdisk].
 
 ```sh
@@ -116,7 +116,7 @@ sudo dd if=$dev of=$name.img count=$size bs=1m
 ```
 
 
-[^fdisk]: Use `fdisk` to obtain the partition table from the SD card, then calculate the
+[^fdisk]: Use `fdisk` to view the partition table info of the SD card, then calculate the
     total amount to copy using `bc`:
 
         # confirm the above values

@@ -4,7 +4,7 @@
   <title><![CDATA[jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-07-01T04:02:56+01:00</updated>
+  <updated>2014-07-01T04:38:26+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -14,480 +14,16 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Making a Pi Disk Image]]></title>
-    <link href="http://jmeosbn.github.io/blog/making-a-pi-disk-image/"/>
-    <updated>2014-06-30T21:13:00+01:00</updated>
-    <id>http://jmeosbn.github.io/blog/making-a-pi-disk-image</id>
-    <content type="html"><![CDATA[<p>After setting up the Raspberry Pi, it’s a good idea to make your own installation image
-from it. This mainly involves using the <code>dd</code> command to clone the SD card into a file.
-However, there are some extra steps that can be used to produce a smaller file, and to
-provide a helpful login message to anyone using the image.</p>
-
-<!-- more -->
-
-<h3 id="preparation-on-the-running-system">Preparation on the running system</h3>
-
-<p>After setting up your Raspberry Pi - but before shutting it down - prepare the installed
-system for imaging.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># login as root</span>
-</span><span class="line">sudo -s
-</span><span class="line">
-</span><span class="line"><span class="c"># make sure sfill tool is installed</span>
-</span><span class="line">apt-get install secure-delete
-</span></code></pre></div></figure></notextile></div>
-
-<p>Edit the login message to detail setup tasks required on logon:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> -e <span class="s2">&quot;\e[47;30;1m</span>
-</span><span class="line"><span class="s2">Please generate new host keys by using the following commands:</span>
-</span><span class="line"><span class="s2">  rm /etc/ssh/ssh_host_*</span>
-</span><span class="line"><span class="s2">  dpkg-reconfigure openssh-server</span>
-</span><span class="line">
-</span><span class="line"><span class="s2">Set user and root passwords with &#39;sudo passwd $(logname) &amp;&amp; sudo passwd&#39;</span>
-</span><span class="line">
-</span><span class="line"><span class="s2">You should also use &#39;sudo raspi-config&#39; to change the hostname</span>
-</span><span class="line"><span class="s2">and expand the filesystem to fill the SD card.</span>
-</span><span class="line">
-</span><span class="line"><span class="s2">Use the following command to suppress this message in future:</span>
-</span><span class="line"><span class="s2">  touch ~/.hushlogin</span>
-</span><span class="line"><span class="s2">\e[0m&quot;</span> | sudo tee /etc/motd
-</span><span class="line">
-</span><span class="line"><span class="c"># ensure the message is shown</span>
-</span><span class="line">rm -f /home/<span class="k">$(</span>logname<span class="k">)</span>/.hushlogin
-</span></code></pre></div></figure></notextile></div>
-
-<p>Clean up the system by removing any unneeded files and private user data.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># clean up downloaded packages, log, caches, etc.</span>
-</span><span class="line">apt-get clean
-</span><span class="line">find /var/log -type f -delete
-</span><span class="line">du -sch /var/cache/*
-</span><span class="line">df -h /
-</span><span class="line">
-</span><span class="line"><span class="c"># backup files from your home directory before removal</span>
-</span><span class="line"><span class="nb">cd</span> /home/<span class="k">$(</span>logname<span class="k">)</span>
-</span><span class="line">zip -FS -ry1 /media/KEY/pihome.zip .
-</span><span class="line">
-</span><span class="line"><span class="c"># remove any other unneeded or private user data</span>
-</span><span class="line">nano /etc/network/interfaces
-</span><span class="line">nano /etc/wpa_supplicant/wpa_supplicant.conf
-</span><span class="line">
-</span><span class="line"><span class="c"># list of temp files in home dir</span>
-</span><span class="line"><span class="nv">tmpfiles</span><span class="o">=</span><span class="s2">&quot;.*_history .lesshst *.log .cache/ .hushlogin&quot;</span>
-</span><span class="line"><span class="c"># list of config files in home dir</span>
-</span><span class="line"><span class="nv">dotfiles</span><span class="o">=</span><span class="s2">&quot;.config/ .local/ .git* .gem/ .npm/ .ssh__/&quot;</span>
-</span><span class="line"><span class="c"># remove transient and config files for root and user home</span>
-</span><span class="line"><span class="k">for </span>u in /home/<span class="k">$(</span>logname<span class="k">)</span> /root; <span class="k">do </span><span class="nb">echo</span> <span class="o">&amp;&amp;</span>
-</span><span class="line">  <span class="nb">cd</span> <span class="nv">$u</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> <span class="o">&amp;&amp;</span> rm -rfv <span class="nv">$tmpfiles</span> <span class="nv">$dotfiles</span>
-</span><span class="line">  ls -A
-</span><span class="line"><span class="k">done</span>
-</span></code></pre></div></figure></notextile></div>
-
-<p>Zero fill the unused SD card space for better compression. This can also be done within a
-desktop Linux environment, and may be a little faster that way<sup id="fnref:sfill"><a href="#fn:sfill" rel="footnote">1</a></sup> (but needs more
-command line effort).</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># zero fill the filesystem</span>
-</span><span class="line">sfill -z -l -l -f -v /boot /
-</span><span class="line">
-</span><span class="line"><span class="c"># zero fill the swap file</span>
-</span><span class="line">swapoff -a
-</span><span class="line">dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>/var/swap <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>100
-</span><span class="line">mkswap /var/swap
-</span><span class="line">
-</span><span class="line"><span class="c"># shutdown and remove the card</span>
-</span><span class="line">halt
-</span></code></pre></div></figure></notextile></div>
-
-<p>Here’s the basic command to copy an SD card into a file. The size is correct for the
-current Raspbian image at <a href="http://raspberrypi.org">raspberrypi.org</a>, and can be confirmed
-by viewing the size of the original uncompressed image, e.g. <code>unzip -l raspbian.zip</code>, or
-by using <code>fdisk</code><sup id="fnref:fdisk"><a href="#fn:fdisk" rel="footnote">2</a></sup>.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># location and size of SD card</span>
-</span><span class="line"><span class="nv">dev</span><span class="o">=</span>/dev/rdisk2
-</span><span class="line"><span class="nv">size</span><span class="o">=</span>2825
-</span><span class="line">
-</span><span class="line"><span class="c"># create the image</span>
-</span><span class="line"><span class="nv">date</span><span class="o">=</span><span class="k">$(</span>date +%Y%m%d<span class="k">)</span>
-</span><span class="line"><span class="nv">name</span><span class="o">=</span>raspbian-minimal
-</span><span class="line">sudo dd <span class="k">if</span><span class="o">=</span><span class="nv">$dev</span> <span class="nv">of</span><span class="o">=</span><span class="nv">$name</span>.img <span class="nv">count</span><span class="o">=</span><span class="nv">$size</span> <span class="nv">bs</span><span class="o">=</span>1m
-</span><span class="line">
-</span><span class="line"><span class="c"># compress the image using 7z (without BCJ filter)</span>
-</span><span class="line">7z a -mf- <span class="nv">$date</span>-<span class="nv">$name</span>.img.7z <span class="nv">$name</span>.img
-</span></code></pre></div></figure></notextile></div>
-
-<!--
-If the image is going to be compressed straightaway, it's also possible to read and
-compress in one operation.  This will be much slower than reading the SD card normally.
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><pre><code class='sh'><span class='line'><span class="c"># read the sd card and compress using 7z</span>
-</span><span class='line'>sudo dd <span class="k">if</span><span class="o">=</span><span class="nv">$dev</span> <span class="nv">count</span><span class="o">=</span><span class="nv">$size</span> <span class="nv">bs</span><span class="o">=</span>1m | 7z a -mf- -si<span class="nv">$name</span>.img <span class="nv">$date</span>-<span class="nv">$name</span>.img.7z
-</span></code></pre></div></figure>
- &#8211;>
-
-<!--
-
-The above method is sufficient to take a backup of a card that's had some initial setup,
-but hasn't yet had it's filesystem expanded and does not require mounting the filesystem
-for further modifications. Otherwise, skip to the more detailed instructions to cleanup
-the image and determine it's correct size.
-
-[ubuntu]: http://www.ubuntu.com/download/desktop/
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><pre><code class='sh'><span class='line'><span class="c"># reduce size of the main partition in gparted</span>
-</span><span class='line'><span class="c"># (to minimise the sd card read/write time)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># set device path for sd card</span>
-</span><span class='line'><span class="nv">dev</span><span class="o">=</span>/dev/sdc
-</span><span class='line'>
-</span><span class='line'><span class="c"># check the filesystems</span>
-</span><span class='line'>umount <span class="k">${</span><span class="nv">dev</span><span class="k">}</span>?
-</span><span class='line'>fsck -pfv <span class="k">${</span><span class="nv">dev</span><span class="k">}</span>?
-</span><span class='line'>
-</span><span class='line'><span class="c"># extract partition info</span>
-</span><span class='line'>partedm<span class="o">()</span> <span class="o">{</span> <span class="nv">usage</span><span class="o">=</span><span class="s2">&quot;Usage: partedm dev part field unit&quot;</span>
-</span><span class='line'>            <span class="o">[</span> <span class="nv">$# </span>-ne 4 <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="nv">$usage</span> <span class="o">&amp;&amp;</span> <span class="k">return</span>
-</span><span class='line'><span class="k">            </span>parted -m <span class="nv">$1</span> unit <span class="nv">$4</span> print |
-</span><span class='line'>            grep <span class="s2">&quot;^$2&quot;</span> | cut -d: -f<span class="nv">$3</span> | tr -d TGMKB; <span class="o">}</span>
-</span><span class='line'><span class="nv">size</span><span class="o">=</span><span class="k">$((</span><span class="o">(</span><span class="k">$(</span>partedm <span class="nv">$dev</span> 2 3 b<span class="k">)</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">/</span><span class="m">1024</span><span class="o">/</span><span class="m">1024</span><span class="k">))</span>
-</span><span class='line'><span class="nv">boot</span><span class="o">=</span><span class="k">$(</span>partedm <span class="nv">$dev</span> 1 2 b<span class="k">)</span>
-</span><span class='line'><span class="nv">main</span><span class="o">=</span><span class="k">$(</span>partedm <span class="nv">$dev</span> 2 2 b<span class="k">)</span>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;total size = $size MB</span>
-</span><span class='line'><span class="s2"> boot starts at  $boot bytes</span>
-</span><span class='line'><span class="s2"> main starts at $main bytes&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># copy the sd card - using calculated size of image</span>
-</span><span class='line'>dd <span class="k">if</span><span class="o">=</span><span class="nv">$dev</span> <span class="nv">of</span><span class="o">=</span><span class="nv">$name</span>.img <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span><span class="k">${</span><span class="nv">size</span><span class="k">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># mount image file and zero fill free space</span>
-</span><span class='line'><span class="k">for </span>part in boot main; <span class="k">do</span>
-</span><span class='line'><span class="k">  </span>mkdir -p <span class="nv">$part</span>
-</span><span class='line'>  mount -o loop,offset<span class="o">=</span><span class="k">${</span><span class="p">!part</span><span class="k">}</span> <span class="nv">$name</span>-basic.img <span class="nv">$part</span> <span class="o">&amp;&amp;</span>
-</span><span class='line'>    sfill -z -l -l -f -v <span class="nv">$part</span>
-</span><span class='line'><span class="k">done</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># zero fill the swap file</span>
-</span><span class='line'>dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>main/var/swap <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>100
-</span><span class='line'>mkswap main/var/swap
-</span><span class='line'>
-</span><span class='line'><span class="c"># unmount (after making any final changes)</span>
-</span><span class='line'>umount boot main <span class="o">&amp;&amp;</span> rm -rf boot main
-</span><span class='line'>
-</span><span class='line'><span class="c"># compress the image using 7z (without BCJ filter)</span>
-</span><span class='line'>7z a -mf- <span class="nv">$name</span>.img.7z <span class="nv">$name</span>.img
-</span></code></pre></div></figure>
-
- &#8211;>
-
-<!--
-# make image on Mac OS X
-dev=/dev/rdisk2
-fdisk $dev
-bc -l <<< '(122880+3481600)/2/1024'
-dd if=$dev of=$name.img bs=1m count=$size
--->
-
-<!-- OFFSET=`fdisk -lu $IMAGE | grep -m 1 Linux$ | awk '{ print $2 *512 }'` -->
-<div class="footnotes">
-  <ol>
-    <li id="fn:sfill">
-      <p>Normally, <code>sfill</code> seems to run just as fast from the Raspberry Pi - since the
-SD card write speed is the main factor - and space saved is similar to mounting
-offline. When making recent images I’ve found <code>sfill</code> to take a long time to complete
-after filling the disk (but before ‘Wiping inodes’), I haven’t retested on the desktop
-with the same images yet though.<a href="#fnref:sfill" rel="reference">&#8617;</a></p>
-    </li>
-    <li id="fn:fdisk">
-      <p>Use <code>fdisk</code> to obtain the partition table from the SD card, then calculate the
-total amount to copy using <code>bc</code>:</p>
-
-      <pre><code># confirm the above values
-sudo fdisk $dev  # append '-l' flag on linux
-
-# on OS X, add the last partition start to its size
-bc -l &lt;&lt;&lt; '(122880+5662720)/2/1024'
-
-# on Linux, use the last partition block
-bc -l &lt;&lt;&lt; '(5785599+1)/2/1024'
-</code></pre>
-      <p><a href="#fnref:fdisk" rel="reference">&#8617;</a></p>
-    </li>
-  </ol>
-</div>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Windows 8.1 - EFI install]]></title>
-    <link href="http://jmeosbn.github.io/blog/windows-8.1-efi-install/"/>
-    <updated>2014-06-16T17:40:00+01:00</updated>
-    <id>http://jmeosbn.github.io/blog/windows-8.1-efi-install</id>
-    <content type="html"><![CDATA[<p>I recently wanted to test something on Windows, and not wanting to use a virtual machine,
-I decided to install Windows 8.1 on my MacBook.</p>
-
-<p>All Intel based Macs use EFI with a GUID partition table (GPT), instead of the
-traditional Wintel BIOS/MBR combination. Until recently, this has meant that Windows can
-only be installed by emulating an MBR disk, typically by using Apple’s Boot Camp to
-create the Windows partition.</p>
-
-<p>Since Windows 8 now supports installation under EFI<sup id="fnref:win7efi"><a href="#fn:win7efi" rel="footnote">1</a></sup>, and Boot Camp is fairly rigid about
-the placement of a Windows partition, I wanted to try installing Windows 8.1 using EFI and
-GPT just as I do with Mac OS X and Ubuntu.</p>
-
-<!-- more -->
-
-<p><em>Note: this procedure gets rapidly more complicated under only slightly unusual
-circumstances (such as having a non Windows OS installed, or more than one disk). Since
-this information involved some trial and error to discover, I post it here more for the
-record than as an endorsement of something that’s worth doing (it’s not too hard, but
-seriously, Ubuntu is free and much easier to install!).</em></p>
-
-<ul id="markdown-toc">
-  <li><a href="#why-the-windows-install-will-fail">Why the Windows install will fail</a></li>
-  <li><a href="#a-new-windows-partition">A new Windows partition</a></li>
-  <li><a href="#preparing-a-guid-partition-table">Preparing a GUID Partition Table</a></li>
-  <li><a href="#install-windows-to-a-gpt-disk">Install Windows to a GPT disk</a></li>
-  <li><a href="#manually-mount-the-efi-partition">Manually mount the EFI partition</a></li>
-  <li><a href="#delete-the-previous-boot-configuration">Delete the previous boot configuration</a></li>
-  <li><a href="#continue-installation-of-windows">Continue installation of Windows</a></li>
-  <li><a href="#why-the-recovery-console-will-fail">Why the Recovery Console will fail</a></li>
-  <li><a href="#legacy-boot-manager">Legacy boot manager</a></li>
-</ul>
-
-<h2 id="why-the-windows-install-will-fail">Why the Windows install will fail</h2>
-
-<p>The issues below will prevent the installation of Windows 8 (and 8.1) from succeeding
-when installing under EFI on a Mac or other EFI based system. The lack of clear error
-messages actually makes an EFI installation seem impossible, despite the EFI boot loader
-being present on the Windows disc. However, the fixes are fairly straightforward once you
-understand the issues.</p>
-
-<ul>
-  <li>When installing from a USB key<sup id="fnref:usbkey"><a href="#fn:usbkey" rel="footnote">2</a></sup>, that key must use an MBR partition table</li>
-  <li>The target for the installation must use a GUID partition table (GPT)</li>
-  <li>The target disk must not have a hybrid GPT/MBR partition table, such as that created by Boot Camp, Disk Utility, or GParted<sup id="fnref:gparted"><a href="#fn:gparted" rel="footnote">3</a></sup>.  A GPT with <em>protective</em> MBR is fine though, and protects the GUID partitions on unsupported systems</li>
-  <li>Windows will normally fail to install on systems with more than one GPT disk</li>
-</ul>
-
-<h2 id="a-new-windows-partition">A new Windows partition</h2>
-
-<p>The first task is to make some free space available, and then create a new NTFS partition
-for Windows to install to (size should be at least 20GB). It’s easier to do this now,
-before trying to install Windows, for reasons that will become apparent.</p>
-
-<p>If you’ll be resizing any Mac HFS+ partitions then you should probably use Disk Utility
-on OS X. Likewise, for resizing ext3/4 and other file systems unknown to OS X, use
-<a href="http://gparted.org/index.php">GParted</a> (booting from the <a href="http://gparted.org/livecd.php">gparted live cd</a> if no Linux system is installed).</p>
-
-<p>Note: On a Mac, the boot manager can be accessed by holding the <code>alt</code> key during startup.</p>
-
-<h2 id="preparing-a-guid-partition-table">Preparing a GUID Partition Table</h2>
-
-<p>You can check the GUID partition table (or create one from an existing MBR) using
-<code>gdisk</code> - which can be <a href="http://sourceforge.net/projects/gptfdisk/files/gptfdisk/0.8.10/gdisk-binaries/gdisk-0.8.10.pkg/download">installed on Mac OS X</a> or used from most Linux
-distros, such as the <a href="http://gparted.org/livecd.php">gparted live cd</a>.</p>
-
-<ol>
-  <li>From a terminal, run <code>sudo gdisk /dev/&lt;target-disk-id&gt;</code><sup id="fnref:diskid"><a href="#fn:diskid" rel="footnote">4</a></sup></li>
-  <li><code>gdisk</code> should display <code>GPT: present</code>, but <em>must not</em> list <code>MBR: hybrid</code></li>
-  <li>If the disk has a GPT without a hybrid MBR, quit by typing <code>q</code> then <code>enter</code></li>
-</ol>
-
-<p>If the target disk is listed with <code>MBR: hybrid</code>, then Windows will fail to install under
-EFI. The best way to correct the GPT is to replace the hybrid MBR using <code>gdisk</code>.</p>
-
-<ol>
-  <li>Still in <code>gdisk</code>, use <code>x</code> to enter the expert menu</li>
-  <li>Enter <code>n</code> to create a new <em>protective</em> MBR</li>
-  <li>Check the protective<sup id="fnref:protective"><a href="#fn:protective" rel="footnote">5</a></sup> MBR and GPT by using <code>o</code> and <code>p</code> respectively</li>
-  <li>You can abort before writing any changes by using <code>q</code> to quit</li>
-  <li>Once satisfied, write out the new table to disk by using <code>w</code></li>
-</ol>
-
-<p>If the target disk is listed with <code>MBR: MBR only</code>, then <code>gdisk</code> should have automatically
-created a GUID partition table in memory<sup id="fnref:gptwarning"><a href="#fn:gptwarning" rel="footnote">6</a></sup>. If the MBR partition table isn’t
-required to support older systems or legacy boot loaders, then use the menu commands
-shown above to check the existing partitions have been added correctly before writing out
-the tables to disk.</p>
-
-<h2 id="install-windows-to-a-gpt-disk">Install Windows to a GPT disk</h2>
-
-<p>Start the Windows installation using your preferred media, select the custom install
-option, then continue on to the partition selection screen and select the empty NTFS
-partition <a href="#a-new-windows-partition">created previously</a>. With a <em>single non-hybrid</em> GPT
-disk, Windows should install without complaint.</p>
-
-<p>Note: While you can use the installer to format or delete existing partitions, using it
-to create a new partition from free space will likely create additional system partitions
-which you may prefer not to have littering your disk. If you don’t want to reboot at this
-point to create an NTFS partition, <code>diskpart</code> can be used to avoid the additional
-partition clutter.</p>
-
-<p>With some free space ready to be partitioned, type <code>Shift + F10</code> to bring up a command
-prompt and use the following commands.</p>
-
-<pre><code># start the diskpart utility
-diskpart
-
-# select the target disk
-list disk
-sel disk &lt;target disk&gt;
-list part
-
-# create a new partition using the selected disk's free space
-create part pri
-format fs=ntfs label=Windows quick
-
-# exit diskpart
-exit
-</code></pre>
-
-<h2 id="manually-mount-the-efi-partition">Manually mount the EFI partition</h2>
-
-<p>With more than one GPT disk, Windows will fail to install as it only expects to have one
-EFI system partition in which to store its boot configuration files. To work around this,
-use <code>diskpart</code> to manually mount the EFI partition from the target installation disk,
-then tell Windows to use that partition by using <code>bcdedit</code>.</p>
-
-<p>Type <code>Shift + F10</code> to bring up a command prompt.</p>
-
-<pre><code># start diskpart
-diskpart
-
-# mount the efi volume
-list vol
-sel vol &lt;efi volume&gt;
-assign letter=s
-exit
-
-# set the EFI partition with bcdedit
-bcdedit /sysstore s:
-</code></pre>
-
-<h2 id="delete-the-previous-boot-configuration">Delete the previous boot configuration</h2>
-
-<p>If you’ve previously had Windows installed using EFI, then the previous boot loader and
-boot configuration data store (BCD) will likely still be installed in the EFI system
-partition. To prevent previous Windows entries from showing up as duplicates in the
-Windows boot manager, you can delete the previous BCD store before installing Windows.</p>
-
-<p>Assuming the EFI partition is mounted to <code>S:\</code>, the following command will delete the BCD store.</p>
-
-<pre><code># delete boot store from a previous windows install
-del s:\EFI\Microsoft\Boot\BCD
-</code></pre>
-
-<p><em>If you forget to do this until Windows is installed, and a previous configuration did
-exist, then a system selection screen will be shown after each startup of Windows. To
-remove the additional entry, use <code>bcdedit /delete {id-of-boot-entry}</code>.</em></p>
-
-<h2 id="continue-installation-of-windows">Continue installation of Windows</h2>
-
-<p>Back in the installer, you should now be able to select the new partition and continue
-the installation as normal. When Windows reboots, it may be necessary to use the system’s
-EFI boot manager to select the Windows partition and complete installation.</p>
-
-<h2 id="why-the-recovery-console-will-fail">Why the Recovery Console will fail</h2>
-
-<p>With Windows installed, you may at some point need to use the recovery console. On EFI
-systems with more than one GPT disk, you’ll find that most of the recovery tools, such as
-System Restore, will fail due to the same issue that causes the installation to fail.</p>
-
-<p>From <em>Troubleshoot -&gt; Advanced Options -&gt; Command Prompt</em>, you can manually mount the
-correct EFI partition using <code>diskpart</code> as
-<a href="#manually-mount-the-efi-partition">described above</a>. Once done, simply use the graphical
-menu to select <em>System Restore</em> or another recovery option.</p>
-
-<h2 id="legacy-boot-manager">Legacy boot manager</h2>
-
-<p>Windows 8 uses a graphical boot manager that’s only shown once the system is mostly
-booted. Apart from taking longer to switch between systems, there is no access to
-advanced boot options such as safe mode etc., without first being able to start the
-graphical boot manager or recovery environment.</p>
-
-<p>Previously, advanced options could be accessed by holding <code>F8</code> during startup, but
-Windows no longer checks for this key<sup id="fnref:f8key"><a href="#fn:f8key" rel="footnote">7</a></sup> as it adds a second or so to the boot
-time. If you’d prefer to have the menu available instead, then the <code>legacy</code> boot menu
-policy can be enabled using <code>bcdedit</code>.</p>
-
-<pre><code># allow F8 during boot to access advanced options
-bcdedit /set bootmenupolicy legacy
-</code></pre>
-
-<p>Alternatively, the advanced options can be shown for the next boot only, or for every boot
-(without needing to hold <code>F8</code>).</p>
-
-<pre><code># show advanced options for the next boot only
-bcdedit /set onetimeadvancedoptions on
-
-# always show the boot menu before system startup
-bcdedit /set {bootmgr} displaybootmenu yes
-</code></pre>
-<div class="footnotes">
-  <ol>
-    <li id="fn:win7efi">
-      <p>Windows 7 actually supports efi booting from CD, but the efi loader and
-related files were not included in the CD’s filesystem (there
-<a href="http://forums.bit-tech.net/showthread.php?t=209045">is a hack</a> to work around
-this, but it doesn’t seem to work on my MacBook).<a href="#fnref:win7efi" rel="reference">&#8617;</a></p>
-    </li>
-    <li id="fn:usbkey">
-      <p>Write a new MBR partition table to a USB key and add a single FAT32 partition.
-Then copy the Windows install files from the disc to the USB
- key using <code>rsync -aPh &lt;source&gt;/. &lt;key&gt;</code>.<a href="#fnref:usbkey" rel="reference">&#8617;</a></p>
-    </li>
-    <li id="fn:gparted">
-      <p>Disk Utility only adds a hybrid MBR when creating a new partition table and
-will retain any protective MBR already present. Annoyingly, GParted will re-add a hybrid
-MBR whenever it modifies a disk that uses GPT, and this will prevent Windows from
-starting under EFI until the hybrid MBR is removed.<a href="#fnref:gparted" rel="reference">&#8617;</a></p>
-    </li>
-    <li id="fn:diskid">
-      <p>On Linux systems, the disk will normally be named using the form <code>sda</code>, where
-the <code>a</code> represents the first disk. On Mac OS X, the form is <code>disk0</code>, where the <code>0</code>
-represents the first disk.<a href="#fnref:diskid" rel="reference">&#8617;</a></p>
-    </li>
-    <li id="fn:protective">
-      <p>A <em>protective</em> MBR usually lists only one partition, that spans the entire
-disk to prevent non-GPT aware tools from identifying the disk as being uninitialised or
-empty. A <em>hybrid</em> MBR exploits the protective MBR to make up to four primary partitions
-available to systems that don’t support GPT disks. The use of a hybrid MBR is
-discouraged, and not supported by Windows when booting under EFI.<a href="#fnref:protective" rel="reference">&#8617;</a></p>
-    </li>
-    <li id="fn:gptwarning">
-      <p>It may be that <code>gdisk</code> can’t write out the GPT due to lack of free spaceat
-the start of the disk. In this case you can try to resize the first partition to start a
-few megabytes later.<a href="#fnref:gptwarning" rel="reference">&#8617;</a></p>
-    </li>
-    <li id="fn:f8key">
-      <p>The check is supposedly still there, but is so short that it can’t be activated.<a href="#fnref:f8key" rel="reference">&#8617;</a></p>
-    </li>
-  </ol>
-</div>
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[Minimal Raspbian Pi]]></title>
-    <link href="http://jmeosbn.github.io/blog/raspbian-pi/"/>
-    <updated>2014-04-28T12:13:00+01:00</updated>
-    <id>http://jmeosbn.github.io/blog/raspbian-pi</id>
-    <content type="html"><![CDATA[<p>A collection of notes for setting up a clean and minimal image of
-<a href="http://raspbian.org">Raspbian</a>.</p>
-
-<p>Starting with the official raspbian image from
-<a href="http://jmeosbn.github.io/blog/raspbian-pi/raspberrypi.org/downloads">raspberrypi.org</a>, the desktop environment and extras will
-be removed, and development tools and other utilities added.</p>
+    <link href="http://jmeosbn.github.io/blog/minimal-raspbian-pi/"/>
+    <updated>2014-06-30T23:42:00+01:00</updated>
+    <id>http://jmeosbn.github.io/blog/minimal-raspbian-pi</id>
+    <content type="html"><![CDATA[<p>A collection of notes for setting up a clean and minimal install of the official <a href="http://raspbian.org">Raspbian</a>
+image from <a href="http://raspberrypi.org/downloads">raspberrypi.org</a>.</p>
 
 <!-- See [Minimal Raspbian Net Installer](#minimal-raspbian-net-installer) if you prefer to
 build a minimal image from scratch using the
 [Raspbian unattended netinstaller](https://github.com/hifi/raspbian-ua-netinst). -->
-
-<!-- more -->
 
 <h3 id="comparison-of-compressed-images">Comparison of compressed images</h3>
 
@@ -495,6 +31,16 @@ build a minimal image from scratch using the
 <code>284 MB</code> - Additional packages added, desktop extras removed<br />
 <code>156 MB</code> - Desktop environment removed, <code>udisks-glue</code> installed<br />
 <code>184 MB</code> - As above, with <code>mono</code> installed</p>
+
+<!-- more -->
+
+<h3 id="short-summary-of-changes">Short summary of changes</h3>
+
+<p>After some initial setup, some common development tools and other utilities were added.
+The desktop extras were then removed, followed by the desktop itself. To handle
+auto-mounting of USB drives, <code>udisks-glue</code> was installed as a service using <code>supervisor</code>.
+Being quite large, <code>Mono</code> was installed after room had been made for it. Wiring Pi is
+built for <code>gpio</code> access, and for dropbox sync, <code>dbox</code> is used.</p>
 
 <!--
 
@@ -505,6 +51,8 @@ Disable password logins for remote ssh access (public key only).
 ### TODO:
 
  -->
+
+<p><em>Note: less common changes are listed towards the end of the post</em></p>
 
 <ul id="markdown-toc">
   <li><a href="#basic-pi-tips">Basic Pi Tips</a></li>
@@ -1214,6 +762,464 @@ Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC
       <p>It should be possible to connect with the hostname even without zeroconfig,
 e.g. <code>pi@raspberrypi</code>, but I’ve had no luck with this (except for when the router sets
 this up via DNS).<a href="#fnref:hostname" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Making a Pi Disk Image]]></title>
+    <link href="http://jmeosbn.github.io/blog/making-a-pi-disk-image/"/>
+    <updated>2014-06-30T21:13:00+01:00</updated>
+    <id>http://jmeosbn.github.io/blog/making-a-pi-disk-image</id>
+    <content type="html"><![CDATA[<p>After setting up the Raspberry Pi, it’s a good idea to make your own installation image
+from it. This mainly involves using the <code>dd</code> command to clone the SD card into a file.
+However, there are some extra steps that can be used to produce a smaller file, and to
+provide a helpful login message to anyone using the image.</p>
+
+<!-- more -->
+
+<h3 id="preparation-on-the-running-system">Preparation on the running system</h3>
+
+<p>After setting up your Raspberry Pi - but before shutting it down - prepare the installed
+system for imaging.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># login as root</span>
+</span><span class="line">sudo -s
+</span><span class="line">
+</span><span class="line"><span class="c"># make sure sfill tool is installed</span>
+</span><span class="line">apt-get install secure-delete
+</span></code></pre></div></figure></notextile></div>
+
+<p>Edit the login message to detail setup tasks required on logon:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> -e <span class="s2">&quot;\e[47;30;1m</span>
+</span><span class="line"><span class="s2">Please generate new host keys by using the following commands:</span>
+</span><span class="line"><span class="s2">  rm /etc/ssh/ssh_host_*</span>
+</span><span class="line"><span class="s2">  dpkg-reconfigure openssh-server</span>
+</span><span class="line">
+</span><span class="line"><span class="s2">Set user and root passwords with &#39;sudo passwd $(logname) &amp;&amp; sudo passwd&#39;</span>
+</span><span class="line">
+</span><span class="line"><span class="s2">You should also use &#39;sudo raspi-config&#39; to change the hostname</span>
+</span><span class="line"><span class="s2">and expand the filesystem to fill the SD card.</span>
+</span><span class="line">
+</span><span class="line"><span class="s2">Use the following command to suppress this message in future:</span>
+</span><span class="line"><span class="s2">  touch ~/.hushlogin</span>
+</span><span class="line"><span class="s2">\e[0m&quot;</span> | sudo tee /etc/motd
+</span><span class="line">
+</span><span class="line"><span class="c"># ensure the message is shown</span>
+</span><span class="line">rm -f /home/<span class="k">$(</span>logname<span class="k">)</span>/.hushlogin
+</span></code></pre></div></figure></notextile></div>
+
+<p>Clean up the system by removing any unneeded files and private user data.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># clean up downloaded packages, log, caches, etc.</span>
+</span><span class="line">apt-get clean
+</span><span class="line">find /var/log -type f -delete
+</span><span class="line">du -sch /var/cache/*
+</span><span class="line">df -h /
+</span><span class="line">
+</span><span class="line"><span class="c"># backup files from your home directory before removal</span>
+</span><span class="line"><span class="nb">cd</span> /home/<span class="k">$(</span>logname<span class="k">)</span>
+</span><span class="line">zip -FS -ry1 /media/KEY/pihome.zip .
+</span><span class="line">
+</span><span class="line"><span class="c"># remove any other unneeded or private user data</span>
+</span><span class="line">nano /etc/network/interfaces
+</span><span class="line">nano /etc/wpa_supplicant/wpa_supplicant.conf
+</span><span class="line">
+</span><span class="line"><span class="c"># list of temp files in home dir</span>
+</span><span class="line"><span class="nv">tmpfiles</span><span class="o">=</span><span class="s2">&quot;.*_history .lesshst *.log .cache/ .hushlogin&quot;</span>
+</span><span class="line"><span class="c"># list of config files in home dir</span>
+</span><span class="line"><span class="nv">dotfiles</span><span class="o">=</span><span class="s2">&quot;.config/ .local/ .git* .gem/ .npm/ .ssh__/&quot;</span>
+</span><span class="line"><span class="c"># remove transient and config files for root and user home</span>
+</span><span class="line"><span class="k">for </span>u in /home/<span class="k">$(</span>logname<span class="k">)</span> /root; <span class="k">do </span><span class="nb">echo</span> <span class="o">&amp;&amp;</span>
+</span><span class="line">  <span class="nb">cd</span> <span class="nv">$u</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> <span class="o">&amp;&amp;</span> rm -rfv <span class="nv">$tmpfiles</span> <span class="nv">$dotfiles</span>
+</span><span class="line">  ls -A
+</span><span class="line"><span class="k">done</span>
+</span></code></pre></div></figure></notextile></div>
+
+<p>Zero fill the unused SD card space for better compression. This can also be done within a
+desktop Linux environment, and may be a little faster that way<sup id="fnref:sfill"><a href="#fn:sfill" rel="footnote">1</a></sup> (but needs more
+command line effort).</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># zero fill the filesystem</span>
+</span><span class="line">sfill -z -l -l -f -v /boot /
+</span><span class="line">
+</span><span class="line"><span class="c"># zero fill the swap file</span>
+</span><span class="line">swapoff -a
+</span><span class="line">dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>/var/swap <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>100
+</span><span class="line">mkswap /var/swap
+</span><span class="line">
+</span><span class="line"><span class="c"># shutdown and remove the card</span>
+</span><span class="line">halt
+</span></code></pre></div></figure></notextile></div>
+
+<p>Here’s the basic command to copy an SD card into a file. The size is correct for the
+current Raspbian image at <a href="http://raspberrypi.org">raspberrypi.org</a>, and can be confirmed
+by viewing the size of the original uncompressed image: <code>unzip -l raspbian.zip</code>, or
+by using <code>fdisk</code><sup id="fnref:fdisk"><a href="#fn:fdisk" rel="footnote">2</a></sup>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># location and size of SD card</span>
+</span><span class="line"><span class="nv">dev</span><span class="o">=</span>/dev/rdisk2
+</span><span class="line"><span class="nv">size</span><span class="o">=</span>2825
+</span><span class="line">
+</span><span class="line"><span class="c"># create the image</span>
+</span><span class="line"><span class="nv">date</span><span class="o">=</span><span class="k">$(</span>date +%Y%m%d<span class="k">)</span>
+</span><span class="line"><span class="nv">name</span><span class="o">=</span>raspbian-minimal
+</span><span class="line">sudo dd <span class="k">if</span><span class="o">=</span><span class="nv">$dev</span> <span class="nv">of</span><span class="o">=</span><span class="nv">$name</span>.img <span class="nv">count</span><span class="o">=</span><span class="nv">$size</span> <span class="nv">bs</span><span class="o">=</span>1m
+</span><span class="line">
+</span><span class="line"><span class="c"># compress the image using 7z (without BCJ filter)</span>
+</span><span class="line">7z a -mf- <span class="nv">$date</span>-<span class="nv">$name</span>.img.7z <span class="nv">$name</span>.img
+</span></code></pre></div></figure></notextile></div>
+
+<!--
+If the image is going to be compressed straightaway, it's also possible to read and
+compress in one operation.  This will be much slower than reading the SD card normally.
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><pre><code class='sh'><span class='line'><span class="c"># read the sd card and compress using 7z</span>
+</span><span class='line'>sudo dd <span class="k">if</span><span class="o">=</span><span class="nv">$dev</span> <span class="nv">count</span><span class="o">=</span><span class="nv">$size</span> <span class="nv">bs</span><span class="o">=</span>1m | 7z a -mf- -si<span class="nv">$name</span>.img <span class="nv">$date</span>-<span class="nv">$name</span>.img.7z
+</span></code></pre></div></figure>
+ &#8211;>
+
+<!--
+
+The above method is sufficient to take a backup of a card that's had some initial setup,
+but hasn't yet had it's filesystem expanded and does not require mounting the filesystem
+for further modifications. Otherwise, skip to the more detailed instructions to cleanup
+the image and determine it's correct size.
+
+[ubuntu]: http://www.ubuntu.com/download/desktop/
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><pre><code class='sh'><span class='line'><span class="c"># reduce size of the main partition in gparted</span>
+</span><span class='line'><span class="c"># (to minimise the sd card read/write time)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># set device path for sd card</span>
+</span><span class='line'><span class="nv">dev</span><span class="o">=</span>/dev/sdc
+</span><span class='line'>
+</span><span class='line'><span class="c"># check the filesystems</span>
+</span><span class='line'>umount <span class="k">${</span><span class="nv">dev</span><span class="k">}</span>?
+</span><span class='line'>fsck -pfv <span class="k">${</span><span class="nv">dev</span><span class="k">}</span>?
+</span><span class='line'>
+</span><span class='line'><span class="c"># extract partition info</span>
+</span><span class='line'>partedm<span class="o">()</span> <span class="o">{</span> <span class="nv">usage</span><span class="o">=</span><span class="s2">&quot;Usage: partedm dev part field unit&quot;</span>
+</span><span class='line'>            <span class="o">[</span> <span class="nv">$# </span>-ne 4 <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="nv">$usage</span> <span class="o">&amp;&amp;</span> <span class="k">return</span>
+</span><span class='line'><span class="k">            </span>parted -m <span class="nv">$1</span> unit <span class="nv">$4</span> print |
+</span><span class='line'>            grep <span class="s2">&quot;^$2&quot;</span> | cut -d: -f<span class="nv">$3</span> | tr -d TGMKB; <span class="o">}</span>
+</span><span class='line'><span class="nv">size</span><span class="o">=</span><span class="k">$((</span><span class="o">(</span><span class="k">$(</span>partedm <span class="nv">$dev</span> 2 3 b<span class="k">)</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">/</span><span class="m">1024</span><span class="o">/</span><span class="m">1024</span><span class="k">))</span>
+</span><span class='line'><span class="nv">boot</span><span class="o">=</span><span class="k">$(</span>partedm <span class="nv">$dev</span> 1 2 b<span class="k">)</span>
+</span><span class='line'><span class="nv">main</span><span class="o">=</span><span class="k">$(</span>partedm <span class="nv">$dev</span> 2 2 b<span class="k">)</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;total size = $size MB</span>
+</span><span class='line'><span class="s2"> boot starts at  $boot bytes</span>
+</span><span class='line'><span class="s2"> main starts at $main bytes&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># copy the sd card - using calculated size of image</span>
+</span><span class='line'>dd <span class="k">if</span><span class="o">=</span><span class="nv">$dev</span> <span class="nv">of</span><span class="o">=</span><span class="nv">$name</span>.img <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span><span class="k">${</span><span class="nv">size</span><span class="k">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># mount image file and zero fill free space</span>
+</span><span class='line'><span class="k">for </span>part in boot main; <span class="k">do</span>
+</span><span class='line'><span class="k">  </span>mkdir -p <span class="nv">$part</span>
+</span><span class='line'>  mount -o loop,offset<span class="o">=</span><span class="k">${</span><span class="p">!part</span><span class="k">}</span> <span class="nv">$name</span>-basic.img <span class="nv">$part</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>    sfill -z -l -l -f -v <span class="nv">$part</span>
+</span><span class='line'><span class="k">done</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># zero fill the swap file</span>
+</span><span class='line'>dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>main/var/swap <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>100
+</span><span class='line'>mkswap main/var/swap
+</span><span class='line'>
+</span><span class='line'><span class="c"># unmount (after making any final changes)</span>
+</span><span class='line'>umount boot main <span class="o">&amp;&amp;</span> rm -rf boot main
+</span><span class='line'>
+</span><span class='line'><span class="c"># compress the image using 7z (without BCJ filter)</span>
+</span><span class='line'>7z a -mf- <span class="nv">$name</span>.img.7z <span class="nv">$name</span>.img
+</span></code></pre></div></figure>
+
+ &#8211;>
+
+<!--
+# make image on Mac OS X
+dev=/dev/rdisk2
+fdisk $dev
+bc -l <<< '(122880+3481600)/2/1024'
+dd if=$dev of=$name.img bs=1m count=$size
+-->
+
+<!-- OFFSET=`fdisk -lu $IMAGE | grep -m 1 Linux$ | awk '{ print $2 *512 }'` -->
+<div class="footnotes">
+  <ol>
+    <li id="fn:sfill">
+      <p>Normally, <code>sfill</code> seems to run just as fast from the Raspberry Pi - since the
+SD card write speed is the main factor - and space saved is similar to mounting
+offline. When making recent images I’ve found <code>sfill</code> to take a long time to complete
+after filling the disk (but before ‘Wiping inodes’), I haven’t retested on the desktop
+with the same images yet though.<a href="#fnref:sfill" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:fdisk">
+      <p>Use <code>fdisk</code> to view the partition table info of the SD card, then calculate the
+total amount to copy using <code>bc</code>:</p>
+
+      <pre><code># confirm the above values
+sudo fdisk $dev  # append '-l' flag on linux
+
+# on OS X, add the last partition start to its size
+bc -l &lt;&lt;&lt; '(122880+5662720)/2/1024'
+
+# on Linux, use the last partition block
+bc -l &lt;&lt;&lt; '(5785599+1)/2/1024'
+</code></pre>
+      <p><a href="#fnref:fdisk" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Windows 8.1 - EFI install]]></title>
+    <link href="http://jmeosbn.github.io/blog/windows-8.1-efi-install/"/>
+    <updated>2014-06-16T17:40:00+01:00</updated>
+    <id>http://jmeosbn.github.io/blog/windows-8.1-efi-install</id>
+    <content type="html"><![CDATA[<p>I recently wanted to test something on Windows, and not wanting to use a virtual machine,
+I decided to install Windows 8.1 on my MacBook.</p>
+
+<p>All Intel based Macs use EFI with a GUID partition table (GPT), instead of the
+traditional Wintel BIOS/MBR combination. Until recently, this has meant that Windows can
+only be installed by emulating an MBR disk, typically by using Apple’s Boot Camp to
+create the Windows partition.</p>
+
+<p>Since Windows 8 now supports installation under EFI<sup id="fnref:win7efi"><a href="#fn:win7efi" rel="footnote">1</a></sup>, and Boot Camp is fairly rigid about
+the placement of a Windows partition, I wanted to try installing Windows 8.1 using EFI and
+GPT just as I do with Mac OS X and Ubuntu.</p>
+
+<!-- more -->
+
+<p><em>Note: this procedure gets rapidly more complicated under only slightly unusual
+circumstances (such as having a non Windows OS installed, or more than one disk). Since
+this information involved some trial and error to discover, I post it here more for the
+record than as an endorsement of something that’s worth doing (it’s not too hard, but
+seriously, Ubuntu is free and much easier to install!).</em></p>
+
+<ul id="markdown-toc">
+  <li><a href="#why-the-windows-install-will-fail">Why the Windows install will fail</a></li>
+  <li><a href="#a-new-windows-partition">A new Windows partition</a></li>
+  <li><a href="#preparing-a-guid-partition-table">Preparing a GUID Partition Table</a></li>
+  <li><a href="#install-windows-to-a-gpt-disk">Install Windows to a GPT disk</a></li>
+  <li><a href="#manually-mount-the-efi-partition">Manually mount the EFI partition</a></li>
+  <li><a href="#delete-the-previous-boot-configuration">Delete the previous boot configuration</a></li>
+  <li><a href="#continue-installation-of-windows">Continue installation of Windows</a></li>
+  <li><a href="#why-the-recovery-console-will-fail">Why the Recovery Console will fail</a></li>
+  <li><a href="#legacy-boot-manager">Legacy boot manager</a></li>
+</ul>
+
+<h2 id="why-the-windows-install-will-fail">Why the Windows install will fail</h2>
+
+<p>The issues below will prevent the installation of Windows 8 (and 8.1) from succeeding
+when installing under EFI on a Mac or other EFI based system. The lack of clear error
+messages actually makes an EFI installation seem impossible, despite the EFI boot loader
+being present on the Windows disc. However, the fixes are fairly straightforward once you
+understand the issues.</p>
+
+<ul>
+  <li>When installing from a USB key<sup id="fnref:usbkey"><a href="#fn:usbkey" rel="footnote">2</a></sup>, that key must use an MBR partition table</li>
+  <li>The target for the installation must use a GUID partition table (GPT)</li>
+  <li>The target disk must not have a hybrid GPT/MBR partition table, such as that created by Boot Camp, Disk Utility, or GParted<sup id="fnref:gparted"><a href="#fn:gparted" rel="footnote">3</a></sup>.  A GPT with <em>protective</em> MBR is fine though, and protects the GUID partitions on unsupported systems</li>
+  <li>Windows will normally fail to install on systems with more than one GPT disk</li>
+</ul>
+
+<h2 id="a-new-windows-partition">A new Windows partition</h2>
+
+<p>The first task is to make some free space available, and then create a new NTFS partition
+for Windows to install to (size should be at least 20GB). It’s easier to do this now,
+before trying to install Windows, for reasons that will become apparent.</p>
+
+<p>If you’ll be resizing any Mac HFS+ partitions then you should probably use Disk Utility
+on OS X. Likewise, for resizing ext3/4 and other file systems unknown to OS X, use
+<a href="http://gparted.org/index.php">GParted</a> (booting from the <a href="http://gparted.org/livecd.php">gparted live cd</a> if no Linux system is installed).</p>
+
+<p>Note: On a Mac, the boot manager can be accessed by holding the <code>alt</code> key during startup.</p>
+
+<h2 id="preparing-a-guid-partition-table">Preparing a GUID Partition Table</h2>
+
+<p>You can check the GUID partition table (or create one from an existing MBR) using
+<code>gdisk</code> - which can be <a href="http://sourceforge.net/projects/gptfdisk/files/gptfdisk/0.8.10/gdisk-binaries/gdisk-0.8.10.pkg/download">installed on Mac OS X</a> or used from most Linux
+distros, such as the <a href="http://gparted.org/livecd.php">gparted live cd</a>.</p>
+
+<ol>
+  <li>From a terminal, run <code>sudo gdisk /dev/&lt;target-disk-id&gt;</code><sup id="fnref:diskid"><a href="#fn:diskid" rel="footnote">4</a></sup></li>
+  <li><code>gdisk</code> should display <code>GPT: present</code>, but <em>must not</em> list <code>MBR: hybrid</code></li>
+  <li>If the disk has a GPT without a hybrid MBR, quit by typing <code>q</code> then <code>enter</code></li>
+</ol>
+
+<p>If the target disk is listed with <code>MBR: hybrid</code>, then Windows will fail to install under
+EFI. The best way to correct the GPT is to replace the hybrid MBR using <code>gdisk</code>.</p>
+
+<ol>
+  <li>Still in <code>gdisk</code>, use <code>x</code> to enter the expert menu</li>
+  <li>Enter <code>n</code> to create a new <em>protective</em> MBR</li>
+  <li>Check the protective<sup id="fnref:protective"><a href="#fn:protective" rel="footnote">5</a></sup> MBR and GPT by using <code>o</code> and <code>p</code> respectively</li>
+  <li>You can abort before writing any changes by using <code>q</code> to quit</li>
+  <li>Once satisfied, write out the new table to disk by using <code>w</code></li>
+</ol>
+
+<p>If the target disk is listed with <code>MBR: MBR only</code>, then <code>gdisk</code> should have automatically
+created a GUID partition table in memory<sup id="fnref:gptwarning"><a href="#fn:gptwarning" rel="footnote">6</a></sup>. If the MBR partition table isn’t
+required to support older systems or legacy boot loaders, then use the menu commands
+shown above to check the existing partitions have been added correctly before writing out
+the tables to disk.</p>
+
+<h2 id="install-windows-to-a-gpt-disk">Install Windows to a GPT disk</h2>
+
+<p>Start the Windows installation using your preferred media, select the custom install
+option, then continue on to the partition selection screen and select the empty NTFS
+partition <a href="#a-new-windows-partition">created previously</a>. With a <em>single non-hybrid</em> GPT
+disk, Windows should install without complaint.</p>
+
+<p>Note: While you can use the installer to format or delete existing partitions, using it
+to create a new partition from free space will likely create additional system partitions
+which you may prefer not to have littering your disk. If you don’t want to reboot at this
+point to create an NTFS partition, <code>diskpart</code> can be used to avoid the additional
+partition clutter.</p>
+
+<p>With some free space ready to be partitioned, type <code>Shift + F10</code> to bring up a command
+prompt and use the following commands.</p>
+
+<pre><code># start the diskpart utility
+diskpart
+
+# select the target disk
+list disk
+sel disk &lt;target disk&gt;
+list part
+
+# create a new partition using the selected disk's free space
+create part pri
+format fs=ntfs label=Windows quick
+
+# exit diskpart
+exit
+</code></pre>
+
+<h2 id="manually-mount-the-efi-partition">Manually mount the EFI partition</h2>
+
+<p>With more than one GPT disk, Windows will fail to install as it only expects to have one
+EFI system partition in which to store its boot configuration files. To work around this,
+use <code>diskpart</code> to manually mount the EFI partition from the target installation disk,
+then tell Windows to use that partition by using <code>bcdedit</code>.</p>
+
+<p>Type <code>Shift + F10</code> to bring up a command prompt.</p>
+
+<pre><code># start diskpart
+diskpart
+
+# mount the efi volume
+list vol
+sel vol &lt;efi volume&gt;
+assign letter=s
+exit
+
+# set the EFI partition with bcdedit
+bcdedit /sysstore s:
+</code></pre>
+
+<h2 id="delete-the-previous-boot-configuration">Delete the previous boot configuration</h2>
+
+<p>If you’ve previously had Windows installed using EFI, then the previous boot loader and
+boot configuration data store (BCD) will likely still be installed in the EFI system
+partition. To prevent previous Windows entries from showing up as duplicates in the
+Windows boot manager, you can delete the previous BCD store before installing Windows.</p>
+
+<p>Assuming the EFI partition is mounted to <code>S:\</code>, the following command will delete the BCD store.</p>
+
+<pre><code># delete boot store from a previous windows install
+del s:\EFI\Microsoft\Boot\BCD
+</code></pre>
+
+<p><em>If you forget to do this until Windows is installed, and a previous configuration did
+exist, then a system selection screen will be shown after each startup of Windows. To
+remove the additional entry, use <code>bcdedit /delete {id-of-boot-entry}</code>.</em></p>
+
+<h2 id="continue-installation-of-windows">Continue installation of Windows</h2>
+
+<p>Back in the installer, you should now be able to select the new partition and continue
+the installation as normal. When Windows reboots, it may be necessary to use the system’s
+EFI boot manager to select the Windows partition and complete installation.</p>
+
+<h2 id="why-the-recovery-console-will-fail">Why the Recovery Console will fail</h2>
+
+<p>With Windows installed, you may at some point need to use the recovery console. On EFI
+systems with more than one GPT disk, you’ll find that most of the recovery tools, such as
+System Restore, will fail due to the same issue that causes the installation to fail.</p>
+
+<p>From <em>Troubleshoot -&gt; Advanced Options -&gt; Command Prompt</em>, you can manually mount the
+correct EFI partition using <code>diskpart</code> as
+<a href="#manually-mount-the-efi-partition">described above</a>. Once done, simply use the graphical
+menu to select <em>System Restore</em> or another recovery option.</p>
+
+<h2 id="legacy-boot-manager">Legacy boot manager</h2>
+
+<p>Windows 8 uses a graphical boot manager that’s only shown once the system is mostly
+booted. Apart from taking longer to switch between systems, there is no access to
+advanced boot options such as safe mode etc., without first being able to start the
+graphical boot manager or recovery environment.</p>
+
+<p>Previously, advanced options could be accessed by holding <code>F8</code> during startup, but
+Windows no longer checks for this key<sup id="fnref:f8key"><a href="#fn:f8key" rel="footnote">7</a></sup> as it adds a second or so to the boot
+time. If you’d prefer to have the menu available instead, then the <code>legacy</code> boot menu
+policy can be enabled using <code>bcdedit</code>.</p>
+
+<pre><code># allow F8 during boot to access advanced options
+bcdedit /set bootmenupolicy legacy
+</code></pre>
+
+<p>Alternatively, the advanced options can be shown for the next boot only, or for every boot
+(without needing to hold <code>F8</code>).</p>
+
+<pre><code># show advanced options for the next boot only
+bcdedit /set onetimeadvancedoptions on
+
+# always show the boot menu before system startup
+bcdedit /set {bootmgr} displaybootmenu yes
+</code></pre>
+<div class="footnotes">
+  <ol>
+    <li id="fn:win7efi">
+      <p>Windows 7 actually supports efi booting from CD, but the efi loader and
+related files were not included in the CD’s filesystem (there
+<a href="http://forums.bit-tech.net/showthread.php?t=209045">is a hack</a> to work around
+this, but it doesn’t seem to work on my MacBook).<a href="#fnref:win7efi" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:usbkey">
+      <p>Write a new MBR partition table to a USB key and add a single FAT32 partition.
+Then copy the Windows install files from the disc to the USB
+ key using <code>rsync -aPh &lt;source&gt;/. &lt;key&gt;</code>.<a href="#fnref:usbkey" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:gparted">
+      <p>Disk Utility only adds a hybrid MBR when creating a new partition table and
+will retain any protective MBR already present. Annoyingly, GParted will re-add a hybrid
+MBR whenever it modifies a disk that uses GPT, and this will prevent Windows from
+starting under EFI until the hybrid MBR is removed.<a href="#fnref:gparted" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:diskid">
+      <p>On Linux systems, the disk will normally be named using the form <code>sda</code>, where
+the <code>a</code> represents the first disk. On Mac OS X, the form is <code>disk0</code>, where the <code>0</code>
+represents the first disk.<a href="#fnref:diskid" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:protective">
+      <p>A <em>protective</em> MBR usually lists only one partition, that spans the entire
+disk to prevent non-GPT aware tools from identifying the disk as being uninitialised or
+empty. A <em>hybrid</em> MBR exploits the protective MBR to make up to four primary partitions
+available to systems that don’t support GPT disks. The use of a hybrid MBR is
+discouraged, and not supported by Windows when booting under EFI.<a href="#fnref:protective" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:gptwarning">
+      <p>It may be that <code>gdisk</code> can’t write out the GPT due to lack of free spaceat
+the start of the disk. In this case you can try to resize the first partition to start a
+few megabytes later.<a href="#fnref:gptwarning" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:f8key">
+      <p>The check is supposedly still there, but is so short that it can’t be activated.<a href="#fnref:f8key" rel="reference">&#8617;</a></p>
     </li>
   </ol>
 </div>

@@ -189,7 +189,7 @@ command line effort).</p>
 
 <p>Here’s the basic command to copy an SD card into a file. The size is correct for the
 current Raspbian image at <a href="http://raspberrypi.org">raspberrypi.org</a>, and can be confirmed
-by viewing the size of the original uncompressed image, e.g. <code>unzip -l raspbian.zip</code>, or
+by viewing the size of the original uncompressed image: <code>unzip -l raspbian.zip</code>, or
 by using <code>fdisk</code><sup id="fnref:fdisk"><a href="#fn:fdisk" rel="footnote">2</a></sup>.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># location and size of SD card</span>
@@ -289,7 +289,7 @@ after filling the disk (but before ‘Wiping inodes’), I haven’t retested on
 with the same images yet though.<a href="#fnref:sfill" rel="reference">&#8617;</a></p>
     </li>
     <li id="fn:fdisk">
-      <p>Use <code>fdisk</code> to obtain the partition table from the SD card, then calculate the
+      <p>Use <code>fdisk</code> to view the partition table info of the SD card, then calculate the
 total amount to copy using <code>bc</code>:</p>
 
       <pre><code># confirm the above values
@@ -353,6 +353,8 @@ bc -l &lt;&lt;&lt; '(5785599+1)/2/1024'
         <a class="basic-alignment left" href="/blog/windows-8.1-efi-install/" title="Previous Post: Windows 8.1 - EFI install">&laquo; Windows 8.1 - EFI install</a>
       
       
+        <a class="basic-alignment right" href="/blog/minimal-raspbian-pi/" title="Next Post: Minimal Raspbian Pi">Minimal Raspbian Pi &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -366,15 +368,15 @@ bc -l &lt;&lt;&lt; '(5785599+1)/2/1024'
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/minimal-raspbian-pi/">Minimal Raspbian Pi</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/making-a-pi-disk-image/">Making a Pi Disk Image</a>
       </li>
     
       <li class="post">
         <a href="/blog/windows-8.1-efi-install/">Windows 8.1 - EFI install</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/raspbian-pi/">Minimal Raspbian Pi</a>
       </li>
     
       <li class="post">

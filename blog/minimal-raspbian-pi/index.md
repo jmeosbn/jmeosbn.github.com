@@ -1,20 +1,16 @@
 title:        Minimal Raspbian Pi
-categories:   pi dev
-date:         2014-04-28 12:13
+categories:   arm pi dev
+date:         2014-06-30 23:42
 
-A collection of notes for setting up a clean and minimal image of
-[Raspbian](http://raspbian.org).
+A collection of notes for setting up a clean and minimal install of the official [Raspbian]
+image from [raspberrypi.org].
 
-Starting with the official raspbian image from
-[raspberrypi.org](raspberrypi.org/downloads), the desktop environment and extras will
-be removed, and development tools and other utilities added.
+[Raspbian]: http://raspbian.org
+[raspberrypi.org]: http://raspberrypi.org/downloads
 
 <!-- See [Minimal Raspbian Net Installer](#minimal-raspbian-net-installer) if you prefer to
 build a minimal image from scratch using the
 [Raspbian unattended netinstaller](https://github.com/hifi/raspbian-ua-netinst). -->
-
-<!-- more -->
-
 
 ### Comparison of compressed images
 
@@ -22,6 +18,17 @@ build a minimal image from scratch using the
 `284 MB` - Additional packages added, desktop extras removed  
 `156 MB` - Desktop environment removed, `udisks-glue` installed  
 `184 MB` - As above, with `mono` installed
+
+
+<!-- more -->
+
+### Short summary of changes
+
+After some initial setup, some common development tools and other utilities were added.
+The desktop extras were then removed, followed by the desktop itself. To handle
+auto-mounting of USB drives, `udisks-glue` was installed as a service using `supervisor`.
+Being quite large, `Mono` was installed after room had been made for it. Wiring Pi is
+built for `gpio` access, and for dropbox sync, `dbox` is used.
 
 
 <!--
@@ -33,6 +40,8 @@ Disable password logins for remote ssh access (public key only).
 ### TODO:
 
  -->
+
+_Note: less common changes are listed towards the end of the post_
 
 * TOC
 {:toc}

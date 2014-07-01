@@ -4,7 +4,7 @@
   <title><![CDATA[Category: dev | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/dev/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-07-01T04:02:56+01:00</updated>
+  <updated>2014-07-01T04:38:26+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -15,21 +15,15 @@
   
   <entry>
     <title type="html"><![CDATA[Minimal Raspbian Pi]]></title>
-    <link href="http://jmeosbn.github.io/blog/raspbian-pi/"/>
-    <updated>2014-04-28T12:13:00+01:00</updated>
-    <id>http://jmeosbn.github.io/blog/raspbian-pi</id>
-    <content type="html"><![CDATA[<p>A collection of notes for setting up a clean and minimal image of
-<a href="http://raspbian.org">Raspbian</a>.</p>
-
-<p>Starting with the official raspbian image from
-<a href="raspberrypi.org/downloads">raspberrypi.org</a>, the desktop environment and extras will
-be removed, and development tools and other utilities added.</p>
+    <link href="http://jmeosbn.github.io/blog/minimal-raspbian-pi/"/>
+    <updated>2014-06-30T23:42:00+01:00</updated>
+    <id>http://jmeosbn.github.io/blog/minimal-raspbian-pi</id>
+    <content type="html"><![CDATA[<p>A collection of notes for setting up a clean and minimal install of the official <a href="http://raspbian.org">Raspbian</a>
+image from <a href="http://raspberrypi.org/downloads">raspberrypi.org</a>.</p>
 
 <!-- See [Minimal Raspbian Net Installer](#minimal-raspbian-net-installer) if you prefer to
 build a minimal image from scratch using the
 [Raspbian unattended netinstaller](https://github.com/hifi/raspbian-ua-netinst). -->
-
-<!-- more -->
 
 <h3 id="comparison-of-compressed-images">Comparison of compressed images</h3>
 
@@ -37,6 +31,16 @@ build a minimal image from scratch using the
 <code>284 MB</code> - Additional packages added, desktop extras removed<br />
 <code>156 MB</code> - Desktop environment removed, <code>udisks-glue</code> installed<br />
 <code>184 MB</code> - As above, with <code>mono</code> installed</p>
+
+<!-- more -->
+
+<h3 id="short-summary-of-changes">Short summary of changes</h3>
+
+<p>After some initial setup, some common development tools and other utilities were added.
+The desktop extras were then removed, followed by the desktop itself. To handle
+auto-mounting of USB drives, <code>udisks-glue</code> was installed as a service using <code>supervisor</code>.
+Being quite large, <code>Mono</code> was installed after room had been made for it. Wiring Pi is
+built for <code>gpio</code> access, and for dropbox sync, <code>dbox</code> is used.</p>
 
 <!--
 
@@ -47,6 +51,8 @@ Disable password logins for remote ssh access (public key only).
 ### TODO:
 
  -->
+
+<p><em>Note: less common changes are listed towards the end of the post</em></p>
 
 <ul id="markdown-toc">
   <li><a href="#basic-pi-tips">Basic Pi Tips</a></li>
