@@ -4,7 +4,7 @@
   <title><![CDATA[jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-04-10T22:43:40+01:00</updated>
+  <updated>2014-07-01T03:54:50+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -12,6 +12,256 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Windows 8.1 - EFI install]]></title>
+    <link href="http://jmeosbn.github.io/blog/windows-8.1-efi-install/"/>
+    <updated>2014-06-16T17:40:00+01:00</updated>
+    <id>http://jmeosbn.github.io/blog/windows-8.1-efi-install</id>
+    <content type="html"><![CDATA[<p>I recently wanted to test something on Windows, and not wanting to use a virtual machine,
+I decided to install Windows 8.1 on my MacBook.</p>
+
+<p>All Intel based Macs use EFI with a GUID partition table (GPT), instead of the
+traditional Wintel BIOS/MBR combination. Until recently, this has meant that Windows can
+only be installed by emulating an MBR disk, typically by using Apple’s Boot Camp to
+create the Windows partition.</p>
+
+<p>Since Windows 8 now supports installation under EFI<sup id="fnref:win7efi"><a href="#fn:win7efi" rel="footnote">1</a></sup>, and Boot Camp is fairly rigid about
+the placement of a Windows partition, I wanted to try installing Windows 8.1 using EFI and
+GPT just as I do with Mac OS X and Ubuntu.</p>
+
+<!-- more -->
+
+<p><em>Note: this procedure gets rapidly more complicated under only slightly unusual
+circumstances (such as having a non Windows OS installed, or more than one disk). Since
+this information involved some trial and error to discover, I post it here more for the
+record than as an endorsement of something that’s worth doing (it’s not too hard, but
+seriously, Ubuntu is free and much easier to install!).</em></p>
+
+<ul id="markdown-toc">
+  <li><a href="#why-the-windows-install-will-fail">Why the Windows install will fail</a></li>
+  <li><a href="#a-new-windows-partition">A new Windows partition</a></li>
+  <li><a href="#preparing-a-guid-partition-table">Preparing a GUID Partition Table</a></li>
+  <li><a href="#install-windows-to-a-gpt-disk">Install Windows to a GPT disk</a></li>
+  <li><a href="#manually-mount-the-efi-partition">Manually mount the EFI partition</a></li>
+  <li><a href="#delete-the-previous-boot-configuration">Delete the previous boot configuration</a></li>
+  <li><a href="#continue-installation-of-windows">Continue installation of Windows</a></li>
+  <li><a href="#why-the-recovery-console-will-fail">Why the Recovery Console will fail</a></li>
+  <li><a href="#legacy-boot-manager">Legacy boot manager</a></li>
+</ul>
+
+<h2 id="why-the-windows-install-will-fail">Why the Windows install will fail</h2>
+
+<p>The issues below will prevent the installation of Windows 8 (and 8.1) from succeeding
+when installing under EFI on a Mac or other EFI based system. The lack of clear error
+messages actually makes an EFI installation seem impossible, despite the EFI boot loader
+being present on the Windows disc. However, the fixes are fairly straightforward once you
+understand the issues.</p>
+
+<ul>
+  <li>When installing from a USB key<sup id="fnref:usbkey"><a href="#fn:usbkey" rel="footnote">2</a></sup>, that key must use an MBR partition table</li>
+  <li>The target for the installation must use a GUID partition table (GPT)</li>
+  <li>The target disk must not have a hybrid GPT/MBR partition table, such as that created by Boot Camp, Disk Utility, or GParted<sup id="fnref:gparted"><a href="#fn:gparted" rel="footnote">3</a></sup>.  A GPT with <em>protective</em> MBR is fine though, and protects the GUID partitions on unsupported systems</li>
+  <li>Windows will normally fail to install on systems with more than one GPT disk</li>
+</ul>
+
+<h2 id="a-new-windows-partition">A new Windows partition</h2>
+
+<p>The first task is to make some free space available, and then create a new NTFS partition
+for Windows to install to (size should be at least 20GB). It’s easier to do this now,
+before trying to install Windows, for reasons that will become apparent.</p>
+
+<p>If you’ll be resizing any Mac HFS+ partitions then you should probably use Disk Utility
+on OS X. Likewise, for resizing ext3/4 and other file systems unknown to OS X, use
+<a href="http://gparted.org/index.php">GParted</a> (booting from the <a href="http://gparted.org/livecd.php">gparted live cd</a> if no Linux system is installed).</p>
+
+<p>Note: On a Mac, the boot manager can be accessed by holding the <code>alt</code> key during startup.</p>
+
+<h2 id="preparing-a-guid-partition-table">Preparing a GUID Partition Table</h2>
+
+<p>You can check the GUID partition table (or create one from an existing MBR) using
+<code>gdisk</code> - which can be <a href="http://sourceforge.net/projects/gptfdisk/files/gptfdisk/0.8.10/gdisk-binaries/gdisk-0.8.10.pkg/download">installed on Mac OS X</a> or used from most Linux
+distros, such as the <a href="http://gparted.org/livecd.php">gparted live cd</a>.</p>
+
+<ol>
+  <li>From a terminal, run <code>sudo gdisk /dev/&lt;target-disk-id&gt;</code><sup id="fnref:diskid"><a href="#fn:diskid" rel="footnote">4</a></sup></li>
+  <li><code>gdisk</code> should display <code>GPT: present</code>, but <em>must not</em> list <code>MBR: hybrid</code></li>
+  <li>If the disk has a GPT without a hybrid MBR, quit by typing <code>q</code> then <code>enter</code></li>
+</ol>
+
+<p>If the target disk is listed with <code>MBR: hybrid</code>, then Windows will fail to install under
+EFI. The best way to correct the GPT is to replace the hybrid MBR using <code>gdisk</code>.</p>
+
+<ol>
+  <li>Still in <code>gdisk</code>, use <code>x</code> to enter the expert menu</li>
+  <li>Enter <code>n</code> to create a new <em>protective</em> MBR</li>
+  <li>Check the protective<sup id="fnref:protective"><a href="#fn:protective" rel="footnote">5</a></sup> MBR and GPT by using <code>o</code> and <code>p</code> respectively</li>
+  <li>You can abort before writing any changes by using <code>q</code> to quit</li>
+  <li>Once satisfied, write out the new table to disk by using <code>w</code></li>
+</ol>
+
+<p>If the target disk is listed with <code>MBR: MBR only</code>, then <code>gdisk</code> should have automatically
+created a GUID partition table in memory<sup id="fnref:gptwarning"><a href="#fn:gptwarning" rel="footnote">6</a></sup>. If the MBR partition table isn’t
+required to support older systems or legacy boot loaders, then use the menu commands
+shown above to check the existing partitions have been added correctly before writing out
+the tables to disk.</p>
+
+<h2 id="install-windows-to-a-gpt-disk">Install Windows to a GPT disk</h2>
+
+<p>Start the Windows installation using your preferred media, select the custom install
+option, then continue on to the partition selection screen and select the empty NTFS
+partition <a href="#a-new-windows-partition">created previously</a>. With a <em>single non-hybrid</em> GPT
+disk, Windows should install without complaint.</p>
+
+<p>Note: While you can use the installer to format or delete existing partitions, using it
+to create a new partition from free space will likely create additional system partitions
+which you may prefer not to have littering your disk. If you don’t want to reboot at this
+point to create an NTFS partition, <code>diskpart</code> can be used to avoid the additional
+partition clutter.</p>
+
+<p>With some free space ready to be partitioned, type <code>Shift + F10</code> to bring up a command
+prompt and use the following commands.</p>
+
+<pre><code># start the diskpart utility
+diskpart
+
+# select the target disk
+list disk
+sel disk &lt;target disk&gt;
+list part
+
+# create a new partition using the selected disk's free space
+create part pri
+format fs=ntfs label=Windows quick
+
+# exit diskpart
+exit
+</code></pre>
+
+<h2 id="manually-mount-the-efi-partition">Manually mount the EFI partition</h2>
+
+<p>With more than one GPT disk, Windows will fail to install as it only expects to have one
+EFI system partition in which to store its boot configuration files. To work around this,
+use <code>diskpart</code> to manually mount the EFI partition from the target installation disk,
+then tell Windows to use that partition by using <code>bcdedit</code>.</p>
+
+<p>Type <code>Shift + F10</code> to bring up a command prompt.</p>
+
+<pre><code># start diskpart
+diskpart
+
+# mount the efi volume
+list vol
+sel vol &lt;efi volume&gt;
+assign letter=s
+exit
+
+# set the EFI partition with bcdedit
+bcdedit /sysstore s:
+</code></pre>
+
+<h2 id="delete-the-previous-boot-configuration">Delete the previous boot configuration</h2>
+
+<p>If you’ve previously had Windows installed using EFI, then the previous boot loader and
+boot configuration data store (BCD) will likely still be installed in the EFI system
+partition. To prevent previous Windows entries from showing up as duplicates in the
+Windows boot manager, you can delete the previous BCD store before installing Windows.</p>
+
+<p>Assuming the EFI partition is mounted to <code>S:\</code>, the following command will delete the BCD store.</p>
+
+<pre><code># delete boot store from a previous windows install
+del s:\EFI\Microsoft\Boot\BCD
+</code></pre>
+
+<p><em>If you forget to do this until Windows is installed, and a previous configuration did
+exist, then a system selection screen will be shown after each startup of Windows. To
+remove the additional entry, use <code>bcdedit /delete {id-of-boot-entry}</code>.</em></p>
+
+<h2 id="continue-installation-of-windows">Continue installation of Windows</h2>
+
+<p>Back in the installer, you should now be able to select the new partition and continue
+the installation as normal. When Windows reboots, it may be necessary to use the system’s
+EFI boot manager to select the Windows partition and complete installation.</p>
+
+<h2 id="why-the-recovery-console-will-fail">Why the Recovery Console will fail</h2>
+
+<p>With Windows installed, you may at some point need to use the recovery console. On EFI
+systems with more than one GPT disk, you’ll find that most of the recovery tools, such as
+System Restore, will fail due to the same issue that causes the installation to fail.</p>
+
+<p>From <em>Troubleshoot -&gt; Advanced Options -&gt; Command Prompt</em>, you can manually mount the
+correct EFI partition using <code>diskpart</code> as
+<a href="#manually-mount-the-efi-partition">described above</a>. Once done, simply use the graphical
+menu to select <em>System Restore</em> or another recovery option.</p>
+
+<h2 id="legacy-boot-manager">Legacy boot manager</h2>
+
+<p>Windows 8 uses a graphical boot manager that’s only shown once the system is mostly
+booted. Apart from taking longer to switch between systems, there is no access to
+advanced boot options such as safe mode etc., without first being able to start the
+graphical boot manager or recovery environment.</p>
+
+<p>Previously, advanced options could be accessed by holding <code>F8</code> during startup, but
+Windows no longer checks for this key<sup id="fnref:f8key"><a href="#fn:f8key" rel="footnote">7</a></sup> as it adds a second or so to the boot
+time. If you’d prefer to have the menu available instead, then the <code>legacy</code> boot menu
+policy can be enabled using <code>bcdedit</code>.</p>
+
+<pre><code># allow F8 during boot to access advanced options
+bcdedit /set bootmenupolicy legacy
+</code></pre>
+
+<p>Alternatively, the advanced options can be shown for the next boot only, or for every boot
+(without needing to hold <code>F8</code>).</p>
+
+<pre><code># show advanced options for the next boot only
+bcdedit /set onetimeadvancedoptions on
+
+# always show the boot menu before system startup
+bcdedit /set {bootmgr} displaybootmenu yes
+</code></pre>
+<div class="footnotes">
+  <ol>
+    <li id="fn:win7efi">
+      <p>Windows 7 actually supports efi booting from CD, but the efi loader and
+related files were not included in the CD’s filesystem (there
+<a href="http://forums.bit-tech.net/showthread.php?t=209045">is a hack</a> to work around
+this, but it doesn’t seem to work on my MacBook).<a href="#fnref:win7efi" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:usbkey">
+      <p>Write a new MBR partition table to a USB key and add a single FAT32 partition.
+Then copy the Windows install files from the disc to the USB
+ key using <code>rsync -aPh &lt;source&gt;/. &lt;key&gt;</code>.<a href="#fnref:usbkey" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:gparted">
+      <p>Disk Utility only adds a hybrid MBR when creating a new partition table and
+will retain any protective MBR already present. Annoyingly, GParted will re-add a hybrid
+MBR whenever it modifies a disk that uses GPT, and this will prevent Windows from
+starting under EFI until the hybrid MBR is removed.<a href="#fnref:gparted" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:diskid">
+      <p>On Linux systems, the disk will normally be named using the form <code>sda</code>, where
+the <code>a</code> represents the first disk. On Mac OS X, the form is <code>disk0</code>, where the <code>0</code>
+represents the first disk.<a href="#fnref:diskid" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:protective">
+      <p>A <em>protective</em> MBR usually lists only one partition, that spans the entire
+disk to prevent non-GPT aware tools from identifying the disk as being uninitialised or
+empty. A <em>hybrid</em> MBR exploits the protective MBR to make up to four primary partitions
+available to systems that don’t support GPT disks. The use of a hybrid MBR is
+discouraged, and not supported by Windows when booting under EFI.<a href="#fnref:protective" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:gptwarning">
+      <p>It may be that <code>gdisk</code> can’t write out the GPT due to lack of free spaceat
+the start of the disk. In this case you can try to resize the first partition to start a
+few megabytes later.<a href="#fnref:gptwarning" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:f8key">
+      <p>The check is supposedly still there, but is so short that it can’t be activated.<a href="#fnref:f8key" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Dropbox on Pi]]></title>
@@ -138,7 +388,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 <p>Jump to <a href="#first-login-tasks">first login tasks</a> if you have already set up terminal access to the Pi.</p>
 
 <ul id="markdown-toc">
-  <li><a href="#basic-pi-tips">Basic Pi Tips</a></li>
+  <li><a href="#connecting-to-the-pi">Connecting to the Pi</a></li>
   <li><a href="#pre-setup-on-pc-laptop-etc">Pre-setup; on PC, laptop, etc.</a></li>
   <li><a href="#transfer-files">Transfer files</a></li>
   <li><a href="#first-login-tasks">First login tasks</a></li>
@@ -151,7 +401,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
   <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
   <li><a href="#remove-the-desktop-environment">Remove the desktop environment</a></li>
   <li><a href="#install-mono">Install Mono</a></li>
-  <li><a href="#install-xbian-onto-a-raspbian-image">Install XBian onto a Raspbian image</a></li>
   <li><a href="#install-aircrack-and-related-tools">Install aircrack and related tools</a></li>
   <li><a href="#regional-system-settings">Regional system settings</a></li>
   <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
@@ -161,11 +410,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
   <li><a href="#not-used-with-recent-versions">Not used with recent versions</a></li>
 </ul>
 
-<h2 id="basic-pi-tips">Basic Pi Tips</h2>
-
-<p>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a>.</p>
-
-<h3 id="connecting-to-the-pi">Connecting to the Pi</h3>
+<h2 id="connecting-to-the-pi">Connecting to the Pi</h2>
 
 <p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian includes support for zeroconfig (via avahi-daemon), so it’s easier to find your Pi on the network<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>.</p>
 
@@ -202,7 +447,7 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">ssh-copy-id xbian@xbian.local
 </span></code></pre></div></figure></notextile></div>
 
-<p>The easiest way to append a key to the remote user’s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source (or <a href="https://github.com/beautifulcode/ssh-copy-id-for-OSX">github</a>) if your system doesn’t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
+<p>The easiest way to append a key to the remote user’s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn’t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
 <h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
@@ -261,10 +506,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line"><span class="c"># Update packages</span>
 </span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
 </span><span class="line">
-</span><span class="line"><span class="c"># Configure time zone and locale</span>
-</span><span class="line">dpkg-reconfigure tzdata
-</span><span class="line">dpkg-reconfigure locales
-</span><span class="line">
 </span><span class="line"><span class="c"># Install some utilities and services</span>
 </span><span class="line">apt-get install p7zip zip curl mediainfo avahi-daemon iw
 </span><span class="line">
@@ -275,9 +516,6 @@ Dropbox integration made easy. This robust client gives you control over what, w
 </span><span class="line">apt-get install ruby ruby-dev ri libsqlite3-dev npm
 </span><span class="line"><span class="c"># Fix node binary being named nodejs</span>
 </span><span class="line"><span class="nb">cd</span> /usr/bin; sudo ln -s nodejs node; <span class="nb">cd</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># Install node packages</span>
-</span><span class="line">npm install -g node-gyp
 </span><span class="line">
 </span><span class="line"><span class="c"># Install rmate for TextMate editing over ssh</span>
 </span><span class="line">gem install rmate
@@ -347,31 +585,10 @@ ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
 
-<p>Connecting to the pi without a network can be achieved over serial cable: e.g. <code>screen /dev/tty.usbserial 115200</code>.</p>
+<p>The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
 
-<p>Unfortunately, the display of full screen terminal programs becomes corrupted when using
-a TTL to USB serial connection to the Pi from Mac OS X. Changing the terminal type to
-match your system’s <code>$TERM</code> variable enables use of programs such as <code>nano</code> and
-<code>xbian-config</code> without screen corruption.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm-256color/&#39;</span> /etc/inittab
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm/&#39;</span> /etc/inittab
 </span></code></pre></div></figure></notextile></div>
-
-<p>Additionally, using <code>screen</code> results in display size issues if your terminal does not
-match the 80x24 columns and lines assumed when logging in over serial. (This does not
-occur when using <code>ssh</code> as the client’s current terminal size is communicated to the ssh
-server.)</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># print the current size assumed by the host</span>
-</span><span class="line">stty size
-</span><span class="line"><span class="c"># returns: 24 80</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># manually set correct size for the client window</span>
-</span><span class="line">stty rows 18
-</span><span class="line">stty cols 70
-</span></code></pre></div></figure></notextile></div>
-
-<p>A script is available <a href="https://github.com/akkana/scripts/blob/master/termsize">on github</a> (found via <a href="http://shallowsky.com/blog/hardware/serial-24-line-terminals.html">shallowsky.com</a>) that will determine your <em>actual</em> terminal window size and set it correctly on the Pi.  The script can be run from <code>.bashrc</code> or similar.</p>
 
 <h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
 
@@ -392,18 +609,9 @@ server.)</p>
 
 <p>If you only plan to run the terminal environment (including self-hosted programs such as XBMC), then a lot of space can be recovered by removing x11 and related packages.</p>
 
-<p><em>TODO: mono depends upon libx11-6, so it’ll need to be (re)installed afterwards.</em></p>
-
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># desktop</span>
-</span><span class="line">apt-get purge x11-common libx11-.* xkb-data xdg-utils menu-xdg
-</span><span class="line">apt-get purge desktop-file-utils fonts-freefont-ttf
-</span><span class="line">apt-get purge libraspberrypi0 raspberrypi-artwork lxde-icon-theme
-</span><span class="line">
-</span><span class="line"><span class="c"># network drives</span>
-</span><span class="line">apt-get purge cifs-utils samba-common smbclient nfs-common
-</span><span class="line">
-</span><span class="line"><span class="c"># other</span>
-</span><span class="line">apt-get purge liblapack3 libatlas3-base
+</span><span class="line">apt-get purge x11-common libx11-.* lxde-icon-theme xkb-data
+</span><span class="line">apt-get purge fonts-freefont-ttf libraspberrypi0
 </span><span class="line">
 </span><span class="line"><span class="c"># cleaning up</span>
 </span><span class="line"><span class="o">(</span><span class="nb">cd</span> ~pi; rm -rf Desktop python_games ocr_pi.png<span class="o">)</span>
@@ -417,58 +625,8 @@ server.)</p>
 
 <p>Install Mono development tools, runtime, and interactive shell.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-utils mono-csharp-shell
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-csharp-shell
 </span></code></pre></div></figure></notextile></div>
-
-<!--
-pkg-count
-353 mono-complete
-214 cli-common-dev
-172 mono-devel
-168 libmono-cil-dev
-
-# for a minimal cli toolchain:
-apt-get install mono-mcs mono-xbuild mono-csharp-shell
--->
-
-<h2 id="install-xbian-onto-a-raspbian-image">Install XBian onto a Raspbian image</h2>
-
-<p>From <a href="http://forum.xbian.org/thread-1850.html">Installing XBIAN directly on RASPBIAN IMG</a></p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># install xbian repo</span>
-</span><span class="line">wget http://xbian.brantje.com/pool/stable/main/x/xbian-package-repo/xbian-package-repo_1.0.0_armhf.deb
-</span><span class="line">dpkg -i xbian-package-repo_1.0.0_armhf.deb
-</span><span class="line">
-</span><span class="line"><span class="c"># enable staging and development repositories and update</span>
-</span><span class="line">sed -i <span class="s1">&#39;/ staging\|devel main/s/^#\+ //&#39;</span> /etc/apt/sources.list.d/xbian.list
-</span><span class="line">apt-get update
-</span><span class="line"><span class="c"># revert previous edit</span>
-</span><span class="line">sed -i <span class="s1">&#39;/ staging\|devel main/s/^/### /&#39;</span> /etc/apt/sources.list.d/xbian.list
-</span><span class="line">
-</span><span class="line"><span class="c"># install xbian/xbmc</span>
-</span><span class="line">apt-get install xbian-package-xbianhome xbian-package-kernel
-</span><span class="line">
-</span><span class="line"><span class="c"># reboot required to make file system changes, and conversion to btrfs</span>
-</span><span class="line">sed -i /rootfstype/s/btrfs/ext4/ /boot/cmdline.txt <span class="c"># do not use btrfs</span>
-</span><span class="line">reboot
-</span><span class="line">
-</span><span class="line"><span class="c"># install remaining xbian packages</span>
-</span><span class="line"><span class="c"># Note: a warning for removal of &#39;sysvinit&#39; will be displayed,</span>
-</span><span class="line"><span class="c"># as xbian replaces it with the &#39;upstart&#39; service manager.</span>
-</span><span class="line"><span class="c"># Also, cmdline.txt should remain unchanged, with new</span>
-</span><span class="line"><span class="c"># parameters written to /boot/cmdline.new.</span>
-</span><span class="line">apt-get install xbian-update xbian-package-rasp-switching
-</span><span class="line">
-</span><span class="line"><span class="c"># XBMC can now be started with &quot;start XBMC&quot;</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># boot to desktop</span>
-</span><span class="line"><span class="c"># apt-get install lightdm</span>
-</span></code></pre></div></figure></notextile></div>
-
-<!-- XBMC can be started with "start XBMC", Raspbian X desktop with "service lightdm start".
-
-if you Raspbian setup used to boot into X with PI user automatically, you can keep this and indeed start / load XBMC quick and easy way - even jumping back and forth between XBMC and you X Desktop. We can click "Logout", put "xbian" as user to log in and XBMC starts. If you quit XBMC, X will come again. No reboots needed.
-Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC). There is how you RPI will boot if you select what service for autostart: -->
 
 <h2 id="install-aircrack-and-related-tools">Install aircrack and related tools</h2>
 
@@ -595,101 +753,6 @@ Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC
 
 <p>If it isn’t possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can either <a href="http://www.recantha.co.uk/blog/?p=2397">scan the network</a>, run <code>nmap 192.168.0.1/24 -p 22</code>, or view ‘Attached Devices’ in your Router’s setup.  Look for a matching hostname or MAC address (which will start with <code>b8:27:eb</code> for the on-board LAN).</p>
 
-<h3 id="testing-pvr">Testing PVR</h3>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install vdr-plugin-dvbsddevice
-</span></code></pre></div></figure></notextile></div>
-
-<h3 id="setting-up-webcam">Setting up webcam</h3>
-
-<p>Use ‘motion’ or ‘fswebcam’, motion may need a default cfg copying</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install motion
-</span><span class="line">cp /etc/default/motion /etc/motion/motion.conf
-</span></code></pre></div></figure></notextile></div>
-
-<h3 id="configure-bluetooth-adapter">Configure bluetooth adapter</h3>
-
-<p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># install bluetooth support and dependencies</span>
-</span><span class="line">agi bluez python-gobject  <span class="c"># minimal?</span>
-</span><span class="line">agi bluetooth bluez-utils  <span class="c"># full</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># for management from the desktop</span>
-</span><span class="line">agi blueman
-</span><span class="line">
-</span><span class="line"><span class="c"># check adapter is working*</span>
-</span><span class="line">hcitool dev
-</span><span class="line">
-</span><span class="line"><span class="c"># scan for devices</span>
-</span><span class="line">hcitool scan
-</span><span class="line">
-</span><span class="line"><span class="c"># pair with device, using the address listed from scan</span>
-</span><span class="line">bluez-simple-agent hci0 XX:XX:XX:XX:XX:XX
-</span><span class="line">
-</span><span class="line"><span class="c"># trust the device</span>
-</span><span class="line">bluez-test-device trusted XX:XX:XX:XX:XX:XX yes
-</span><span class="line">
-</span><span class="line"><span class="c"># connect to input device</span>
-</span><span class="line">bluez-test-input hci0 XX:XX:XX:XX:XX:XX
-</span><span class="line">
-</span><span class="line"><span class="c"># adapter status</span>
-</span><span class="line">hciconfig
-</span></code></pre></div></figure></notextile></div>
-
-<p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
-
-<h2 id="troubleshooting-and-backup">Troubleshooting and backup</h2>
-
-<p>Some useful commands and procedures</p>
-
-<h3 id="backup-settings">Backup settings</h3>
-
-<ul>
-  <li>Settings, addons etc. are in ~/.xbmc</li>
-  <li>.xbmc/userdata - preferences etc</li>
-  <li>.xbmc/addons - binaries, themes</li>
-  <li>.xbmc/addons/packages - original downloads, can use with “install from zip”</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
-</span><span class="line">zip -ry xbmc .xbmc/
-</span><span class="line">zip -ry dotfiles .bash_aliases .nanorc .toprc .ssh
-</span><span class="line">
-</span><span class="line"><span class="c"># backup system config files</span>
-</span><span class="line">sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
-</span></code></pre></div></figure></notextile></div>
-
-<p>Or using tar..</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
-</span><span class="line">tar -czf xbmc-backup.tar.gz .xbmc
-</span><span class="line">
-</span><span class="line"><span class="c"># restore profile settings</span>
-</span><span class="line">sudo initctl stop xbmc
-</span><span class="line">tar -xzf xbmc-backup.tar.gz
-</span><span class="line">sudo initctl start xbmc
-</span></code></pre></div></figure></notextile></div>
-
-<h3 id="clear-cached-network-adapter">Clear cached network adapter</h3>
-
-<p>(needed for switching cards between devices)</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> | sudo tee /etc/udev/rules.d/70-persistent-net.rules
-</span></code></pre></div></figure></notextile></div>
-
-<h3 id="quick-tips">Quick Tips</h3>
-
-<ul>
-  <li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
-  <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
-</ul>
-
-<h2 id="not-used-with-recent-versions">Not used with recent versions</h2>
-
-<p>Previously useful functionality or workarounds</p>
-
 <h3 id="manually-configure-wifi-adapter">Manually configure WiFi adapter</h3>
 
 <p><a href="http://www.savagehomeautomation.com/raspi-airlink101">Instructions adapted from here</a>.</p>
@@ -732,6 +795,103 @@ Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC
 
 <p>Use <code>iwconfig</code> to view wifi adapter info and <code>ifconfig</code> for general network info.</p>
 
+<h3 id="configure-bluetooth-adapter">Configure bluetooth adapter</h3>
+
+<p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># install bluetooth support and dependencies</span>
+</span><span class="line">agi bluez python-gobject  <span class="c"># minimal?</span>
+</span><span class="line">agi bluetooth bluez-utils  <span class="c"># full</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># for management from the desktop</span>
+</span><span class="line">agi blueman
+</span><span class="line">
+</span><span class="line"><span class="c"># check adapter is working*</span>
+</span><span class="line">hcitool dev
+</span><span class="line">
+</span><span class="line"><span class="c"># scan for devices</span>
+</span><span class="line">hcitool scan
+</span><span class="line">
+</span><span class="line"><span class="c"># pair with device, using the address listed from scan</span>
+</span><span class="line">bluez-simple-agent hci0 XX:XX:XX:XX:XX:XX
+</span><span class="line">
+</span><span class="line"><span class="c"># trust the device</span>
+</span><span class="line">bluez-test-device trusted XX:XX:XX:XX:XX:XX yes
+</span><span class="line">
+</span><span class="line"><span class="c"># connect to input device</span>
+</span><span class="line">bluez-test-input hci0 XX:XX:XX:XX:XX:XX
+</span><span class="line">
+</span><span class="line"><span class="c"># adapter status</span>
+</span><span class="line">hciconfig
+</span></code></pre></div></figure></notextile></div>
+
+<p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
+
+<h3 id="testing-pvr">Testing PVR</h3>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install vdr-plugin-dvbsddevice
+</span></code></pre></div></figure></notextile></div>
+
+<h3 id="setup-webcam">Setup webcam</h3>
+
+<p>Use ‘motion’ or ‘fswebcam’, motion may need a default cfg copying</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install motion
+</span><span class="line">cp /etc/default/motion /etc/motion/motion.conf
+</span></code></pre></div></figure></notextile></div>
+
+<h2 id="troubleshooting-and-backup">Troubleshooting and backup</h2>
+
+<p>Some useful commands and procedures</p>
+
+<h3 id="quick-tips">Quick Tips</h3>
+
+<ul>
+  <li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
+  <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
+</ul>
+
+<h3 id="backup-settings">Backup settings</h3>
+
+<ul>
+  <li>Settings, addons etc. are in ~/.xbmc</li>
+  <li>.xbmc/userdata - preferences etc</li>
+  <li>.xbmc/addons - binaries, themes</li>
+  <li>.xbmc/addons/packages - original downloads, can use with “install from zip”</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
+</span><span class="line">zip -FS -ry xbmc .xbmc/
+</span><span class="line">zip -FS -ry dotfiles .bash_aliases .nanorc .toprc .ssh
+</span><span class="line">
+</span><span class="line"><span class="c"># backup system config files</span>
+</span><span class="line">sudo zip -FS -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
+</span></code></pre></div></figure></notextile></div>
+
+<p>Or using tar..</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># backup profile settings</span>
+</span><span class="line">tar -czf xbmc-backup.tar.gz .xbmc
+</span><span class="line">
+</span><span class="line"><span class="c"># restore profile settings</span>
+</span><span class="line">sudo initctl stop xbmc
+</span><span class="line">tar -xzf xbmc-backup.tar.gz
+</span><span class="line">sudo initctl start xbmc
+</span></code></pre></div></figure></notextile></div>
+
+<!-- endofpost -->
+
+<h2 id="not-used-with-recent-versions">Not used with recent versions</h2>
+
+<p>Previously useful functionality or workarounds</p>
+
+<h3 id="clear-cached-network-adapter">Clear cached network adapter</h3>
+
+<p>(needed for switching cards between devices)</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> | sudo tee /etc/udev/rules.d/70-persistent-net.rules
+</span></code></pre></div></figure></notextile></div>
+
 <h3 id="fake-a-hardware-clock-unabridged">Fake a hardware clock (unabridged)</h3>
 
 <p>More complicated instructions, as used on previous versions of XBian.</p>
@@ -759,8 +919,10 @@ Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC
 
 <h3 id="download-openssh-sftp-server">Download OpenSSH sftp server</h3>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get -d install openssh-server
-</span><span class="line">cp /var/cache/apt/archives/openssh-server_*.deb .
+<p>If sftp is not already on your system (such as when using dropbear), it can’t be installed
+manually without installing the entire openssh package.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get download openssh-server
 </span><span class="line">dpkg-deb -X openssh-server_*.deb sftp
 </span><span class="line">cp sftp/usr/lib/openssh/sftp-server /usr/lib/
 </span><span class="line">rm -r sftp openssh-server_*.deb
@@ -827,6 +989,50 @@ Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC
 </span><span class="line"><span class="c"># exit root</span>
 </span><span class="line"><span class="nb">exit</span>
 </span></code></pre></div></figure></notextile></div>
+
+<!--
+## Host a WiFi hotspot
+
+If no other WiFi is found, then start a hotspot.  This allows clients to connect
+to the Raspberry Pi by WiFi as usual.
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><pre><code class='sh'><span class='line'><span class="c"># Install the busybox DHCP server and Host AP driver</span>
+</span><span class='line'>apt-get install udhcpd hostapd
+</span><span class='line'>
+</span><span class='line'><span class="c"># Enable udhcp</span>
+</span><span class='line'>sed -i <span class="s1">&#39;/DHCPD_ENABLED/s/^/# /&#39;</span> /etc/default/udhcpd
+</span><span class='line'>
+</span><span class='line'><span class="c"># Configure interface to use</span>
+</span><span class='line'>sed -i <span class="s1">&#39;/^interface/s/eth0/wlan0/&#39;</span> /etc/udhcpd.conf
+</span><span class='line'>
+</span><span class='line'><span class="c"># Enable &#39;remaining&#39; option (for devices without rtc)</span>
+</span><span class='line'>sed -i <span class="s1">&#39;/^#remaining/s/^#//&#39;</span> /etc/udhcpd.conf
+</span></code></pre></div></figure>
+ &#8211;>
+
+<!--
+## Owncloud - a self hosted dropbox
+
+Using the script provided at [github.com/petrockblog](https://github.com/petrockblog),
+install the owncloud dependencies and NGiNX based web app.
+
+Before starting, check the free space available with `df -h /` and ensure there is enough
+space available (needs upto 800MB, depends upon existing packages already installed and
+includes increasing the swap file to 512MB).
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><pre><code class='sh'><span class='line'><span class="c"># install script dependency</span>
+</span><span class='line'>apt-get install dialog
+</span><span class='line'>
+</span><span class='line'><span class="c"># download script and execute</span>
+</span><span class='line'>wget https://github.com/petrockblog/OwncloudPie/raw/master/owncloudpie_setup.sh
+</span><span class='line'>chmod +x owncloudpie_setup.sh
+</span><span class='line'>./owncloudpie_setup.sh
+</span></code></pre></div></figure>
+
+Use option (1) to set the URL (or IP) where the Pi can be accessed.  Then option (2)
+for a new install using NGiNX.  For more details on manual setup, or fixing WebDAV issues,
+see the [eiosifidis](http://eiosifidis.blogspot.co.uk/2014/06/owncloud-on-raspberry-pi-moebious-nginx.html).
+ &#8211;>
 <div class="footnotes">
   <ol>
     <li id="fn:hostname">

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: htpc | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/htpc/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-04-10T22:43:40+01:00</updated>
+  <updated>2014-07-01T03:54:50+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -25,7 +25,7 @@
 <p>Jump to <a href="#first-login-tasks">first login tasks</a> if you have already set up terminal access to the Pi.</p>
 
 <ul id="markdown-toc">
-  <li><a href="#basic-pi-tips">Basic Pi Tips</a></li>
+  <li><a href="#connecting-to-the-pi">Connecting to the Pi</a></li>
   <li><a href="#login-as-user-pi-on-raspbian">login as user pi on raspbian</a>    <ul>
       <li><a href="#pre-setup-on-pc-laptop-etc">Pre-setup; on PC, laptop, etc.</a></li>
     </ul>
@@ -48,11 +48,9 @@
   <li><a href="#allow-full-use-of-sudo-without-needing-password">Allow full use of sudo without needing password</a></li>
   <li><a href="#allow-boot-partition-to-be-mounted">Allow boot partition to be mounted</a></li>
   <li><a href="#update-packages">Update packages</a></li>
-  <li><a href="#configure-time-zone-and-locale">Configure time zone and locale</a></li>
   <li><a href="#install-some-utilities-and-services">Install some utilities and services</a></li>
   <li><a href="#install-gcc-compiler-dev-tools">Install gcc compiler, dev tools</a></li>
   <li><a href="#install-scripting-tools">Install scripting tools</a></li>
-  <li><a href="#install-node-packages">Install node packages</a></li>
   <li><a href="#install-rmate-for-textmate-editing-over-ssh">Install rmate for TextMate editing over ssh</a>    <ul>
       <li><a href="#change-hostname">Change Hostname</a></li>
       <li><a href="#fake-a-hardware-clock">Fake a hardware clock</a></li>
@@ -68,9 +66,6 @@
   <li><a href="#remove-old-host-key-from-clients-using">remove old host key from clients using:</a>    <ul>
       <li><a href="#configure-wifi-and-bluetooth">Configure WiFi and Bluetooth</a></li>
       <li><a href="#ttl-serial-console">TTL serial console</a></li>
-    </ul>
-  </li>
-  <li><a href="#manually-set-correct-size-for-the-client-window">manually set correct size for the client window</a>    <ul>
       <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
     </ul>
   </li>
@@ -79,19 +74,8 @@
       <li><a href="#remove-the-desktop-environment">Remove the desktop environment</a></li>
     </ul>
   </li>
-  <li><a href="#network-drives">network drives</a></li>
-  <li><a href="#other">other</a></li>
   <li><a href="#cleaning-up">cleaning up</a>    <ul>
       <li><a href="#install-mono">Install Mono</a></li>
-      <li><a href="#install-xbian-onto-a-raspbian-image">Install XBian onto a Raspbian image</a></li>
-    </ul>
-  </li>
-  <li><a href="#enable-staging-and-development-repositories-and-update">enable staging and development repositories and update</a></li>
-  <li><a href="#install-xbianxbmc">install xbian/xbmc</a></li>
-  <li><a href="#reboot-required-to-make-file-system-changes-and-conversion-to-btrfs">reboot required to make file system changes, and conversion to btrfs</a></li>
-  <li><a href="#install-remaining-xbian-packages">install remaining xbian packages</a></li>
-  <li><a href="#xbmc-can-now-be-started-with-start-xbmc">XBMC can now be started with “start XBMC”</a></li>
-  <li><a href="#boot-to-desktop">boot to desktop</a>    <ul>
       <li><a href="#install-aircrack-and-related-tools">Install aircrack and related tools</a></li>
     </ul>
   </li>
@@ -104,7 +88,7 @@
   </li>
   <li><a href="#configure-keyboard-settings">Configure keyboard settings</a></li>
   <li><a href="#configure-console-font">Configure console font</a></li>
-  <li><a href="#configure-time-zone-and-locale-1">Configure time zone and locale</a>    <ul>
+  <li><a href="#configure-time-zone-and-locale">Configure time zone and locale</a>    <ul>
       <li><a href="#install-dbox-dropbox-tool">Install dbox (dropbox tool)</a></li>
       <li><a href="#setup-xbmc">Setup XBMC</a></li>
       <li><a href="#useful-extras-not-always-used">Useful extras, not always used</a></li>
@@ -130,11 +114,7 @@
   <li><a href="#optionally-remove-unused-usbmount-directories">optionally remove unused usbmount directories</a></li>
 </ul>
 
-<h2 id="basic-pi-tips">Basic Pi Tips</h2>
-
-<p>Guide for navigating XBMC with the <a href="http://wiki.xbmc.org/index.php?title=Keyboard">keyboard</a>.</p>
-
-<h3 id="connecting-to-the-pi">Connecting to the Pi</h3>
+<h2 id="connecting-to-the-pi">Connecting to the Pi</h2>
 
 <p>XBian names the default user account <code>xbian</code>, other distributions normally use <code>pi</code>.  The default password is <code>raspberry</code>.  XBian includes support for zeroconfig (via avahi-daemon), so it’s easier to find your Pi on the network<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>.</p>
 
@@ -174,7 +154,7 @@ test -f ~/.ssh/id_rsa.pub || ssh-keygen</p>
 <p>ssh-copy-id xbian@xbian.local
 ```</p>
 
-<p>The easiest way to append a key to the remote user’s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source (or <a href="https://github.com/beautifulcode/ssh-copy-id-for-OSX">github</a>) if your system doesn’t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
+<p>The easiest way to append a key to the remote user’s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source if your system doesn’t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
 
 <h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
 
@@ -236,10 +216,6 @@ echo ‘%sudo  ALL=(ALL) NOPASSWD: ALL’ » /etc/sudoers</p>
 <h1 id="update-packages">Update packages</h1>
 <p>apt-get update &amp;&amp; apt-get upgrade</p>
 
-<h1 id="configure-time-zone-and-locale">Configure time zone and locale</h1>
-<p>dpkg-reconfigure tzdata
-dpkg-reconfigure locales</p>
-
 <h1 id="install-some-utilities-and-services">Install some utilities and services</h1>
 <p>apt-get install p7zip zip curl mediainfo avahi-daemon iw</p>
 
@@ -250,9 +226,6 @@ dpkg-reconfigure locales</p>
 <p>apt-get install ruby ruby-dev ri libsqlite3-dev npm
 # Fix node binary being named nodejs
 cd /usr/bin; sudo ln -s nodejs node; cd</p>
-
-<h1 id="install-node-packages">Install node packages</h1>
-<p>npm install -g node-gyp</p>
 
 <h1 id="install-rmate-for-textmate-editing-over-ssh">Install rmate for TextMate editing over ssh</h1>
 <p>gem install rmate
@@ -327,33 +300,11 @@ dropbearkey -t rsa -f /etc/dropbear/dropbear_rsa_host_key
 
 <h2 id="ttl-serial-console">TTL serial console</h2>
 
-<p>Connecting to the pi without a network can be achieved over serial cable: e.g. <code>screen /dev/tty.usbserial 115200</code>.</p>
-
-<p>Unfortunately, the display of full screen terminal programs becomes corrupted when using
-a TTL to USB serial connection to the Pi from Mac OS X. Changing the terminal type to
-match your system’s <code>$TERM</code> variable enables use of programs such as <code>nano</code> and
-<code>xbian-config</code> without screen corruption.</p>
+<p>The display of full screen terminal programs becomes corrupted when using a TTL to USB serial connection to the Pi from Mac OS X.  Changing the terminal type enables use of programs such as <code>nano</code> and <code>xbian-config</code>.</p>
 
 <p><code>sh
-sed -i '/ttyAMA0/s/vt100$/xterm-256color/' /etc/inittab
+sed -i '/ttyAMA0/s/vt100$/xterm/' /etc/inittab
 </code></p>
-
-<p>Additionally, using <code>screen</code> results in display size issues if your terminal does not
-match the 80x24 columns and lines assumed when logging in over serial. (This does not
-occur when using <code>ssh</code> as the client’s current terminal size is communicated to the ssh
-server.)</p>
-
-<p>```sh
-# print the current size assumed by the host
-stty size
-# returns: 24 80</p>
-
-<h1 id="manually-set-correct-size-for-the-client-window">manually set correct size for the client window</h1>
-<p>stty rows 18
-stty cols 70
-```</p>
-
-<p>A script is available <a href="https://github.com/akkana/scripts/blob/master/termsize">on github</a> (found via <a href="http://shallowsky.com/blog/hardware/serial-24-line-terminals.html">shallowsky.com</a>) that will determine your <em>actual</em> terminal window size and set it correctly on the Pi.  The script can be run from <code>.bashrc</code> or similar.</p>
 
 <h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
 
@@ -375,19 +326,10 @@ cd wiringPi; ./build</p>
 
 <p>If you only plan to run the terminal environment (including self-hosted programs such as XBMC), then a lot of space can be recovered by removing x11 and related packages.</p>
 
-<p><em>TODO: mono depends upon libx11-6, so it’ll need to be (re)installed afterwards.</em></p>
-
 <p>```sh
 # desktop
-apt-get purge x11-common libx11-.* xkb-data xdg-utils menu-xdg
-apt-get purge desktop-file-utils fonts-freefont-ttf
-apt-get purge libraspberrypi0 raspberrypi-artwork lxde-icon-theme</p>
-
-<h1 id="network-drives">network drives</h1>
-<p>apt-get purge cifs-utils samba-common smbclient nfs-common</p>
-
-<h1 id="other">other</h1>
-<p>apt-get purge liblapack3 libatlas3-base</p>
+apt-get purge x11-common libx11-.* lxde-icon-theme xkb-data
+apt-get purge fonts-freefont-ttf libraspberrypi0</p>
 
 <h1 id="cleaning-up">cleaning up</h1>
 <p>(cd ~pi; rm -rf Desktop python_games ocr_pi.png)
@@ -402,59 +344,8 @@ apt-get clean
 <p>Install Mono development tools, runtime, and interactive shell.</p>
 
 <p><code>sh
-apt-get install mono-devel mono-utils mono-csharp-shell
+apt-get install mono-devel mono-csharp-shell
 </code></p>
-
-<!--
-pkg-count
-353 mono-complete
-214 cli-common-dev
-172 mono-devel
-168 libmono-cil-dev
-
-# for a minimal cli toolchain:
-apt-get install mono-mcs mono-xbuild mono-csharp-shell
--->
-
-<h2 id="install-xbian-onto-a-raspbian-image">Install XBian onto a Raspbian image</h2>
-
-<p>From <a href="http://forum.xbian.org/thread-1850.html">Installing XBIAN directly on RASPBIAN IMG</a></p>
-
-<p>```sh
-# install xbian repo
-wget http://xbian.brantje.com/pool/stable/main/x/xbian-package-repo/xbian-package-repo<em>1.0.0_armhf.deb
-dpkg -i xbian-package-repo</em>1.0.0_armhf.deb</p>
-
-<h1 id="enable-staging-and-development-repositories-and-update">enable staging and development repositories and update</h1>
-<p>sed -i ‘/ staging|devel main/s/^#+ //’ /etc/apt/sources.list.d/xbian.list
-apt-get update
-# revert previous edit
-sed -i ‘/ staging|devel main/s/^/### /’ /etc/apt/sources.list.d/xbian.list</p>
-
-<h1 id="install-xbianxbmc">install xbian/xbmc</h1>
-<p>apt-get install xbian-package-xbianhome xbian-package-kernel</p>
-
-<h1 id="reboot-required-to-make-file-system-changes-and-conversion-to-btrfs">reboot required to make file system changes, and conversion to btrfs</h1>
-<p>sed -i /rootfstype/s/btrfs/ext4/ /boot/cmdline.txt # do not use btrfs
-reboot</p>
-
-<h1 id="install-remaining-xbian-packages">install remaining xbian packages</h1>
-<p># Note: a warning for removal of ‘sysvinit’ will be displayed,
-# as xbian replaces it with the ‘upstart’ service manager.
-# Also, cmdline.txt should remain unchanged, with new
-# parameters written to /boot/cmdline.new.
-apt-get install xbian-update xbian-package-rasp-switching</p>
-
-<h1 id="xbmc-can-now-be-started-with-start-xbmc">XBMC can now be started with “start XBMC”</h1>
-
-<h1 id="boot-to-desktop">boot to desktop</h1>
-<p># apt-get install lightdm
-```</p>
-
-<!-- XBMC can be started with "start XBMC", Raspbian X desktop with "service lightdm start".
-
-if you Raspbian setup used to boot into X with PI user automatically, you can keep this and indeed start / load XBMC quick and easy way - even jumping back and forth between XBMC and you X Desktop. We can click "Logout", put "xbian" as user to log in and XBMC starts. If you quit XBMC, X will come again. No reboots needed.
-Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC). There is how you RPI will boot if you select what service for autostart: -->
 
 <h2 id="install-aircrack-and-related-tools">Install aircrack and related tools</h2>
 
@@ -506,7 +397,7 @@ apt-get install console-setup keyboard-configuration</p>
 <p># accept the defaults until the font selection screen
 dpkg-reconfigure console-setup</p>
 
-<h1 id="configure-time-zone-and-locale-1">Configure time zone and locale</h1>
+<h1 id="configure-time-zone-and-locale">Configure time zone and locale</h1>
 <p>dpkg-reconfigure tzdata
 dpkg-reconfigure locales
 ```</p>
@@ -589,107 +480,6 @@ ip r | grep -o ‘src.*’</p>
 
 <p>If it isn’t possible to run a command locally on the Pi (e.g. there is no monitor or keyboard attached), you can either <a href="http://www.recantha.co.uk/blog/?p=2397">scan the network</a>, run <code>nmap 192.168.0.1/24 -p 22</code>, or view ‘Attached Devices’ in your Router’s setup.  Look for a matching hostname or MAC address (which will start with <code>b8:27:eb</code> for the on-board LAN).</p>
 
-<h3 id="testing-pvr">Testing PVR</h3>
-
-<p><code>sh
-apt-get install vdr-plugin-dvbsddevice
-</code></p>
-
-<h3 id="setting-up-webcam">Setting up webcam</h3>
-
-<p>Use ‘motion’ or ‘fswebcam’, motion may need a default cfg copying</p>
-
-<p><code>sh
-apt-get install motion
-cp /etc/default/motion /etc/motion/motion.conf
-</code></p>
-
-<h3 id="configure-bluetooth-adapter">Configure bluetooth adapter</h3>
-
-<p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
-
-<p>```sh
-# install bluetooth support and dependencies
-agi bluez python-gobject  # minimal?
-agi bluetooth bluez-utils  # full</p>
-
-<h1 id="for-management-from-the-desktop">for management from the desktop</h1>
-<p>agi blueman</p>
-
-<h1 id="check-adapter-is-working">check adapter is working*</h1>
-<p>hcitool dev</p>
-
-<h1 id="scan-for-devices">scan for devices</h1>
-<p>hcitool scan</p>
-
-<h1 id="pair-with-device-using-the-address-listed-from-scan">pair with device, using the address listed from scan</h1>
-<p>bluez-simple-agent hci0 XX:XX:XX:XX:XX:XX</p>
-
-<h1 id="trust-the-device">trust the device</h1>
-<p>bluez-test-device trusted XX:XX:XX:XX:XX:XX yes</p>
-
-<h1 id="connect-to-input-device">connect to input device</h1>
-<p>bluez-test-input hci0 XX:XX:XX:XX:XX:XX</p>
-
-<h1 id="adapter-status">adapter status</h1>
-<p>hciconfig
-```</p>
-
-<p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
-
-<h2 id="troubleshooting-and-backup">Troubleshooting and backup</h2>
-
-<p>Some useful commands and procedures</p>
-
-<h3 id="backup-settings">Backup settings</h3>
-
-<ul>
-  <li>Settings, addons etc. are in ~/.xbmc</li>
-  <li>.xbmc/userdata - preferences etc</li>
-  <li>.xbmc/addons - binaries, themes</li>
-  <li>.xbmc/addons/packages - original downloads, can use with “install from zip”</li>
-</ul>
-
-<p>```sh
-# backup profile settings
-zip -ry xbmc .xbmc/
-zip -ry dotfiles .bash_aliases .nanorc .toprc .ssh</p>
-
-<h1 id="backup-system-config-files">backup system config files</h1>
-<p>sudo zip -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
-```</p>
-
-<p>Or using tar..</p>
-
-<p>```sh
-# backup profile settings
-tar -czf xbmc-backup.tar.gz .xbmc</p>
-
-<h1 id="restore-profile-settings">restore profile settings</h1>
-<p>sudo initctl stop xbmc
-tar -xzf xbmc-backup.tar.gz
-sudo initctl start xbmc
-```</p>
-
-<h3 id="clear-cached-network-adapter">Clear cached network adapter</h3>
-
-<p>(needed for switching cards between devices)</p>
-
-<p><code>sh
-echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
-</code></p>
-
-<h3 id="quick-tips">Quick Tips</h3>
-
-<ul>
-  <li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
-  <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
-</ul>
-
-<h2 id="not-used-with-recent-versions">Not used with recent versions</h2>
-
-<p>Previously useful functionality or workarounds</p>
-
 <h3 id="manually-configure-wifi-adapter">Manually configure WiFi adapter</h3>
 
 <p><a href="http://www.savagehomeautomation.com/raspi-airlink101">Instructions adapted from here</a>.</p>
@@ -737,6 +527,109 @@ sudo ifup wlan0
 
 <p>Use <code>iwconfig</code> to view wifi adapter info and <code>ifconfig</code> for general network info.</p>
 
+<h3 id="configure-bluetooth-adapter">Configure bluetooth adapter</h3>
+
+<p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
+
+<p>```sh
+# install bluetooth support and dependencies
+agi bluez python-gobject  # minimal?
+agi bluetooth bluez-utils  # full</p>
+
+<h1 id="for-management-from-the-desktop">for management from the desktop</h1>
+<p>agi blueman</p>
+
+<h1 id="check-adapter-is-working">check adapter is working*</h1>
+<p>hcitool dev</p>
+
+<h1 id="scan-for-devices">scan for devices</h1>
+<p>hcitool scan</p>
+
+<h1 id="pair-with-device-using-the-address-listed-from-scan">pair with device, using the address listed from scan</h1>
+<p>bluez-simple-agent hci0 XX:XX:XX:XX:XX:XX</p>
+
+<h1 id="trust-the-device">trust the device</h1>
+<p>bluez-test-device trusted XX:XX:XX:XX:XX:XX yes</p>
+
+<h1 id="connect-to-input-device">connect to input device</h1>
+<p>bluez-test-input hci0 XX:XX:XX:XX:XX:XX</p>
+
+<h1 id="adapter-status">adapter status</h1>
+<p>hciconfig
+```</p>
+
+<p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
+
+<h3 id="testing-pvr">Testing PVR</h3>
+
+<p><code>sh
+apt-get install vdr-plugin-dvbsddevice
+</code></p>
+
+<h3 id="setup-webcam">Setup webcam</h3>
+
+<p>Use ‘motion’ or ‘fswebcam’, motion may need a default cfg copying</p>
+
+<p><code>sh
+apt-get install motion
+cp /etc/default/motion /etc/motion/motion.conf
+</code></p>
+
+<h2 id="troubleshooting-and-backup">Troubleshooting and backup</h2>
+
+<p>Some useful commands and procedures</p>
+
+<h3 id="quick-tips">Quick Tips</h3>
+
+<ul>
+  <li>You can detect hdmi audio modes: <code>/opt/vc/bin/tvservice -a</code></li>
+  <li>Setup CEC remote over hdmi from console: <code>cec-config</code></li>
+</ul>
+
+<h3 id="backup-settings">Backup settings</h3>
+
+<ul>
+  <li>Settings, addons etc. are in ~/.xbmc</li>
+  <li>.xbmc/userdata - preferences etc</li>
+  <li>.xbmc/addons - binaries, themes</li>
+  <li>.xbmc/addons/packages - original downloads, can use with “install from zip”</li>
+</ul>
+
+<p>```sh
+# backup profile settings
+zip -FS -ry xbmc .xbmc/
+zip -FS -ry dotfiles .bash_aliases .nanorc .toprc .ssh</p>
+
+<h1 id="backup-system-config-files">backup system config files</h1>
+<p>sudo zip -FS -ry basecfg /etc/wpa_supplicant/wpa_supplicant.conf
+```</p>
+
+<p>Or using tar..</p>
+
+<p>```sh
+# backup profile settings
+tar -czf xbmc-backup.tar.gz .xbmc</p>
+
+<h1 id="restore-profile-settings">restore profile settings</h1>
+<p>sudo initctl stop xbmc
+tar -xzf xbmc-backup.tar.gz
+sudo initctl start xbmc
+```</p>
+
+<!-- endofpost -->
+
+<h2 id="not-used-with-recent-versions">Not used with recent versions</h2>
+
+<p>Previously useful functionality or workarounds</p>
+
+<h3 id="clear-cached-network-adapter">Clear cached network adapter</h3>
+
+<p>(needed for switching cards between devices)</p>
+
+<p><code>sh
+echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
+</code></p>
+
 <h3 id="fake-a-hardware-clock-unabridged">Fake a hardware clock (unabridged)</h3>
 
 <p>More complicated instructions, as used on previous versions of XBian.</p>
@@ -766,9 +659,11 @@ chmod a+r ~/.ssh/id_rsa.pub
 
 <h3 id="download-openssh-sftp-server">Download OpenSSH sftp server</h3>
 
+<p>If sftp is not already on your system (such as when using dropbear), it can’t be installed
+manually without installing the entire openssh package.</p>
+
 <p><code>sh
-apt-get -d install openssh-server
-cp /var/cache/apt/archives/openssh-server_*.deb .
+apt-get download openssh-server
 dpkg-deb -X openssh-server_*.deb sftp
 cp sftp/usr/lib/openssh/sftp-server /usr/lib/
 rm -r sftp openssh-server_*.deb
@@ -839,6 +734,52 @@ service avahi-daemon start
 # exit root
 exit
 </code></p>
+
+<!--
+## Host a WiFi hotspot
+
+If no other WiFi is found, then start a hotspot.  This allows clients to connect
+to the Raspberry Pi by WiFi as usual.
+
+```sh
+# Install the busybox DHCP server and Host AP driver
+apt-get install udhcpd hostapd
+
+# Enable udhcp
+sed -i '/DHCPD_ENABLED/s/^/# /' /etc/default/udhcpd
+
+# Configure interface to use
+sed -i '/^interface/s/eth0/wlan0/' /etc/udhcpd.conf
+
+# Enable 'remaining' option (for devices without rtc)
+sed -i '/^#remaining/s/^#//' /etc/udhcpd.conf
+```
+ -->
+
+<!--
+## Owncloud - a self hosted dropbox
+
+Using the script provided at [github.com/petrockblog](https://github.com/petrockblog),
+install the owncloud dependencies and NGiNX based web app.
+
+Before starting, check the free space available with `df -h /` and ensure there is enough
+space available (needs upto 800MB, depends upon existing packages already installed and
+includes increasing the swap file to 512MB).
+
+```sh
+# install script dependency
+apt-get install dialog
+
+# download script and execute
+wget https://github.com/petrockblog/OwncloudPie/raw/master/owncloudpie_setup.sh
+chmod +x owncloudpie_setup.sh
+./owncloudpie_setup.sh
+```
+
+Use option (1) to set the URL (or IP) where the Pi can be accessed.  Then option (2)
+for a new install using NGiNX.  For more details on manual setup, or fixing WebDAV issues,
+see the [eiosifidis](http://eiosifidis.blogspot.co.uk/2014/06/owncloud-on-raspberry-pi-moebious-nginx.html).
+ -->
 <div class="footnotes">
   <ol>
     <li id="fn:hostname">

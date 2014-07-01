@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: efi | jmeosbn]]></title>
+  <link href="http://jmeosbn.github.io/blog/categories/efi/atom.xml" rel="self"/>
+  <link href="http://jmeosbn.github.io/"/>
+  <updated>2014-07-01T03:54:50+01:00</updated>
+  <id>http://jmeosbn.github.io/</id>
+  <author>
+    <name><![CDATA[Jamie Osborne]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Windows 8.1 - EFI install]]></title>
+    <link href="http://jmeosbn.github.io/blog/windows-8.1-efi-install/"/>
+    <updated>2014-06-16T17:40:00+01:00</updated>
+    <id>http://jmeosbn.github.io/blog/windows-8.1-efi-install</id>
+    <content type="html"><![CDATA[<p>I recently wanted to test something on Windows, and not wanting to use a virtual machine,
+I decided to install Windows 8.1 on my MacBook.</p>
+
+<p>All Intel based Macs use EFI with a GUID partition table (GPT), instead of the
+traditional Wintel BIOS/MBR combination. Until recently, this has meant that Windows can
+only be installed by emulating an MBR disk, typically by using Apple’s Boot Camp to
+create the Windows partition.</p>
+
+<p>Since Windows 8 now supports installation under EFI<sup id="fnref:win7efi"><a href="#fn:win7efi" rel="footnote">1</a></sup>, and Boot Camp is fairly rigid about
+the placement of a Windows partition, I wanted to try installing Windows 8.1 using EFI and
+GPT just as I do with Mac OS X and Ubuntu.</p>
+
+<!-- more -->
+
+<p><em>Note: this procedure gets rapidly more complicated under only slightly unusual
+circumstances (such as having a non Windows OS installed, or more than one disk). Since
+this information involved some trial and error to discover, I post it here more for the
+record than as an endorsement of something that’s worth doing (it’s not too hard, but
+seriously, Ubuntu is free and much easier to install!).</em></p>
+
+<ul id="markdown-toc">
+  <li><a href="#why-the-windows-install-will-fail">Why the Windows install will fail</a></li>
+  <li><a href="#a-new-windows-partition">A new Windows partition</a></li>
+  <li><a href="#preparing-a-guid-partition-table">Preparing a GUID Partition Table</a></li>
+  <li><a href="#install-windows-to-a-gpt-disk">Install Windows to a GPT disk</a></li>
+  <li><a href="#manually-mount-the-efi-partition">Manually mount the EFI partition</a></li>
+  <li><a href="#delete-the-previous-boot-configuration">Delete the previous boot configuration</a></li>
+  <li><a href="#continue-installation-of-windows">Continue installation of Windows</a></li>
+  <li><a href="#why-the-recovery-console-will-fail">Why the Recovery Console will fail</a></li>
+  <li><a href="#legacy-boot-manager">Legacy boot manager</a></li>
+</ul>
+
+<h2 id="why-the-windows-install-will-fail">Why the Windows install will fail</h2>
+
+<p>The issues below will prevent the installation of Windows 8 (and 8.1) from succeeding
+when installing under EFI on a Mac or other EFI based system. The lack of clear error
+messages actually makes an EFI installation seem impossible, despite the EFI boot loader
+being present on the Windows disc. However, the fixes are fairly straightforward once you
+understand the issues.</p>
+
+<ul>
+  <li>When installing from a USB key<sup id="fnref:usbkey"><a href="#fn:usbkey" rel="footnote">2</a></sup>, that key must use an MBR partition table</li>
+  <li>The target for the installation must use a GUID partition table (GPT)</li>
+  <li>The target disk must not have a hybrid GPT/MBR partition table, such as that created by Boot Camp, Disk Utility, or GParted<sup id="fnref:gparted"><a href="#fn:gparted" rel="footnote">3</a></sup>.  A GPT with <em>protective</em> MBR is fine though, and protects the GUID partitions on unsupported systems</li>
+  <li>Windows will normally fail to install on systems with more than one GPT disk</li>
+</ul>
+
+<h2 id="a-new-windows-partition">A new Windows partition</h2>
+
+<p>The first task is to make some free space available, and then create a new NTFS partition
+for Windows to install to (size should be at least 20GB). It’s easier to do this now,
+before trying to install Windows, for reasons that will become apparent.</p>
+
+<p>If you’ll be resizing any Mac HFS+ partitions then you should probably use Disk Utility
+on OS X. Likewise, for resizing ext3/4 and other file systems unknown to OS X, use
+<a href="http://gparted.org/index.php">GParted</a> (booting from the <a href="http://gparted.org/livecd.php">gparted live cd</a> if no Linux system is installed).</p>
+
+<p>Note: On a Mac, the boot manager can be accessed by holding the <code>alt</code> key during startup.</p>
+
+<h2 id="preparing-a-guid-partition-table">Preparing a GUID Partition Table</h2>
+
+<p>You can check the GUID partition table (or create one from an existing MBR) using
+<code>gdisk</code> - which can be <a href="http://sourceforge.net/projects/gptfdisk/files/gptfdisk/0.8.10/gdisk-binaries/gdisk-0.8.10.pkg/download">installed on Mac OS X</a> or used from most Linux
+distros, such as the <a href="http://gparted.org/livecd.php">gparted live cd</a>.</p>
+
+<ol>
+  <li>From a terminal, run <code>sudo gdisk /dev/&lt;target-disk-id&gt;</code><sup id="fnref:diskid"><a href="#fn:diskid" rel="footnote">4</a></sup></li>
+  <li><code>gdisk</code> should display <code>GPT: present</code>, but <em>must not</em> list <code>MBR: hybrid</code></li>
+  <li>If the disk has a GPT without a hybrid MBR, quit by typing <code>q</code> then <code>enter</code></li>
+</ol>
+
+<p>If the target disk is listed with <code>MBR: hybrid</code>, then Windows will fail to install under
+EFI. The best way to correct the GPT is to replace the hybrid MBR using <code>gdisk</code>.</p>
+
+<ol>
+  <li>Still in <code>gdisk</code>, use <code>x</code> to enter the expert menu</li>
+  <li>Enter <code>n</code> to create a new <em>protective</em> MBR</li>
+  <li>Check the protective<sup id="fnref:protective"><a href="#fn:protective" rel="footnote">5</a></sup> MBR and GPT by using <code>o</code> and <code>p</code> respectively</li>
+  <li>You can abort before writing any changes by using <code>q</code> to quit</li>
+  <li>Once satisfied, write out the new table to disk by using <code>w</code></li>
+</ol>
+
+<p>If the target disk is listed with <code>MBR: MBR only</code>, then <code>gdisk</code> should have automatically
+created a GUID partition table in memory<sup id="fnref:gptwarning"><a href="#fn:gptwarning" rel="footnote">6</a></sup>. If the MBR partition table isn’t
+required to support older systems or legacy boot loaders, then use the menu commands
+shown above to check the existing partitions have been added correctly before writing out
+the tables to disk.</p>
+
+<h2 id="install-windows-to-a-gpt-disk">Install Windows to a GPT disk</h2>
+
+<p>Start the Windows installation using your preferred media, select the custom install
+option, then continue on to the partition selection screen and select the empty NTFS
+partition <a href="#a-new-windows-partition">created previously</a>. With a <em>single non-hybrid</em> GPT
+disk, Windows should install without complaint.</p>
+
+<p>Note: While you can use the installer to format or delete existing partitions, using it
+to create a new partition from free space will likely create additional system partitions
+which you may prefer not to have littering your disk. If you don’t want to reboot at this
+point to create an NTFS partition, <code>diskpart</code> can be used to avoid the additional
+partition clutter.</p>
+
+<p>With some free space ready to be partitioned, type <code>Shift + F10</code> to bring up a command
+prompt and use the following commands.</p>
+
+<pre><code># start the diskpart utility
+diskpart
+
+# select the target disk
+list disk
+sel disk &lt;target disk&gt;
+list part
+
+# create a new partition using the selected disk's free space
+create part pri
+format fs=ntfs label=Windows quick
+
+# exit diskpart
+exit
+</code></pre>
+
+<h2 id="manually-mount-the-efi-partition">Manually mount the EFI partition</h2>
+
+<p>With more than one GPT disk, Windows will fail to install as it only expects to have one
+EFI system partition in which to store its boot configuration files. To work around this,
+use <code>diskpart</code> to manually mount the EFI partition from the target installation disk,
+then tell Windows to use that partition by using <code>bcdedit</code>.</p>
+
+<p>Type <code>Shift + F10</code> to bring up a command prompt.</p>
+
+<pre><code># start diskpart
+diskpart
+
+# mount the efi volume
+list vol
+sel vol &lt;efi volume&gt;
+assign letter=s
+exit
+
+# set the EFI partition with bcdedit
+bcdedit /sysstore s:
+</code></pre>
+
+<h2 id="delete-the-previous-boot-configuration">Delete the previous boot configuration</h2>
+
+<p>If you’ve previously had Windows installed using EFI, then the previous boot loader and
+boot configuration data store (BCD) will likely still be installed in the EFI system
+partition. To prevent previous Windows entries from showing up as duplicates in the
+Windows boot manager, you can delete the previous BCD store before installing Windows.</p>
+
+<p>Assuming the EFI partition is mounted to <code>S:\</code>, the following command will delete the BCD store.</p>
+
+<pre><code># delete boot store from a previous windows install
+del s:\EFI\Microsoft\Boot\BCD
+</code></pre>
+
+<p><em>If you forget to do this until Windows is installed, and a previous configuration did
+exist, then a system selection screen will be shown after each startup of Windows. To
+remove the additional entry, use <code>bcdedit /delete {id-of-boot-entry}</code>.</em></p>
+
+<h2 id="continue-installation-of-windows">Continue installation of Windows</h2>
+
+<p>Back in the installer, you should now be able to select the new partition and continue
+the installation as normal. When Windows reboots, it may be necessary to use the system’s
+EFI boot manager to select the Windows partition and complete installation.</p>
+
+<h2 id="why-the-recovery-console-will-fail">Why the Recovery Console will fail</h2>
+
+<p>With Windows installed, you may at some point need to use the recovery console. On EFI
+systems with more than one GPT disk, you’ll find that most of the recovery tools, such as
+System Restore, will fail due to the same issue that causes the installation to fail.</p>
+
+<p>From <em>Troubleshoot -&gt; Advanced Options -&gt; Command Prompt</em>, you can manually mount the
+correct EFI partition using <code>diskpart</code> as
+<a href="#manually-mount-the-efi-partition">described above</a>. Once done, simply use the graphical
+menu to select <em>System Restore</em> or another recovery option.</p>
+
+<h2 id="legacy-boot-manager">Legacy boot manager</h2>
+
+<p>Windows 8 uses a graphical boot manager that’s only shown once the system is mostly
+booted. Apart from taking longer to switch between systems, there is no access to
+advanced boot options such as safe mode etc., without first being able to start the
+graphical boot manager or recovery environment.</p>
+
+<p>Previously, advanced options could be accessed by holding <code>F8</code> during startup, but
+Windows no longer checks for this key<sup id="fnref:f8key"><a href="#fn:f8key" rel="footnote">7</a></sup> as it adds a second or so to the boot
+time. If you’d prefer to have the menu available instead, then the <code>legacy</code> boot menu
+policy can be enabled using <code>bcdedit</code>.</p>
+
+<pre><code># allow F8 during boot to access advanced options
+bcdedit /set bootmenupolicy legacy
+</code></pre>
+
+<p>Alternatively, the advanced options can be shown for the next boot only, or for every boot
+(without needing to hold <code>F8</code>).</p>
+
+<pre><code># show advanced options for the next boot only
+bcdedit /set onetimeadvancedoptions on
+
+# always show the boot menu before system startup
+bcdedit /set {bootmgr} displaybootmenu yes
+</code></pre>
+<div class="footnotes">
+  <ol>
+    <li id="fn:win7efi">
+      <p>Windows 7 actually supports efi booting from CD, but the efi loader and
+related files were not included in the CD’s filesystem (there
+<a href="http://forums.bit-tech.net/showthread.php?t=209045">is a hack</a> to work around
+this, but it doesn’t seem to work on my MacBook).<a href="#fnref:win7efi" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:usbkey">
+      <p>Write a new MBR partition table to a USB key and add a single FAT32 partition.
+Then copy the Windows install files from the disc to the USB
+ key using <code>rsync -aPh &lt;source&gt;/. &lt;key&gt;</code>.<a href="#fnref:usbkey" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:gparted">
+      <p>Disk Utility only adds a hybrid MBR when creating a new partition table and
+will retain any protective MBR already present. Annoyingly, GParted will re-add a hybrid
+MBR whenever it modifies a disk that uses GPT, and this will prevent Windows from
+starting under EFI until the hybrid MBR is removed.<a href="#fnref:gparted" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:diskid">
+      <p>On Linux systems, the disk will normally be named using the form <code>sda</code>, where
+the <code>a</code> represents the first disk. On Mac OS X, the form is <code>disk0</code>, where the <code>0</code>
+represents the first disk.<a href="#fnref:diskid" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:protective">
+      <p>A <em>protective</em> MBR usually lists only one partition, that spans the entire
+disk to prevent non-GPT aware tools from identifying the disk as being uninitialised or
+empty. A <em>hybrid</em> MBR exploits the protective MBR to make up to four primary partitions
+available to systems that don’t support GPT disks. The use of a hybrid MBR is
+discouraged, and not supported by Windows when booting under EFI.<a href="#fnref:protective" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:gptwarning">
+      <p>It may be that <code>gdisk</code> can’t write out the GPT due to lack of free spaceat
+the start of the disk. In this case you can try to resize the first partition to start a
+few megabytes later.<a href="#fnref:gptwarning" rel="reference">&#8617;</a></p>
+    </li>
+    <li id="fn:f8key">
+      <p>The check is supposedly still there, but is so short that it can’t be activated.<a href="#fnref:f8key" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+  </entry>
+  
+</feed>
