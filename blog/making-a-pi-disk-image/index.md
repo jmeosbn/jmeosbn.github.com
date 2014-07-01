@@ -76,10 +76,11 @@ Zero fill the unused SD card space for better compression. This can also be done
 desktop Linux environment, and may be a little faster that way[^sfill] (but needs more
 command line effort).
 
-[^sfill]: Normally, `sfill` seems to run just as fast from the raspberry pi - since the
-    SD card speed is the main factor - and space saved is similar to mounting offline.
-    However, with recent images, I've found `sfill` to take a long time to complete after
-    filling the disk (but before "Wiping inodes").
+[^sfill]: Normally, `sfill` seems to run just as fast from the Raspberry Pi - since the
+    SD card write speed is the main factor - and space saved is similar to mounting
+    offline. When making recent images I've found `sfill` to take a long time to complete
+    after filling the disk (but before 'Wiping inodes'), I haven't retested on the desktop
+    with the same images yet though.
 
 ```sh
 # zero fill the filesystem

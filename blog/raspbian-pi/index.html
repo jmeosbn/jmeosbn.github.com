@@ -1,0 +1,1043 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Minimal Raspbian Pi - jmeosbn</title>
+  <meta name="author" content="Jamie Osborne">
+
+  
+  <meta name="description" content="A collection of notes for setting up a clean and minimal image of
+Raspbian. Starting with the official raspbian image from
+raspberrypi.org, the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jmeosbn.github.io/blog/raspbian-pi/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/print.css" media="print" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="jmeosbn" type="application/atom+xml">
+  
+  <!-- Google site verification -->
+  <meta name="google-site-verification" content="PubgJ00VUIj1r0qaB3oR0KwXirQKu3XAhBh0YduPdS0" />
+
+  <!-- Link to full license file -->
+  <link rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-42399191-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jmeosbn</a></h1>
+  
+</hgroup>
+
+</header>
+  
+    <nav role="navigation"><ul class="main-navigation" data-subscription="rss">
+    <li><a href="/">jmeosbn</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+
+  
+  <li><a href="feed://jmeosbn.github.io/atom.xml" rel="subscribe-rss-no-icon" title="Subscribe via RSS">rss</a></li>
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jmeosbn.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+</nav>
+  
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Minimal Raspbian Pi</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-28T12:13:00+01:00" pubdate data-updated="true">Apr 28<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>A collection of notes for setting up a clean and minimal image of
+<a href="http://raspbian.org">Raspbian</a>.</p>
+
+<p>Starting with the official raspbian image from
+<a href="/blog/raspbian-pi/raspberrypi.org/downloads">raspberrypi.org</a>, the desktop environment and extras will
+be removed, and development tools and other utilities added.</p>
+
+<!-- See [Minimal Raspbian Net Installer](#minimal-raspbian-net-installer) if you prefer to
+build a minimal image from scratch using the
+[Raspbian unattended netinstaller](https://github.com/hifi/raspbian-ua-netinst). -->
+
+<!-- more -->
+
+<h3 id="comparison-of-compressed-images">Comparison of compressed images</h3>
+
+<p><code>826 MB</code> - Original 2014-06-20-wheezy-raspbian<br />
+<code>284 MB</code> - Additional packages added, desktop extras removed<br />
+<code>156 MB</code> - Desktop environment removed, <code>udisks-glue</code> installed<br />
+<code>184 MB</code> - As above, with <code>mono</code> installed</p>
+
+<!--
+
+## Disable password based logon
+
+Disable password logins for remote ssh access (public key only).
+
+### TODO:
+
+ -->
+
+<ul id="markdown-toc">
+  <li><a href="#basic-pi-tips">Basic Pi Tips</a></li>
+  <li><a href="#first-login-tasks">First login tasks</a></li>
+  <li><a href="#change-hostname">Change Hostname</a></li>
+  <li><a href="#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
+  <li><a href="#configure-wifi-adapter">Configure WiFi adapter</a></li>
+  <li><a href="#backup-installation">Backup installation</a></li>
+  <li><a href="#removing-the-desktop-environment">Removing the desktop environment</a></li>
+  <li><a href="#configure-automount-for-usb-drives">Configure automount for usb drives</a></li>
+  <li><a href="#add-services-using-supervisor">Add services using Supervisor</a></li>
+  <li><a href="#install-mono">Install Mono</a></li>
+  <li><a href="#link-settings-to-root-profile">Link settings to root profile</a></li>
+  <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
+  <li><a href="#install-transmission">Install Transmission</a></li>
+  <li><a href="#dropbox-sync-using-dbox">Dropbox sync using dbox</a></li>
+  <li><a href="#precompiled-xbmc">Precompiled XBMC</a></li>
+  <li><a href="#connecting-to-the-pi">Connecting to the Pi</a></li>
+</ul>
+
+<h2 id="basic-pi-tips">Basic Pi Tips</h2>
+
+<p>You can copy an image to the SD card, without first extracting it:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># Replace image archive and device name with correct values</span>
+</span><span class="line">7z e -so raspbian.img.7z <span class="s1">&#39;*.img&#39;</span> | sudo dd <span class="nv">of</span><span class="o">=</span>/dev/sdc <span class="nv">bs</span><span class="o">=</span>1M
+</span><span class="line">
+</span><span class="line"><span class="c"># 7z should support most compression formats</span>
+</span><span class="line">7z e -so raspbmc.img.gz <span class="s1">&#39;*.img&#39;</span> | sudo dd <span class="nv">of</span><span class="o">=</span>/dev/sdc <span class="nv">bs</span><span class="o">=</span>1M
+</span></code></pre></div></figure></notextile></div>
+
+<p>To backup an entire SD card to an image file, use <code>dd</code> again:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># Replace device name with correct values</span>
+</span><span class="line">sudo dd <span class="k">if</span><span class="o">=</span>/dev/sdc <span class="nv">of</span><span class="o">=</span>raspbian.img <span class="nv">bs</span><span class="o">=</span>1M
+</span></code></pre></div></figure></notextile></div>
+
+<p>For details on making an optimised <code>dd</code> image, see
+<a href="/blog/making-a-pi-disk-image/">Making a Pi disk image</a>.</p>
+
+<h2 id="first-login-tasks">First login tasks</h2>
+
+<p>The first task after booting the Raspberry Pi, is to set up the environment. For a
+headless Pi (one without a monitor or keyboard connected), you may want to use a
+serial connection to login until WiFi and zeroconfig <a href="#connecting-to-the-pi">have been configured</a>.</p>
+
+<p>Note that there will be a login message recommending to run <code>sudo raspi-config</code>. This can
+be done later for tasks more specific to the installation, such as expanding the
+partition to fill the SD card.</p>
+
+<p>Most of the commands below need root privileges on the Pi, as they alter the system
+configuration. To run a single command with root privileges, prepend the <code>sudo</code> command
+to it. To run many commands this way without typing <code>sudo</code> each time, first start a root
+shell with <code>sudo -s</code> (<em>logout with ‘exit’ or ctrl+d when finished</em>).</p>
+
+<!--
+# retain user's $HOME for non-login shell using 'sudo'
+# sed -i '/env_keep.*\+.*HOME/b; $ a\\nDefaults env_keep += \"HOME\"' /etc/sudoers
+-->
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># Login to the pi over serial, user:pi pw:raspberry</span>
+</span><span class="line">screen /dev/tty.usbserial 115200
+</span><span class="line">
+</span><span class="line"><span class="c"># Disable the login message</span>
+</span><span class="line">touch ~/.hushlogin
+</span><span class="line">
+</span><span class="line"><span class="c"># Disable setting of the terminal title</span>
+</span><span class="line">sed -i <span class="s1">&#39;/PS1=.*\][0-2];/s/\w/## &amp;/&#39;</span> ~/.bashrc
+</span><span class="line">
+</span><span class="line"><span class="c"># Use a root shell for the following commands</span>
+</span><span class="line">sudo -s
+</span><span class="line">
+</span><span class="line"><span class="c"># Change password for root and user</span>
+</span><span class="line">passwd <span class="o">&amp;&amp;</span> passwd <span class="k">$(</span>logname<span class="k">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Temporarily fit serial terminal to local window size</span>
+</span><span class="line">stty rows 17
+</span><span class="line">
+</span><span class="line"><span class="c"># Configure time zone and locale</span>
+</span><span class="line">dpkg-reconfigure tzdata
+</span><span class="line">dpkg-reconfigure locales
+</span><span class="line">
+</span><span class="line"><span class="c"># Hide the Raspberry Pi logo during boot</span>
+</span><span class="line">sed -i <span class="s2">&quot;/logo\.nologo/b; /1/s/$/ logo.nologo/&quot;</span> /boot/cmdline.txt
+</span><span class="line">
+</span><span class="line"><span class="c"># Don&#39;t prompt to run raspi-config on login</span>
+</span><span class="line">rm -f /etc/profile.d/raspi-config.sh
+</span><span class="line">
+</span><span class="line"><span class="c"># Enable colored xterm support over serial</span>
+</span><span class="line">sed -i <span class="s1">&#39;/ttyAMA0/s/vt100$/xterm-256color/&#39;</span> /etc/inittab
+</span><span class="line">
+</span><span class="line"><span class="c"># Update packages</span>
+</span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
+</span><span class="line">
+</span><span class="line"><span class="c"># Add tools for fat, exfat, and ntfs</span>
+</span><span class="line">apt-get install dosfstools exfat-fuse ntfs-3g
+</span><span class="line">
+</span><span class="line"><span class="c"># Support for zeroconfig</span>
+</span><span class="line">apt-get install avahi-daemon
+</span><span class="line">
+</span><span class="line"><span class="c"># Other utilities</span>
+</span><span class="line">apt-get install p7zip-full zip curl psmisc usbutils iw bc
+</span></code></pre></div></figure></notextile></div>
+
+<h4 id="preferred-packages">Preferred Packages</h4>
+
+<p>Depending upon your uses, you may have a set of packages you install to every fresh
+Raspbian image.  Below are the packages I like to install.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># SysV configuration tool (not for systemd)</span>
+</span><span class="line">apt-get install sysv-rc-conf
+</span><span class="line">
+</span><span class="line"><span class="c"># Install scripting tools</span>
+</span><span class="line">apt-get install ruby ruby-dev ri libsqlite3-dev nodejs-legacy npm
+</span><span class="line">
+</span><span class="line"><span class="c"># Set npm to use known registrars only</span>
+</span><span class="line">npm config <span class="nb">set </span>ca <span class="s2">&quot;&quot;</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Install node packages</span>
+</span><span class="line">npm install -g node-gyp markdown-preview
+</span><span class="line">
+</span><span class="line"><span class="c"># Install misc. packages</span>
+</span><span class="line">apt-get install mediainfo irssi
+</span><span class="line">
+</span><span class="line"><span class="c"># Install rmate for TextMate editing over ssh</span>
+</span><span class="line">gem install rmate
+</span></code></pre></div></figure></notextile></div>
+
+<h2 id="change-hostname">Change Hostname</h2>
+
+<p>If it’s likely the Pi won’t be the only one using the local network, then it should be
+given a unique host name.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># replace the hostname in each file</span>
+</span><span class="line"><span class="nv">NEWNAME</span><span class="o">=</span>snhack
+</span><span class="line">sed -i <span class="s2">&quot;s/${HOSTNAME}$/${NEWNAME}/&quot;</span> /etc/host<span class="o">{</span>s,name<span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># enable the changes</span>
+</span><span class="line">/etc/init.d/hostname.sh start
+</span></code></pre></div></figure></notextile></div>
+
+<h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
+
+<p>These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have <a href="#change-hostname">more than one Pi</a>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">rm /etc/ssh/ssh_host_*
+</span><span class="line">dpkg-reconfigure openssh-server
+</span><span class="line">
+</span><span class="line"><span class="c"># remove old host key from clients using:</span>
+</span><span class="line"><span class="c"># ssh-keygen -R raspberrypi.local</span>
+</span></code></pre></div></figure></notextile></div>
+<!--
+ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
+-->
+
+<p>If you’re using dropbear instead of openssh, then use:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">rm -f /etc/dropbear/dropbear/dropbear_*
+</span><span class="line">dropbearkey -t rsa -f /etc/dropbear/dropbear_rsa_host_key
+</span><span class="line">dropbearkey -t rsa -f /etc/dropbear/dropbear_rsa_host_key
+</span><span class="line">/etc/init.d/dropbear restart
+</span></code></pre></div></figure></notextile></div>
+
+<h2 id="configure-wifi-adapter">Configure WiFi adapter</h2>
+
+<p>Some distributions include WiFi setup as part of the terminal configuration script, but
+this functionality is not yet included in <code>raspi-config</code>. If keeping the desktop
+installed, then its network configuration tools can be used. Otherwise, use the
+instructions for <a href="#manually-configure-wifi-adapter">manual configuration</a>.</p>
+
+<!-- My bluetooth adapter is not supported in the current build of Raspbian/XBian, but
+[here is the procedure](#configure-bluetooth-adapter) I used when
+trying to get it running (confirmed working on a laptop running Ubuntu). -->
+
+<!-- If the keyboard layout is incorrect, you'll need to configure
+[regional system settings](#regional-system-settings). -->
+
+<h2 id="backup-installation">Backup installation</h2>
+
+<p>At this point we have a Raspbian image with minor tweaks, added/updated packages, and
+zeroconfig support which provides mDNS/Bonjour discovery of the Pi over a network without
+needing it’s IP address.</p>
+
+<p>To minimise the time spent installing updates on future install, it’s a good idea to
+<a href="/blog/making-a-pi-disk-image/">backup the card</a> to a disk image that can be reinstalled
+later. This will also come in handy if you decide later to revert large changes made
+after this point (such as removal of the desktop).</p>
+
+<h2 id="removing-the-desktop-environment">Removing the desktop environment</h2>
+
+<p>If you only plan to run the terminal environment (and self-hosted programs, such as
+XBMC), then a lot of space can be recovered by removing x11 and related packages.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># desktop extras</span>
+</span><span class="line">apt-get purge oracle-java.* wolfram-engine
+</span><span class="line">apt-get purge squeak-vm sonic-pi pistore midori dillo
+</span><span class="line">apt-get purge penguinspuzzle <span class="s1">&#39;raspberrypi-(artwork|doc)&#39;</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># samba network drives</span>
+</span><span class="line">apt-get purge samba-common smbclient
+</span><span class="line">
+</span><span class="line"><span class="c"># other libraries</span>
+</span><span class="line">apt-get purge python-numpy python-pygame python3-numpy
+</span><span class="line">apt-get purge liblapack3 libatlas3-base
+</span></code></pre></div></figure></notextile></div>
+
+<p>At this point, the base desktop system and utilities are still installed. However, over
+800MB has already been recovered - so if you just wanted to save a little space, you may
+want to keep the desktop after all.</p>
+
+<!-- *TODO: mono depends upon libx11-6, so it'll be (re)installed with mono as req.* -->
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># desktop environment</span>
+</span><span class="line">apt-get purge x11-common libx11-.* xkb-data xdg-utils menu-xdg
+</span><span class="line">apt-get purge desktop-file-utils lxde-icon-theme gnome-themes*
+</span></code></pre></div></figure></notextile></div>
+<!-- # apt-get purge fonts-freefont-ttf -->
+
+<p>Finally, purge packages no longer needed and clean up unused files.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># cleaning up</span>
+</span><span class="line"><span class="o">(</span><span class="nb">cd</span> ~pi; rm -rf Desktop python_games ocr_pi.png<span class="o">)</span>
+</span><span class="line">rm -rf /usr/share/<span class="o">{</span>icons,images<span class="o">}</span>
+</span><span class="line">apt-get --purge autoremove
+</span><span class="line">apt-get clean
+</span></code></pre></div></figure></notextile></div>
+
+<p><em>Note: see <a href="http://www.cnx-software.com/2012/07/31/84-mb-minimal-raspbian-armhf-image-for-raspberry-pi/">cnx-software.com</a> for an even lighter install.</em></p>
+
+<h2 id="configure-automount-for-usb-drives">Configure automount for usb drives</h2>
+
+<p>Install udisks-glue to automount usb drives without starting the desktop.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># install udisks-glue</span>
+</span><span class="line">apt-get install udisks-glue policykit-1
+</span><span class="line">
+</span><span class="line"><span class="c"># edit config file to enable automount</span>
+</span><span class="line">sed -i <span class="s1">&#39;/^match disks /a\    automount = true&#39;</span> /etc/udisks-glue.conf
+</span><span class="line">
+</span><span class="line"><span class="c"># startup using rc.local</span>
+</span><span class="line">sed -i <span class="s2">&quot;/^exit 0/isudo -u $(logname) udisks-glue\n&quot;</span> /etc/rc.local
+</span></code></pre></div></figure></notextile></div>
+
+<p>Note: for startup methods other than <code>rc.local</code>, see
+<a href="http://angryelectron.com/udisks-glue-initscript/">angryelectron.com</a> for an example of
+how to add <code>udisks-glue</code> as a service using a traditional init.d script, or the section:
+<a href="#add-services-using-supervisor">Add services using Supervisor</a>.</p>
+
+<h2 id="add-services-using-supervisor">Add services using Supervisor</h2>
+
+<p><a href="http://supervisord.org">Supervisor</a> provides a simple way to add user services, without messing with <code>SysV</code> or
+other <code>init</code> scripts.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install supervisor
+</span></code></pre></div></figure></notextile></div>
+
+<p>Create a startup script <code>/etc/supervisor/conf.d/udisks-glue.conf</code>:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="ini"><span class="line"><span class="k">[program:udisks-glue]</span>
+</span><span class="line"><span class="na">user</span> <span class="o">=</span> <span class="s">pi</span>
+</span><span class="line"><span class="na">command</span> <span class="o">=</span> <span class="s">udisks-glue -f</span>
+</span><span class="line"><span class="na">autostart</span> <span class="o">=</span> <span class="s">true</span>
+</span><span class="line"><span class="na">autorestart</span> <span class="o">=</span> <span class="s">true</span>
+</span><span class="line"><span class="na">stdout_logfile</span> <span class="o">=</span> <span class="s">/var/log/supervisor/udisks-glue-out.log</span>
+</span><span class="line"><span class="na">stderr_logfile</span> <span class="o">=</span> <span class="s">/var/log/supervisor/udisks-glue-err.log</span>
+</span></code></pre></div></figure></notextile></div>
+
+<p>Remove the previous startup of <code>udisks-glue</code> - if already
+<a href="#configure-automount-for-usb-drives">configured above</a> - and start the new service
+by reloading the <code>supervisor</code> config.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># remove the startup line from rc.local</span>
+</span><span class="line">sed -i <span class="s2">&quot;/udisks-glue/d&quot;</span> /etc/rc.local
+</span><span class="line">
+</span><span class="line"><span class="c"># stop already running process</span>
+</span><span class="line">killall udisks-glue
+</span><span class="line">
+</span><span class="line"><span class="c"># reload supervisor config</span>
+</span><span class="line">supervisorctl reload
+</span></code></pre></div></figure></notextile></div>
+
+<p>The <code>udisks-glue</code> program should start automatically on boot. Use <code>supervisorctl</code> with
+<code>start</code>, <code>stop</code>, and <code>restart</code> to manually control Supervisor programs: <code>supervisorctl
+restart udisks-glue</code>.</p>
+
+<h2 id="install-mono">Install Mono</h2>
+
+<p>Install Mono development tools, runtime, and interactive shell.</p>
+
+<p>Note: If you’ve previously shrunk the system partition down, it may need to be expanded
+(use <code>sudo raspi-config</code>) to be able to fit the mono installation (about 153MB).</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install mono-devel mono-utils mono-csharp-shell
+</span></code></pre></div></figure></notextile></div>
+
+<!--
+pkg-count
+353 mono-complete
+214 cli-common-dev
+172 mono-devel
+168 libmono-cil-dev
+
+# for a minimal cli toolchain:
+apt-get install mono-mcs mono-xbuild mono-csharp-shell
+-->
+
+<h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
+
+<p>Occasionally you’ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># change to the home folder you want to link from</span>
+</span><span class="line"><span class="nb">cd</span> /home/<span class="k">$(</span>logname<span class="k">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># define a list of dot files to link</span>
+</span><span class="line"><span class="nv">dotfiles</span><span class="o">=</span><span class="s2">&quot;.profile .bashrc .bash_aliases .bash_logout .nanorc .toprc .inputrc&quot;</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># link each existing file into the root user&#39;s home folder</span>
+</span><span class="line"><span class="k">for </span>i in <span class="nv">$dotfiles</span>; <span class="k">do</span>
+</span><span class="line">  <span class="o">[</span> -f <span class="nv">$i</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> sudo ln -sfv ~+/<span class="nv">$i</span> ~root/
+</span><span class="line"><span class="k">done</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># hush login message</span>
+</span><span class="line">sudo touch ~root/.hushlogin
+</span></code></pre></div></figure></notextile></div>
+
+<p>If you prefer to copy the files into ~root, then replace <code>ln -sfv</code> with <code>cp</code>.</p>
+
+<h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
+
+<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi’s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install gcc make git-core libi2c-dev
+</span><span class="line">git clone git://git.drogon.net/wiringPi
+</span><span class="line"><span class="nb">cd </span>wiringPi; ./build
+</span><span class="line">
+</span><span class="line"><span class="c"># test with gpio utility</span>
+</span><span class="line">gpio readall
+</span><span class="line">
+</span><span class="line"><span class="c"># install ruby gem (optional)</span>
+</span><span class="line">gem install --user-install wiringpi
+</span></code></pre></div></figure></notextile></div>
+
+<h2 id="install-transmission">Install Transmission</h2>
+
+<p>The transmission bittorrent client doesn’t have many dependencies, can be installed as a
+daemon, and accessed remotely using a Web UI.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># install packages</span>
+</span><span class="line">apt-get install transmission-daemon
+</span><span class="line">
+</span><span class="line"><span class="c"># start daemon as logged in user (usually &#39;pi&#39;)</span>
+</span><span class="line">sed -i <span class="s2">&quot;/^USER=/s/.*/#&amp;\nUSER=$(logname)/&quot;</span> /etc/init.d/transmission-daemon
+</span><span class="line">
+</span><span class="line"><span class="c"># don&#39;t store config in &#39;/var/lib/&#39;</span>
+</span><span class="line">sed -i <span class="s2">&quot;/^OPTIONS=/s/^/# /&quot;</span> /etc/default/transmission-daemon
+</span><span class="line">
+</span><span class="line"><span class="c"># test transmission-daemon uses ~/.config</span>
+</span><span class="line">service transmission-daemon restart
+</span><span class="line">ls -l .config/transmission-daemon
+</span><span class="line">
+</span><span class="line"><span class="c"># customise settings for transmission (see below)</span>
+</span><span class="line">nano .config/transmission-daemon/settings.json
+</span><span class="line">service transmission-daemon reload
+</span></code></pre></div></figure></notextile></div>
+
+<p>The following block includes settings needed to get the Web UI up and running, pasting it
+before the last setting will replace any definitions duplicated earlier in the file.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="json"><span class="line"><span class="s2">&quot;watch-dir&quot;</span><span class="err">:</span> <span class="s2">&quot;/home/pi/torrents&quot;</span><span class="err">,</span>
+</span><span class="line"><span class="s2">&quot;download-dir&quot;</span><span class="err">:</span> <span class="s2">&quot;/home/pi/torrents&quot;</span><span class="err">,</span>
+</span><span class="line"><span class="s2">&quot;incomplete-dir&quot;</span><span class="err">:</span> <span class="s2">&quot;/home/pi/torrents/incomplete&quot;</span><span class="err">,</span>
+</span><span class="line"><span class="s2">&quot;incomplete-dir-enabled&quot;</span><span class="err">:</span> <span class="kc">false</span><span class="err">,</span>
+</span><span class="line"><span class="s2">&quot;watch-dir-enabled&quot;</span><span class="err">:</span> <span class="kc">true</span><span class="err">,</span>
+</span><span class="line"><span class="s2">&quot;trash-original-torrent-files&quot;</span><span class="err">:</span> <span class="kc">true</span><span class="err">,</span>
+</span><span class="line">
+</span><span class="line"><span class="s2">&quot;rpc-port&quot;</span><span class="err">:</span> <span class="mi">9091</span><span class="err">,</span>
+</span><span class="line"><span class="s2">&quot;rpc-whitelist&quot;</span><span class="err">:</span> <span class="s2">&quot;127.0.0.1, 192.168.*.*, 172.16.0.*&quot;</span><span class="err">,</span>
+</span><span class="line">
+</span><span class="line"><span class="s2">&quot;rpc-password&quot;</span><span class="err">:</span> <span class="s2">&quot;pi&quot;</span><span class="err">,</span>
+</span><span class="line"><span class="s2">&quot;rpc-username&quot;</span><span class="err">:</span> <span class="s2">&quot;transmission&quot;</span><span class="err">,</span>
+</span><span class="line"><span class="s2">&quot;rpc-authentication-required&quot;</span><span class="err">:</span> <span class="kc">true</span><span class="err">,</span>
+</span></code></pre></div></figure></notextile></div>
+
+<p>Full details on transmission’s config files may be found
+<a href="https://trac.transmissionbt.com/wiki/EditConfigFiles">here</a>. Other settings such as port
+forwarding, bandwidth throttling, and encryption, can be configured from the Web UI
+(usually at <code>raspbian.local:9091</code>) .</p>
+
+<h2 id="dropbox-sync-using-dbox">Dropbox sync using dbox</h2>
+
+<p>Follow the <a href="https://github.com/kenpratt/dbox">dbox installation instructions</a> to set up the dropbox sdk developer
+keys and authorisation tokens. To use dbox for automatic folder syncing, see my post:
+<a href="/blog/pi-box/">Dropbox on Pi</a>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install gcc make ruby ruby-dev libsqlite3-dev
+</span><span class="line">gem install dbox
+</span></code></pre></div></figure></notextile></div>
+
+<h2 id="precompiled-xbmc">Precompiled XBMC</h2>
+
+<p>If you’re running raspbian and want to use the same image with XBMC, you can install the
+base XBMC and required packages as follows (adapted from
+<a href="http://michael.gorven.za.net/raspberrypi/xbmc">michael.gorven.za.net</a>):</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> <span class="s1">&#39;deb http://archive.mene.za.net/raspbian wheezy contrib</span>
+</span><span class="line"><span class="s1">&#39;</span> | sudo tee /etc/apt/sources.list.d/mene.list
+</span><span class="line">
+</span><span class="line">apt-key adv --keyserver keyserver.ubuntu.com --recv-key 5243CDED
+</span><span class="line">
+</span><span class="line">apt-get update <span class="o">&amp;&amp;</span> apt-get install xbmc
+</span><span class="line">
+</span><span class="line">nano /etc/default/xbmc  <span class="c"># edit to enable and set user</span>
+</span></code></pre></div></figure></notextile></div>
+
+<h2 id="connecting-to-the-pi">Connecting to the Pi</h2>
+
+<p>With support for zeroconfig installed (via <code>avahi-daemon</code>), it’s much easier to
+find your Pi on the network<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># login using zeroconfig</span>
+</span><span class="line">ssh pi@raspberrypi.local
+</span></code></pre></div></figure></notextile></div>
+
+<p><em>Note: If multiple Pis are active on the same network, they should be given
+<a href="#change-hostname">unique hostnames</a>.</em></p>
+
+<h3 id="copy-public-key-to-the-pi">Copy public key to the Pi</h3>
+
+<p>Before setting up the Pi remotely, there are some things that can be done locally (on your PC, laptop, etc.) to ease logging in when using SSH.  This will obviate the need to enter a password, or specify the full host name each time we access the Pi.</p>
+
+<p>If generating a new key pair, accept the default key location as suggested by <code>ssh-keygen</code> below.  While a passphrase is optional, anyone can use a copy of the unencrypted private key to authenticate with your identity.  Many operating systems are preconfigured to use <code>ssh-agent</code> or a similar utility, to avoid having to enter a passphrase multiple times (if at all).</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># generate a key pair if none already exists</span>
+</span><span class="line"><span class="nb">test</span> -f ~/.ssh/id_rsa.pub <span class="o">||</span> ssh-keygen
+</span><span class="line">
+</span><span class="line"><span class="c"># remove any old, conflicting host entries</span>
+</span><span class="line">ssh-keygen -R raspberrypi.local
+</span><span class="line">
+</span><span class="line"><span class="c"># password is required until the key is installed</span>
+</span><span class="line">ssh-copy-id pi@raspberrypi.local
+</span></code></pre></div></figure></notextile></div>
+
+<p>The easiest way to append a key to the remote user’s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source (or <a href="https://github.com/beautifulcode/ssh-copy-id-for-OSX">github</a>) if your system doesn’t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
+
+<h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
+
+<p>Locally define the alias <code>pi</code>, to be used in place of <code>pi@raspberrypi.local</code> with
+ssh commands such as <code>ssh pi</code> and <code>sftp pi</code>. Enter the text below as a single command, or
+manually paste the quoted text into <code>~/.ssh/config</code> using <code>nano</code> or similar (the IP
+address can be used for <code>Hostname</code> if preferred).</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> <span class="s1">&#39;</span>
+</span><span class="line"><span class="s1">Host pi</span>
+</span><span class="line"><span class="s1">  User  pi</span>
+</span><span class="line"><span class="s1">  Hostname  raspberrypi.local&#39;</span> &gt;&gt; ~/.ssh/config
+</span></code></pre></div></figure></notextile></div>
+
+<h3 id="transfer-files">Transfer files</h3>
+
+<p>If you have previous files from your Pi stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># connect to the pi, using the `xb` alias defined above</span>
+</span><span class="line">sftp xb
+</span><span class="line">sftp&gt; put .bash_aliases
+</span><span class="line">sftp&gt; <span class="nb">exit</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># you can also use ctlr+d to logout</span>
+</span></code></pre></div></figure></notextile></div>
+
+<h3 id="manually-configure-wifi-adapter">Manually configure WiFi adapter</h3>
+
+<p><a href="http://www.savagehomeautomation.com/raspi-airlink101">Instructions adapted from here</a>.</p>
+
+<p>Use <code>lsusb</code> to check that the adapter is recognised, and <code>lsmod</code> to check the kernel module (e.g. <code>8192cu</code>) is loaded.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo nano /etc/network/interfaces
+</span></code></pre></div></figure></notextile></div>
+
+<p>Make sure the following lines exist in the interfaces file, adding them as needed:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">allow-hotplug wlan0
+</span><span class="line">iface wlan0 inet manual
+</span><span class="line">wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+</span></code></pre></div></figure></notextile></div>
+
+<p>Open the file that configures WiFi hotspots:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+</span></code></pre></div></figure></notextile></div>
+
+<p>Add your network details, using the following template:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">network</span><span class="o">={</span>
+</span><span class="line">  <span class="nv">ssid</span><span class="o">=</span><span class="s2">&quot;YOUR-NETWORK-SSID&quot;</span>
+</span><span class="line">  <span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;YOUR-WLAN-PASSWORD&quot;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></div></figure></notextile></div>
+
+<p>Or, more fully as required:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">network</span><span class="o">={</span>
+</span><span class="line">  <span class="nv">ssid</span><span class="o">=</span><span class="s2">&quot;YOUR-NETWORK-SSID&quot;</span>
+</span><span class="line">  <span class="nv">proto</span><span class="o">=</span>WPA2
+</span><span class="line">  <span class="nv">key_mgmt</span><span class="o">=</span>WPA-PSK
+</span><span class="line">  <span class="nv">pairwise</span><span class="o">=</span>CCMP TKIP
+</span><span class="line">  <span class="nv">group</span><span class="o">=</span>CCMP TKIP
+</span><span class="line">  <span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;YOUR-WLAN-PASSWORD&quot;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></div></figure></notextile></div>
+
+<p>Reinitialise the adapter, and check it’s connected.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo ifdown wlan0
+</span><span class="line">sudo ifup wlan0
+</span><span class="line"><span class="c"># you may get some errors here, even when successful</span>
+</span></code></pre></div></figure></notextile></div>
+
+<p>Use <code>iwconfig</code> to view wifi adapter info and <code>ifconfig</code> for general network info.</p>
+
+<h3 id="configure-bluetooth-adapter">Configure bluetooth adapter</h3>
+
+<p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># install bluetooth support and dependencies</span>
+</span><span class="line">agi bluez python-gobject  <span class="c"># minimal?</span>
+</span><span class="line">agi bluetooth bluez-utils  <span class="c"># full</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># for management from the desktop</span>
+</span><span class="line">agi blueman
+</span><span class="line">
+</span><span class="line"><span class="c"># check adapter is working*</span>
+</span><span class="line">hcitool dev
+</span><span class="line">
+</span><span class="line"><span class="c"># scan for devices</span>
+</span><span class="line">hcitool scan
+</span><span class="line">
+</span><span class="line"><span class="c"># pair with device, using the address listed from scan</span>
+</span><span class="line">bluez-simple-agent hci0 XX:XX:XX:XX:XX:XX
+</span><span class="line">
+</span><span class="line"><span class="c"># trust the device</span>
+</span><span class="line">bluez-test-device trusted XX:XX:XX:XX:XX:XX yes
+</span><span class="line">
+</span><span class="line"><span class="c"># connect to input device</span>
+</span><span class="line">bluez-test-input hci0 XX:XX:XX:XX:XX:XX
+</span><span class="line">
+</span><span class="line"><span class="c"># adapter status</span>
+</span><span class="line">hciconfig
+</span></code></pre></div></figure></notextile></div>
+
+<p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
+
+<h3 id="install-aircrack-and-related-tools">Install aircrack and related tools</h3>
+
+<p>Taken from <a href="http://blog.petrilopia.net/linux/raspberry-pi-install-aircrackng-suite/">blog.petrilopia.net</a>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get -y install iw reaver
+</span><span class="line">apt-get -y install libssl-dev libnl-3-dev libnl-genl-3-dev
+</span><span class="line">wget http://download.aircrack-ng.org/aircrack-ng-1.2-beta3.tar.gz
+</span><span class="line">tar -zxvf aircrack-ng-1.2-beta3.tar.gz
+</span><span class="line"><span class="nb">cd </span>aircrack-ng-1.2-beta3
+</span><span class="line">make
+</span><span class="line">make install
+</span></code></pre></div></figure></notextile></div>
+
+<h3 id="using-reaver">Using Reaver</h3>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">apt-get install reaver
+</span><span class="line">
+</span><span class="line"><span class="c"># put wifi device into monitor mode</span>
+</span><span class="line">airmon-ng start wlan0
+</span><span class="line">
+</span><span class="line"><span class="c"># list available networks</span>
+</span><span class="line">airodump-ng wlan0
+</span><span class="line"><span class="c"># airodump-ng mon0</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># set bssid to target network name</span>
+</span><span class="line"><span class="nv">bssid</span><span class="o">=</span><span class="s2">&quot;setthistobssid&quot;</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># start reaver</span>
+</span><span class="line">reaver -i mon0 -b <span class="s2">&quot;$bssid&quot;</span> -vv
+</span></code></pre></div></figure></notextile></div>
+
+<h3 id="configure-automount-for-usb-drives-1">Configure automount for usb drives</h3>
+
+<p>If there’s no service already installed to automount usb drives, then udisks-glue can be
+setup as follows.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># install udisks-glue</span>
+</span><span class="line">apt-get install udisks-glue
+</span><span class="line">
+</span><span class="line"><span class="c"># create config file, including spin down of drives after 10 mins</span>
+</span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;filter disks {</span>
+</span><span class="line"><span class="s1">    optical = false</span>
+</span><span class="line"><span class="s1">    partition_table = false</span>
+</span><span class="line"><span class="s1">    usage = filesystem</span>
+</span><span class="line"><span class="s1">}</span>
+</span><span class="line">
+</span><span class="line"><span class="s1">match disks {</span>
+</span><span class="line"><span class="s1">    automount = true</span>
+</span><span class="line"><span class="s1">    automount_options = { sync, noatime }</span>
+</span><span class="line"><span class="s1">    post_insertion_command = &quot;udisks --set-spindown %device_file --spindown-timeout 600 --mount %device_file --mount-options sync,noatime&quot;</span>
+</span><span class="line"><span class="s1">}&#39;</span> | sudo tee /etc/udisks-glue.conf
+</span><span class="line">
+</span><span class="line"><span class="c"># create &#39;upstart&#39; service definition</span>
+</span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;#</span>
+</span><span class="line"><span class="s1"># udisks-glue</span>
+</span><span class="line"><span class="s1">#</span>
+</span><span class="line">
+</span><span class="line"><span class="s1">description &quot;udisks-glue for udisks&quot;</span>
+</span><span class="line">
+</span><span class="line"><span class="s1">start on started</span>
+</span><span class="line"><span class="s1">stop on (runlevel [06] or stopped dbus)</span>
+</span><span class="line">
+</span><span class="line"><span class="s1">expect fork</span>
+</span><span class="line"><span class="s1">respawn</span>
+</span><span class="line"><span class="s1">setuid pi</span>
+</span><span class="line"><span class="s1">exec /usr/bin/udisks-glue</span>
+</span><span class="line"><span class="s1">&#39;</span> | sudo tee /etc/init/udisks-glue.conf
+</span><span class="line">
+</span><span class="line"><span class="c"># alternative startup using rc.local</span>
+</span><span class="line"><span class="c"># sed -i &quot;/^exit 0/isudo -u $(logname) udisks-glue\n&quot; /etc/rc.local</span>
+</span></code></pre></div></figure></notextile></div>
+
+<p>Note: see <a href="http://angryelectron.com/udisks-glue-initscript/">angryelectron.com</a> for an
+example of how to add udisks-glue as a service when using a traditional init.d script.</p>
+
+<h3 id="install-xbian-onto-a-raspbian-image">Install XBian onto a Raspbian image</h3>
+
+<p>From <a href="http://forum.xbian.org/thread-1850.html">Installing XBIAN directly on RASPBIAN IMG</a></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># install xbian repo</span>
+</span><span class="line">wget http://xbian.brantje.com/pool/stable/main/x/xbian-package-repo/xbian-package-repo_1.0.0_armhf.deb
+</span><span class="line">dpkg -i xbian-package-repo_1.0.0_armhf.deb
+</span><span class="line">
+</span><span class="line"><span class="c"># enable staging and development repositories and update</span>
+</span><span class="line">sed -i <span class="s1">&#39;/ staging\|devel main/s/^#\+ //&#39;</span> /etc/apt/sources.list.d/xbian.list
+</span><span class="line">apt-get update
+</span><span class="line"><span class="c"># revert previous edit</span>
+</span><span class="line">sed -i <span class="s1">&#39;/ staging\|devel main/s/^/### /&#39;</span> /etc/apt/sources.list.d/xbian.list
+</span><span class="line">
+</span><span class="line"><span class="c"># install xbmc **only**</span>
+</span><span class="line"><span class="c"># apt-get install xbian-package-xbmc # 97MB</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># install xbian and xbmc</span>
+</span><span class="line">apt-get install xbian-package-xbianhome xbian-package-kernel
+</span><span class="line">
+</span><span class="line"><span class="c"># reboot required to make file system changes, and conversion to btrfs</span>
+</span><span class="line">sed -i /rootfstype/s/btrfs/ext4/ /boot/cmdline.txt <span class="c"># do not use btrfs</span>
+</span><span class="line">reboot
+</span><span class="line">
+</span><span class="line"><span class="c"># install remaining xbian packages</span>
+</span><span class="line"><span class="c"># Note: a warning for removal of &#39;sysvinit&#39; will be displayed,</span>
+</span><span class="line"><span class="c"># as xbian replaces it with the &#39;upstart&#39; service manager.</span>
+</span><span class="line"><span class="c"># Also, cmdline.txt should remain unchanged, with new</span>
+</span><span class="line"><span class="c"># parameters written to /boot/cmdline.new.</span>
+</span><span class="line">apt-get install xbian-update xbian-package-rasp-switching
+</span><span class="line">
+</span><span class="line"><span class="c"># XBMC can now be started with &quot;start XBMC&quot;</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># boot to desktop</span>
+</span><span class="line"><span class="c"># apt-get install lightdm</span>
+</span></code></pre></div></figure></notextile></div>
+
+<!-- XBMC can be started with "start XBMC", Raspbian X desktop with "service lightdm start".
+
+if you Raspbian setup used to boot into X with PI user automatically, you can keep this and indeed start / load XBMC quick and easy way - even jumping back and forth between XBMC and you X Desktop. We can click "Logout", put "xbian" as user to log in and XBMC starts. If you quit XBMC, X will come again. No reboots needed.
+Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC). There is how you RPI will boot if you select what service for autostart: -->
+
+<!-- endofpost -->
+
+<h3 id="not-used-with-recent-versions">Not used with recent versions</h3>
+
+<p>Previously useful functionality or workarounds</p>
+
+<h3 id="clear-cached-network-adapter">Clear cached network adapter</h3>
+
+<p>(needed for switching cards between devices)</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> | sudo tee /etc/udev/rules.d/70-persistent-net.rules
+</span></code></pre></div></figure></notextile></div>
+
+<h3 id="regional-system-settings">Regional system settings</h3>
+
+<p>If the console keyboard is not setup correctly for the en_GB layout, a solution I’ve used before is to install <code>keyboard-configuration</code>, which only seems to work once <code>console-setup</code> is also installed.</p>
+
+<p><em>The latter package will change the console font, but this can be reverted during the commands shown below. Just choose the font you prefer, or choose ‘Do not change the boot/kernel font’.</em></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># Packages needed to change keyboard layout</span>
+</span><span class="line">apt-get install console-setup keyboard-configuration
+</span><span class="line">
+</span><span class="line"><span class="c"># Configure keyboard settings</span>
+</span><span class="line">dpkg-reconfigure keyboard-configuration
+</span><span class="line">
+</span><span class="line"><span class="c"># Configure console font</span>
+</span><span class="line"><span class="c"># accept the defaults until the font selection screen</span>
+</span><span class="line">dpkg-reconfigure console-setup
+</span><span class="line">
+</span><span class="line"><span class="c"># Configure time zone and locale</span>
+</span><span class="line">dpkg-reconfigure tzdata
+</span><span class="line">dpkg-reconfigure locales
+</span></code></pre></div></figure></notextile></div>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:hostname">
+      <p>It should be possible to connect with the hostname even without zeroconfig,
+e.g. <code>pi@raspberrypi</code>, but I’ve had no luck with this (except for when the router sets
+this up via DNS).<a href="#fnref:hostname" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jamie Osborne</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-28T12:13:00+01:00" pubdate data-updated="true">Apr 28<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/dev/'>dev</a>, <a class='category' href='/blog/categories/pi/'>pi</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jmeosbn.github.io/blog/raspbian-pi/" data-via="jmeosbn" data-counturl="http://jmeosbn.github.io/blog/raspbian-pi/" data-count="none">Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/pi-box/" title="Previous Post: Dropbox on Pi">&laquo; Dropbox on Pi</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/windows-8.1-efi-install/" title="Next Post: Windows 8.1 - EFI install">Windows 8.1 - EFI install &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1><a href="/blog/archives">Recent</a></h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/making-a-pi-disk-image/">Making a Pi Disk Image</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/windows-8.1-efi-install/">Windows 8.1 - EFI install</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/raspbian-pi/">Minimal Raspbian Pi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/pi-box/">Dropbox on Pi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/baking-the-pi/">Home Theatre Pi (HTPi)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/stellaris-virtual-serial-device/">Stellaris Virtual Serial Device</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/testing-the-stellaris-toolchain/">Testing the Stellaris Toolchain</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/compiling-the-stellaris-toolchain/">Compiling the Stellaris Toolchain</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/resources-for-using-git/">Resources for Using Git</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1><a href="https://github.com/jmeosbn">GitHub</a></h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jmeosbn',
+            count: 15,
+            skip_forks: true,
+            skip_sites: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+
+
+
+
+  <h1><a href="https://twitter.com/intent/user?screen_name=jmeosbn">Twitter</a></h1>
+
+
+
+
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><hr class="footer-rule">
+
+<div id="copyright">
+  Copyright &copy; 2012 - 2014
+</div>
+
+
+<div id="license">
+  <a rel="license" href="http://git.io/jmeosbn-license" title="Except where otherwise noted, content on this site is licensed under a Creative Commons BY-NC-SA 3.0 License">
+  
+    <span id="license_text">CC BY-NC-SA 3.0</span>
+  
+  </a>
+</div>
+
+
+<div id="siteauthor">Jamie Osborne</div>
+
+<div id="footer">
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</div>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

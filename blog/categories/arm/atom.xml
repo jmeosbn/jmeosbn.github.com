@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-07-01T03:57:41+01:00</updated>
+  <updated>2014-07-01T04:02:56+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -202,10 +202,11 @@ dd if=$dev of=$name.img bs=1m count=$size
 <div class="footnotes">
   <ol>
     <li id="fn:sfill">
-      <p>Normally, <code>sfill</code> seems to run just as fast from the raspberry pi - since the
-SD card speed is the main factor - and space saved is similar to mounting offline.
-However, with recent images, I’ve found <code>sfill</code> to take a long time to complete after
-filling the disk (but before “Wiping inodes”).<a href="#fnref:sfill" rel="reference">&#8617;</a></p>
+      <p>Normally, <code>sfill</code> seems to run just as fast from the Raspberry Pi - since the
+SD card write speed is the main factor - and space saved is similar to mounting
+offline. When making recent images I’ve found <code>sfill</code> to take a long time to complete
+after filling the disk (but before ‘Wiping inodes’), I haven’t retested on the desktop
+with the same images yet though.<a href="#fnref:sfill" rel="reference">&#8617;</a></p>
     </li>
     <li id="fn:fdisk">
       <p>Use <code>fdisk</code> to obtain the partition table from the SD card, then calculate the

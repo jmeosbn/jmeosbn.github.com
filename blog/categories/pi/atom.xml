@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pi | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/pi/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-07-01T03:57:41+01:00</updated>
+  <updated>2014-07-01T04:02:56+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -202,10 +202,11 @@ dd if=$dev of=$name.img bs=1m count=$size
 <div class="footnotes">
   <ol>
     <li id="fn:sfill">
-      <p>Normally, <code>sfill</code> seems to run just as fast from the raspberry pi - since the
-SD card speed is the main factor - and space saved is similar to mounting offline.
-However, with recent images, I’ve found <code>sfill</code> to take a long time to complete after
-filling the disk (but before “Wiping inodes”).<a href="#fnref:sfill" rel="reference">&#8617;</a></p>
+      <p>Normally, <code>sfill</code> seems to run just as fast from the Raspberry Pi - since the
+SD card write speed is the main factor - and space saved is similar to mounting
+offline. When making recent images I’ve found <code>sfill</code> to take a long time to complete
+after filling the disk (but before ‘Wiping inodes’), I haven’t retested on the desktop
+with the same images yet though.<a href="#fnref:sfill" rel="reference">&#8617;</a></p>
     </li>
     <li id="fn:fdisk">
       <p>Use <code>fdisk</code> to obtain the partition table from the SD card, then calculate the
@@ -221,6 +222,877 @@ bc -l &lt;&lt;&lt; '(122880+5662720)/2/1024'
 bc -l &lt;&lt;&lt; '(5785599+1)/2/1024'
 </code></pre>
       <p><a href="#fnref:fdisk" rel="reference">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Minimal Raspbian Pi]]></title>
+    <link href="http://jmeosbn.github.io/blog/raspbian-pi/"/>
+    <updated>2014-04-28T12:13:00+01:00</updated>
+    <id>http://jmeosbn.github.io/blog/raspbian-pi</id>
+    <content type="html"><![CDATA[<p>A collection of notes for setting up a clean and minimal image of
+<a href="http://raspbian.org">Raspbian</a>.</p>
+
+<p>Starting with the official raspbian image from
+<a href="raspberrypi.org/downloads">raspberrypi.org</a>, the desktop environment and extras will
+be removed, and development tools and other utilities added.</p>
+
+<!-- See [Minimal Raspbian Net Installer](#minimal-raspbian-net-installer) if you prefer to
+build a minimal image from scratch using the
+[Raspbian unattended netinstaller](https://github.com/hifi/raspbian-ua-netinst). -->
+
+<!-- more -->
+
+<h3 id="comparison-of-compressed-images">Comparison of compressed images</h3>
+
+<p><code>826 MB</code> - Original 2014-06-20-wheezy-raspbian<br />
+<code>284 MB</code> - Additional packages added, desktop extras removed<br />
+<code>156 MB</code> - Desktop environment removed, <code>udisks-glue</code> installed<br />
+<code>184 MB</code> - As above, with <code>mono</code> installed</p>
+
+<!--
+
+## Disable password based logon
+
+Disable password logins for remote ssh access (public key only).
+
+### TODO:
+
+ -->
+
+<ul id="markdown-toc">
+  <li><a href="#basic-pi-tips">Basic Pi Tips</a></li>
+  <li><a href="#z-should-support-most-compression-formats">7z should support most compression formats</a>    <ul>
+      <li><a href="#first-login-tasks">First login tasks</a></li>
+    </ul>
+  </li>
+  <li><a href="#disable-the-login-message">Disable the login message</a></li>
+  <li><a href="#disable-setting-of-the-terminal-title">Disable setting of the terminal title</a></li>
+  <li><a href="#use-a-root-shell-for-the-following-commands">Use a root shell for the following commands</a></li>
+  <li><a href="#change-password-for-root-and-user">Change password for root and user</a></li>
+  <li><a href="#temporarily-fit-serial-terminal-to-local-window-size">Temporarily fit serial terminal to local window size</a></li>
+  <li><a href="#configure-time-zone-and-locale">Configure time zone and locale</a></li>
+  <li><a href="#hide-the-raspberry-pi-logo-during-boot">Hide the Raspberry Pi logo during boot</a></li>
+  <li><a href="#dont-prompt-to-run-raspi-config-on-login">Don’t prompt to run raspi-config on login</a></li>
+  <li><a href="#enable-colored-xterm-support-over-serial">Enable colored xterm support over serial</a></li>
+  <li><a href="#update-packages">Update packages</a></li>
+  <li><a href="#add-tools-for-fat-exfat-and-ntfs">Add tools for fat, exfat, and ntfs</a></li>
+  <li><a href="#support-for-zeroconfig">Support for zeroconfig</a></li>
+  <li><a href="#other-utilities">Other utilities</a></li>
+  <li><a href="#install-scripting-tools">Install scripting tools</a></li>
+  <li><a href="#set-npm-to-use-known-registrars-only">Set npm to use known registrars only</a></li>
+  <li><a href="#install-node-packages">Install node packages</a></li>
+  <li><a href="#install-misc-packages">Install misc. packages</a></li>
+  <li><a href="#install-rmate-for-textmate-editing-over-ssh">Install rmate for TextMate editing over ssh</a>    <ul>
+      <li><a href="#change-hostname">Change Hostname</a></li>
+    </ul>
+  </li>
+  <li><a href="#enable-the-changes">enable the changes</a>    <ul>
+      <li><a href="#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
+    </ul>
+  </li>
+  <li><a href="#remove-old-host-key-from-clients-using">remove old host key from clients using:</a>    <ul>
+      <li><a href="#configure-wifi-adapter">Configure WiFi adapter</a></li>
+      <li><a href="#backup-installation">Backup installation</a></li>
+      <li><a href="#removing-the-desktop-environment">Removing the desktop environment</a></li>
+    </ul>
+  </li>
+  <li><a href="#samba-network-drives">samba network drives</a></li>
+  <li><a href="#other-libraries">other libraries</a>    <ul>
+      <li><a href="#configure-automount-for-usb-drives">Configure automount for usb drives</a></li>
+    </ul>
+  </li>
+  <li><a href="#edit-config-file-to-enable-automount">edit config file to enable automount</a></li>
+  <li><a href="#startup-using-rclocal">startup using rc.local</a>    <ul>
+      <li><a href="#add-services-using-supervisor">Add services using Supervisor</a></li>
+    </ul>
+  </li>
+  <li><a href="#stop-already-running-process">stop already running process</a></li>
+  <li><a href="#reload-supervisor-config">reload supervisor config</a>    <ul>
+      <li><a href="#install-mono">Install Mono</a></li>
+      <li><a href="#link-settings-to-root-profile">Link settings to root profile</a></li>
+    </ul>
+  </li>
+  <li><a href="#define-a-list-of-dot-files-to-link">define a list of dot files to link</a></li>
+  <li><a href="#link-each-existing-file-into-the-root-users-home-folder">link each existing file into the root user’s home folder</a></li>
+  <li><a href="#hush-login-message">hush login message</a>    <ul>
+      <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
+    </ul>
+  </li>
+  <li><a href="#test-with-gpio-utility">test with gpio utility</a></li>
+  <li><a href="#install-ruby-gem-optional">install ruby gem (optional)</a>    <ul>
+      <li><a href="#install-transmission">Install Transmission</a></li>
+    </ul>
+  </li>
+  <li><a href="#start-daemon-as-logged-in-user-usually-pi">start daemon as logged in user (usually ‘pi’)</a></li>
+  <li><a href="#dont-store-config-in-varlib">don’t store config in ‘/var/lib/’</a></li>
+  <li><a href="#test-transmission-daemon-uses-config">test transmission-daemon uses ~/.config</a></li>
+  <li><a href="#customise-settings-for-transmission-see-below">customise settings for transmission (see below)</a>    <ul>
+      <li><a href="#dropbox-sync-using-dbox">Dropbox sync using dbox</a></li>
+      <li><a href="#precompiled-xbmc">Precompiled XBMC</a></li>
+      <li><a href="#connecting-to-the-pi">Connecting to the Pi</a></li>
+    </ul>
+  </li>
+  <li><a href="#remove-any-old-conflicting-host-entries">remove any old, conflicting host entries</a></li>
+  <li><a href="#password-is-required-until-the-key-is-installed">password is required until the key is installed</a></li>
+  <li><a href="#you-can-also-use-ctlrd-to-logout">you can also use ctlr+d to logout</a></li>
+  <li><a href="#for-management-from-the-desktop">for management from the desktop</a></li>
+  <li><a href="#check-adapter-is-working">check adapter is working*</a></li>
+  <li><a href="#scan-for-devices">scan for devices</a></li>
+  <li><a href="#pair-with-device-using-the-address-listed-from-scan">pair with device, using the address listed from scan</a></li>
+  <li><a href="#trust-the-device">trust the device</a></li>
+  <li><a href="#connect-to-input-device">connect to input device</a></li>
+  <li><a href="#adapter-status">adapter status</a></li>
+  <li><a href="#put-wifi-device-into-monitor-mode">put wifi device into monitor mode</a></li>
+  <li><a href="#list-available-networks">list available networks</a></li>
+  <li><a href="#set-bssid-to-target-network-name">set bssid to target network name</a></li>
+  <li><a href="#start-reaver">start reaver</a></li>
+  <li><a href="#create-config-file-including-spin-down-of-drives-after-10-mins">create config file, including spin down of drives after 10 mins</a></li>
+  <li><a href="#create-upstart-service-definition">create ‘upstart’ service definition</a></li>
+  <li><a href="#alternative-startup-using-rclocal">alternative startup using rc.local</a></li>
+  <li><a href="#enable-staging-and-development-repositories-and-update">enable staging and development repositories and update</a></li>
+  <li><a href="#install-xbmc-only">install xbmc <strong>only</strong></a></li>
+  <li><a href="#install-xbian-and-xbmc">install xbian and xbmc</a></li>
+  <li><a href="#reboot-required-to-make-file-system-changes-and-conversion-to-btrfs">reboot required to make file system changes, and conversion to btrfs</a></li>
+  <li><a href="#install-remaining-xbian-packages">install remaining xbian packages</a></li>
+  <li><a href="#xbmc-can-now-be-started-with-start-xbmc">XBMC can now be started with “start XBMC”</a></li>
+  <li><a href="#boot-to-desktop">boot to desktop</a></li>
+  <li><a href="#configure-keyboard-settings">Configure keyboard settings</a></li>
+  <li><a href="#configure-console-font">Configure console font</a></li>
+  <li><a href="#configure-time-zone-and-locale-1">Configure time zone and locale</a></li>
+</ul>
+
+<h2 id="basic-pi-tips">Basic Pi Tips</h2>
+
+<p>You can copy an image to the SD card, without first extracting it:</p>
+
+<p>```sh
+# Replace image archive and device name with correct values
+7z e -so raspbian.img.7z ‘*.img’ | sudo dd of=/dev/sdc bs=1M</p>
+
+<h1 id="z-should-support-most-compression-formats">7z should support most compression formats</h1>
+<p>7z e -so raspbmc.img.gz ‘*.img’ | sudo dd of=/dev/sdc bs=1M</p>
+
+<p>```</p>
+
+<p>To backup an entire SD card to an image file, use <code>dd</code> again:</p>
+
+<p><code>sh
+# Replace device name with correct values
+sudo dd if=/dev/sdc of=raspbian.img bs=1M
+</code></p>
+
+<p>For details on making an optimised <code>dd</code> image, see
+<a href="/blog/making-a-pi-disk-image/">Making a Pi disk image</a>.</p>
+
+<h2 id="first-login-tasks">First login tasks</h2>
+
+<p>The first task after booting the Raspberry Pi, is to set up the environment. For a
+headless Pi (one without a monitor or keyboard connected), you may want to use a
+serial connection to login until WiFi and zeroconfig <a href="#connecting-to-the-pi">have been configured</a>.</p>
+
+<p>Note that there will be a login message recommending to run <code>sudo raspi-config</code>. This can
+be done later for tasks more specific to the installation, such as expanding the
+partition to fill the SD card.</p>
+
+<p>Most of the commands below need root privileges on the Pi, as they alter the system
+configuration. To run a single command with root privileges, prepend the <code>sudo</code> command
+to it. To run many commands this way without typing <code>sudo</code> each time, first start a root
+shell with <code>sudo -s</code> (<em>logout with ‘exit’ or ctrl+d when finished</em>).</p>
+
+<!--
+# retain user's $HOME for non-login shell using 'sudo'
+# sed -i '/env_keep.*\+.*HOME/b; $ a\\nDefaults env_keep += \"HOME\"' /etc/sudoers
+-->
+
+<p>```sh
+# Login to the pi over serial, user:pi pw:raspberry
+screen /dev/tty.usbserial 115200</p>
+
+<h1 id="disable-the-login-message">Disable the login message</h1>
+<p>touch ~/.hushlogin</p>
+
+<h1 id="disable-setting-of-the-terminal-title">Disable setting of the terminal title</h1>
+<p>sed -i ‘/PS1=.*][0-2];/s/\w/## &amp;/’ ~/.bashrc</p>
+
+<h1 id="use-a-root-shell-for-the-following-commands">Use a root shell for the following commands</h1>
+<p>sudo -s</p>
+
+<h1 id="change-password-for-root-and-user">Change password for root and user</h1>
+<p>passwd &amp;&amp; passwd $(logname)</p>
+
+<h1 id="temporarily-fit-serial-terminal-to-local-window-size">Temporarily fit serial terminal to local window size</h1>
+<p>stty rows 17</p>
+
+<h1 id="configure-time-zone-and-locale">Configure time zone and locale</h1>
+<p>dpkg-reconfigure tzdata
+dpkg-reconfigure locales</p>
+
+<h1 id="hide-the-raspberry-pi-logo-during-boot">Hide the Raspberry Pi logo during boot</h1>
+<p>sed -i “/logo.nologo/b; /1/s/$/ logo.nologo/” /boot/cmdline.txt</p>
+
+<h1 id="dont-prompt-to-run-raspi-config-on-login">Don’t prompt to run raspi-config on login</h1>
+<p>rm -f /etc/profile.d/raspi-config.sh</p>
+
+<h1 id="enable-colored-xterm-support-over-serial">Enable colored xterm support over serial</h1>
+<p>sed -i ‘/ttyAMA0/s/vt100$/xterm-256color/’ /etc/inittab</p>
+
+<h1 id="update-packages">Update packages</h1>
+<p>apt-get update &amp;&amp; apt-get upgrade</p>
+
+<h1 id="add-tools-for-fat-exfat-and-ntfs">Add tools for fat, exfat, and ntfs</h1>
+<p>apt-get install dosfstools exfat-fuse ntfs-3g</p>
+
+<h1 id="support-for-zeroconfig">Support for zeroconfig</h1>
+<p>apt-get install avahi-daemon</p>
+
+<h1 id="other-utilities">Other utilities</h1>
+<p>apt-get install p7zip-full zip curl psmisc usbutils iw bc
+```</p>
+
+<h4 id="preferred-packages">Preferred Packages</h4>
+
+<p>Depending upon your uses, you may have a set of packages you install to every fresh
+Raspbian image.  Below are the packages I like to install.</p>
+
+<p>```sh
+# SysV configuration tool (not for systemd)
+apt-get install sysv-rc-conf</p>
+
+<h1 id="install-scripting-tools">Install scripting tools</h1>
+<p>apt-get install ruby ruby-dev ri libsqlite3-dev nodejs-legacy npm</p>
+
+<h1 id="set-npm-to-use-known-registrars-only">Set npm to use known registrars only</h1>
+<p>npm config set ca “”</p>
+
+<h1 id="install-node-packages">Install node packages</h1>
+<p>npm install -g node-gyp markdown-preview</p>
+
+<h1 id="install-misc-packages">Install misc. packages</h1>
+<p>apt-get install mediainfo irssi</p>
+
+<h1 id="install-rmate-for-textmate-editing-over-ssh">Install rmate for TextMate editing over ssh</h1>
+<p>gem install rmate
+```</p>
+
+<h2 id="change-hostname">Change Hostname</h2>
+
+<p>If it’s likely the Pi won’t be the only one using the local network, then it should be
+given a unique host name.</p>
+
+<p>```sh
+# replace the hostname in each file
+NEWNAME=snhack
+sed -i “s/${HOSTNAME}$/${NEWNAME}/” /etc/host{s,name}</p>
+
+<h1 id="enable-the-changes">enable the changes</h1>
+<p>/etc/init.d/hostname.sh start
+```</p>
+
+<h2 id="generate-new-rsa-host-keys">Generate new RSA host keys</h2>
+
+<p>These keys confirm the identity of the Pi, to prevent a malicious host from intercepting the remote login process.  Not so important for your HTPi, but good standard security practice.  Also recommended if you have <a href="#change-hostname">more than one Pi</a>.</p>
+
+<p>```sh
+rm /etc/ssh/ssh_host_*
+dpkg-reconfigure openssh-server</p>
+
+<h1 id="remove-old-host-key-from-clients-using">remove old host key from clients using:</h1>
+<p># ssh-keygen -R raspberrypi.local
+```
+<!--
+ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_key
+--></p>
+
+<p>If you’re using dropbear instead of openssh, then use:</p>
+
+<p><code>sh
+rm -f /etc/dropbear/dropbear/dropbear_*
+dropbearkey -t rsa -f /etc/dropbear/dropbear_rsa_host_key
+dropbearkey -t rsa -f /etc/dropbear/dropbear_rsa_host_key
+/etc/init.d/dropbear restart
+</code></p>
+
+<h2 id="configure-wifi-adapter">Configure WiFi adapter</h2>
+
+<p>Some distributions include WiFi setup as part of the terminal configuration script, but
+this functionality is not yet included in <code>raspi-config</code>. If keeping the desktop
+installed, then its network configuration tools can be used. Otherwise, use the
+instructions for <a href="#manually-configure-wifi-adapter">manual configuration</a>.</p>
+
+<!-- My bluetooth adapter is not supported in the current build of Raspbian/XBian, but
+[here is the procedure](#configure-bluetooth-adapter) I used when
+trying to get it running (confirmed working on a laptop running Ubuntu). -->
+
+<!-- If the keyboard layout is incorrect, you'll need to configure
+[regional system settings](#regional-system-settings). -->
+
+<h2 id="backup-installation">Backup installation</h2>
+
+<p>At this point we have a Raspbian image with minor tweaks, added/updated packages, and
+zeroconfig support which provides mDNS/Bonjour discovery of the Pi over a network without
+needing it’s IP address.</p>
+
+<p>To minimise the time spent installing updates on future install, it’s a good idea to
+<a href="/blog/making-a-pi-disk-image/">backup the card</a> to a disk image that can be reinstalled
+later. This will also come in handy if you decide later to revert large changes made
+after this point (such as removal of the desktop).</p>
+
+<h2 id="removing-the-desktop-environment">Removing the desktop environment</h2>
+
+<p>If you only plan to run the terminal environment (and self-hosted programs, such as
+XBMC), then a lot of space can be recovered by removing x11 and related packages.</p>
+
+<p>```sh
+# desktop extras
+apt-get purge oracle-java.* wolfram-engine
+apt-get purge squeak-vm sonic-pi pistore midori dillo
+apt-get purge penguinspuzzle ‘raspberrypi-(artwork|doc)’</p>
+
+<h1 id="samba-network-drives">samba network drives</h1>
+<p>apt-get purge samba-common smbclient</p>
+
+<h1 id="other-libraries">other libraries</h1>
+<p>apt-get purge python-numpy python-pygame python3-numpy
+apt-get purge liblapack3 libatlas3-base
+```</p>
+
+<p>At this point, the base desktop system and utilities are still installed. However, over
+800MB has already been recovered - so if you just wanted to save a little space, you may
+want to keep the desktop after all.</p>
+
+<!-- *TODO: mono depends upon libx11-6, so it'll be (re)installed with mono as req.* -->
+
+<p><code>sh
+# desktop environment
+apt-get purge x11-common libx11-.* xkb-data xdg-utils menu-xdg
+apt-get purge desktop-file-utils lxde-icon-theme gnome-themes*
+</code>
+<!-- # apt-get purge fonts-freefont-ttf --></p>
+
+<p>Finally, purge packages no longer needed and clean up unused files.</p>
+
+<p><code>sh
+# cleaning up
+(cd ~pi; rm -rf Desktop python_games ocr_pi.png)
+rm -rf /usr/share/{icons,images}
+apt-get --purge autoremove
+apt-get clean
+</code></p>
+
+<p><em>Note: see <a href="http://www.cnx-software.com/2012/07/31/84-mb-minimal-raspbian-armhf-image-for-raspberry-pi/">cnx-software.com</a> for an even lighter install.</em></p>
+
+<h2 id="configure-automount-for-usb-drives">Configure automount for usb drives</h2>
+
+<p>Install udisks-glue to automount usb drives without starting the desktop.</p>
+
+<p>```sh
+# install udisks-glue
+apt-get install udisks-glue policykit-1</p>
+
+<h1 id="edit-config-file-to-enable-automount">edit config file to enable automount</h1>
+<p>sed -i ‘/^match disks /a\    automount = true’ /etc/udisks-glue.conf</p>
+
+<h1 id="startup-using-rclocal">startup using rc.local</h1>
+<p>sed -i “/^exit 0/isudo -u $(logname) udisks-glue\n” /etc/rc.local
+```</p>
+
+<p>Note: for startup methods other than <code>rc.local</code>, see
+<a href="http://angryelectron.com/udisks-glue-initscript/">angryelectron.com</a> for an example of
+how to add <code>udisks-glue</code> as a service using a traditional init.d script, or the section:
+<a href="#add-services-using-supervisor">Add services using Supervisor</a>.</p>
+
+<h2 id="add-services-using-supervisor">Add services using Supervisor</h2>
+
+<p><a href="http://supervisord.org">Supervisor</a> provides a simple way to add user services, without messing with <code>SysV</code> or
+other <code>init</code> scripts.</p>
+
+<p><code>sh
+apt-get install supervisor
+</code></p>
+
+<p>Create a startup script <code>/etc/supervisor/conf.d/udisks-glue.conf</code>:</p>
+
+<p><code>ini
+[program:udisks-glue]
+user = pi
+command = udisks-glue -f
+autostart = true
+autorestart = true
+stdout_logfile = /var/log/supervisor/udisks-glue-out.log
+stderr_logfile = /var/log/supervisor/udisks-glue-err.log
+</code></p>
+
+<p>Remove the previous startup of <code>udisks-glue</code> - if already
+<a href="#configure-automount-for-usb-drives">configured above</a> - and start the new service
+by reloading the <code>supervisor</code> config.</p>
+
+<p>```sh
+# remove the startup line from rc.local
+sed -i “/udisks-glue/d” /etc/rc.local</p>
+
+<h1 id="stop-already-running-process">stop already running process</h1>
+<p>killall udisks-glue</p>
+
+<h1 id="reload-supervisor-config">reload supervisor config</h1>
+<p>supervisorctl reload
+```</p>
+
+<p>The <code>udisks-glue</code> program should start automatically on boot. Use <code>supervisorctl</code> with
+<code>start</code>, <code>stop</code>, and <code>restart</code> to manually control Supervisor programs: <code>supervisorctl
+restart udisks-glue</code>.</p>
+
+<h2 id="install-mono">Install Mono</h2>
+
+<p>Install Mono development tools, runtime, and interactive shell.</p>
+
+<p>Note: If you’ve previously shrunk the system partition down, it may need to be expanded
+(use <code>sudo raspi-config</code>) to be able to fit the mono installation (about 153MB).</p>
+
+<p><code>sh
+apt-get install mono-devel mono-utils mono-csharp-shell
+</code></p>
+
+<!--
+pkg-count
+353 mono-complete
+214 cli-common-dev
+172 mono-devel
+168 libmono-cil-dev
+
+# for a minimal cli toolchain:
+apt-get install mono-mcs mono-xbuild mono-csharp-shell
+-->
+
+<h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
+
+<p>Occasionally you’ll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.</p>
+
+<p>```sh
+# change to the home folder you want to link from
+cd /home/$(logname)</p>
+
+<h1 id="define-a-list-of-dot-files-to-link">define a list of dot files to link</h1>
+<p>dotfiles=”.profile .bashrc .bash_aliases .bash_logout .nanorc .toprc .inputrc”</p>
+
+<h1 id="link-each-existing-file-into-the-root-users-home-folder">link each existing file into the root user’s home folder</h1>
+<p>for i in $dotfiles; do
+  [ -f $i ] &amp;&amp; sudo ln -sfv ~+/$i ~root/
+done</p>
+
+<h1 id="hush-login-message">hush login message</h1>
+<p>sudo touch ~root/.hushlogin
+```</p>
+
+<p>If you prefer to copy the files into ~root, then replace <code>ln -sfv</code> with <code>cp</code>.</p>
+
+<h2 id="build-and-install-wiringpi">Build and install WiringPi</h2>
+
+<p><a href="https://projects.drogon.net/raspberry-pi/wiringpi">WiringPi</a> is a library to access the Pi’s GPIO, SPI, and I2C headers, modelled on the Arduino Wiring system.  It also includes the <code>gpio</code> utility for use of the libraries from the command prompt.</p>
+
+<p>```sh
+apt-get install gcc make git-core libi2c-dev
+git clone git://git.drogon.net/wiringPi
+cd wiringPi; ./build</p>
+
+<h1 id="test-with-gpio-utility">test with gpio utility</h1>
+<p>gpio readall</p>
+
+<h1 id="install-ruby-gem-optional">install ruby gem (optional)</h1>
+<p>gem install –user-install wiringpi
+```</p>
+
+<h2 id="install-transmission">Install Transmission</h2>
+
+<p>The transmission bittorrent client doesn’t have many dependencies, can be installed as a
+daemon, and accessed remotely using a Web UI.</p>
+
+<p>```sh
+# install packages
+apt-get install transmission-daemon</p>
+
+<h1 id="start-daemon-as-logged-in-user-usually-pi">start daemon as logged in user (usually ‘pi’)</h1>
+<p>sed -i “/^USER=/s/.*/#&amp;\nUSER=$(logname)/” /etc/init.d/transmission-daemon</p>
+
+<h1 id="dont-store-config-in-varlib">don’t store config in ‘/var/lib/’</h1>
+<p>sed -i “/^OPTIONS=/s/^/# /” /etc/default/transmission-daemon</p>
+
+<h1 id="test-transmission-daemon-uses-config">test transmission-daemon uses ~/.config</h1>
+<p>service transmission-daemon restart
+ls -l .config/transmission-daemon</p>
+
+<h1 id="customise-settings-for-transmission-see-below">customise settings for transmission (see below)</h1>
+<p>nano .config/transmission-daemon/settings.json
+service transmission-daemon reload
+```</p>
+
+<p>The following block includes settings needed to get the Web UI up and running, pasting it
+before the last setting will replace any definitions duplicated earlier in the file.</p>
+
+<p>```json
+“watch-dir”: “/home/pi/torrents”,
+“download-dir”: “/home/pi/torrents”,
+“incomplete-dir”: “/home/pi/torrents/incomplete”,
+“incomplete-dir-enabled”: false,
+“watch-dir-enabled”: true,
+“trash-original-torrent-files”: true,</p>
+
+<p>“rpc-port”: 9091,
+“rpc-whitelist”: “127.0.0.1, 192.168.<em>.</em>, 172.16.0.*”,</p>
+
+<p>“rpc-password”: “pi”,
+“rpc-username”: “transmission”,
+“rpc-authentication-required”: true,
+```</p>
+
+<p>Full details on transmission’s config files may be found
+<a href="https://trac.transmissionbt.com/wiki/EditConfigFiles">here</a>. Other settings such as port
+forwarding, bandwidth throttling, and encryption, can be configured from the Web UI
+(usually at <code>raspbian.local:9091</code>) .</p>
+
+<h2 id="dropbox-sync-using-dbox">Dropbox sync using dbox</h2>
+
+<p>Follow the <a href="https://github.com/kenpratt/dbox">dbox installation instructions</a> to set up the dropbox sdk developer
+keys and authorisation tokens. To use dbox for automatic folder syncing, see my post:
+<a href="/blog/pi-box/">Dropbox on Pi</a>.</p>
+
+<p><code>sh
+apt-get install gcc make ruby ruby-dev libsqlite3-dev
+gem install dbox
+</code></p>
+
+<h2 id="precompiled-xbmc">Precompiled XBMC</h2>
+
+<p>If you’re running raspbian and want to use the same image with XBMC, you can install the
+base XBMC and required packages as follows (adapted from
+<a href="http://michael.gorven.za.net/raspberrypi/xbmc">michael.gorven.za.net</a>):</p>
+
+<p>```sh
+echo ‘deb http://archive.mene.za.net/raspbian wheezy contrib
+‘ | sudo tee /etc/apt/sources.list.d/mene.list</p>
+
+<p>apt-key adv –keyserver keyserver.ubuntu.com –recv-key 5243CDED</p>
+
+<p>apt-get update &amp;&amp; apt-get install xbmc</p>
+
+<p>nano /etc/default/xbmc  # edit to enable and set user
+```</p>
+
+<h2 id="connecting-to-the-pi">Connecting to the Pi</h2>
+
+<p>With support for zeroconfig installed (via <code>avahi-daemon</code>), it’s much easier to
+find your Pi on the network<sup id="fnref:hostname"><a href="#fn:hostname" rel="footnote">1</a></sup>.</p>
+
+<p><code>sh
+# login using zeroconfig
+ssh pi@raspberrypi.local
+</code></p>
+
+<p><em>Note: If multiple Pis are active on the same network, they should be given
+<a href="#change-hostname">unique hostnames</a>.</em></p>
+
+<h3 id="copy-public-key-to-the-pi">Copy public key to the Pi</h3>
+
+<p>Before setting up the Pi remotely, there are some things that can be done locally (on your PC, laptop, etc.) to ease logging in when using SSH.  This will obviate the need to enter a password, or specify the full host name each time we access the Pi.</p>
+
+<p>If generating a new key pair, accept the default key location as suggested by <code>ssh-keygen</code> below.  While a passphrase is optional, anyone can use a copy of the unencrypted private key to authenticate with your identity.  Many operating systems are preconfigured to use <code>ssh-agent</code> or a similar utility, to avoid having to enter a passphrase multiple times (if at all).</p>
+
+<p>```sh
+# generate a key pair if none already exists
+test -f ~/.ssh/id_rsa.pub || ssh-keygen</p>
+
+<h1 id="remove-any-old-conflicting-host-entries">remove any old, conflicting host entries</h1>
+<p>ssh-keygen -R raspberrypi.local</p>
+
+<h1 id="password-is-required-until-the-key-is-installed">password is required until the key is installed</h1>
+<p>ssh-copy-id pi@raspberrypi.local
+```</p>
+
+<p>The easiest way to append a key to the remote user’s <code>~/.ssh/authorized_keys</code> file is to use <code>ssh-copy-id</code> as shown above.  Download <a href="http://hg.mindrot.org/openssh/raw-file/tip/contrib/ssh-copy-id">ssh-copy-id</a> from source (or <a href="https://github.com/beautifulcode/ssh-copy-id-for-OSX">github</a>) if your system doesn’t already have it (<a href="http://www.commandlinefu.com/commands/view/10228/...if-you-have-sudo-access-you-could-just-install-ssh-copy-id-mac-users-take-note.-this-is-how-you-install-ssh-copy-id-">installation instructions</a>), this <a href="http://www.commandlinefu.com/commands/view/188/copy-your-ssh-public-key-to-a-server-from-a-machine-that-doesnt-have-ssh-copy-id">alternative method</a> should also work in most situations.</p>
+
+<h3 id="add-an-alias-to-sshconfig">Add an alias to .ssh/config</h3>
+
+<p>Locally define the alias <code>pi</code>, to be used in place of <code>pi@raspberrypi.local</code> with
+ssh commands such as <code>ssh pi</code> and <code>sftp pi</code>. Enter the text below as a single command, or
+manually paste the quoted text into <code>~/.ssh/config</code> using <code>nano</code> or similar (the IP
+address can be used for <code>Hostname</code> if preferred).</p>
+
+<p><code>sh
+echo '
+Host pi
+  User  pi
+  Hostname  raspberrypi.local' &gt;&gt; ~/.ssh/config
+</code></p>
+
+<h3 id="transfer-files">Transfer files</h3>
+
+<p>If you have previous files from your Pi stored locally, you can transfer them using <code>sftp</code>, <code>scp</code>, etc.  For easily transferring many arbitrary files , a GUI sftp client is recommended.</p>
+
+<p>```sh
+# connect to the pi, using the <code>xb</code> alias defined above
+sftp xb
+sftp&gt; put .bash_aliases
+sftp&gt; exit</p>
+
+<h1 id="you-can-also-use-ctlrd-to-logout">you can also use ctlr+d to logout</h1>
+<p>```</p>
+
+<h3 id="manually-configure-wifi-adapter">Manually configure WiFi adapter</h3>
+
+<p><a href="http://www.savagehomeautomation.com/raspi-airlink101">Instructions adapted from here</a>.</p>
+
+<p>Use <code>lsusb</code> to check that the adapter is recognised, and <code>lsmod</code> to check the kernel module (e.g. <code>8192cu</code>) is loaded.</p>
+
+<p><code>sh
+sudo nano /etc/network/interfaces
+</code></p>
+
+<p>Make sure the following lines exist in the interfaces file, adding them as needed:</p>
+
+<p><code>
+allow-hotplug wlan0
+iface wlan0 inet manual
+wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+</code></p>
+
+<p>Open the file that configures WiFi hotspots:</p>
+
+<p><code>sh
+sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+</code></p>
+
+<p>Add your network details, using the following template:</p>
+
+<p><code>
+network={
+  ssid="YOUR-NETWORK-SSID"
+  psk="YOUR-WLAN-PASSWORD"
+}
+</code></p>
+
+<p>Or, more fully as required:</p>
+
+<p><code>
+network={
+  ssid="YOUR-NETWORK-SSID"
+  proto=WPA2
+  key_mgmt=WPA-PSK
+  pairwise=CCMP TKIP
+  group=CCMP TKIP
+  psk="YOUR-WLAN-PASSWORD"
+}
+</code></p>
+
+<p>Reinitialise the adapter, and check it’s connected.</p>
+
+<p><code>sh
+sudo ifdown wlan0
+sudo ifup wlan0
+# you may get some errors here, even when successful
+</code></p>
+
+<p>Use <code>iwconfig</code> to view wifi adapter info and <code>ifconfig</code> for general network info.</p>
+
+<h3 id="configure-bluetooth-adapter">Configure bluetooth adapter</h3>
+
+<p><a href="http://www.ctheroux.com/2012/08/a-step-by-step-guide-to-setup-a-bluetooth-keyboard-and-mouse-on-the-raspberry-pi/">Adapted from ctheroux</a>.</p>
+
+<p>```sh
+# install bluetooth support and dependencies
+agi bluez python-gobject  # minimal?
+agi bluetooth bluez-utils  # full</p>
+
+<h1 id="for-management-from-the-desktop">for management from the desktop</h1>
+<p>agi blueman</p>
+
+<h1 id="check-adapter-is-working">check adapter is working*</h1>
+<p>hcitool dev</p>
+
+<h1 id="scan-for-devices">scan for devices</h1>
+<p>hcitool scan</p>
+
+<h1 id="pair-with-device-using-the-address-listed-from-scan">pair with device, using the address listed from scan</h1>
+<p>bluez-simple-agent hci0 XX:XX:XX:XX:XX:XX</p>
+
+<h1 id="trust-the-device">trust the device</h1>
+<p>bluez-test-device trusted XX:XX:XX:XX:XX:XX yes</p>
+
+<h1 id="connect-to-input-device">connect to input device</h1>
+<p>bluez-test-input hci0 XX:XX:XX:XX:XX:XX</p>
+
+<h1 id="adapter-status">adapter status</h1>
+<p>hciconfig
+```</p>
+
+<p><em>*Note: a bluetooth adapter may be listed in <code>lsusb</code> and <code>hciconfig</code>, without being recognised by <code>hcitool</code>. This is the case with the belkin dongle I have, so use <code>hcitool</code> to check that a device is working properly.</em></p>
+
+<h3 id="install-aircrack-and-related-tools">Install aircrack and related tools</h3>
+
+<p>Taken from <a href="http://blog.petrilopia.net/linux/raspberry-pi-install-aircrackng-suite/">blog.petrilopia.net</a>.</p>
+
+<p><code>sh
+apt-get -y install iw reaver
+apt-get -y install libssl-dev libnl-3-dev libnl-genl-3-dev
+wget http://download.aircrack-ng.org/aircrack-ng-1.2-beta3.tar.gz
+tar -zxvf aircrack-ng-1.2-beta3.tar.gz
+cd aircrack-ng-1.2-beta3
+make
+make install
+</code></p>
+
+<h3 id="using-reaver">Using Reaver</h3>
+
+<p>```sh
+apt-get install reaver</p>
+
+<h1 id="put-wifi-device-into-monitor-mode">put wifi device into monitor mode</h1>
+<p>airmon-ng start wlan0</p>
+
+<h1 id="list-available-networks">list available networks</h1>
+<p>airodump-ng wlan0
+# airodump-ng mon0</p>
+
+<h1 id="set-bssid-to-target-network-name">set bssid to target network name</h1>
+<p>bssid=”setthistobssid”</p>
+
+<h1 id="start-reaver">start reaver</h1>
+<p>reaver -i mon0 -b “$bssid” -vv
+```</p>
+
+<h3 id="configure-automount-for-usb-drives-1">Configure automount for usb drives</h3>
+
+<p>If there’s no service already installed to automount usb drives, then udisks-glue can be
+setup as follows.</p>
+
+<p>```sh
+# install udisks-glue
+apt-get install udisks-glue</p>
+
+<h1 id="create-config-file-including-spin-down-of-drives-after-10-mins">create config file, including spin down of drives after 10 mins</h1>
+<p>echo ‘filter disks {
+    optical = false
+    partition_table = false
+    usage = filesystem
+}</p>
+
+<p>match disks {
+    automount = true
+    automount_options = { sync, noatime }
+    post_insertion_command = “udisks –set-spindown %device_file –spindown-timeout 600 –mount %device_file –mount-options sync,noatime”
+}’ | sudo tee /etc/udisks-glue.conf</p>
+
+<h1 id="create-upstart-service-definition">create ‘upstart’ service definition</h1>
+<p>echo ‘#
+# udisks-glue
+#</p>
+
+<p>description “udisks-glue for udisks”</p>
+
+<p>start on started
+stop on (runlevel [06] or stopped dbus)</p>
+
+<p>expect fork
+respawn
+setuid pi
+exec /usr/bin/udisks-glue
+‘ | sudo tee /etc/init/udisks-glue.conf</p>
+
+<h1 id="alternative-startup-using-rclocal">alternative startup using rc.local</h1>
+<p># sed -i “/^exit 0/isudo -u $(logname) udisks-glue\n” /etc/rc.local
+```</p>
+
+<p>Note: see <a href="http://angryelectron.com/udisks-glue-initscript/">angryelectron.com</a> for an
+example of how to add udisks-glue as a service when using a traditional init.d script.</p>
+
+<h3 id="install-xbian-onto-a-raspbian-image">Install XBian onto a Raspbian image</h3>
+
+<p>From <a href="http://forum.xbian.org/thread-1850.html">Installing XBIAN directly on RASPBIAN IMG</a></p>
+
+<p>```sh
+# install xbian repo
+wget http://xbian.brantje.com/pool/stable/main/x/xbian-package-repo/xbian-package-repo<em>1.0.0_armhf.deb
+dpkg -i xbian-package-repo</em>1.0.0_armhf.deb</p>
+
+<h1 id="enable-staging-and-development-repositories-and-update">enable staging and development repositories and update</h1>
+<p>sed -i ‘/ staging|devel main/s/^#+ //’ /etc/apt/sources.list.d/xbian.list
+apt-get update
+# revert previous edit
+sed -i ‘/ staging|devel main/s/^/### /’ /etc/apt/sources.list.d/xbian.list</p>
+
+<h1 id="install-xbmc-only">install xbmc <strong>only</strong></h1>
+<p># apt-get install xbian-package-xbmc # 97MB</p>
+
+<h1 id="install-xbian-and-xbmc">install xbian and xbmc</h1>
+<p>apt-get install xbian-package-xbianhome xbian-package-kernel</p>
+
+<h1 id="reboot-required-to-make-file-system-changes-and-conversion-to-btrfs">reboot required to make file system changes, and conversion to btrfs</h1>
+<p>sed -i /rootfstype/s/btrfs/ext4/ /boot/cmdline.txt # do not use btrfs
+reboot</p>
+
+<h1 id="install-remaining-xbian-packages">install remaining xbian packages</h1>
+<p># Note: a warning for removal of ‘sysvinit’ will be displayed,
+# as xbian replaces it with the ‘upstart’ service manager.
+# Also, cmdline.txt should remain unchanged, with new
+# parameters written to /boot/cmdline.new.
+apt-get install xbian-update xbian-package-rasp-switching</p>
+
+<h1 id="xbmc-can-now-be-started-with-start-xbmc">XBMC can now be started with “start XBMC”</h1>
+
+<h1 id="boot-to-desktop">boot to desktop</h1>
+<p># apt-get install lightdm
+```</p>
+
+<!-- XBMC can be started with "start XBMC", Raspbian X desktop with "service lightdm start".
+
+if you Raspbian setup used to boot into X with PI user automatically, you can keep this and indeed start / load XBMC quick and easy way - even jumping back and forth between XBMC and you X Desktop. We can click "Logout", put "xbian" as user to log in and XBMC starts. If you quit XBMC, X will come again. No reboots needed.
+Both X and XBMC can be managed now from xbian-config tool (from SSH or even XBMC). There is how you RPI will boot if you select what service for autostart: -->
+
+<!-- endofpost -->
+
+<h3 id="not-used-with-recent-versions">Not used with recent versions</h3>
+
+<p>Previously useful functionality or workarounds</p>
+
+<h3 id="clear-cached-network-adapter">Clear cached network adapter</h3>
+
+<p>(needed for switching cards between devices)</p>
+
+<p><code>sh
+echo | sudo tee /etc/udev/rules.d/70-persistent-net.rules
+</code></p>
+
+<h3 id="regional-system-settings">Regional system settings</h3>
+
+<p>If the console keyboard is not setup correctly for the en_GB layout, a solution I’ve used before is to install <code>keyboard-configuration</code>, which only seems to work once <code>console-setup</code> is also installed.</p>
+
+<p><em>The latter package will change the console font, but this can be reverted during the commands shown below. Just choose the font you prefer, or choose ‘Do not change the boot/kernel font’.</em></p>
+
+<p>```sh
+# Packages needed to change keyboard layout
+apt-get install console-setup keyboard-configuration</p>
+
+<h1 id="configure-keyboard-settings">Configure keyboard settings</h1>
+<p>dpkg-reconfigure keyboard-configuration</p>
+
+<h1 id="configure-console-font">Configure console font</h1>
+<p># accept the defaults until the font selection screen
+dpkg-reconfigure console-setup</p>
+
+<h1 id="configure-time-zone-and-locale-1">Configure time zone and locale</h1>
+<p>dpkg-reconfigure tzdata
+dpkg-reconfigure locales
+```</p>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:hostname">
+      <p>It should be possible to connect with the hostname even without zeroconfig,
+e.g. <code>pi@raspberrypi</code>, but I’ve had no luck with this (except for when the router sets
+this up via DNS).<a href="#fnref:hostname" rel="reference">&#8617;</a></p>
     </li>
   </ol>
 </div>
