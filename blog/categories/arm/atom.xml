@@ -4,7 +4,7 @@
   <title><![CDATA[Category: arm | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/arm/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-07-01T04:38:26+01:00</updated>
+  <updated>2014-07-03T18:48:19+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -969,13 +969,13 @@ desktop Linux environment, and may be a little faster that way<sup id="fnref:sfi
 command line effort).</p>
 
 <p>```sh
-# zero fill the filesystem
-sfill -z -l -l -f -v /boot /</p>
-
-<h1 id="zero-fill-the-swap-file">zero fill the swap file</h1>
-<p>swapoff -a
+# zero fill the swap file
+swapoff -a
 dd if=/dev/zero of=/var/swap bs=1M count=100
 mkswap /var/swap</p>
+
+<h1 id="zero-fill-the-filesystem">zero fill the filesystem</h1>
+<p>sfill -z -l -l -f -v /boot /</p>
 
 <h1 id="shutdown-and-remove-the-card">shutdown and remove the card</h1>
 <p>halt

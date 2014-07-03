@@ -175,13 +175,13 @@ system for imaging.</p>
 desktop Linux environment, and may be a little faster that way<sup id="fnref:sfill"><a href="#fn:sfill" rel="footnote">1</a></sup> (but needs more
 command line effort).</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># zero fill the filesystem</span>
-</span><span class="line">sfill -z -l -l -f -v /boot /
-</span><span class="line">
-</span><span class="line"><span class="c"># zero fill the swap file</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># zero fill the swap file</span>
 </span><span class="line">swapoff -a
 </span><span class="line">dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>/var/swap <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>100
 </span><span class="line">mkswap /var/swap
+</span><span class="line">
+</span><span class="line"><span class="c"># zero fill the filesystem</span>
+</span><span class="line">sfill -z -l -l -f -v /boot /
 </span><span class="line">
 </span><span class="line"><span class="c"># shutdown and remove the card</span>
 </span><span class="line">halt

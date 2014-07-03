@@ -83,13 +83,13 @@ command line effort).
     with the same images yet though.
 
 ```sh
-# zero fill the filesystem
-sfill -z -l -l -f -v /boot /
-
 # zero fill the swap file
 swapoff -a
 dd if=/dev/zero of=/var/swap bs=1M count=100
 mkswap /var/swap
+
+# zero fill the filesystem
+sfill -z -l -l -f -v /boot /
 
 # shutdown and remove the card
 halt
