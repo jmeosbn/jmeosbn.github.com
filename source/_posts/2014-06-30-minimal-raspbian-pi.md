@@ -221,6 +221,29 @@ trying to get it running (confirmed working on a laptop running Ubuntu). -->
 [regional system settings](#regional-system-settings). -->
 
 
+## Update dosfstools build
+
+The current raspbian version of `dosfstools` is out of date and won't reset the 'dirty bit'
+of a FAT volume, such as that used by the `/boot` partition.
+
+```sh
+git clone http://daniel-baumann.ch/git/software/dosfstools.git
+cd dosfstools
+sudo make install
+```
+
+
+## Add a cron job for dynamic DNS
+
+```sh
+# run cron tab as pi user
+sudo -u pi crontab -e
+
+# append the following line, replacing domain and token values
+*/5 * * * * curl -k -o /tmp/duckdns.log 'https://www.duckdns.org/update?domains=yourdomain&token=yourtoken&ip=' >/dev/null 2>&1
+```
+
+
 ## Backup installation
 
 At this point we have a Raspbian image with minor tweaks, added/updated packages, and
@@ -579,6 +602,15 @@ iface wlan0 inet manual
 wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
+<!--
+To manually set a static IP, add the following lines with the desired values:
+
+    address 192.168.1.31
+    netmask 255.255.255.0
+    gateway 192.168.1.254
+
+-->
+
 Open the file that configures WiFi hotspots:
 
 ```sh
@@ -599,11 +631,11 @@ Or, more fully as required:
 ```
 network={
   ssid="YOUR-NETWORK-SSID"
+  psk="YOUR-WLAN-PASSWORD"
   proto=WPA2
   key_mgmt=WPA-PSK
   pairwise=CCMP TKIP
   group=CCMP TKIP
-  psk="YOUR-WLAN-PASSWORD"
 }
 ```
 
