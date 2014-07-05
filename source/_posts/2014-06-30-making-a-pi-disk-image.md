@@ -15,14 +15,6 @@ provide a helpful login message to anyone using the image.
 After setting up your Raspberry Pi - but before shutting it down - prepare the installed
 system for imaging.
 
-```sh
-# login as root
-sudo -s
-
-# make sure sfill tool is installed
-apt-get install secure-delete
-```
-
 Edit the login message to detail setup tasks required on logon:
 
 ```sh
@@ -47,6 +39,12 @@ rm -f /home/$(logname)/.hushlogin
 Clean up the system by removing any unneeded files and private user data.
 
 ```sh
+# login as root
+sudo -s
+
+# install secure-delete
+apt-get install secure-delete
+
 # clean up downloaded packages, log, caches, etc.
 apt-get clean
 find /var/log -type f -delete
@@ -72,29 +70,23 @@ for u in /home/$(logname) /root; do echo &&
 done
 ```
 
-Zero fill the unused SD card space for better compression. This can also be done within a
-desktop Linux environment, and may be a little faster that way[^sfill] (but needs more
-command line effort).
+Zero fill the unused SD card space for better compression. This can instead be done with an
+image file[^gnome-disk] if you're concerned wearing out the card, or just want better speed.
 
-[^sfill]: Normally, `sfill` seems to run just as fast from the Raspberry Pi - since the
-    SD card write speed is the main factor - and space saved is similar to mounting
-    offline. When making recent images I've found `sfill` to take a long time to complete
-    after filling the disk (but before 'Wiping inodes'), I haven't retested on the desktop
-    with the same images yet though.
+[^gnome-disk]: The easiest way I've found to mount the image as writable, is to first create loopback devices using `gnome-disk-image-mounter -w`.  You can also calculate the partition offsets and use `mount` directly.
 
 ```sh
-# zero fill the filesystem
-sfill -z -l -l -f -v /boot /
-
 # zero fill the swap file
 swapoff -a
 dd if=/dev/zero of=/var/swap bs=1M count=100
 mkswap /var/swap
 
-# shutdown and remove the card
-halt
-```
+# zero fill the filesystem
+sfill -z -l -l -f -v /boot /
 
+# shutdown and remove the card
+poweroff
+```
 
 Here's the basic command to copy an SD card into a file. The size is correct for the
 current Raspbian image at [raspberrypi.org](http://raspberrypi.org), and can be confirmed
