@@ -4,7 +4,7 @@
   <title><![CDATA[jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-07-06T00:01:44+01:00</updated>
+  <updated>2014-07-06T00:34:32+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -257,15 +257,18 @@ of a FAT volume, such as that used by the <code>/boot</code> partition.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">git clone http://daniel-baumann.ch/git/software/dosfstools.git
 </span><span class="line"><span class="nb">cd </span>dosfstools
-</span><span class="line">sudo make install
+</span><span class="line">make install
 </span></code></pre></div></figure></notextile></div>
 
 <h2 id="add-a-cron-job-for-dynamic-dns">Add a cron job for dynamic DNS</h2>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># run cron tab as pi user</span>
+<p>If you have a dynamic DNS entry to keep updated, or another simple command or script to
+run every so often, then a cron job can be set up to run as a particular user.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># run crontab for the &#39;pi&#39; user</span>
 </span><span class="line">sudo -u pi crontab -e
 </span><span class="line">
-</span><span class="line"><span class="c"># append the following line, replacing domain and token values</span>
+</span><span class="line"><span class="c"># append line to run command every 5 mins</span>
 </span><span class="line">*/5 * * * * curl -k -o /tmp/duckdns.log <span class="s1">&#39;https://www.duckdns.org/update?domains=yourdomain&amp;token=yourtoken&amp;ip=&#39;</span> &gt;/dev/null 2&gt;&amp;1
 </span></code></pre></div></figure></notextile></div>
 
@@ -886,7 +889,7 @@ system for imaging.</p>
 </span></code></pre></div></figure></notextile></div>
 
 <p>Zero fill the unused SD card space for better compression. This can instead be done with an
-image file<sup id="fnref:zerofree"><a href="#fn:zerofree" rel="footnote">1</a></sup> if you’re concerned about wearing out the card.</p>
+image file<sup id="fnref:gnome-disk"><a href="#fn:gnome-disk" rel="footnote">1</a></sup> if you’re concerned wearing out the card, or just want better speed.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># zero fill the swap file</span>
 </span><span class="line">swapoff -a
@@ -994,8 +997,8 @@ dd if=$dev of=$name.img bs=1m count=$size
 <!-- OFFSET=`fdisk -lu $IMAGE | grep -m 1 Linux$ | awk '{ print $2 *512 }'` -->
 <div class="footnotes">
   <ol>
-    <li id="fn:zerofree">
-      <p>In this case, you could try the more efficient <code>zerofree</code> utility for the main ext3/4 partition.<a href="#fnref:zerofree" rel="reference">&#8617;</a></p>
+    <li id="fn:gnome-disk">
+      <p>The easiest way I’ve found to mount the image as writable, is to first create loopback devices with <code>gnome-disk-image-mounter -w</code>.  You can also calculate the partition offsets and use <code>mount</code> directly.<a href="#fnref:gnome-disk" rel="reference">&#8617;</a></p>
     </li>
     <li id="fn:fdisk">
       <p>Use <code>fdisk</code> to view the partition table info of the SD card, then calculate the

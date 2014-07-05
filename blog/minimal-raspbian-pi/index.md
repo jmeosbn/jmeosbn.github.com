@@ -247,17 +247,20 @@ of a FAT volume, such as that used by the `/boot` partition.
 ```sh
 git clone http://daniel-baumann.ch/git/software/dosfstools.git
 cd dosfstools
-sudo make install
+make install
 ```
 
 
 ## Add a cron job for dynamic DNS
 
+If you have a dynamic DNS entry to keep updated, or another simple command or script to
+run every so often, then a cron job can be set up to run as a particular user.
+
 ```sh
-# run cron tab as pi user
+# run crontab for the 'pi' user
 sudo -u pi crontab -e
 
-# append the following line, replacing domain and token values
+# append line to run command every 5 mins
 */5 * * * * curl -k -o /tmp/duckdns.log 'https://www.duckdns.org/update?domains=yourdomain&token=yourtoken&ip=' >/dev/null 2>&1
 ```
 

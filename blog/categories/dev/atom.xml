@@ -4,7 +4,7 @@
   <title><![CDATA[Category: dev | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/dev/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-07-06T00:01:44+01:00</updated>
+  <updated>2014-07-06T00:34:32+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -95,7 +95,7 @@ Disable password logins for remote ssh access (public key only).
       <li><a href="#add-a-cron-job-for-dynamic-dns">Add a cron job for dynamic DNS</a></li>
     </ul>
   </li>
-  <li><a href="#append-the-following-line-replacing-domain-and-token-values">append the following line, replacing domain and token values</a>    <ul>
+  <li><a href="#append-line-to-run-command-every-5-mins">append line to run command every 5 mins</a>    <ul>
       <li><a href="#backup-installation">Backup installation</a></li>
       <li><a href="#removing-the-desktop-environment">Removing the desktop environment</a></li>
     </ul>
@@ -356,16 +356,19 @@ of a FAT volume, such as that used by the <code>/boot</code> partition.</p>
 <p><code>sh
 git clone http://daniel-baumann.ch/git/software/dosfstools.git
 cd dosfstools
-sudo make install
+make install
 </code></p>
 
 <h2 id="add-a-cron-job-for-dynamic-dns">Add a cron job for dynamic DNS</h2>
 
+<p>If you have a dynamic DNS entry to keep updated, or another simple command or script to
+run every so often, then a cron job can be set up to run as a particular user.</p>
+
 <p>```sh
-# run cron tab as pi user
+# run crontab for the ‘pi’ user
 sudo -u pi crontab -e</p>
 
-<h1 id="append-the-following-line-replacing-domain-and-token-values">append the following line, replacing domain and token values</h1>
+<h1 id="append-line-to-run-command-every-5-mins">append line to run command every 5 mins</h1>
 <p>*/5 * * * * curl -k -o /tmp/duckdns.log ‘https://www.duckdns.org/update?domains=yourdomain&amp;token=yourtoken&amp;ip=’ &gt;/dev/null 2&gt;&amp;1
 ```</p>
 

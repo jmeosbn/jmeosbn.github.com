@@ -71,9 +71,9 @@ done
 ```
 
 Zero fill the unused SD card space for better compression. This can instead be done with an
-image file[^zerofree] if you're concerned about wearing out the card.
+image file[^gnome-disk] if you're concerned wearing out the card, or just want better speed.
 
-[^zerofree]: In this case, you could try the more efficient `zerofree` utility for the main ext3/4 partition.
+[^gnome-disk]: The easiest way I've found to mount the image as writable, is to first create loopback devices with `gnome-disk-image-mounter -w`.  You can also calculate the partition offsets and use `mount` directly.
 
 ```sh
 # zero fill the swap file

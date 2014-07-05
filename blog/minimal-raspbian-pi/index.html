@@ -344,15 +344,18 @@ of a FAT volume, such as that used by the <code>/boot</code> partition.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">git clone http://daniel-baumann.ch/git/software/dosfstools.git
 </span><span class="line"><span class="nb">cd </span>dosfstools
-</span><span class="line">sudo make install
+</span><span class="line">make install
 </span></code></pre></div></figure></notextile></div>
 
 <h2 id="add-a-cron-job-for-dynamic-dns">Add a cron job for dynamic DNS</h2>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># run cron tab as pi user</span>
+<p>If you have a dynamic DNS entry to keep updated, or another simple command or script to
+run every so often, then a cron job can be set up to run as a particular user.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># run crontab for the &#39;pi&#39; user</span>
 </span><span class="line">sudo -u pi crontab -e
 </span><span class="line">
-</span><span class="line"><span class="c"># append the following line, replacing domain and token values</span>
+</span><span class="line"><span class="c"># append line to run command every 5 mins</span>
 </span><span class="line">*/5 * * * * curl -k -o /tmp/duckdns.log <span class="s1">&#39;https://www.duckdns.org/update?domains=yourdomain&amp;token=yourtoken&amp;ip=&#39;</span> &gt;/dev/null 2&gt;&amp;1
 </span></code></pre></div></figure></notextile></div>
 
