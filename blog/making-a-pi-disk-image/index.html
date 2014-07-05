@@ -280,7 +280,7 @@ dd if=$dev of=$name.img bs=1m count=$size
 <div class="footnotes">
   <ol>
     <li id="fn:gnome-disk">
-      <p>The easiest way I’ve found to mount the image as writable, is to first create loopback devices with <code>gnome-disk-image-mounter -w</code>.  You can also calculate the partition offsets and use <code>mount</code> directly.<a href="#fnref:gnome-disk" rel="reference">&#8617;</a></p>
+      <p>The easiest way I’ve found to mount the image as writable, is to first create loopback devices using <code>gnome-disk-image-mounter -w</code>.  You can also calculate the partition offsets and use <code>mount</code> directly.<a href="#fnref:gnome-disk" rel="reference">&#8617;</a></p>
     </li>
     <li id="fn:fdisk">
       <p>Use <code>fdisk</code> to view the partition table info of the SD card, then calculate the
