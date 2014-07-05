@@ -117,13 +117,6 @@ provide a helpful login message to anyone using the image.</p>
 <p>After setting up your Raspberry Pi - but before shutting it down - prepare the installed
 system for imaging.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># login as root</span>
-</span><span class="line">sudo -s
-</span><span class="line">
-</span><span class="line"><span class="c"># make sure sfill tool is installed</span>
-</span><span class="line">apt-get install secure-delete
-</span></code></pre></div></figure></notextile></div>
-
 <p>Edit the login message to detail setup tasks required on logon:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> -e <span class="s2">&quot;\e[47;30;1m</span>
@@ -146,7 +139,13 @@ system for imaging.</p>
 
 <p>Clean up the system by removing any unneeded files and private user data.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># clean up downloaded packages, log, caches, etc.</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># login as root</span>
+</span><span class="line">sudo -s
+</span><span class="line">
+</span><span class="line"><span class="c"># install secure-delete</span>
+</span><span class="line">apt-get install secure-delete
+</span><span class="line">
+</span><span class="line"><span class="c"># clean up downloaded packages, log, caches, etc.</span>
 </span><span class="line">apt-get clean
 </span><span class="line">find /var/log -type f -delete
 </span><span class="line">du -sch /var/cache/*
@@ -171,9 +170,8 @@ system for imaging.</p>
 </span><span class="line"><span class="k">done</span>
 </span></code></pre></div></figure></notextile></div>
 
-<p>Zero fill the unused SD card space for better compression. This can also be done within a
-desktop Linux environment, and may be a little faster that way<sup id="fnref:sfill"><a href="#fn:sfill" rel="footnote">1</a></sup> (but needs more
-command line effort).</p>
+<p>Zero fill the unused SD card space for better compression. This can instead be done with an
+image file<sup id="fnref:zerofree"><a href="#fn:zerofree" rel="footnote">1</a></sup> if you’re concerned about wearing out the card.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># zero fill the swap file</span>
 </span><span class="line">swapoff -a
@@ -184,7 +182,7 @@ command line effort).</p>
 </span><span class="line">sfill -z -l -l -f -v /boot /
 </span><span class="line">
 </span><span class="line"><span class="c"># shutdown and remove the card</span>
-</span><span class="line">halt
+</span><span class="line">poweroff
 </span></code></pre></div></figure></notextile></div>
 
 <p>Here’s the basic command to copy an SD card into a file. The size is correct for the
@@ -281,12 +279,8 @@ dd if=$dev of=$name.img bs=1m count=$size
 <!-- OFFSET=`fdisk -lu $IMAGE | grep -m 1 Linux$ | awk '{ print $2 *512 }'` -->
 <div class="footnotes">
   <ol>
-    <li id="fn:sfill">
-      <p>Normally, <code>sfill</code> seems to run just as fast from the Raspberry Pi - since the
-SD card write speed is the main factor - and space saved is similar to mounting
-offline. When making recent images I’ve found <code>sfill</code> to take a long time to complete
-after filling the disk (but before ‘Wiping inodes’), I haven’t retested on the desktop
-with the same images yet though.<a href="#fnref:sfill" rel="reference">&#8617;</a></p>
+    <li id="fn:zerofree">
+      <p>In this case, you could try the more efficient <code>zerofree</code> utility for the main ext3/4 partition.<a href="#fnref:zerofree" rel="reference">&#8617;</a></p>
     </li>
     <li id="fn:fdisk">
       <p>Use <code>fdisk</code> to view the partition table info of the SD card, then calculate the

@@ -4,7 +4,7 @@
   <title><![CDATA[jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-07-03T18:48:19+01:00</updated>
+  <updated>2014-07-05T22:33:55+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -60,6 +60,8 @@ Disable password logins for remote ssh access (public key only).
   <li><a href="#change-hostname">Change Hostname</a></li>
   <li><a href="#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
   <li><a href="#configure-wifi-adapter">Configure WiFi adapter</a></li>
+  <li><a href="#update-dosfstools-build">Update dosfstools build</a></li>
+  <li><a href="#add-a-cron-job-for-dynamic-dns">Add a cron job for dynamic DNS</a></li>
   <li><a href="#backup-installation">Backup installation</a></li>
   <li><a href="#removing-the-desktop-environment">Removing the desktop environment</a></li>
   <li><a href="#configure-automount-for-usb-drives">Configure automount for usb drives</a></li>
@@ -230,6 +232,25 @@ trying to get it running (confirmed working on a laptop running Ubuntu). -->
 
 <!-- If the keyboard layout is incorrect, you'll need to configure
 [regional system settings](#regional-system-settings). -->
+
+<h2 id="update-dosfstools-build">Update dosfstools build</h2>
+
+<p>The current raspbian version of <code>dosfstools</code> is out of date and won’t reset the ‘dirty bit’
+of a FAT volume, such as that used by the <code>/boot</code> partition.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">git clone http://daniel-baumann.ch/git/software/dosfstools.git
+</span><span class="line"><span class="nb">cd </span>dosfstools
+</span><span class="line">sudo make install
+</span></code></pre></div></figure></notextile></div>
+
+<h2 id="add-a-cron-job-for-dynamic-dns">Add a cron job for dynamic DNS</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># run cron tab as pi user</span>
+</span><span class="line">sudo -u pi crontab -e
+</span><span class="line">
+</span><span class="line"><span class="c"># append the following line, replacing domain and token values</span>
+</span><span class="line">*/5 * * * * curl -k -o /tmp/duckdns.log <span class="s1">&#39;https://www.duckdns.org/update?domains=yourdomain&amp;token=yourtoken&amp;ip=&#39;</span> &gt;/dev/null 2&gt;&amp;1
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="backup-installation">Backup installation</h2>
 
@@ -539,6 +560,15 @@ address can be used for <code>Hostname</code> if preferred).</p>
 </span><span class="line">wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
 </span></code></pre></div></figure></notextile></div>
 
+<!--
+To manually set a static IP, add the following lines with the desired values:
+
+    address 192.168.1.31
+    netmask 255.255.255.0
+    gateway 192.168.1.254
+
+-->
+
 <p>Open the file that configures WiFi hotspots:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
@@ -556,11 +586,11 @@ address can be used for <code>Hostname</code> if preferred).</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">network</span><span class="o">={</span>
 </span><span class="line">  <span class="nv">ssid</span><span class="o">=</span><span class="s2">&quot;YOUR-NETWORK-SSID&quot;</span>
+</span><span class="line">  <span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;YOUR-WLAN-PASSWORD&quot;</span>
 </span><span class="line">  <span class="nv">proto</span><span class="o">=</span>WPA2
 </span><span class="line">  <span class="nv">key_mgmt</span><span class="o">=</span>WPA-PSK
 </span><span class="line">  <span class="nv">pairwise</span><span class="o">=</span>CCMP TKIP
 </span><span class="line">  <span class="nv">group</span><span class="o">=</span>CCMP TKIP
-</span><span class="line">  <span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;YOUR-WLAN-PASSWORD&quot;</span>
 </span><span class="line"><span class="o">}</span>
 </span></code></pre></div></figure></notextile></div>
 
@@ -785,13 +815,6 @@ provide a helpful login message to anyone using the image.</p>
 <p>After setting up your Raspberry Pi - but before shutting it down - prepare the installed
 system for imaging.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># login as root</span>
-</span><span class="line">sudo -s
-</span><span class="line">
-</span><span class="line"><span class="c"># make sure sfill tool is installed</span>
-</span><span class="line">apt-get install secure-delete
-</span></code></pre></div></figure></notextile></div>
-
 <p>Edit the login message to detail setup tasks required on logon:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nb">echo</span> -e <span class="s2">&quot;\e[47;30;1m</span>
@@ -814,7 +837,13 @@ system for imaging.</p>
 
 <p>Clean up the system by removing any unneeded files and private user data.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># clean up downloaded packages, log, caches, etc.</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># login as root</span>
+</span><span class="line">sudo -s
+</span><span class="line">
+</span><span class="line"><span class="c"># install secure-delete</span>
+</span><span class="line">apt-get install secure-delete
+</span><span class="line">
+</span><span class="line"><span class="c"># clean up downloaded packages, log, caches, etc.</span>
 </span><span class="line">apt-get clean
 </span><span class="line">find /var/log -type f -delete
 </span><span class="line">du -sch /var/cache/*
@@ -839,9 +868,8 @@ system for imaging.</p>
 </span><span class="line"><span class="k">done</span>
 </span></code></pre></div></figure></notextile></div>
 
-<p>Zero fill the unused SD card space for better compression. This can also be done within a
-desktop Linux environment, and may be a little faster that way<sup id="fnref:sfill"><a href="#fn:sfill" rel="footnote">1</a></sup> (but needs more
-command line effort).</p>
+<p>Zero fill the unused SD card space for better compression. This can instead be done with an
+image file<sup id="fnref:zerofree"><a href="#fn:zerofree" rel="footnote">1</a></sup> if you’re concerned about wearing out the card.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># zero fill the swap file</span>
 </span><span class="line">swapoff -a
@@ -852,7 +880,7 @@ command line effort).</p>
 </span><span class="line">sfill -z -l -l -f -v /boot /
 </span><span class="line">
 </span><span class="line"><span class="c"># shutdown and remove the card</span>
-</span><span class="line">halt
+</span><span class="line">poweroff
 </span></code></pre></div></figure></notextile></div>
 
 <p>Here’s the basic command to copy an SD card into a file. The size is correct for the
@@ -949,12 +977,8 @@ dd if=$dev of=$name.img bs=1m count=$size
 <!-- OFFSET=`fdisk -lu $IMAGE | grep -m 1 Linux$ | awk '{ print $2 *512 }'` -->
 <div class="footnotes">
   <ol>
-    <li id="fn:sfill">
-      <p>Normally, <code>sfill</code> seems to run just as fast from the Raspberry Pi - since the
-SD card write speed is the main factor - and space saved is similar to mounting
-offline. When making recent images I’ve found <code>sfill</code> to take a long time to complete
-after filling the disk (but before ‘Wiping inodes’), I haven’t retested on the desktop
-with the same images yet though.<a href="#fnref:sfill" rel="reference">&#8617;</a></p>
+    <li id="fn:zerofree">
+      <p>In this case, you could try the more efficient <code>zerofree</code> utility for the main ext3/4 partition.<a href="#fnref:zerofree" rel="reference">&#8617;</a></p>
     </li>
     <li id="fn:fdisk">
       <p>Use <code>fdisk</code> to view the partition table info of the SD card, then calculate the

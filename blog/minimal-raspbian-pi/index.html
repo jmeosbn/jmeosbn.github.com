@@ -147,6 +147,8 @@ Disable password logins for remote ssh access (public key only).
   <li><a href="#change-hostname">Change Hostname</a></li>
   <li><a href="#generate-new-rsa-host-keys">Generate new RSA host keys</a></li>
   <li><a href="#configure-wifi-adapter">Configure WiFi adapter</a></li>
+  <li><a href="#update-dosfstools-build">Update dosfstools build</a></li>
+  <li><a href="#add-a-cron-job-for-dynamic-dns">Add a cron job for dynamic DNS</a></li>
   <li><a href="#backup-installation">Backup installation</a></li>
   <li><a href="#removing-the-desktop-environment">Removing the desktop environment</a></li>
   <li><a href="#configure-automount-for-usb-drives">Configure automount for usb drives</a></li>
@@ -317,6 +319,25 @@ trying to get it running (confirmed working on a laptop running Ubuntu). -->
 
 <!-- If the keyboard layout is incorrect, you'll need to configure
 [regional system settings](#regional-system-settings). -->
+
+<h2 id="update-dosfstools-build">Update dosfstools build</h2>
+
+<p>The current raspbian version of <code>dosfstools</code> is out of date and won’t reset the ‘dirty bit’
+of a FAT volume, such as that used by the <code>/boot</code> partition.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">git clone http://daniel-baumann.ch/git/software/dosfstools.git
+</span><span class="line"><span class="nb">cd </span>dosfstools
+</span><span class="line">sudo make install
+</span></code></pre></div></figure></notextile></div>
+
+<h2 id="add-a-cron-job-for-dynamic-dns">Add a cron job for dynamic DNS</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># run cron tab as pi user</span>
+</span><span class="line">sudo -u pi crontab -e
+</span><span class="line">
+</span><span class="line"><span class="c"># append the following line, replacing domain and token values</span>
+</span><span class="line">*/5 * * * * curl -k -o /tmp/duckdns.log <span class="s1">&#39;https://www.duckdns.org/update?domains=yourdomain&amp;token=yourtoken&amp;ip=&#39;</span> &gt;/dev/null 2&gt;&amp;1
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="backup-installation">Backup installation</h2>
 
@@ -626,6 +647,15 @@ address can be used for <code>Hostname</code> if preferred).</p>
 </span><span class="line">wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
 </span></code></pre></div></figure></notextile></div>
 
+<!--
+To manually set a static IP, add the following lines with the desired values:
+
+    address 192.168.1.31
+    netmask 255.255.255.0
+    gateway 192.168.1.254
+
+-->
+
 <p>Open the file that configures WiFi hotspots:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
@@ -643,11 +673,11 @@ address can be used for <code>Hostname</code> if preferred).</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="nv">network</span><span class="o">={</span>
 </span><span class="line">  <span class="nv">ssid</span><span class="o">=</span><span class="s2">&quot;YOUR-NETWORK-SSID&quot;</span>
+</span><span class="line">  <span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;YOUR-WLAN-PASSWORD&quot;</span>
 </span><span class="line">  <span class="nv">proto</span><span class="o">=</span>WPA2
 </span><span class="line">  <span class="nv">key_mgmt</span><span class="o">=</span>WPA-PSK
 </span><span class="line">  <span class="nv">pairwise</span><span class="o">=</span>CCMP TKIP
 </span><span class="line">  <span class="nv">group</span><span class="o">=</span>CCMP TKIP
-</span><span class="line">  <span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;YOUR-WLAN-PASSWORD&quot;</span>
 </span><span class="line"><span class="o">}</span>
 </span></code></pre></div></figure></notextile></div>
 

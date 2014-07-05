@@ -4,7 +4,7 @@
   <title><![CDATA[Category: dev | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/dev/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-07-03T18:48:19+01:00</updated>
+  <updated>2014-07-05T22:33:55+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -87,6 +87,11 @@ Disable password logins for remote ssh access (public key only).
   </li>
   <li><a href="#remove-old-host-key-from-clients-using">remove old host key from clients using:</a>    <ul>
       <li><a href="#configure-wifi-adapter">Configure WiFi adapter</a></li>
+      <li><a href="#update-dosfstools-build">Update dosfstools build</a></li>
+      <li><a href="#add-a-cron-job-for-dynamic-dns">Add a cron job for dynamic DNS</a></li>
+    </ul>
+  </li>
+  <li><a href="#append-the-following-line-replacing-domain-and-token-values">append the following line, replacing domain and token values</a>    <ul>
       <li><a href="#backup-installation">Backup installation</a></li>
       <li><a href="#removing-the-desktop-environment">Removing the desktop environment</a></li>
     </ul>
@@ -321,6 +326,27 @@ trying to get it running (confirmed working on a laptop running Ubuntu). -->
 
 <!-- If the keyboard layout is incorrect, you'll need to configure
 [regional system settings](#regional-system-settings). -->
+
+<h2 id="update-dosfstools-build">Update dosfstools build</h2>
+
+<p>The current raspbian version of <code>dosfstools</code> is out of date and won’t reset the ‘dirty bit’
+of a FAT volume, such as that used by the <code>/boot</code> partition.</p>
+
+<p><code>sh
+git clone http://daniel-baumann.ch/git/software/dosfstools.git
+cd dosfstools
+sudo make install
+</code></p>
+
+<h2 id="add-a-cron-job-for-dynamic-dns">Add a cron job for dynamic DNS</h2>
+
+<p>```sh
+# run cron tab as pi user
+sudo -u pi crontab -e</p>
+
+<h1 id="append-the-following-line-replacing-domain-and-token-values">append the following line, replacing domain and token values</h1>
+<p>*/5 * * * * curl -k -o /tmp/duckdns.log ‘https://www.duckdns.org/update?domains=yourdomain&amp;token=yourtoken&amp;ip=’ &gt;/dev/null 2&gt;&amp;1
+```</p>
 
 <h2 id="backup-installation">Backup installation</h2>
 
@@ -650,6 +676,15 @@ iface wlan0 inet manual
 wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
 </code></p>
 
+<!--
+To manually set a static IP, add the following lines with the desired values:
+
+    address 192.168.1.31
+    netmask 255.255.255.0
+    gateway 192.168.1.254
+
+-->
+
 <p>Open the file that configures WiFi hotspots:</p>
 
 <p><code>sh
@@ -670,11 +705,11 @@ network={
 <p><code>
 network={
   ssid="YOUR-NETWORK-SSID"
+  psk="YOUR-WLAN-PASSWORD"
   proto=WPA2
   key_mgmt=WPA-PSK
   pairwise=CCMP TKIP
   group=CCMP TKIP
-  psk="YOUR-WLAN-PASSWORD"
 }
 </code></p>
 
