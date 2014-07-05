@@ -154,6 +154,7 @@ Disable password logins for remote ssh access (public key only).
   <li><a href="#configure-automount-for-usb-drives">Configure automount for usb drives</a></li>
   <li><a href="#add-services-using-supervisor">Add services using Supervisor</a></li>
   <li><a href="#install-mono">Install Mono</a></li>
+  <li><a href="#ssh-login-by-public-key-only">SSH login by public key only</a></li>
   <li><a href="#link-settings-to-root-profile">Link settings to root profile</a></li>
   <li><a href="#build-and-install-wiringpi">Build and install WiringPi</a></li>
   <li><a href="#install-transmission">Install Transmission</a></li>
@@ -467,6 +468,22 @@ pkg-count
 # for a minimal cli toolchain:
 apt-get install mono-mcs mono-xbuild mono-csharp-shell
 -->
+
+<h2 id="ssh-login-by-public-key-only">SSH login by public key only</h2>
+
+<p>If the Pi is open to the internet or a shared WiFi hotspot, it’s recommended to disable
+SSH password logins (after first setting up <a href="#copy-public-key-to-the-pi">public key login</a>).</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><pre><code class="sh"><span class="line"><span class="c"># add settings to sshd config</span>
+</span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;</span>
+</span><span class="line"><span class="s1"># enforce public key login</span>
+</span><span class="line"><span class="s1">ChallengeResponseAuthentication no</span>
+</span><span class="line"><span class="s1">PasswordAuthentication no</span>
+</span><span class="line"><span class="s1">UsePAM no&#39;</span> | sudo tee -a /etc/ssh/sshd_config
+</span><span class="line">
+</span><span class="line"><span class="c"># restart sshd</span>
+</span><span class="line">sudo /etc/init.d/ssh reload
+</span></code></pre></div></figure></notextile></div>
 
 <h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
 

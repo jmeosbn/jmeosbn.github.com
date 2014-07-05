@@ -388,6 +388,24 @@ apt-get install mono-mcs mono-xbuild mono-csharp-shell
 -->
 
 
+## SSH login by public key only
+
+If the Pi is open to the internet or a shared WiFi hotspot, it's recommended to disable
+SSH password logins (after first setting up [public key login](#copy-public-key-to-the-pi)).
+
+```sh
+# add settings to sshd config
+echo '
+# enforce public key login
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+UsePAM no' | sudo tee -a /etc/ssh/sshd_config
+
+# restart sshd
+sudo /etc/init.d/ssh reload
+```
+
+
 ## Link settings to root profile
 
 Occasionally you'll want to use a root shell, and then be annoyed that your aliases etc. are not configured for the root user.  You can either copy the profile files into ~/root or, as shown here, link them symbolically so that any future modifications will be reflected.
