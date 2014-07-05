@@ -4,7 +4,7 @@
   <title><![CDATA[Category: dev | jmeosbn]]></title>
   <link href="http://jmeosbn.github.io/blog/categories/dev/atom.xml" rel="self"/>
   <link href="http://jmeosbn.github.io/"/>
-  <updated>2014-07-05T23:30:42+01:00</updated>
+  <updated>2014-07-06T00:01:44+01:00</updated>
   <id>http://jmeosbn.github.io/</id>
   <author>
     <name><![CDATA[Jamie Osborne]]></name>
@@ -87,6 +87,10 @@ Disable password logins for remote ssh access (public key only).
   </li>
   <li><a href="#remove-old-host-key-from-clients-using">remove old host key from clients using:</a>    <ul>
       <li><a href="#configure-wifi-adapter">Configure WiFi adapter</a></li>
+      <li><a href="#ssh-login-by-public-key-only">SSH login by public key only</a></li>
+    </ul>
+  </li>
+  <li><a href="#restart-sshd">restart sshd</a>    <ul>
       <li><a href="#update-dosfstools-build">Update dosfstools build</a></li>
       <li><a href="#add-a-cron-job-for-dynamic-dns">Add a cron job for dynamic DNS</a></li>
     </ul>
@@ -109,10 +113,6 @@ Disable password logins for remote ssh access (public key only).
   <li><a href="#stop-already-running-process">stop already running process</a></li>
   <li><a href="#reload-supervisor-config">reload supervisor config</a>    <ul>
       <li><a href="#install-mono">Install Mono</a></li>
-      <li><a href="#ssh-login-by-public-key-only">SSH login by public key only</a></li>
-    </ul>
-  </li>
-  <li><a href="#restart-sshd">restart sshd</a>    <ul>
       <li><a href="#link-settings-to-root-profile">Link settings to root profile</a></li>
     </ul>
   </li>
@@ -331,6 +331,23 @@ trying to get it running (confirmed working on a laptop running Ubuntu). -->
 <!-- If the keyboard layout is incorrect, you'll need to configure
 [regional system settings](#regional-system-settings). -->
 
+<h2 id="ssh-login-by-public-key-only">SSH login by public key only</h2>
+
+<p>If the Pi is open to the internet or a shared WiFi hotspot, it’s recommended to disable
+SSH password logins (after first setting up <a href="#copy-public-key-to-the-pi">public key login</a>).</p>
+
+<p>```sh
+# add settings to sshd config
+echo ‘
+# enforce public key login
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+UsePAM no’ | sudo tee -a /etc/ssh/sshd_config</p>
+
+<h1 id="restart-sshd">restart sshd</h1>
+<p>sudo /etc/init.d/ssh reload
+```</p>
+
 <h2 id="update-dosfstools-build">Update dosfstools build</h2>
 
 <p>The current raspbian version of <code>dosfstools</code> is out of date and won’t reset the ‘dirty bit’
@@ -488,23 +505,6 @@ pkg-count
 # for a minimal cli toolchain:
 apt-get install mono-mcs mono-xbuild mono-csharp-shell
 -->
-
-<h2 id="ssh-login-by-public-key-only">SSH login by public key only</h2>
-
-<p>If the Pi is open to the internet or a shared WiFi hotspot, it’s recommended to disable
-SSH password logins (after first setting up <a href="#copy-public-key-to-the-pi">public key login</a>).</p>
-
-<p>```sh
-# add settings to sshd config
-echo ‘
-# enforce public key login
-ChallengeResponseAuthentication no
-PasswordAuthentication no
-UsePAM no’ | sudo tee -a /etc/ssh/sshd_config</p>
-
-<h1 id="restart-sshd">restart sshd</h1>
-<p>sudo /etc/init.d/ssh reload
-```</p>
 
 <h2 id="link-settings-to-root-profile">Link settings to root profile</h2>
 

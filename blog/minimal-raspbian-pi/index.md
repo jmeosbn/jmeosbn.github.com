@@ -221,6 +221,24 @@ trying to get it running (confirmed working on a laptop running Ubuntu). -->
 [regional system settings](#regional-system-settings). -->
 
 
+## SSH login by public key only
+
+If the Pi is open to the internet or a shared WiFi hotspot, it's recommended to disable
+SSH password logins (after first setting up [public key login](#copy-public-key-to-the-pi)).
+
+```sh
+# add settings to sshd config
+echo '
+# enforce public key login
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+UsePAM no' | sudo tee -a /etc/ssh/sshd_config
+
+# restart sshd
+sudo /etc/init.d/ssh reload
+```
+
+
 ## Update dosfstools build
 
 The current raspbian version of `dosfstools` is out of date and won't reset the 'dirty bit'
@@ -386,24 +404,6 @@ pkg-count
 # for a minimal cli toolchain:
 apt-get install mono-mcs mono-xbuild mono-csharp-shell
 -->
-
-
-## SSH login by public key only
-
-If the Pi is open to the internet or a shared WiFi hotspot, it's recommended to disable
-SSH password logins (after first setting up [public key login](#copy-public-key-to-the-pi)).
-
-```sh
-# add settings to sshd config
-echo '
-# enforce public key login
-ChallengeResponseAuthentication no
-PasswordAuthentication no
-UsePAM no' | sudo tee -a /etc/ssh/sshd_config
-
-# restart sshd
-sudo /etc/init.d/ssh reload
-```
 
 
 ## Link settings to root profile
